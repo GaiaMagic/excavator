@@ -1,0 +1,32 @@
+{
+  "name": "excavator",
+  "version": "0.0.0",
+  "description": "Ultimate form generator",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lyoooooooo/excavator.git"
+  },
+  "keywords": [
+    "form",
+    "generator"
+  ],
+  "author": "Cai Guanhao <caiguanhao@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lyoooooooo/excavator/issues"
+  },
+  "homepage": "https://github.com/lyoooooooo/excavator",
+  "dependencies": {
+    "express": "^4.10.1"
+  },
+  "devDependencies": {
+    "connect-livereload": "^0.5.0",
+    "del": "^0.1.3",
+    "gulp": "^3.8.9",
+    "gulp-browserify": "^0.5.0",
+    "gulp-express": "^0.1.0",
+    "gulp-less": "^1.3.6",
+    "gulp-load-plugins": "^0.7.0"
+  }
+}
