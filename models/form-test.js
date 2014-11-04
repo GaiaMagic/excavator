@@ -3,6 +3,7 @@ var config       = require('../test/config');
 var Q            = require('q');
 var mongoose     = require('mongoose');
 var FormRevision = require('./form-revision');
+var panic        = require('../lib/panic');
 
 var real     =  config.fixtures.form;
 
@@ -12,12 +13,12 @@ var expect   = chai.expect;
 chai.should();
 
 describe('Form (w/ revision) database model', function () {
-  function expectFailure (promise, reason, done) {
+  function expectFailure (promise, type, done) {
     return promise.then(function (revision) {
       expect(revision).to.be.undefined;
     }, function (err) {
-      expect(err).to.be.an.Object;
-      expect(err.reason).to.equal(reason);
+      expect(err).to.be.an.instanceof(panic);
+      expect(err.type).to.equal(type);
     }).then(done).catch(done);
   }
 

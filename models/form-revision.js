@@ -2,32 +2,56 @@ var mongoose   = require('mongoose');
 var Schema     = mongoose.Schema;
 var Q          = require('q');
 var formSchema = require('./form');
+var panic      = require('../lib/panic');
 
 var formRevisionSchema = new Schema({
   parent:     { type: Schema.ObjectId, ref: 'Form' },
-  title:      { type: String, required: true, trim: true },
-  content:    { type: String, required: true },
+  title:      { type: String, trim: true },
+  content:    { type: String },
   created_at: { type: Date, default: Date.now }
 });
 
-// validations:
-
-formRevisionSchema.path('title').validate(function(value) {
-  return value.length <= 100;
-}, 'title-is-too-long');
-
-formRevisionSchema.path('content').validate(function(value) {
-  return value.length <= 1024 * 10;
-}, 'content-is-too-large');
+// don't want to use the validate methods,
+// as it is hard to handle the error messages
 
 // middleware:
 
 formRevisionSchema.pre('save', function (next) {
-  if (!this.isNew) {
-    var err = new Error('revision should not be edited');
-    err.reason = 'revision-not-allowed-to-edit';
-    return next(err);
+  if (typeof this.title !== 'string' || this.title.length === 0) {
+    return next(new panic(422, {
+      type:    'title-is-required',
+      message: 'Title is required.'
+    }));
   }
+
+  if (this.title.length > 100) {
+    return next(new panic(413, {
+      type:    'title-is-too-long',
+      message: 'Title is too long. Its length should be less than 100.'
+    }));
+  }
+
+  if (typeof this.content !== 'string' || this.content.length === 0) {
+    return next(new panic(422, {
+      type:    'content-is-required',
+      message: 'Content is required.'
+    }));
+  }
+
+  if (this.content.length > 10 * 1024) {
+    return next(new panic(413, {
+      type:    'content-is-too-large',
+      message: 'Content is too large. Its length should be less than 10K.'
+    }));
+  }
+
+  if (!this.isNew) {
+    return next(new panic(422, {
+      type:    'revision-not-allowed-to-edit',
+      message: 'Revision should not be edited.'
+    }));
+  }
+
   if (this.isModified('content')) {
     try {
       var parsed = JSON.parse(this.content);
@@ -35,9 +59,10 @@ formRevisionSchema.pre('save', function (next) {
         throw 'parsed JSON is not an object';
       }
     } catch (e) {
-      var err = new Error('content should be a JSON string');
-      err.reason = 'content-is-not-valid-json';
-      return next(err);
+      return next(new panic(422, {
+        type:    'content-is-not-valid-json',
+        message: 'Content should be a valid JSON string.'
+      }));
     }
   }
   var self = this;
@@ -57,9 +82,10 @@ formRevisionSchema.pre('save', function (next) {
 });
 
 formRevisionSchema.pre('remove', function (next) {
-  var err = new Error('revision should not be deleted');
-  err.reason = 'revision-not-allowed-to-delete';
-  next(err);
+  next(new panic(422, {
+    type:    'revision-not-allowed-to-delete',
+    message: 'Revision should not be deleted.'
+  }));
 });
 
 // document methods:
@@ -96,15 +122,6 @@ formRevisionSchema.static('create', function (title, content, parent) {
   var deferred = Q.defer();
   newrevision.save(function (err) {
     if (err) {
-      if (err.name === 'ValidationError') {
-        var errors = err.errors;
-        var first = errors[Object.keys(errors)[0]];
-        if (first.type === 'user defined') {
-          err.reason = first.message;
-        } else {
-          err.reason = first.path + '-is-' + first.type;
-        }
-      }
       return deferred.reject(err);
     }
     deferred.resolve(newrevision);
