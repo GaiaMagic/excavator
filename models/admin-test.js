@@ -181,6 +181,32 @@ describe('Admin database model', function () {
         expect(Admin.comparePassword(newpassword, newhash)).to.be.true;
       }).then(done).catch(done);
     });
+
+    it('should return error if token was empty', function (done) {
+      expectFailure(Admin.authorize(), 'invalid-token', done);
+    });
+
+    it('should return error if token is not 64-chars long', function (done) {
+      expectFailure(Admin.authorize('fake-token'), 'invalid-token', done);
+    });
+
+    it('should return error if token is invalid', function (done) {
+      expectFailure(Admin.authorize('313d4c51226c3ce901111e5dbfd' +
+        '82f645003435fb7856e0e18f29b84f437f1a1'), 'invalid-token', done);
+    });
+
+    it('should return valid user info if a valid token was provided',
+    function (done) {
+      var token;
+      Admin.register(real.username, real.password).then(function (admin) {
+        token = admin.token;
+        return Admin.authorize(token);
+      }).then(function (admin) {
+        expect(admin).to.be.an('object');
+        expect(admin.username).to.equal(real.username);
+        expect(admin.token).to.equal(token);
+      }).then(done).catch(done);
+    });
   });
 
 
