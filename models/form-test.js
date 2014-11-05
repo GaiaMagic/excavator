@@ -38,15 +38,15 @@ describe('Form (w/ revision) database model', function () {
     it('should create a form automatically if no parent id is specified',
     function (done) {
       FormRevision.create(real.title, real.content).then(function (revision) {
-        expect(revision).to.be.an.Object;
+        expect(revision).to.be.an('object');
         expect(Object.keys(revision.schema.paths)).to.have.members([
           'parent',
           'title',
           'content',
           'created_at',
           '_id', '__v']);
-        revision.created_at.should.be.a.Date;
-        revision.parent.should.not.be.empty.and.should.be.a.string;
+        revision.created_at.should.be.a('date');
+        expect(revision.parent.toString()).to.be.a('string');
         revision.title.should.equal(real.title);
         revision.content.should.equal(real.content);
       }).then(done).catch(done);
@@ -59,9 +59,9 @@ describe('Form (w/ revision) database model', function () {
      * @return {undefined}        this function returns nothing
      */
     function expectRevision (revision, len) {
-      expect(revision).to.be.an.object;
-      expect(revision._id).to.be.a.string;
-      expect(revision.parent).to.be.an.object;
+      expect(revision).to.be.an('object');
+      expect(revision._id.toString()).to.be.a('string');
+      expect(revision.parent).to.be.an('object');
       expect(Object.keys(revision.parent.schema.paths)).to.have.members([
         'published',
         'head',

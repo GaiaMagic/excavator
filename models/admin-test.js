@@ -81,12 +81,15 @@ describe('Admin database model', function () {
     });
 
     it('should create a new valid admin user', function (done) {
+      // this sometimes fails on CI service, so make timeout longer
+      this.timeout(5000);
+
       var newAdmin = Admin.register(real.username, real.password);
-      newAdmin.then.should.be.a.Function;
-      newAdmin.catch.should.be.a.Function;
-      newAdmin.finally.should.be.a.Function;
+      newAdmin.then.should.be.a('function');
+      newAdmin.catch.should.be.a('function');
+      newAdmin.finally.should.be.a('function');
       newAdmin.then(function (admin) {
-        expect(admin).to.be.an.Object;
+        expect(admin).to.be.an('object');
         expect(Object.keys(admin.schema.paths)).to.have.members([
           'username',
           'password',
@@ -97,8 +100,8 @@ describe('Admin database model', function () {
           'created_at',
           'updated_at',
           '_id', '__v']);
-        admin.created_at.should.be.a.Date;
-        admin.updated_at.should.be.a.Date;
+        admin.created_at.should.be.a('date');
+        admin.updated_at.should.be.a('date');
         expect(admin.token).to.be.a('string').and.have.length(64);
         expect(admin.login_attempts).to.equal(0);
         expect(admin.lock_until).to.be.undefined;
@@ -112,7 +115,7 @@ describe('Admin database model', function () {
     function (done) {
       var newAdmin = Admin.register(real.username.toLowerCase(), real.password);
       newAdmin.then(function (admin) {
-        expect(admin).to.be.an.Object;
+        expect(admin).to.be.an('object');
         return Admin.register(real.username.toLowerCase(), real.password);
       }).then(function (admin) {
         expect(admin).to.be.undefined;
@@ -255,7 +258,7 @@ describe('Admin database model', function () {
               ).then(function (admin) {
               if (index >= 5) {
                 expect(admin.login_attempts).to.equal(5);
-                expect(admin.lock_until).to.be.a.Date;
+                expect(new Date(admin.lock_until)).to.be.a('date');
                 var timediff = (admin.lock_until - Date.now()) / 1000 / 3600;
                 expect(Math.round(timediff)).to.equal(2);
               } else {
