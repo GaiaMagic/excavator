@@ -101,6 +101,15 @@ formRevisionSchema.method('populateParent', function () {
   return deferred.promise;
 });
 
+formRevisionSchema.method('sanitize', function () {
+  return {
+    parent:     this.parent,
+    title:      this.title,
+    content:    this.content,
+    created_at: this.created_at
+  };
+});
+
 // static methods:
 
 /**

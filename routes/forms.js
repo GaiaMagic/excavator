@@ -1,13 +1,15 @@
 var express = require('express');
 var router = express.Router();
-var formRevision = require('../models/form-revision');
+var FormRevision = require('../models/form-revision');
 var jsonParser = require('body-parser').json();
 
 router.post('/create', jsonParser, function (req, res, next) {
-  formRevision.create(
+  FormRevision.create(
     req.body.title,
     req.body.content
-  ).then(res.send).catch(next);
+  ).then(function (revision) {
+    res.send(revision.sanitize());
+  }).catch(next);
 });
 
 module.exports = router;

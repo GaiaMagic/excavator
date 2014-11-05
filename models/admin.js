@@ -141,6 +141,15 @@ adminSchema.method('Save', function () {
   return deferred.promise;
 });
 
+adminSchema.method('sanitize', function () {
+  return {
+    username:   this.username,
+    token:      this.token,
+    created_at: this.created_at,
+    updated_at: this.updated_at
+  };
+});
+
 adminSchema.static('register', function (username, password) {
   var self = this;
   var newuser = new self({
@@ -219,9 +228,7 @@ adminSchema.static('authenticate', function (username, password) {
         }));
       }
 
-      deferred.resolve({
-        user: user
-      });
+      deferred.resolve(user);
     });
   };
 
