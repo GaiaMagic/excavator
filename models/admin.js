@@ -110,6 +110,8 @@ adminSchema.method('generateNewToken', function () {
 });
 
 adminSchema.static('comparePassword', function (plaintext, hashed) {
+  if (typeof plaintext !== 'string') plaintext = '';
+  if (typeof hashed !== 'string') hashed = '';
   return bcrypt.compareSync(plaintext, hashed);
 });
 
@@ -148,6 +150,35 @@ adminSchema.method('sanitize', function () {
     created_at: this.created_at,
     updated_at: this.updated_at
   };
+});
+
+adminSchema.method('heal', function () {
+  var deferred = Q.defer();
+  this.banned = false;
+  this.lock_until = undefined;
+  this.login_attempts = 0;
+  this.generateNewToken();
+  this.save(function (err, user) {
+    if (err) {
+      return deferred.reject(panic(500, {
+        type:    'internal-server-error',
+        message: 'Unexpected server error was encountered.'
+      }));
+    }
+
+    deferred.resolve(user);
+  });
+  return deferred.promise;
+});
+
+adminSchema.static('heal', function (username) {
+  var deferred = Q.defer();
+  this.findOne({ username: username }, function (err, user) {
+    if (err) return deferred.reject(err);
+    if (!user) return deferred.reject(new Error('no such user'));
+    deferred.resolve(user.heal());
+  });
+  return deferred.promise;
 });
 
 adminSchema.static('register', function (username, password) {
@@ -217,19 +248,7 @@ adminSchema.static('authenticate', function (username, password) {
       }));
     }
 
-    user.lock_until = undefined;
-    user.login_attempts = 0;
-    user.generateNewToken();
-    user.save(function (err, user) {
-      if (err) {
-        return deferred.reject(panic(500, {
-          type:    'internal-server-error',
-          message: 'Unexpected server error was encountered.'
-        }));
-      }
-
-      deferred.resolve(user);
-    });
+    user.heal().then(deferred.resolve, deferred.reject);
   };
 
   self.findOne(query, selects, findOneCallback);
