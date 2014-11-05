@@ -14,4 +14,9 @@ https://circleci.com/gh/lyoooooooo/excavator)
 
 npm install
 npm test
+
+# manually do tests
+
+alias mocha='./node_modules/mocha/bin/mocha'
+mocha [-w|--watch] [some-file-test.js] [-g|--grep 'grep']
 ```
