@@ -13,8 +13,10 @@ excavator.use(express.static(path.join(root, 'views')));
 excavator.use(express.static(path.join(root, 'assets')));
 excavator.use(express.static(path.join(root, 'vendors')));
 
+var needsTokenAuth = require('./token-auth');
+
 excavator.use('/admins', require('./admins'));
-excavator.use('/forms', require('./forms'));
+excavator.use('/forms', needsTokenAuth, require('./forms'));
 
 excavator.use(function (req, res, next) {
   try {
