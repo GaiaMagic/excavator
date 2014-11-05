@@ -13,6 +13,8 @@ var expect    = chai.expect;
 chai.should();
 
 describe('Route /admins', function () {
+  var realAdmin;
+
   before(function (done) {
     if (mongoose.connection.db) {
       return createUser(done);
@@ -22,10 +24,57 @@ describe('Route /admins', function () {
     function createUser (done) {
       Admin.remove({}, function () {
         Admin.register(real.username, real.password).then(function (admin) {
+          realAdmin = admin;
           done();
         }).catch(done);
       });
     }
+  });
+
+  describe('Sub-route /status', function () {
+    function expectFailure (token, done) {
+      request(excavator).
+      get('/admins/status').
+      set('Authorization', token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(Object.keys(res.body)).to.have.members([
+          'status',
+          'type',
+          'message'
+        ]);
+        expect(res.body.type).to.equal('invalid-token');
+        done();
+      });
+    }
+
+    it('should return forbidden if token is undefined', function (done) {
+      expectFailure(undefined, done);
+    });
+
+    it('should return forbidden if there is no token', function (done) {
+      expectFailure('token', done);
+    });
+
+    it('should return forbidden if the token is not valid', function (done) {
+      expectFailure('token ' + real.token, done);
+    });
+
+    it('should return OK if the token is valid', function (done) {
+      request(excavator).
+      get('/admins/status').
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(Object.keys(res.body)).to.have.members([
+          'status'
+        ]);
+        expect(res.body.status).to.equal('OK');
+        done();
+      });
+    });
   });
 
   describe('Sub-route /login', function () {
