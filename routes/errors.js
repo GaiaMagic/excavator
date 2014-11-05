@@ -6,6 +6,8 @@ module.exports = function (err, req, res, next) {
       type: err.type,
       message: err.message
     });
+  } else {
+    console.error(err);
   }
   res.status(500).send({
     status: 500,
