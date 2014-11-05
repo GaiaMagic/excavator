@@ -4,7 +4,8 @@ module.exports = {
   fixtures: {
     admin: {
       username: 'caiguanhao',
-      password: 'cTHhHzCyNfeYv6KzyuGYAeaGoBHFVm8koTpLgERWLLMyWVmDo2'
+      password: 'cTHhHzCyNfeYv6KzyuGYAeaGoBHFVm8koTpLgERWLLMyWVmDo2',
+      token: '313d4c51226c3ce901111e5dbfd82f645003435fb7856e0e18f29b84f437f1a1'
     },
     form: {
       title: 'Music Festival Volunteer Application Form',

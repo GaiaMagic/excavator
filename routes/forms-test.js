@@ -66,8 +66,7 @@ describe('Route /forms', function () {
     });
 
     it('should return forbidden if the token is not valid', function (done) {
-      expectTokenFailure('token 313d4c51226c3ce901111e5dbfd82f64500' +
-        '3435fb7856e0e18f29b84f437f1a1', done);
+      expectTokenFailure('token ' + real.token, done);
     });
 
     it('should return title-is-required if no title', function (done) {

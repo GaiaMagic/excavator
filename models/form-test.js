@@ -45,7 +45,7 @@ describe('Form (w/ revision) database model', function () {
           'content',
           'created_at',
           '_id', '__v']);
-        revision.created_at.should.be.a('date');
+        expect(isNaN(new Date(revision.created_at))).to.be.false;
         expect(revision.parent.toString()).to.be.a('string');
         revision.title.should.equal(real.title);
         revision.content.should.equal(real.content);

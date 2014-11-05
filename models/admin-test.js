@@ -100,8 +100,8 @@ describe('Admin database model', function () {
           'created_at',
           'updated_at',
           '_id', '__v']);
-        admin.created_at.should.be.a('date');
-        admin.updated_at.should.be.a('date');
+        expect(isNaN(new Date(admin.created_at))).to.be.false;
+        expect(isNaN(new Date(admin.updated_at))).to.be.false;
         expect(admin.token).to.be.a('string').and.have.length(64);
         expect(admin.login_attempts).to.equal(0);
         expect(admin.lock_until).to.be.undefined;
@@ -191,8 +191,7 @@ describe('Admin database model', function () {
     });
 
     it('should return error if token is invalid', function (done) {
-      expectFailure(Admin.authorize('313d4c51226c3ce901111e5dbfd' +
-        '82f645003435fb7856e0e18f29b84f437f1a1'), 'invalid-token', done);
+      expectFailure(Admin.authorize(real.token), 'invalid-token', done);
     });
 
     it('should return valid user info if a valid token was provided',
@@ -284,7 +283,7 @@ describe('Admin database model', function () {
               ).then(function (admin) {
               if (index >= 5) {
                 expect(admin.login_attempts).to.equal(5);
-                expect(new Date(admin.lock_until)).to.be.a('date');
+                expect(isNaN(new Date(admin.lock_until))).to.be.false;
                 var timediff = (admin.lock_until - Date.now()) / 1000 / 3600;
                 expect(Math.round(timediff)).to.equal(2);
               } else {
