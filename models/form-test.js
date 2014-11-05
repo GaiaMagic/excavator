@@ -17,16 +17,22 @@ describe('Form (w/ revision) database model', function () {
     return promise.then(function (revision) {
       expect(revision).to.be.undefined;
     }, function (err) {
-      expect(err).to.be.an.instanceof(panic);
+      expect(err).to.be.an.instanceof(Error);
+      expect(err.panic).to.be.true;
       expect(err.type).to.equal(type);
     }).then(done).catch(done);
   }
 
+  before(function (done) {
+    if (mongoose.connection.db) {
+      return done();
+    }
+    mongoose.connect(config.testDBAddress, done);
+  });
+
   describe('on creation', function () {
     before(function (done) {
-      mongoose.connect(config.testDBAddress, function () {
-        FormRevision.remove({}, done);
-      });
+      FormRevision.remove({}, done);
     });
 
     it('should create a form automatically if no parent id is specified',

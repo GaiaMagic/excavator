@@ -3,6 +3,7 @@ var config   = require('../test/config');
 var Q        = require('q');
 var mongoose = require('mongoose');
 var Admin    = require('./admin');
+var panic    = require('../lib/panic');
 
 var real     = config.fixtures.admin;
 
@@ -12,43 +13,71 @@ var expect   = chai.expect;
 chai.should();
 
 describe('Admin database model', function () {
+  function expectFailure (promise, type, done) {
+    promise = promise.then(function (admin) {
+      expect(admin).to.be.undefined;
+    }, function (err) {
+      expect(err).to.be.an.instanceof(Error);
+      expect(err.panic).to.be.true;
+      expect(err.type).to.equal(type);
+    });
+
+    if (done) promise = promise.then(done).catch(done);
+
+    return promise;
+  }
+
+  before(function (done) {
+    if (mongoose.connection.db) {
+      return done();
+    }
+    mongoose.connect(config.testDBAddress, done);
+  });
 
   describe('On user registration', function () {
     before(function (done) {
-      mongoose.connect(config.testDBAddress, function () {
-        Admin.remove({}, done);
-      });
+      Admin.remove({}, done);
     });
-
-    function expectFailure (promise, done) {
-      return promise.then(function (admin) {
-        expect(admin).to.be.undefined;
-      }, function (err) {
-        expect(err).to.be.an.Object;
-        expect(err.reason).to.equal('validation-failed');
-      }).then(done).catch(done);
-    }
 
     function repeat (string, n) {
       return Array(n + 1).join(string);
     }
 
+    it('should fail to register without username', function (done) {
+      expectFailure(Admin.register(undefined, real.password),
+        'username-is-required', done);
+    });
+
     it('should fail to register with too short username', function (done) {
-      expectFailure(Admin.register('sh', real.password), done);
+      expectFailure(Admin.register('sh', real.password),
+        'username-is-too-short', done);
     });
 
     it('should fail to register with too long username', function (done) {
       var longname = repeat(real.username, 10);
-      expectFailure(Admin.register(longname, real.password), done);
+      expectFailure(Admin.register(longname, real.password),
+        'username-is-too-long', done);
+    });
+
+    it('should fail to register with malformed username', function (done) {
+      expectFailure(Admin.register('#@$@#!#!@#@!#!@', real.password),
+        'malformed-username', done);
+    });
+
+    it('should fail to register without password', function (done) {
+      expectFailure(Admin.register(real.username, undefined),
+        'password-is-required', done);
     });
 
     it('should fail to register with too short password', function (done) {
-      expectFailure(Admin.register(real.username, '123'), done);
+      expectFailure(Admin.register(real.username, '123'),
+        'password-is-too-short', done);
     });
 
     it('should fail to register with too long password', function (done) {
       var longpass = repeat(real.password, 10);
-      expectFailure(Admin.register(real.username, longpass), done);
+      expectFailure(Admin.register(real.username, longpass),
+        'password-is-too-long', done);
     });
 
     it('should create a new valid admin user', function (done) {
@@ -84,34 +113,28 @@ describe('Admin database model', function () {
       var newAdmin = Admin.register(real.username.toLowerCase(), real.password);
       newAdmin.then(function (admin) {
         expect(admin).to.be.an.Object;
-        newAdmin = Admin.register(real.username.toLowerCase(), real.password);
-        return newAdmin;
+        return Admin.register(real.username.toLowerCase(), real.password);
       }).then(function (admin) {
         expect(admin).to.be.undefined;
       }, function (err) {
-        expect(err).to.be.an.Object;
-        expect(err.reason).to.equal('username-has-been-taken');
+        expect(err).to.be.an.instanceof(Error);
+        expect(err.panic).to.be.true;
+        expect(err.type).to.equal('username-has-been-taken');
       }).then(function () {
-        newAdmin = Admin.register(real.username.toUpperCase(), real.password);
-        return newAdmin;
+        return Admin.register(real.username.toUpperCase(), real.password);
       }).then(function (admin) {
         expect(admin).to.be.undefined;
       }, function (err) {
-        expect(err).to.be.an.Object;
-        expect(err.reason).to.equal('username-has-been-taken');
+        expect(err).to.be.an.instanceof(Error);
+        expect(err.panic).to.be.true;
+        expect(err.type).to.equal('username-has-been-taken');
       }).then(done).catch(done);
     });
   });
 
 
   describe('On user object properties', function () {
-    before(function (done) {
-      mongoose.connect(config.testDBAddress, function () {
-        Admin.remove({}, done);
-      });
-    });
-
-    afterEach(function (done) {
+    beforeEach(function (done) {
       Admin.remove({}, done);
     });
 
@@ -129,29 +152,12 @@ describe('Admin database model', function () {
       expect(Admin.generateNewToken()).to.be.a('string').and.have.length(64);
     });
 
-    function expectFailure (promise, reason, done) {
-      promise = promise.then(function (admin) {
-        expect(admin).to.be.undefined;
-      }, function (err) {
-        expect(err).to.be.an.Object;
-        expect(Object.keys(err)).to.have.members(['reason']);
-        expect(err.reason).to.equal(reason);
-      });
-      if (done) promise = promise.then(done).catch(done);
-      return promise;
-    }
-
     it('should disallow changes on username', function (done) {
       Admin.register(real.username, real.password).then(function (admin) {
         return Admin.findById(admin._id).exec();
       }).then(function (admin) {
         admin.username = real.username + '-alias';
-        return admin.Save();
-      }).then(function (admin) {
-        expect(admin).to.be.undefined;
-      }, function (err) {
-        expect(err).to.be.an.Object;
-        expect(err.reason).to.equal('username-not-allowed-to-change');
+        return expectFailure(admin.Save(), 'username-is-unchangeable');
       }).then(done).catch(done);
     });
 
@@ -179,9 +185,7 @@ describe('Admin database model', function () {
     var newAdmin;
 
     before(function (done) {
-      mongoose.connect(config.testDBAddress, function () {
-        Admin.remove({}, done);
-      });
+      Admin.remove({}, done);
     });
 
     beforeEach(function (done) {
@@ -195,20 +199,8 @@ describe('Admin database model', function () {
       Admin.remove({}, done);
     });
 
-    function expectFailure (promise, reason, done) {
-      promise = promise.then(function (admin) {
-        expect(admin).to.be.undefined;
-      }, function (err) {
-        expect(err).to.be.an.Object;
-        expect(Object.keys(err)).to.have.members(['reason']);
-        expect(err.reason).to.equal(reason);
-      });
-      if (done) promise = promise.then(done).catch(done);
-      return promise;
-    }
-
-    function expectFailureAndReturnLastestAdminInfo (promise, reason) {
-      return expectFailure(promise, reason).then(function () {
+    function expectFailureAndReturnLastestAdminInfo (promise, type) {
+      return expectFailure(promise, type).then(function () {
         return returnLastestAdminInfo();
       });
     }
@@ -244,22 +236,22 @@ describe('Admin database model', function () {
         promise = promise.then((function (index) {
           return function () {
             var password;
-            var reason;
+            var type;
             if (index > 5) {
               // so it is STILL locked even if we use real password
               password = real.password;
-              reason = 'user-exceeds-max-login-attempts';
+              type = 'user-exceeds-max-login-attempts';
             } else {
               // use wrong password so that it fails every time
               password = real.password.toUpperCase();
-              reason = 'invalid-password';
+              type = 'invalid-password';
             }
             return expectFailureAndReturnLastestAdminInfo(
                 Admin.authenticate(
                   real.username,
                   password
                 ),
-                reason
+                type
               ).then(function (admin) {
               if (index >= 5) {
                 expect(admin.login_attempts).to.equal(5);

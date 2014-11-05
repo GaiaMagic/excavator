@@ -18,35 +18,35 @@ var formRevisionSchema = new Schema({
 
 formRevisionSchema.pre('save', function (next) {
   if (typeof this.title !== 'string' || this.title.length === 0) {
-    return next(new panic(422, {
+    return next(panic(422, {
       type:    'title-is-required',
       message: 'Title is required.'
     }));
   }
 
   if (this.title.length > 100) {
-    return next(new panic(413, {
+    return next(panic(413, {
       type:    'title-is-too-long',
       message: 'Title is too long. Its length should be less than 100.'
     }));
   }
 
   if (typeof this.content !== 'string' || this.content.length === 0) {
-    return next(new panic(422, {
+    return next(panic(422, {
       type:    'content-is-required',
       message: 'Content is required.'
     }));
   }
 
   if (this.content.length > 10 * 1024) {
-    return next(new panic(413, {
+    return next(panic(413, {
       type:    'content-is-too-large',
       message: 'Content is too large. Its length should be less than 10K.'
     }));
   }
 
   if (!this.isNew) {
-    return next(new panic(422, {
+    return next(panic(422, {
       type:    'revision-not-allowed-to-edit',
       message: 'Revision should not be edited.'
     }));
@@ -59,7 +59,7 @@ formRevisionSchema.pre('save', function (next) {
         throw 'parsed JSON is not an object';
       }
     } catch (e) {
-      return next(new panic(422, {
+      return next(panic(422, {
         type:    'content-is-not-valid-json',
         message: 'Content should be a valid JSON string.'
       }));
@@ -82,7 +82,7 @@ formRevisionSchema.pre('save', function (next) {
 });
 
 formRevisionSchema.pre('remove', function (next) {
-  next(new panic(422, {
+  next(panic(422, {
     type:    'revision-not-allowed-to-delete',
     message: 'Revision should not be deleted.'
   }));
