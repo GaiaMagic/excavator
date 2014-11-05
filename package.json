@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "Ultimate form generator",
   "private": true,
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:lyoooooooo/excavator.git"
