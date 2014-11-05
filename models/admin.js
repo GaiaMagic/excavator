@@ -256,6 +256,27 @@ adminSchema.static('authenticate', function (username, password) {
   return deferred.promise;
 });
 
+adminSchema.static('authorize', function (token) {
+  var deferred = Q.defer();
+  if (typeof token !== 'string' || token.length !== 64) {
+    deferred.reject(panic(403, {
+      type:    'invalid-token',
+      message: 'Invalid token.'
+    }));
+    return deferred.promise;
+  }
+  this.findOne({ token: token }, function (err, admin) {
+    if (err || !admin) {
+      return deferred.reject(panic(403, {
+        type:    'invalid-token',
+        message: 'Invalid token.'
+      }));
+    }
+    return deferred.resolve(admin);
+  });
+  return deferred.promise;
+});
+
 var model;
 
 if (mongoose.models.Admin === undefined) {
