@@ -5,5 +5,7 @@ angular.module('excavator.func', [
   'excavator.func.error',
   'excavator.func.formatter',
   'excavator.func.localstorage',
+  'excavator.func.location',
+  'excavator.func.panic',
   'excavator.func.scheme'
 ]);

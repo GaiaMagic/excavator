@@ -2,8 +2,11 @@ angular.module('excavator.admin.nav', []).
 
 directive('navView', [
   '$location',
+  'backend.admin.loggedIn',
+  'backend.admin.logout',
   'data.admin.nav.menu',
-  function ($location, menu) {
+  'func.panic.alert',
+  function ($location, loggedIn, logout, menu, alert) {
   return {
     scope: true,
     template: [
@@ -20,7 +23,10 @@ directive('navView', [
               '</li>',
             '</ul>',
             '<ul class="nav navbar-nav navbar-right">',
-              '<li><a href="/">Log out</a></li>',
+              '<li ng-if="loggedIn()"><a href ng-click="logout()">',
+                'Log out</a></li>',
+              '<li ng-if="!loggedIn()"><a href="/login">',
+                'Log In</a></li>',
             '</ul>',
           '</div>',
         '</div>',
@@ -32,6 +38,11 @@ directive('navView', [
         $scope.currentPath = $location.path();
       });
       $scope.menu = menu;
+      $scope.logout = function () {
+        logout();
+        alert('You have successfully logged out.');
+      };
+      $scope.loggedIn = loggedIn.loggedIn;
     }
   };
 }]);

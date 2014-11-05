@@ -1,8 +1,10 @@
 angular.module('excavator', [
   'ngRoute',
   'excavator.admin',
+  'excavator.backend',
   'excavator.func',
-  'excavator.scheme'
+  'excavator.scheme',
+  'excavator.vendor'
 ]).
 
 constant('data.admin.nav.menu', [{
@@ -20,6 +22,11 @@ config([
   '$routeProvider', '$locationProvider',
   function($routeProvider, $locationProvider) {
     $routeProvider.
+
+    when('/login', {
+      templateUrl: '/login.html',
+      controller: 'AdminLoginController as alc',
+    }).
 
     when('/edit', {
       templateUrl: '/edit.html',
