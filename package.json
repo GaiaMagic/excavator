@@ -4,7 +4,7 @@
   "description": "Ultimate form generator",
   "private": true,
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "./node_modules/mocha/bin/mocha --opts ./test/mocha.test.opts"
   },
   "repository": {
     "type": "git",
