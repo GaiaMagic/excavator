@@ -18,7 +18,7 @@ directive('navView', [
           '<div>',
             '<ul class="nav navbar-nav">',
               '<li ng-repeat="item in menu" ',
-                'ng-class="{active: item.link === currentPath}">',
+                'ng-class="{active: isActive(currentPath, item.link)}">',
                 '<a href="{{ item.link }}" ng-bind="item.text"></a>',
               '</li>',
             '</ul>',
@@ -41,6 +41,11 @@ directive('navView', [
       $scope.logout = function () {
         logout();
         alert('You have successfully logged out.');
+      };
+      $scope.isActive = function (longpath, shortpath) {
+        if (shortpath.slice(-1) !== '/') shortpath += '/';
+        if (longpath.slice(-1) !== '/') longpath += '/';
+        return longpath.slice(0, shortpath.length) === shortpath;
       };
       $scope.status = status;
     }

@@ -10,9 +10,9 @@
         </div>
       </h3>
       <div class="main-pane-content">
-        <div scheme="scheme" scheme-data="aec.object.data"
-          ng-repeat="scheme in aec.object.scheme"></div>
-        <div ng-if="aec.object.scheme.length > 0">
+        <div scheme="scheme" scheme-data="aec.form.content.data"
+          ng-repeat="scheme in aec.form.content.scheme"></div>
+        <div ng-if="aec.form.content.scheme.length > 0">
           <pre ng-bind="aec.formdata"></pre>
           <pre ng-bind="aec.schemedata"></pre>
         </div>
@@ -22,7 +22,8 @@
   <div class="main-pane main-pane-right">
     <form class="form-horizontal">
       <h3>
-        <span>Editor</span>
+        <span ng-if="aec.form.title">Editing {{aec.form.title}}</span>
+        <span ng-if="!aec.form.title">Create New Form</span>
         <div class="btn-group btn-group-sm pull-right">
           <button class="btn btn-default" ng-click="aec.save()">
             <span class="glyphicon glyphicon-floppy-disk"></span>
@@ -34,25 +35,25 @@
         </div>
       </h3>
       <div class="main-pane-content">
-        <h4 ng-repeat-start="scheme in aec.object.scheme">
+        <h4 ng-repeat-start="scheme in aec.form.content.scheme">
           <span ng-bind="scheme.label || scheme.type"></span>
           <div class="btn-group btn-group-xs pull-right">
             <button class="btn btn-default"
-              ng-click="aec.array.duplicate(aec.object.scheme, $index)">
+              ng-click="aec.array.duplicate(aec.form.content.scheme, $index)">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
             <button class="btn btn-default"
-              ng-click="aec.array.delete(aec.object.scheme, $index)">
+              ng-click="aec.array.delete(aec.form.content.scheme, $index)">
               <span class="glyphicon glyphicon-minus"></span>
             </button>
             <button class="btn btn-default"
-              ng-class="{disabled: aec.array.edgeT(aec.object.scheme, $index)}"
-              ng-click="aec.array.moveup(aec.object.scheme, $index)">
+              ng-class="{disabled: aec.array.edgeT(aec.form.content.scheme, $index)}"
+              ng-click="aec.array.moveup(aec.form.content.scheme, $index)">
               <span class="glyphicon glyphicon-chevron-up"></span>
             </button>
             <button class="btn btn-default"
-              ng-class="{disabled: aec.array.edgeB(aec.object.scheme, $index)}"
-              ng-click="aec.array.movedown(aec.object.scheme, $index)">
+              ng-class="{disabled: aec.array.edgeB(aec.form.content.scheme, $index)}"
+              ng-click="aec.array.movedown(aec.form.content.scheme, $index)">
               <span class="glyphicon glyphicon-chevron-down"></span>
             </button>
           </div>

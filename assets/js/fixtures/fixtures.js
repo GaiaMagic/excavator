@@ -8,14 +8,14 @@ constant('fixtures.admin.edit', {
     model: 'fullname',
     label: 'Full Name',
     placeholder: 'Type your full name here.',
-    default: 'WWW'
+    default: undefined
   }, {
     type: 'long-text',
     version: '1.0',
     model: 'description',
     label: 'Description',
     placeholder: 'Type your description here.',
-    default: 'WWWXXX'
+    default: undefined
   }, {
     type: 'multiple-choice',
     version: '1.0',

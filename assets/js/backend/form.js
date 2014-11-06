@@ -2,13 +2,30 @@ angular.module('excavator.backend.form', []).
 
 factory('backend.form.create', [
   '$http',
-  'func.panic',
-  function ($http, panic) {
+  function ($http) {
     return function (title, content) {
       return $http.post('/forms/create', {
         title: title,
         content: content
       });
+    };
+  }
+]).
+
+factory('backend.form.get', [
+  '$http',
+  function ($http) {
+    return function (formid) {
+      return $http.get('/forms/' + formid);
+    };
+  }
+]).
+
+factory('backend.form.list', [
+  '$http',
+  function ($http) {
+    return function (title, content) {
+      return $http.get('/forms');
     };
   }
 ]);

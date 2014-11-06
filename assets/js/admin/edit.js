@@ -6,6 +6,7 @@ controller('AdminEditController', [
   '$scope',
   '$timeout',
   '$document',
+  '$routeParams',
   'schemes',
   'fixtures.admin.edit',
   'form.create.new',
@@ -15,27 +16,32 @@ controller('AdminEditController', [
   'func.localstorage.remove',
   'func.localstorage.save',
   'func.scheme.parse',
+  'currentForm',
   function (
     $scope,
     $timeout,
     $document,
+    $routeParams,
     schemes,
-    fixturesAdminEdit,
+    fixtures,
     createNew,
     funcArray,
     rememberState,
     load,
     remove,
     save,
-    parse
+    parse,
+    currentForm
   ) {
+  this.form = {};
+
   this.formdata = 'Form data will appear here once you submit the form.';
   this.submit = function () {
-    this.formdata = angular.toJson(this.object.data, true);
+    this.formdata = angular.toJson(this.form.content.data, true);
   };
 
   this.clear = function () {
-    var data = this.object.data;
+    var data = this.form.content.data;
     for (var key in data) {
       delete data[key];
     }
@@ -44,26 +50,29 @@ controller('AdminEditController', [
   this.schemedata = 'Scheme data will appear here once you save the scheme.';
   this.save = function () {
     var self = this;
-    createNew(this.object).catch(function (data) {
+    createNew(this.form.content).catch(function (data) {
       self.schemedata = data.content;
       save('schemedata', self.schemedata);
     });
   };
 
-  this.reset = function () {
-    remove('schemedata');
-    this.object = fixturesAdminEdit;
-  };
-
   this.schemes = schemes.list();
-  this.object = load('schemedata', parse) || fixturesAdminEdit;
+
+  if (angular.isUndefined(currentForm)) {
+    this.form.content = load('schemedata', parse) || fixtures;
+    this.form.title = undefined;
+  } else {
+    this.form.content = currentForm.content;
+    this.form.title = currentForm.title;
+  }
+
   this.array = funcArray;
 
   var self = this;
   var debounce;
   $scope.$watch(function () {
-    return self.object.scheme;
-  }, function (scheme) {
+    return self.form.content.scheme;
+  }, function () {
     if (debounce) {
       $timeout.cancel(debounce);
     }
