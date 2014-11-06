@@ -11,7 +11,7 @@ module.exports = {
     '1.0'
   ],
 
-  lastest: '1.0',
+  latest: '1.0',
 
   '1.0': {
     templateInit: [

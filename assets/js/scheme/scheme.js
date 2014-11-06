@@ -24,10 +24,10 @@ service('schemes', ['func.error', function (error) {
     if (angular.isDefined(module[version])) {
       return module[version];
     }
-    if (angular.isDefined(module[module.lastest])) {
+    if (angular.isDefined(module[module.latest])) {
       error('Module', name, 'version', version, 'does not exist,',
-        'however, the lastest version', module.lastest, 'is used.');
-      return module[module.lastest];
+        'however, the latest version', module.latest, 'is used.');
+      return module[module.latest];
     }
     error('Module', name, 'version', version, 'does not exist!');
     return undefined;

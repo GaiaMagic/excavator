@@ -227,13 +227,13 @@ describe('Admin database model', function () {
       Admin.remove({}, done);
     });
 
-    function expectFailureAndReturnLastestAdminInfo (promise, type) {
+    function expectFailureAndReturnLatestAdminInfo (promise, type) {
       return expectFailure(promise, type).then(function () {
-        return returnLastestAdminInfo();
+        return returnLatestAdminInfo();
       });
     }
 
-    function returnLastestAdminInfo () {
+    function returnLatestAdminInfo () {
       var keys = '+login_attempts +lock_until';
       return Admin.findById(newAdmin._id, keys).exec();
     }
@@ -274,7 +274,7 @@ describe('Admin database model', function () {
               password = real.password.toUpperCase();
               type = 'invalid-password';
             }
-            return expectFailureAndReturnLastestAdminInfo(
+            return expectFailureAndReturnLatestAdminInfo(
                 Admin.authenticate(
                   real.username,
                   password
@@ -313,7 +313,7 @@ describe('Admin database model', function () {
         newAdmin.lock_until = Date.now() - 60 * 1000;
         expect(newAdmin.locked).to.be.false;
         newAdmin.Save().then(function () {
-          return expectFailureAndReturnLastestAdminInfo(
+          return expectFailureAndReturnLatestAdminInfo(
             Admin.authenticate(real.username, real.password.toUpperCase()),
             'invalid-password').then(function (admin) {
               expect(admin.login_attempts).to.equal(1);
@@ -329,7 +329,7 @@ describe('Admin database model', function () {
         newAdmin.Save().then(function () {
           return Admin.authenticate(real.username, real.password);
         }).then(function () {
-          return returnLastestAdminInfo();
+          return returnLatestAdminInfo();
         }).then(function (admin) {
           expect(admin.login_attempts).to.equal(0);
           expect(admin.lock_until).to.be.undefined;
