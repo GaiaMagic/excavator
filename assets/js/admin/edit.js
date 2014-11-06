@@ -8,26 +8,26 @@ controller('AdminEditController', [
   '$document',
   'schemes',
   'fixtures.admin.edit',
+  'form.create.new',
   'func.array',
   'func.dom.input.remember.state',
   'func.localstorage.load',
   'func.localstorage.remove',
   'func.localstorage.save',
   'func.scheme.parse',
-  'func.scheme.stringify',
   function (
     $scope,
     $timeout,
     $document,
     schemes,
     fixturesAdminEdit,
+    createNew,
     funcArray,
     rememberState,
     load,
     remove,
     save,
-    parse,
-    stringify
+    parse
   ) {
   this.formdata = 'Form data will appear here once you submit the form.';
   this.submit = function () {
@@ -43,8 +43,11 @@ controller('AdminEditController', [
 
   this.schemedata = 'Scheme data will appear here once you save the scheme.';
   this.save = function () {
-    this.schemedata = stringify(this.object);
-    save('schemedata', this.schemedata);
+    var self = this;
+    createNew(this.object).catch(function (data) {
+      self.schemedata = data.content;
+      save('schemedata', self.schemedata);
+    });
   };
 
   this.reset = function () {
