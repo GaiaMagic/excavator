@@ -5,7 +5,8 @@ var FormRevision = require('../models/form-revision');
 var jsonParser = require('body-parser').json();
 
 router.get('/', function (req, res, next) {
-  Form.find({}).sort('-updated_at').skip(0).limit(5).populate('head').exec().
+  Form.find({}).sort('-updated_at').skip(0).limit(20).
+  populate('head', 'title').exec().
   then(function (revisions) {
     res.send(revisions);
   }, next);
