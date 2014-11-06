@@ -23,7 +23,8 @@ router.get('/:formid', function (req, res, next) {
 router.post('/create', jsonParser, function (req, res, next) {
   FormRevision.create(
     req.body.title,
-    req.body.content
+    req.body.content,
+    req.body.parent
   ).then(function (revision) {
     res.send(revision.sanitize());
   }).catch(next);

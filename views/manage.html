@@ -1,26 +1,25 @@
 <div class="main-static">
-  <div class="row">
-    <div class="col-xs-8 col-xs-offset-2">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th class="date">Created At</th>
-            <th class="date">Updated At</th>
-            <th class="number">Revisions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="form in amc.forms">
-            <td>
-              <a class="block" href="/edit/{{ form._id }}" ng-bind="form.head.title"></a>
-            </td>
-            <td ng-bind="form.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
-            <td ng-bind="form.updated_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
-            <td ng-bind="form.commits.length"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="col-xs-8 col-xs-offset-2">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th class="date">Created At</th>
+          <th class="date">Updated At</th>
+          <th class="number">Revisions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="form in amc.forms">
+          <td>
+            <a class="block" href="/edit/{{ form._id }}"
+              ng-bind="form.head.title || '(untitled)'"></a>
+          </td>
+          <td ng-bind="form.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
+          <td ng-bind="form.updated_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
+          <td ng-bind="form.commits.length"></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

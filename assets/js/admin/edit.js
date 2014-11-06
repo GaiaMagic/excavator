@@ -60,7 +60,7 @@ controller('AdminEditController', [
   this.schemedata = 'Scheme data will appear here once you save the scheme.';
   this.save = function () {
     var self = this;
-    createNew(this.form.content).catch(function (data) {
+    createNew(currentForm, this.form.content).catch(function (data) {
       self.schemedata = data.content;
       save('schemedata', self.schemedata);
     });
