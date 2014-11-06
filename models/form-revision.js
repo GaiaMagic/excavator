@@ -58,6 +58,7 @@ formRevisionSchema.pre('save', function (next) {
       if (typeof parsed !== 'object') {
         throw 'parsed JSON is not an object';
       }
+      this.content = JSON.stringify(parsed);
     } catch (e) {
       return next(panic(422, {
         type:    'content-is-not-valid-json',
