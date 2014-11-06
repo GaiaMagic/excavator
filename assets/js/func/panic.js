@@ -30,11 +30,15 @@ factory('func.panic', [
     return function (err) {
       var details;
       var errorMsg;
-      if (angular.isObject(err)) details = err.data;
-      if (details) {
-        errorMsg = details.message;
+      if (angular.isString(err)) {
+        errorMsg = err;
       } else {
-        errorMsg = 'Unexpected error was encountered.';
+        if (angular.isObject(err)) details = err.data;
+        if (details) {
+          errorMsg = details.message;
+        } else {
+          errorMsg = 'Unexpected error was encountered.';
+        }
       }
       $modal({
         title: 'Error',
