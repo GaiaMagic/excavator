@@ -1,8 +1,13 @@
 var mongoose = require('mongoose');
 var Admin = require('./models/admin');
 var defaultAdmin = 'caiguanhao';
-mongoose.connect('mongodb://localhost/excavator', function () {
-  console.log('mongoose is running');
+mongoose.connect('mongodb://localhost/excavator', function (err) {
+  if (err) {
+    console.error('Failed to connect to MongoDB.',
+                  'Have you started the service?');
+    return;
+  }
+  console.log('MongoDB is running.');
 
   Admin.register(defaultAdmin, '123456').then(function () {
     console.log('created new admin: ' + defaultAdmin);
