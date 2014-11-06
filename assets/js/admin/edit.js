@@ -16,6 +16,7 @@ controller('AdminEditController', [
   'func.localstorage.remove',
   'func.localstorage.save',
   'func.scheme.parse',
+  'func.panic',
   'currentForm',
   function (
     $scope,
@@ -31,9 +32,18 @@ controller('AdminEditController', [
     remove,
     save,
     parse,
+    panic,
     currentForm
   ) {
-  this.form = {};
+  if (angular.isUndefined(currentForm)) {
+    this.form = {};
+    this.form.content = load('schemedata', parse) || fixtures;
+    this.form.title = undefined;
+  } else if (currentForm === false) {
+    return panic('Form is corrupted.');
+  } else {
+    this.form = currentForm;
+  }
 
   this.formdata = 'Form data will appear here once you submit the form.';
   this.submit = function () {
@@ -57,14 +67,6 @@ controller('AdminEditController', [
   };
 
   this.schemes = schemes.list();
-
-  if (angular.isUndefined(currentForm)) {
-    this.form.content = load('schemedata', parse) || fixtures;
-    this.form.title = undefined;
-  } else {
-    this.form.content = currentForm.content;
-    this.form.title = currentForm.title;
-  }
 
   this.array = funcArray;
 

@@ -33,9 +33,19 @@ config([
             var formid = $route.current.params.formid;
             if (angular.isUndefined(formid)) return;
             return get(formid).then(function (res) {
+              if (!angular.isObject(res.data.head)) return false;
+
+              var title = res.data.head.title;
+              if (!angular.isString(title) || !title) return false;
+
+              var content = parse(res.data.head.content);
+              if (!angular.isObject(content) ||
+                  !angular.isObject(content.scheme)) return false;
+
               return {
-                title: res.data.head.title,
-                content: parse(res.data.head.content)
+                title: title,
+                content: content,
+                form: res.data
               };
             });
           }
