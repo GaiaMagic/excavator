@@ -32,16 +32,30 @@ service('backend.admin.user.token.unset', [
 
 service('backend.admin.login.status', [
   '$http',
+  '$rootScope',
   'func.panic',
-  function ($http, panic) {
+  function ($http, $rootScope, panic) {
     var self = this;
     self.loggedIn = false;
 
+    $rootScope.$watch(function () {
+      return self.loggedIn;
+    }, function (val) {
+      $rootScope.$broadcast('login-status-changed', val);
+    });
+
+    self.updatePromise = undefined;
+
     self.update = function () {
-      return $http.get('/admins/status').then(function (res) {
-        self.loggedIn = !!(res.data.status && res.data.status === 'OK');
-        return self.loggedIn;
-      }, panic);
+      if (angular.isUndefined(self.updatePromise)) {
+        self.updatePromise = $http.get('/admins/status').then(function (res) {
+          self.loggedIn = !!(res.data.status && res.data.status === 'OK');
+          return self.loggedIn;
+        }, panic).finally(function () {
+          self.updatePromise = undefined;
+        });
+      }
+      return self.updatePromise;
     };
   }
 ]).

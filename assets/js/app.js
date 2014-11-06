@@ -3,6 +3,7 @@ angular.module('excavator', [
   'excavator.admin',
   'excavator.backend',
   'excavator.func',
+  'excavator.routes',
   'excavator.scheme',
   'excavator.vendor'
 ]).
@@ -16,27 +17,4 @@ constant('data.admin.nav.menu', [{
 }, {
   text: 'Manage',
   link: '/manage'
-}]).
-
-config([
-  '$routeProvider', '$locationProvider',
-  function($routeProvider, $locationProvider) {
-    $routeProvider.
-
-    when('/login', {
-      templateUrl: '/login.html',
-      controller: 'AdminLoginController as alc',
-    }).
-
-    when('/edit', {
-      templateUrl: '/edit.html',
-      controller: 'AdminEditController as aec',
-    }).
-
-    otherwise({
-      redirectTo: '/edit'
-    });
-
-    $locationProvider.html5Mode(true);
-  }
-]);
+}]);
