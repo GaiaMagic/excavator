@@ -4,9 +4,8 @@ directive('navView', [
   '$location',
   'backend.admin.login.status',
   'backend.admin.logout',
-  'data.admin.nav.menu',
   'func.panic.alert',
-  function ($location, status, logout, menu, alert) {
+  function ($location, status, logout, alert) {
   return {
     scope: true,
     template: [
@@ -17,9 +16,16 @@ directive('navView', [
           '</div>',
           '<div>',
             '<ul class="nav navbar-nav">',
-              '<li ng-repeat="item in menu" ',
-                'ng-class="{active: isActive(currentPath, item.link)}">',
-                '<a href="{{ item.link }}" ng-bind="item.text"></a>',
+              '<li ng-class="{active: isActive(\'/manage\')}">',
+                '<a href="/manage">All Forms</a>',
+              '</li>',
+              '<li ng-class="{active: isActive(\'/edit\')}" ',
+                'ng-if="is(\'form-edit\')">',
+                '<a href="/edit/{{metaData.id}}">Editing ',
+                  '{{metaData.title}}</a>',
+              '</li>',
+              '<li ng-class="{active:isActive(\'/create\')}">',
+                '<a href="/create">Create</a>',
               '</li>',
             '</ul>',
             '<ul class="nav navbar-nav navbar-right">',
@@ -37,17 +43,23 @@ directive('navView', [
       $scope.$on('$routeChangeSuccess', function () {
         $scope.currentPath = $location.path();
       });
-      $scope.menu = menu;
       $scope.logout = function () {
         logout();
         alert('You have successfully logged out.');
       };
-      $scope.isActive = function (longpath, shortpath) {
-        if (shortpath.slice(-1) !== '/') shortpath += '/';
-        if (longpath.slice(-1) !== '/') longpath += '/';
-        return longpath.slice(0, shortpath.length) === shortpath;
+      $scope.isActive = function (path) {
+        if (path.slice(-1) !== '/') path += '/';
+        var currentPath = $scope.currentPath;
+        if (currentPath.slice(-1) !== '/') currentPath += '/';
+        return currentPath.slice(0, path.length) === path;
+      };
+      $scope.is = function (type) {
+        return !!($scope.metaData && $scope.metaData.type === type);
       };
       $scope.status = status;
+      $scope.$on('global-meta', function (e, data) {
+        $scope.metaData = data;
+      });
     }
   };
 }]);

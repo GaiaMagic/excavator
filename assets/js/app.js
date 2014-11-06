@@ -7,15 +7,4 @@ angular.module('excavator', [
   'excavator.routes',
   'excavator.scheme',
   'excavator.vendor'
-]).
-
-constant('data.admin.nav.menu', [{
-  text: 'Create',
-  link: '/create'
-}, {
-  text: 'Edit',
-  link: '/edit'
-}, {
-  text: 'Manage',
-  link: '/manage'
-}]);
+]);
