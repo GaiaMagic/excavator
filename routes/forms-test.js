@@ -3,6 +3,7 @@ var mongoose  = require('mongoose');
 var request   = require('supertest');
 var excavator = require('./');
 var Admin     = require('../models/admin');
+var FormRevision = require('../models/form-revision');
 
 var real      = config.fixturesOf('admin', 'form');
 
@@ -13,6 +14,7 @@ chai.should();
 
 describe('Route /forms', function () {
   var realAdmin;
+  var realForm;
 
   before(function (done) {
     if (mongoose.connection.db) {
@@ -24,10 +26,85 @@ describe('Route /forms', function () {
       Admin.remove({}, function () {
         Admin.register(real.username, real.password).then(function (admin) {
           realAdmin = admin;
-          done();
-        }).catch(done);
+          return FormRevision.create(real.title, real.content).
+            then(function (form) {
+              realForm = form;
+            });
+        }).then(done).catch(done);
       });
     }
+  });
+
+  describe('Sub-route /', function () {
+    it('should list forms', function (done) {
+      request(excavator).
+      get('/forms').
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(res.body).to.be.an('array');
+        done();
+      });
+    });
+  });
+
+  describe('Sub-route /:formid', function () {
+    it('should return 404 if formid in invalid', function (done) {
+      request(excavator).
+      get('/forms/invalidformid').
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(404).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(Object.keys(res.body)).to.have.members([
+          'status',
+          'type',
+          'message'
+        ]);
+        expect(res.body.type).to.equal('not-found');
+        done();
+      });
+    });
+
+    it('should return 404 if formid does not exist', function (done) {
+      var id = realForm.parent.toString();
+      var last = parseInt(id.slice(-1)) || 0;
+      request(excavator).
+      get('/forms/' + id.slice(0, -1) + (last + 1)).
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(404).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(Object.keys(res.body)).to.have.members([
+          'status',
+          'type',
+          'message'
+        ]);
+        expect(res.body.type).to.equal('not-found');
+        done();
+      });
+    });
+
+    it('should list a form', function (done) {
+      request(excavator).
+      get('/forms/' + realForm.parent).
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(res.body).to.be.an('object');
+        expect(res.body.head).to.be.an('object');
+        expect(res.body.head._id).to.equal(realForm._id.toString());
+        expect(res.body.head.title).to.equal(real.title);
+        expect(res.body.head.content).to.equal(real.content);
+        expect(res.body.commits).to.be.an('array');
+        expect(res.body.commits).to.have.members([
+          realForm._id.toString()
+        ]);
+        done();
+      });
+    });
   });
 
   function expectFailure (token, data, status, type, done) {
