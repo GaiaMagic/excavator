@@ -10,8 +10,10 @@ service('schemes', ['func.error', function (error) {
     return Object.keys(this.all).map(function (name) {
       var scheme = self.all[name];
       return {
-        name: scheme.title || scheme.name || '(untitled)'
-      };
+        title: scheme.title || scheme.name || '(untitled)',
+        name: scheme.name,
+        version: scheme.latest
+      }
     });
   };
 
@@ -66,6 +68,12 @@ directive('scheme', [
         $scope.data = data || {};
         if (angular.isArray(renderInit) || angular.isFunction(renderInit)) {
           $injector.invoke(renderInit, $scope);
+        }
+
+        // scheme.model is a necessary field
+        if (!angular.isString(scheme.model) ||
+          !/^[a-zA-Z][A-Za-z0-9]+$/.test(scheme.model)) {
+          scheme.model = 'undetermined' + Date.now();
         }
 
         var html = enumerate(proto[render], $scope).join('');

@@ -14,6 +14,17 @@ module.exports = {
   latest: '1.0',
 
   '1.0': {
+    schemeDefaults: {
+      enum: [{
+        label: 'Yes, I do.',
+        value: true,
+        group: 'YES'
+      }, {
+        label: 'No, I don\'t',
+        value: false,
+        group: 'NO'
+      }]
+    },
     templateInit: [
       'func.enumerate',
       'func.enumerate.stat',

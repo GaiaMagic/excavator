@@ -68,6 +68,16 @@ controller('AdminEditController', [
 
   this.schemes = schemes.list();
 
+  this.add = function (name, version) {
+    var scheme = schemes.get(name, version);
+    if (angular.isUndefined(scheme)) return panic('No such item.');
+    var schemeToAdd = angular.extend({
+      type: name,
+      version: version
+    }, scheme.schemeDefaults);
+    this.form.content.scheme.push(schemeToAdd);
+  };
+
   this.array = funcArray;
 
   var self = this;

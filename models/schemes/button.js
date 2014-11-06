@@ -14,6 +14,16 @@ module.exports = {
   latest: '1.0',
 
   '1.0': {
+    schemeDefaults: {
+      enum: [{
+        type: 'submit',
+        label: 'Submit',
+        class: 'btn-info'
+      }, {
+        type: 'button',
+        label: 'Cancel'
+      }]
+    },
     templateInit: [
       'func.enumerate',
       'func.enumerate.stat',

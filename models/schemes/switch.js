@@ -14,6 +14,15 @@ module.exports = {
   latest: '1.0',
 
   '1.0': {
+    schemeDefaults: {
+      enum: [{
+        label: 'YES',
+        value: true
+      }, {
+        label: 'NO',
+        value: false
+      }]
+    },
     templateInit: [
       'func.enumerate',
       'func.enumerate.stat',
@@ -23,14 +32,7 @@ module.exports = {
         var items = enumerate(scheme.enum);
         var stat = enumerateStat(items);
         if (!stat.isValid) {
-          items = enumerate([{
-            label: 'YES',
-            value: true
-          }, {
-            label: 'NO',
-            value: false
-          }]);
-          stat = enumerateStat(items);
+          throw 'Enum of switch must be an object.';
         }
 
         var defValue;
