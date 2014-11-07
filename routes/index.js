@@ -17,6 +17,7 @@ var needsTokenAuth = require('./token-auth')();
 
 excavator.use('/admins', require('./admins'));
 excavator.use('/forms', needsTokenAuth, require('./forms'));
+excavator.use('/submissions', needsTokenAuth, require('./submissions'));
 
 excavator.use(function (req, res, next) {
   try {
