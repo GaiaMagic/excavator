@@ -37,7 +37,11 @@ factory('func.panic', [
         if (details) {
           errorMsg = details.message;
         } else {
-          errorMsg = 'Unexpected error was encountered.';
+          if (err.status === 0) {
+            errorMsg = 'Unable to access network. Check your network settings.';
+          } else {
+            errorMsg = 'Unexpected error was encountered.';
+          }
         }
       }
       $modal({
@@ -50,14 +54,38 @@ factory('func.panic', [
 ]).
 
 factory('func.panic.alert', [
+  '$location',
   '$modal',
-  function ($modal) {
-    return function (content, title) {
-      $modal({
+  '$timeout',
+  function ($location, $modal, $timeout) {
+    /**
+     * show an alert modal window
+     * @param  {string}   content  the body of the alert window
+     * @param  {string}   title    the title of the alert window
+     * @param  {str/func} hide     function to be executed after modal window
+     *                             is hidden, if this is a URI string, it will
+     *                             go to this location
+     * @return {undefined}         this function returns nothing
+     */
+    return function (content, title, hide) {
+      var modal = $modal({
         title: title || 'Info',
         content: content,
         template: 'func.panic.modal.template'
       });
+      var hideEvent;
+      if (angular.isString(hide)) {
+        hideEvent = function () {
+          $location.path(hide);
+        };
+      } else if (angular.isFunction(hide)) {
+        hideEvent = hide;
+      }
+      if (angular.isFunction(hideEvent)) {
+        modal.$scope.$on('modal.hide', function () {
+          $timeout(hideEvent);
+        });
+      }
     };
   }
 ]);

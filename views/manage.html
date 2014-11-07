@@ -10,6 +10,11 @@
         </tr>
       </thead>
       <tbody>
+        <tr ng-if="!amc.forms || !amc.forms.length">
+          <td colspan="4" class="text-center">
+            No forms has been created yet. <a href="/create">Create</a> one now.
+          </td>
+        </tr>
         <tr ng-repeat="form in amc.forms">
           <td>
             <a class="block" href="/edit/{{ form._id }}"

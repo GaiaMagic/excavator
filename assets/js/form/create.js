@@ -96,7 +96,9 @@ factory('form.create.new', [
           modal.hide();
           var content = stringify(schemeData);
           create(form.title, content).then(function (res) {
-            alert('Successfully created ' + form.title + '.', 'OK');
+            alert('Successfully created ' + form.title + '. You will be ' +
+              'redirected to the form edit page.', 'OK',
+              '/edit/' + res.data.parent);
             deferred.resolve(res.data);
           }, function (err) {
             panic(err);

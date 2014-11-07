@@ -7,7 +7,12 @@ var panic      = require('../lib/panic');
 var formRevisionSchema = new Schema({
   parent:     { type: Schema.ObjectId, ref: 'Form' },
   title:      { type: String, trim: true },
+
+  // content should be a JSON string rather than an Object,
+  // as the content may have variable data types which may
+  // cause security troubles
   content:    { type: String },
+
   created_at: { type: Date, default: Date.now }
 });
 
