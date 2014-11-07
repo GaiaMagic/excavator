@@ -1,0 +1,26 @@
+<div class="main-static">
+  <div class="col-xs-8 col-xs-offset-2">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Form</th>
+          <th class="date">Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-if="!asc.submissions || !asc.submissions.length">
+          <td colspan="4" class="text-center">
+            No submissions yet!
+          </td>
+        </tr>
+        <tr ng-repeat="sub in asc.submissions">
+          <td>
+            <a class="block" href="/edit/{{ sub.form }}"
+              ng-bind="sub.form_revision.title || '(untitled)'"></a>
+          </td>
+          <td ng-bind="sub.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

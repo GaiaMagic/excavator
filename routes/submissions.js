@@ -4,7 +4,8 @@ var Submission = require('../models/submission');
 var jsonParser = require('body-parser').json();
 
 router.get('/', function (req, res, next) {
-  Submission.find({}).sort('-created_at').skip(0).limit(20).exec().
+  Submission.find({}).sort('-created_at').skip(0).limit(20).
+  populate('form_revision', 'title').exec().
   then(function (submissions) {
     res.send(submissions);
   }, next);

@@ -80,6 +80,14 @@ config([
       }
     }).
 
+    when('/subs', {
+      templateUrl: '/submissions.html',
+      controller: 'AdminSubmissionsController as asc',
+      resolve: {
+        loggedIn: needsAuth
+      }
+    }).
+
     otherwise({
       redirectTo: '/manage'
     });

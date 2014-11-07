@@ -16,8 +16,8 @@ factory('backend.form.create', [
 factory('backend.form.get', [
   '$http',
   function ($http) {
-    return function (formid) {
-      return $http.get('/forms/' + formid);
+    return function (id) {
+      return $http.get('/forms/' + id);
     };
   }
 ]).
@@ -25,7 +25,7 @@ factory('backend.form.get', [
 factory('backend.form.list', [
   '$http',
   function ($http) {
-    return function (title, content) {
+    return function () {
       return $http.get('/forms');
     };
   }
