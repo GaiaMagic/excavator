@@ -7,7 +7,7 @@ config([
       'backend.admin.login.status', '$location',
       function(status, $location) {
         return status.update().then(function (loggedIn) {
-          if (!loggedIn) $location.path('/login');
+          if (!loggedIn) $location.path('/control/login');
           return loggedIn;
         });
       }
@@ -15,12 +15,12 @@ config([
 
     $routeProvider.
 
-    when('/login', {
+    when('/control/login', {
       templateUrl: '/login.html',
       controller: 'AdminLoginController as alc',
     }).
 
-    when('/create', {
+    when('/control/forms/create', {
       templateUrl: '/edit.html',
       controller: 'AdminEditController as aec',
       resolve: {
@@ -31,7 +31,7 @@ config([
       }
     }).
 
-    when('/edit/:formid', {
+    when('/control/forms/edit/:formid', {
       templateUrl: '/edit.html',
       controller: 'AdminEditController as aec',
       resolve: {
@@ -72,7 +72,7 @@ config([
       }
     }).
 
-    when('/manage', {
+    when('/control/forms', {
       templateUrl: '/manage.html',
       controller: 'AdminManageController as amc',
       resolve: {
@@ -80,7 +80,7 @@ config([
       }
     }).
 
-    when('/subs', {
+    when('/control/submissions', {
       templateUrl: '/submissions.html',
       controller: 'AdminSubmissionsController as asc',
       resolve: {
@@ -89,7 +89,7 @@ config([
     }).
 
     otherwise({
-      redirectTo: '/manage'
+      redirectTo: '/control/forms'
     });
 
     $locationProvider.html5Mode(true);

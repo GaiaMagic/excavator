@@ -10,9 +10,9 @@ mongoose.connect('mongodb://localhost/excavator', function (err) {
   console.log('MongoDB is running.');
 
   Admin.register(defaultAdmin, '123456').then(function () {
-    console.log('created new admin: ' + defaultAdmin);
+    console.log('New admin has been created: ' + defaultAdmin);
   }, function () {
-    console.log('already registered: ' + defaultAdmin);
+    console.log('Already registered: ' + defaultAdmin);
   });
 });
 
@@ -21,5 +21,7 @@ var excavator = require('./routes');
 excavator.set('port', 3000);
 
 excavator.listen(excavator.get('port'), function () {
-  console.log('excavator is listening on port ' + excavator.get('port'));
+  console.log('Excavator is listening on port ' + excavator.get('port'));
+  console.log('Administrator interface: http://localhost:' +
+    excavator.get('port') + '/control/login')
 });

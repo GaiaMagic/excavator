@@ -17,7 +17,7 @@
         </tr>
         <tr ng-repeat="form in amc.forms">
           <td>
-            <a class="block" href="/edit/{{ form._id }}"
+            <a class="block" href="/control/forms/edit/{{ form._id }}"
               ng-bind="form.head.title || '(untitled)'"></a>
           </td>
           <td ng-bind="form.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>

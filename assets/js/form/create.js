@@ -98,7 +98,7 @@ factory('form.create.new', [
           create(form.title, content).then(function (res) {
             alert('Successfully created ' + form.title + '. You will be ' +
               'redirected to the form edit page.', 'OK',
-              '/edit/' + res.data.parent);
+              '/control/forms/edit/' + res.data.parent);
             deferred.resolve(res.data);
           }, function (err) {
             panic(err);

@@ -15,7 +15,7 @@
         </tr>
         <tr ng-repeat="sub in asc.submissions">
           <td>
-            <a class="block" href="/edit/{{ sub.form }}"
+            <a class="block" href="/control/forms/edit/{{ sub.form }}"
               ng-bind="sub.form_revision.title || '(untitled)'"></a>
           </td>
           <td ng-bind="sub.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
