@@ -19,11 +19,12 @@ gulp.task('scripts', function () {
 });
 
 gulp.task('watch', ['less', 'scripts'], function () {
-  var excavator = $.express;
-
-  excavator.run({
-    file: 'excavator.js'
-  });
+  var gutil = require('gulp/node_modules/gulp-util');
+  var errLogger = function () {
+    gutil.log(gutil.colors.red.apply(undefined, arguments));
+  };
+  var excavator = $.express2('excavator.js', gutil.log, errLogger);
+  excavator.run();
 
   gulp.watch([
     'excavator.js',
