@@ -16,18 +16,18 @@ directive('navView', [
           '</div>',
           '<div>',
             '<ul class="nav navbar-nav">',
-              '<li ng-class="{active: isActive(\'/control/forms\')}">',
+              '<li ng-class="{active: ifPathIs(\'/control/forms\')}">',
                 '<a href="/control/forms">All Forms</a>',
               '</li>',
-              '<li ng-class="{active: isActive(\'/control/forms/edit\')}" ',
+              '<li ng-class="{active: ifPathHas(\'/control/forms/edit\')}" ',
                 'ng-if="is(\'form-edit\')">',
                 '<a href="/control/forms/edit/{{metaData.id}}">Editing ',
                   '{{metaData.title}}</a>',
               '</li>',
-              '<li ng-class="{active:isActive(\'/control/forms/create\')}">',
+              '<li ng-class="{active:ifPathIs(\'/control/forms/create\')}">',
                 '<a href="/control/forms/create">Create</a>',
               '</li>',
-              '<li ng-class="{active:isActive(\'/control/submissions\')}">',
+              '<li ng-class="{active:ifPathIs(\'/control/submissions\')}">',
                 '<a href="/control/submissions">Submissions</a>',
               '</li>',
             '</ul>',
@@ -50,11 +50,14 @@ directive('navView', [
         logout();
         alert('You have successfully logged out.');
       };
-      $scope.isActive = function (path) {
+      $scope.ifPathHas = function (path) {
         if (path.slice(-1) !== '/') path += '/';
         var currentPath = $scope.currentPath;
         if (currentPath.slice(-1) !== '/') currentPath += '/';
         return currentPath.slice(0, path.length) === path;
+      };
+      $scope.ifPathIs = function (path) {
+        return $scope.currentPath === path;
       };
       $scope.is = function (type) {
         return !!($scope.metaData && $scope.metaData.type === type);
