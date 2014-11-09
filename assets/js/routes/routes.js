@@ -16,12 +16,12 @@ config([
     $routeProvider.
 
     when('/control/login', {
-      templateUrl: '/login.html',
+      templateUrl: '/control/login.html',
       controller: 'AdminLoginController as alc',
     }).
 
     when('/control/forms/create', {
-      templateUrl: '/edit.html',
+      templateUrl: '/control/forms/edit.html',
       controller: 'AdminEditController as aec',
       resolve: {
         loggedIn: needsAuth,
@@ -32,7 +32,7 @@ config([
     }).
 
     when('/control/forms/edit/:formid', {
-      templateUrl: '/edit.html',
+      templateUrl: '/control/forms/edit.html',
       controller: 'AdminEditController as aec',
       resolve: {
         loggedIn: needsAuth,
@@ -73,7 +73,7 @@ config([
     }).
 
     when('/control/forms', {
-      templateUrl: '/manage.html',
+      templateUrl: '/control/forms/list.html',
       controller: 'AdminManageController as amc',
       resolve: {
         loggedIn: needsAuth
@@ -81,7 +81,7 @@ config([
     }).
 
     when('/control/submissions', {
-      templateUrl: '/submissions.html',
+      templateUrl: '/control/submissions/list.html',
       controller: 'AdminSubmissionsController as asc',
       resolve: {
         loggedIn: needsAuth

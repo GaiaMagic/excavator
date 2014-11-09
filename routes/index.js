@@ -19,9 +19,10 @@ excavator.use('/admins', require('./admins'));
 excavator.use('/forms', needsTokenAuth, require('./forms'));
 excavator.use('/submissions', needsTokenAuth, require('./submissions'));
 
-excavator.use(function (req, res, next) {
+excavator.use('/control', function (req, res, next) {
   try {
-    fs.createReadStream(path.join(root, 'views', 'index.html')).pipe(res);
+    var controlIndex = path.join(root, 'views', 'control', 'index.html');
+    fs.createReadStream(controlIndex).pipe(res);
   } catch (e) {
     next();
   }
