@@ -1,4 +1,3 @@
-var fs = require('fs');
 var path = require('path');
 var express = require('express');
 var livereload = require('connect-livereload');
@@ -15,14 +14,13 @@ excavator.use(express.static(path.join(root, 'vendors')));
 
 excavator.use('/backend', require('./backend'));
 
-excavator.use('/control', function (req, res, next) {
-  try {
-    var controlIndex = path.join(root, 'views', 'control', 'index.html');
-    fs.createReadStream(controlIndex).pipe(res);
-  } catch (e) {
-    next();
-  }
-});
+var serveThisFileOnly = require('./serve-only');
+
+var controlIndex = path.join(root, 'views', 'control', 'index.html');
+excavator.use('/control', serveThisFileOnly(controlIndex));
+
+var defaultIndex = path.join(root, 'views', 'index.html');
+excavator.use(serveThisFileOnly(defaultIndex));
 
 excavator.use(require('./errors'));
 
