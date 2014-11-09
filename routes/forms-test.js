@@ -12,7 +12,7 @@ var expect    = chai.expect;
 
 chai.should();
 
-describe('Route /forms', function () {
+describe('Route /backend/forms', function () {
   var realAdmin;
   var realForm;
 
@@ -38,7 +38,7 @@ describe('Route /forms', function () {
   describe('Sub-route /', function () {
     it('should list forms', function (done) {
       request(excavator).
-      get('/forms').
+      get('/backend/forms').
       set('Authorization', 'token ' + realAdmin.token).
       expect(200).
       end(function (err, res) {
@@ -52,7 +52,7 @@ describe('Route /forms', function () {
   describe('Sub-route /:formid', function () {
     it('should return 404 if formid in invalid', function (done) {
       request(excavator).
-      get('/forms/invalidformid').
+      get('/backend/forms/invalidformid').
       set('Authorization', 'token ' + realAdmin.token).
       expect(404).
       end(function (err, res) {
@@ -71,7 +71,7 @@ describe('Route /forms', function () {
       var id = realForm.parent.toString();
       var last = parseInt(id.slice(-1)) || 0;
       request(excavator).
-      get('/forms/' + id.slice(0, -1) + (last + 1)).
+      get('/backend/forms/' + id.slice(0, -1) + (last + 1)).
       set('Authorization', 'token ' + realAdmin.token).
       expect(404).
       end(function (err, res) {
@@ -88,7 +88,7 @@ describe('Route /forms', function () {
 
     it('should list a form', function (done) {
       request(excavator).
-      get('/forms/' + realForm.parent).
+      get('/backend/forms/' + realForm.parent).
       set('Authorization', 'token ' + realAdmin.token).
       expect(200).
       end(function (err, res) {
@@ -109,7 +109,7 @@ describe('Route /forms', function () {
 
   function expectFailure (token, data, status, type, done) {
     request(excavator).
-    post('/forms/create').
+    post('/backend/forms/create').
     set('Authorization', token).
     send(data || { title: real.title, content: real.content }).
     expect(status || 403).
@@ -178,7 +178,7 @@ describe('Route /forms', function () {
 
     it('should return 200 OK if everything is valid', function (done) {
       request(excavator).
-      post('/forms/create').
+      post('/backend/forms/create').
       set('Authorization', 'token ' + realAdmin.token).
       send({ title: real.title, content: real.content }).
       expect(200).

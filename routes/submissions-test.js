@@ -13,7 +13,7 @@ var expect    = chai.expect;
 
 chai.should();
 
-describe('Route /submissions', function () {
+describe('Route /backend/submissions', function () {
   var realAdmin;
   var realForm;
   var realSubmission;
@@ -46,7 +46,7 @@ describe('Route /submissions', function () {
   describe('Sub-route /', function () {
     it('should list submissions', function (done) {
       request(excavator).
-      get('/submissions').
+      get('/backend/submissions').
       set('Authorization', 'token ' + realAdmin.token).
       expect(200).
       end(function (err, res) {
@@ -60,7 +60,7 @@ describe('Route /submissions', function () {
   describe('Sub-route /:submissionid', function () {
     it('should return 404 if submissionid in invalid', function (done) {
       request(excavator).
-      get('/submissions/invalidsubmissionid').
+      get('/backend/submissions/invalidsubmissionid').
       set('Authorization', 'token ' + realAdmin.token).
       expect(404).
       end(function (err, res) {
@@ -79,7 +79,7 @@ describe('Route /submissions', function () {
       var id = realSubmission._id.toString();
       var last = ((parseInt(id.slice(-1)) || 0) + 1 + '').slice(0, 1);
       request(excavator).
-      get('/submissions/' + id.slice(0, -1) + last).
+      get('/backend/submissions/' + id.slice(0, -1) + last).
       set('Authorization', 'token ' + realAdmin.token).
       expect(404).
       end(function (err, res) {
@@ -96,7 +96,7 @@ describe('Route /submissions', function () {
 
     it('should list a submission', function (done) {
       request(excavator).
-      get('/submissions/' + realSubmission._id).
+      get('/backend/submissions/' + realSubmission._id).
       set('Authorization', 'token ' + realAdmin.token).
       expect(200).
       end(function (err, res) {
@@ -111,7 +111,7 @@ describe('Route /submissions', function () {
 
   function expectFailure (token, data, status, type, done) {
     request(excavator).
-    post('/submissions/create').
+    post('/backend/submissions/create').
     set('Authorization', token).
     send(data || { form: realForm._id, data: {} }).
     expect(status || 403).
@@ -156,7 +156,7 @@ describe('Route /submissions', function () {
 
     it('should return 200 OK if everything is valid', function (done) {
       request(excavator).
-      post('/submissions/create').
+      post('/backend/submissions/create').
       set('Authorization', 'token ' + realAdmin.token).
       send({ form: realForm._id, data: {} }).
       expect(200).

@@ -12,7 +12,7 @@ var expect    = chai.expect;
 
 chai.should();
 
-describe('Route /admins', function () {
+describe('Route /backend/admins', function () {
   var realAdmin;
 
   before(function (done) {
@@ -34,7 +34,7 @@ describe('Route /admins', function () {
   describe('Sub-route /status', function () {
     function expectFailure (token, done) {
       request(excavator).
-      get('/admins/status').
+      get('/backend/admins/status').
       set('Authorization', token).
       expect(200).
       end(function (err, res) {
@@ -63,7 +63,7 @@ describe('Route /admins', function () {
 
     it('should return OK if the token is valid', function (done) {
       request(excavator).
-      get('/admins/status').
+      get('/backend/admins/status').
       set('Authorization', 'token ' + realAdmin.token).
       expect(200).
       end(function (err, res) {
@@ -81,7 +81,7 @@ describe('Route /admins', function () {
     function expectFailure (data, status, type) {
       var deferred = Q.defer();
       request(excavator).
-      post('/admins/login').
+      post('/backend/admins/login').
       send(data).
       expect(status || 403).
       end(function (err, res) {
@@ -158,7 +158,7 @@ describe('Route /admins', function () {
     describe('should only return a token', function () {
       it('if user succcessfully logged in', function (done) {
         request(excavator).
-        post('/admins/login').
+        post('/backend/admins/login').
         send({ username: real.username, password: real.password }).
         expect(200).
         end(function (err, res) {

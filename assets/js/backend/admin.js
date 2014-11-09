@@ -48,7 +48,8 @@ service('backend.admin.login.status', [
 
     self.update = function () {
       if (angular.isUndefined(self.updatePromise)) {
-        self.updatePromise = $http.get('/admins/status').then(function (res) {
+        self.updatePromise = $http.get('/backend/admins/status').
+        then(function (res) {
           self.loggedIn = !!(res.data.status && res.data.status === 'OK');
           return self.loggedIn;
         }, panic).finally(function () {
@@ -75,7 +76,7 @@ factory('backend.admin.login', [
   'backend.admin.user.token.set',
   function ($http, set) {
     return function (username, password) {
-      return $http.post('/admins/login', {
+      return $http.post('/backend/admins/login', {
         username: username,
         password: password
       }).then(function (res) {
