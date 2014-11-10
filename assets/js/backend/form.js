@@ -3,11 +3,12 @@ angular.module('excavator.backend.form', []).
 factory('backend.form.create', [
   '$http',
   function ($http) {
-    return function (title, content, parent) {
+    return function (title, content, parent, slug) {
       return $http.post('/backend/forms/create', {
         title: title,
         content: content,
-        parent: parent
+        parent: parent,
+        slug: slug
       });
     };
   }

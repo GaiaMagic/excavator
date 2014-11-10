@@ -1,6 +1,6 @@
 angular.module('excavator.resolver', []).
 
-constant('resolver.form', function (service) {
+constant('resolver.form', function currentForm (service) {
   return [
     '$rootScope',
     '$route',
@@ -16,6 +16,8 @@ constant('resolver.form', function (service) {
         var title = res.data.head.title;
         if (!angular.isString(title) || !title) return false;
 
+        var slug = res.data.head.slug;
+
         var content = parse(res.data.head.content);
         if (!angular.isObject(content) ||
             !angular.isObject(content.scheme)) return false;
@@ -29,6 +31,7 @@ constant('resolver.form', function (service) {
         return {
           title: title,
           content: content,
+          slug: slug,
           form: res.data
         };
       });

@@ -4,8 +4,8 @@ var Form = require('../models/form');
 var Submission = require('../models/submission');
 var jsonParser = require('body-parser').json();
 
-router.get('/forms/:formid', function (req, res, next) {
-  Form.findById(req.params.formid).populate('head').exec().
+router.get('/forms/:slug', function (req, res, next) {
+  Form.findOne({ slug: req.params.slug }).populate('head').exec().
   then(function (revision) {
     if (!revision) return next('not-found');
     res.send(revision);

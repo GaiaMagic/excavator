@@ -24,7 +24,8 @@ router.post('/create', jsonParser, function (req, res, next) {
   FormRevision.create(
     req.body.title,
     req.body.content,
-    req.body.parent
+    req.body.parent,
+    req.body.slug
   ).then(function (revision) {
     res.send(revision.sanitize());
   }).catch(next);

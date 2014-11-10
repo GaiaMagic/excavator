@@ -30,6 +30,14 @@ run([
                   '</div>',
                 '</div>',
                 '<div class="form-group">',
+                  '<label for="slug" class="col-sm-2 control-label">',
+                    'Slug</label>',
+                  '<div class="col-sm-10">',
+                    '<input type="text" class="form-control" id="slug" ',
+                      'placeholder="Slug of the form" ng-model="form.slug">',
+                  '</div>',
+                '</div>',
+                '<div class="form-group">',
                   '<label for="title" class="col-sm-2 control-label">',
                     'Title</label>',
                   '<div class="col-sm-10">',
@@ -69,14 +77,16 @@ factory('form.create.new', [
         });
         modal.$scope.form = {
           title: currentForm.title,
-          parent: currentForm.form._id
+          parent: currentForm.form._id,
+          slug: currentForm.slug
         };
         modal.$scope.submit = function () {
           modal.hide();
           var title = modal.$scope.form.title;
           var content = stringify(schemeData);
           var parent = modal.$scope.form.parent;
-          create(title, content, parent).then(function (res) {
+          var slug = modal.$scope.form.slug;
+          create(title, content, parent, slug).then(function (res) {
             alert('Successfully updated ' + title + '.', 'OK');
             deferred.resolve(res.data);
           }, function (err) {
@@ -95,7 +105,8 @@ factory('form.create.new', [
         modal.$scope.submit = function () {
           modal.hide();
           var content = stringify(schemeData);
-          create(form.title, content).then(function (res) {
+          var slug = form.slug;
+          create(form.title, content, undefined, slug).then(function (res) {
             alert('Successfully created ' + form.title + '. You will be ' +
               'redirected to the form edit page.', 'OK',
               '/control/forms/edit/' + res.data.parent);
