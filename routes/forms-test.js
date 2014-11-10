@@ -3,6 +3,7 @@ var mongoose  = require('mongoose');
 var request   = require('supertest');
 var excavator = require('./');
 var Admin     = require('../models/admin');
+var Form      = require('../models/form');
 var FormRevision = require('../models/form-revision');
 
 var real      = config.fixturesOf('admin', 'form');
@@ -174,6 +175,52 @@ describe('Route /backend/forms', function () {
         title: real.title,
         content: largecontent
       }, 413, 'content-is-too-large', done);
+    });
+
+    it('should return content-is-not-valid-json if content is not a valid JSON',
+    function (done) {
+      expectFailure('token ' + realAdmin.token, {
+        title: real.title,
+        content: '{test:false}'
+      }, 422, 'content-is-not-valid-json', done);
+    });
+
+    it('should return invalid-slug if slug is invalid', function (done) {
+      expectFailure('token ' + realAdmin.token, {
+        title: real.title,
+        content: real.content,
+        slug: repeat(real.slug, 10)
+      }, 422, 'invalid-slug', done);
+    });
+
+    it('should return malformed-slug if slug is malformed', function (done) {
+      expectFailure('token ' + realAdmin.token, {
+        title: real.title,
+        content: real.content,
+        slug: '@#$%'
+      }, 422, 'malformed-slug', done);
+    });
+
+    it('should return reserved-slug if slug is reserved', function (done) {
+      expectFailure('token ' + realAdmin.token, {
+        title: real.title,
+        content: real.content,
+        slug: 'backend'
+      }, 409, 'reserved-slug', done);
+    });
+
+    it('should return slug-has-been-taken if slug has been taken already',
+    function (done) {
+      Form.remove({ slug: real.slug }).exec().then(function () {
+        FormRevision.create(real.title, real.content,
+          undefined, real.slug).then(function () {}, done).then(function (){
+          expectFailure('token ' + realAdmin.token, {
+            title: real.title,
+            content: real.content,
+            slug: real.slug
+          }, 409, 'slug-has-been-taken', done);
+        });
+      }, done);
     });
 
     it('should return 200 OK if everything is valid', function (done) {

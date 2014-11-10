@@ -2,6 +2,7 @@ var config       = require('../test/config');
 
 var Q            = require('q');
 var mongoose     = require('mongoose');
+var Form         = require('./form');
 var FormRevision = require('./form-revision');
 var panic        = require('../lib/panic');
 
@@ -41,6 +42,7 @@ describe('Form (w/ revision) database model', function () {
         expect(revision).to.be.an('object');
         expect(Object.keys(revision.schema.paths)).to.have.members([
           'parent',
+          'slug',
           'title',
           'content',
           'created_at',
@@ -64,6 +66,7 @@ describe('Form (w/ revision) database model', function () {
       expect(revision.parent).to.be.an('object');
       expect(Object.keys(revision.parent.schema.paths)).to.have.members([
         'published',
+        'slug',
         'head',
         'commits',
         'created_at',
@@ -130,6 +133,59 @@ describe('Form (w/ revision) database model', function () {
       var invalidcontent = '{test:false}';
       expectFailure(FormRevision.create(real.title, invalidcontent),
         'content-is-not-valid-json', done);
+    });
+
+    it('should fail if slug is invalid', function (done) {
+      expectFailure(FormRevision.create(real.title, real.content,
+        undefined, repeat(real.slug, 10)), 'invalid-slug', done);
+    });
+
+    it('should fail if slug is malformed', function (done) {
+      expectFailure(FormRevision.create(real.title, real.content,
+        undefined, '@#$%^'), 'malformed-slug', done);
+    });
+
+    it('should fail if slug is reserved', function (done) {
+      expectFailure(FormRevision.create(real.title, real.content,
+        undefined, 'backend'), 'reserved-slug', done);
+    });
+
+    it('should fail if slug has been taken already', function (done) {
+      Form.remove({ slug: real.slug }).exec().then(function () {
+        FormRevision.create(real.title, real.content,
+          undefined, real.slug).then(function () {}, done).then(function (){
+          expectFailure(FormRevision.create(real.title, real.content,
+            undefined, real.slug), 'slug-has-been-taken', done);
+        });
+      }, done);
+    });
+
+    it('should use _id of the form as slug if slug is not specified',
+      function (done) {
+      Form.remove({ slug: real.slug }).exec().then(function () {
+        FormRevision.create(real.title, real.content).then(function (revision) {
+          expect(revision.slug).to.be.undefined;
+          return revision.populateParent();
+        }).then(function (revision) {
+          expect(revision.parent.slug).to.equal(revision.parent._id.toString());
+          return revision;
+        }).then(function (revision) {
+          return FormRevision.create(real.title, real.content,
+            revision.parent._id.toString(), real.slug);
+        }).then(function (revision) {
+          return revision.populateParent();
+        }).then(function (revision) {
+          expect(revision.parent.slug).to.equal(real.slug);
+          return revision;
+        }).then(function (revision) {
+          return FormRevision.create(real.title, real.content,
+            revision.parent._id.toString(), undefined);
+        }).then(function (revision) {
+          return revision.populateParent();
+        }).then(function (revision) {
+          expect(revision.parent.slug).to.equal(revision.parent._id.toString());
+        }).then(done).catch(done);
+      }, done);
     });
   });
 
