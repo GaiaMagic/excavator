@@ -1,12 +1,13 @@
 angular.module('excavator.resolver', []).
 
-constant('resolver.form', function currentForm (service) {
+constant('resolver.form', function formResolver (service) {
   return [
     '$rootScope',
     '$route',
     service,
+    'func.panic',
     'func.scheme.parse',
-    function ($rootScope, $route, get, parse) {
+    function currentForm ($rootScope, $route, get, panic, parse) {
       var formid = $route.current.params.formid;
       return get(formid).then(function (res) {
         $rootScope.$broadcast('global-meta', undefined);
@@ -34,7 +35,7 @@ constant('resolver.form', function currentForm (service) {
           slug: slug,
           form: res.data
         };
-      });
+      }, panic);
     }
   ];
 });

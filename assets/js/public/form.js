@@ -14,7 +14,7 @@ controller('FormController', [
   'public.public.forms.submit',
   function (panic, alert, currentForm, submitForm) {
     if (angular.isUndefined(currentForm)) {
-      return panic('Form does not exist.');
+      return;
     } else if (currentForm === false) {
       return panic('Form is corrupted.');
     } else {

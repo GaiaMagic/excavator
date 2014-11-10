@@ -3,7 +3,7 @@
     <table class="table table-bordered table-hover">
       <thead>
         <tr>
-          <th class="number">Public</th>
+          <th class="slug">Slug</th>
           <th>Name</th>
           <th class="date">Created At</th>
           <th class="date">Updated At</th>
@@ -18,8 +18,9 @@
         </tr>
         <tr ng-repeat="form in amc.forms">
           <td>
-            <a href="/{{ form._id }}" target="_blank">
+            <a class="block" href="/{{ form.slug }}" target="_blank">
               <span class="glyphicon glyphicon-new-window"></span>
+              {{ form.slug }}
             </a>
           </td>
           <td>
