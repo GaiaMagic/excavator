@@ -6,6 +6,7 @@ var panic      = require('../lib/panic');
 
 var formRevisionSchema = new Schema({
   parent:     { type: Schema.ObjectId, ref: 'Form' },
+  slug:       { type: String, trim: true },
   title:      { type: String, trim: true },
 
   // content should be a JSON string rather than an Object,
@@ -16,12 +17,44 @@ var formRevisionSchema = new Schema({
   created_at: { type: Date, default: Date.now }
 });
 
+// basically we don't want these slugs to conflict with routes
+var RESERVED_SLUGS = [
+  'public',
+  'control',
+  'backend'
+];
+
 // don't want to use the validate methods,
 // as it is hard to handle the error messages
 
 // middleware:
 
 formRevisionSchema.pre('save', function (next) {
+  if (typeof this.slug !== 'undefined') {
+    if (typeof this.slug !== 'string' || this.slug.length > 100) {
+      return next(panic(422, {
+        type:    'invalid-slug',
+        message: 'Slug should be a string with less than 100 characters.'
+      }));
+    }
+
+    var slug = this.slug.trim();
+
+    if (!/^[a-zA-Z0-9-]+$/.test(slug)) {
+      return next(panic(422, {
+        type:    'malformed-slug',
+        message: 'Slug should contain letters, numbers or hyphen (dash).'
+      }));
+    }
+
+    if (RESERVED_SLUGS.indexOf(slug) > -1) {
+      return next(panic(409, {
+        type:    'reserved-slug',
+        message: 'This slug is reserved for internal use only.'
+      }));
+    }
+  }
+
   if (typeof this.title !== 'string' || this.title.length === 0) {
     return next(panic(422, {
       type:    'title-is-required',
@@ -124,14 +157,16 @@ formRevisionSchema.method('sanitize', function () {
  * @param  {string} content the JSON string content of the form
  * @param  {string} parent  the form id, create new if it does not exist,
  *                          for more info, you can see the 'save' middleware
+ * @param  {string} slug    the page URI slug
  * @return {promise}        a promise is returned
  */
-formRevisionSchema.static('create', function (title, content, parent) {
+formRevisionSchema.static('create', function (title, content, parent, slug) {
   var self = this;
   var newrevision = new self({
     parent: parent,
     title: title,
-    content: content
+    content: content,
+    slug: slug
   });
 
   var deferred = Q.defer();

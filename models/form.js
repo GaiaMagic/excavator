@@ -1,9 +1,14 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 var Q        = require('q');
+var panic    = require('../lib/panic');
 
 var formSchema = new Schema({
   published:  { type: Boolean, default: false },
+
+  // slug is used for better URL, equal to form's _id if slug is empty
+  slug:       { type: String, index: { unique: true }, trim: true },
+
   head:       { type: Schema.ObjectId, ref: 'FormRevision' },
   commits:    [ { type: Schema.ObjectId, ref: 'FormRevision' } ],
   created_at: { type: Date, default: Date.now },
@@ -44,6 +49,7 @@ formSchema.static('link', function (revision, form, hard) {
   if (form && form._id) {
     form.head = revision._id;
     form.commits.unshift(revision._id);
+    form.slug = revision.slug || form._id;
     action = form;
   } else {
     action = new self({
@@ -51,10 +57,17 @@ formSchema.static('link', function (revision, form, hard) {
       head: revision._id,
       commits: [ revision._id ]
     });
+    action.slug = revision.slug || action._id;
   }
 
   action.save(function (err) {
     if (err) {
+      if (err.code === 11000) {
+        err = panic(409, {
+          type:    'slug-has-been-taken',
+          message: 'Slug has been taken. Use another one.'
+        });
+      }
       return deferred.reject(err);
     }
     revision.parent = action._id;
