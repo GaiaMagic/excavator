@@ -45,15 +45,19 @@ directive('validator', [
       };
       scope.charsets = [{
         label: 'Lowercase letters',
+        say: 'lowercase letters',
         value: 'a-z'
       }, {
         label: 'Uppercase letters',
+        say: 'uppercase letters',
         value: 'A-Z'
       }, {
         label: 'Chinese',
+        say: 'Chinese characters',
         value: '\\u4e00-\\u9fff'
       }, {
         label: 'Numeric',
+        say: 'numbers',
         value: '0-9'
       }];
       if (defaultString) {
@@ -113,27 +117,59 @@ directive('validator', [
           ']') : '.') + '{' + (scope.min || 0) + ',' + (scope.max || 100) +
           '}/.test(data)';
       };
+      scope.say = function () {
+        if (scope.page === 'choices') {
+          var ret = scope.choices.filter(function (choice) {
+            return choice;
+          }).map(angular.toJson).join(', ');
+          return ret ? ('contain one of ' + ret) : '';
+        }
+
+        if (scope.page === 'boolean') {
+          return 'be yes or no';
+        }
+
+        if (scope.page === 'numeric') {
+          return 'be a number between ' + scope.min + ' to ' + scope.max;
+        }
+
+        var ret = [];
+        for (var i = 0; i < scope.charsets.length; i++) {
+          if (scope.charsets[i].selected) {
+            ret.push(scope.charsets[i].say);
+          }
+        }
+        var con = '';
+        if (ret.length > 0) con = 'include ' + ret.join(', ') + ' and ';
+        return con + 'have ' + scope.min + '-' + scope.max + ' characters';
+      };
       scope.ok = function () {
         modal.hide();
         parentScope.$eval(attr + '=' + angular.toJson(scope.make()));
+        parentScope.$eval(attr + 'Message=' + angular.toJson(scope.say()));
       };
     }
 
     return {
-      scope: {},
       restrict: 'E',
       link: function ($scope, $elem, $attrs) {
         var tpl = [
-          '<textarea class="form-control monospace" rows="3" ',
-            'ng-model="', $attrs.for, '" ',
-            'ng-model-options="{ debounce: 500 }"></textarea>',
+          '<div class="validator">',
+            '<textarea class="form-control monospace" rows="3" ',
+              'placeholder="JavaScript expression to pass validation" ',
+              'ng-model="', $attrs.for, '" ',
+              'ng-model-options="{ debounce: 500 }"></textarea>',
+            '<input type="text" class="form-control" ',
+              'placeholder="Help text" ',
+              'ng-model="', $attrs.for, 'Message">',
             '<button type="button" class="btn btn-xs btn-default"',
-              'ng-click="helper(this, \'', $attrs.for, '\')">',
+              'ng-click="$helper(this, \'', $attrs.for, '\')">',
               'Open Helper...</button>',
+          '</div>'
         ];
         $elem.html(tpl.join(''));
         $compile($elem.contents())($scope);
-        $scope.helper = helper;
+        $scope.$helper = helper;
       }
     };
   }

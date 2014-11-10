@@ -9,6 +9,7 @@
       <div class="modal-body">
         <div class="btn-group">
           <button class="btn btn-default"
+            type="button"
             ng-class="{active: p.value === $parent.page }"
             ng-click="$parent.page=p.value"
             ng-bind="p.label"
@@ -33,6 +34,7 @@
           <div class="form-group">
             <div class="btn-group btn-group-sm">
               <button class="btn btn-default"
+                type="button"
                 ng-class="{active: charset.selected}"
                 ng-bind="charset.label"
                 ng-click="charset.selected=!charset.selected"
@@ -69,6 +71,7 @@
           </div>
         </form>
         <pre ng-bind="make()"></pre>
+        <pre ng-bind="say()"></pre>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default"
