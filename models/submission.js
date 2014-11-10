@@ -26,6 +26,37 @@ submissionSchema.pre('save', function (next) {
       message: 'The form is invalid.'
     }));
     self.form = formRev.parent;
+
+    // validator
+    try {
+      var data = self.data;
+      if (typeof data === 'string') data = JSON.parse(data);
+      var content = JSON.parse(formRev.content);
+      var schemes = content.scheme;
+      var errorMsgs = [];
+      for (var i = 0; i < schemes.length; i++) {
+        var scheme = schemes[i];
+        if (!scheme.validator) continue;
+        var validator = new Function('data', 'return ' + scheme.validator);
+        var sd = data[scheme.model];
+        if (validator(sd) !== true) {
+          errorMsgs.push('Item "' + scheme.label + '" should ' +
+            scheme.validatorMessage + '.');
+        }
+      }
+      if (errorMsgs.length > 0) {
+        return next(panic(422, {
+          type: 'valdation-failed',
+          messages: errorMsgs
+        }));
+      }
+    } catch (e) {
+      return next(panic(422, {
+        type: 'parse-error',
+        message: 'Unable to process data for now.'
+      }));
+    }
+
     next();
   });
 });
