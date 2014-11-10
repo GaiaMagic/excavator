@@ -30,6 +30,10 @@ var RESERVED_SLUGS = [
 // middleware:
 
 formRevisionSchema.pre('save', function (next) {
+  if (typeof this.slug === 'string' && this.slug.length === 0) {
+    this.slug = undefined;
+  }
+
   if (typeof this.slug !== 'undefined') {
     if (typeof this.slug !== 'string' || this.slug.length > 100) {
       return next(panic(422, {
