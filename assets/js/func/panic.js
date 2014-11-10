@@ -6,8 +6,8 @@ run([
     cache.put('func.panic.modal.template', [
       '<div class="modal" tabindex="-1" role="dialog">',
         '<div class="modal-dialog">',
-          '<div class="modal-content">',
-            '<div class="modal-header" ng-show="title">',
+          '<div class="modal-content panel-{{ modalType }}">',
+            '<div class="modal-header panel-heading" ng-show="title">',
               '<button type="button" class="close" ',
                 'ng-click="$hide()">&times;</button>',
               '<h4 class="modal-title" ng-bind="title"></h4>',
@@ -44,11 +44,12 @@ factory('func.panic', [
           }
         }
       }
-      $modal({
+      var modal = $modal({
         title: 'Error',
         content: errorMsg,
         template: 'func.panic.modal.template'
       });
+      modal.$scope.modalType = 'danger';
     };
   }
 ]).
@@ -73,6 +74,7 @@ factory('func.panic.alert', [
         content: content,
         template: 'func.panic.modal.template'
       });
+      modal.$scope.modalType = 'info';
       var hideEvent;
       if (angular.isString(hide)) {
         hideEvent = function () {
