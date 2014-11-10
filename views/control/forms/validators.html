@@ -1,0 +1,79 @@
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content panel-info">
+      <div class="modal-header panel-heading" ng-show="title">
+        <button type="button" class="close"
+          ng-click="$hide()">&times;</button>
+        <h4 class="modal-title" ng-bind="title"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="btn-group">
+          <button class="btn btn-default"
+            ng-class="{active: p.value === $parent.page }"
+            ng-click="$parent.page=p.value"
+            ng-bind="p.label"
+            ng-repeat="p in pages"></button>
+        </div>
+        <hr>
+        <form class="form form-space" ng-show="page === 'string'">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-addon">MIN</div>
+              <input class="form-control" type="number"
+                placeholder="Minimum length" ng-model="min">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-addon">MAX</div>
+              <input class="form-control" type="number"
+                placeholder="Maximum length" ng-model="max">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-default"
+                ng-class="{active: charset.selected}"
+                ng-bind="charset.label"
+                ng-click="charset.selected=!charset.selected"
+                ng-repeat="charset in charsets"></button>
+            </div>
+          </div>
+        </form>
+        <form class="form form-space" ng-show="page === 'numeric'">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-addon">MIN</div>
+              <input class="form-control" type="number"
+                placeholder="Minimum length" ng-model="min">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-addon">MAX</div>
+              <input class="form-control" type="number"
+                placeholder="Maximum length" ng-model="max">
+            </div>
+          </div>
+        </form>
+        <form class="form form-space" ng-show="page === 'choices'">
+          <div class="form-group" ng-repeat="choice in choices track by $index">
+            <div class="input-group">
+              <input type="text" class="form-control" ng-model="choices[$index]">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="add($index)">
+                  <span class="glyphicon glyphicon-plus"></span>
+                </button>
+              </span>
+            </div>
+          </div>
+        </form>
+        <pre ng-bind="make()"></pre>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default"
+          ng-click="ok()">OK, use this validator.</button>
+      </div>
+    </div>
+  </div>
+</div>

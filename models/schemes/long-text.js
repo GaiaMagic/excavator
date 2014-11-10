@@ -55,6 +55,12 @@ module.exports = {
               '<textarea class="form-control" rows="3" ',
                 'ng-model="data.default"></textarea>',
             '</div>',
+          '</div>',
+          '<div class="form-group">',
+            '<label class="col-sm-2 control-label">Validator</label>',
+            '<div class="col-sm-10">',
+              '<validator for="data.validator"></validator>',
+            '</div>',
           '</div>'
         ]);
         return ret;

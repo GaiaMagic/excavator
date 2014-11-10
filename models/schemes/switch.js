@@ -122,6 +122,12 @@ module.exports = {
                 'code-editor ng-model="data.enum" ',
                 'ng-model-options="{ debounce: 500 }"></textarea>',
             '</div>',
+          '</div>',
+          '<div class="form-group">',
+            '<label class="col-sm-2 control-label">Validator</label>',
+            '<div class="col-sm-10">',
+              '<validator for="data.validator"></validator>',
+            '</div>',
           '</div>'
         ]);
         return ret;
