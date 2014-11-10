@@ -24,6 +24,7 @@ gulp.task('watch', ['less', 'scripts'], function () {
     gutil.log(gutil.colors.red.apply(undefined, arguments));
   };
   var excavator = $.express2('excavator.js', gutil.log, errLogger);
+  excavator.env = process.env.NODE_ENV;
   excavator.run();
 
   gulp.watch([
