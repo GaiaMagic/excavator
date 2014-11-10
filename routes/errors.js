@@ -10,11 +10,18 @@ module.exports = function (err, req, res, next) {
     });
   }
   if (err.panic) {
-    return res.status(err.status).send({
+    var errObj = {
       status: err.status,
       type: err.type,
       message: err.message
-    });
+    };
+    if (err.messages instanceof Array && err.messages.length > 0) {
+      errObj.messages = err.messages;
+      if (!err.message) {
+        errObj.message = err.messages[0];
+      }
+    }
+    return res.status(err.status).send(errObj);
   } else {
     console.error(err);
   }

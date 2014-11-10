@@ -12,7 +12,12 @@ run([
                 'ng-click="$hide()">&times;</button>',
               '<h4 class="modal-title" ng-bind="title"></h4>',
             '</div>',
-            '<div class="modal-body" ng-bind="content"></div>',
+            '<div class="modal-body">',
+              '<p ng-bind="content" ng-if="!errorMsgs"></p>',
+              '<ul ng-if="errorMsgs">',
+                '<li ng-repeat="msg in errorMsgs" ng-bind="msg"></li>',
+              '</ul>',
+            '</div>',
             '<div class="modal-footer">',
               '<button type="button" class="btn btn-default" ',
                 'ng-click="$hide()">Close</button>',
@@ -30,12 +35,14 @@ factory('func.panic', [
     return function (err) {
       var details;
       var errorMsg;
+      var errorMsgs;
       if (angular.isString(err)) {
         errorMsg = err;
       } else {
         if (angular.isObject(err)) details = err.data;
         if (details) {
           errorMsg = details.message;
+          errorMsgs = details.messages;
         } else {
           if (err.status === 0) {
             errorMsg = 'Unable to access network. Check your network settings.';
@@ -50,6 +57,7 @@ factory('func.panic', [
         template: 'func.panic.modal.template'
       });
       modal.$scope.modalType = 'danger';
+      modal.$scope.errorMsgs = errorMsgs;
     };
   }
 ]).
