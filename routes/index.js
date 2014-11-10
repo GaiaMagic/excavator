@@ -1,18 +1,17 @@
 var path = require('path');
 var express = require('express');
-var livereload = require('connect-livereload');
+var environment = process.env.NODE_ENV;
 
 var excavator = express();
 var root = path.join(__dirname, '..');
 
-excavator.use(livereload({ port: 35729 }));
-express.static.mime.define({'text/javascript': ['js']});
-excavator.use(express.static(path.join(root, 'dist')));
-excavator.use(express.static(path.join(root, 'views')));
-excavator.use(express.static(path.join(root, 'assets')));
-excavator.use(express.static(path.join(root, 'vendors')));
+if (environment === 'development') {
+  require('./development')(express, excavator, root);
+}
 
 excavator.use('/backend', require('./backend'));
+
+excavator.use('/public', require('./public'));
 
 var serveThisFileOnly = require('./serve-only');
 
