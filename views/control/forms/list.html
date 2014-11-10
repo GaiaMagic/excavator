@@ -3,6 +3,7 @@
     <table class="table table-bordered table-hover">
       <thead>
         <tr>
+          <th class="number">Public</th>
           <th>Name</th>
           <th class="date">Created At</th>
           <th class="date">Updated At</th>
@@ -16,6 +17,11 @@
           </td>
         </tr>
         <tr ng-repeat="form in amc.forms">
+          <td>
+            <a href="/{{ form._id }}" target="_blank">
+              <span class="glyphicon glyphicon-new-window"></span>
+            </a>
+          </td>
           <td>
             <a class="block" href="/control/forms/edit/{{ form._id }}"
               ng-bind="form.head.title || '(untitled)'"></a>
