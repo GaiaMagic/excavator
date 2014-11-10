@@ -109,11 +109,12 @@ describe('Route /public', function () {
     it('should return 200 OK if everything is valid', function (done) {
       request(excavator).
       post('/public/submit').
-      send({ form: realForm._id, data: {} }).
+      send({ form: realForm._id, data: real.submit }).
       expect(200).
       end(function (err, res) {
         if (err) return done(err);
         expect(Object.keys(res.body)).to.have.members([
+          'data',
           'form',
           'form_revision',
           'created_at',

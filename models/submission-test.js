@@ -50,7 +50,7 @@ describe('Submission database model', function () {
     });
 
     it('should have form id automatically once created', function (done) {
-      Submission.submit(realForm._id, {}).then(function (submission) {
+      Submission.submit(realForm._id, real.submit).then(function (submission) {
         expect(submission).to.be.an('object');
         expect(submission.form).to.be.an('object');
         expect(submission.form_revision).to.be.an('object');
@@ -58,7 +58,7 @@ describe('Submission database model', function () {
     });
 
     it('should not allow user to edit submissions', function (done) {
-      var promise = Submission.submit(realForm._id, {}).
+      var promise = Submission.submit(realForm._id, real.submit).
         then(function (submission) {
           return Submission.findById(submission).exec();
         }).then(function (submission) {
@@ -68,7 +68,7 @@ describe('Submission database model', function () {
     });
 
     it('should not allow user to delete submissions', function (done) {
-      var promise = Submission.submit(realForm._id, {}).
+      var promise = Submission.submit(realForm._id, real.submit).
         then(function (submission) {
           return Submission.findById(submission).exec();
         }).then(function (submission) {

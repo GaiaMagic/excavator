@@ -33,7 +33,7 @@ describe('Route /backend/submissions', function () {
               realForm = form;
             });
         }).then(function () {
-          return Submission.submit(realForm._id, {}).
+          return Submission.submit(realForm._id, real.submit).
             then(function (submission) {
               realSubmission = submission;
             }

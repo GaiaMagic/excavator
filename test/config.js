@@ -1,3 +1,17 @@
+var form = {
+  "scheme": [{
+    "type": "short-text",
+    "version": "1.0",
+    "model": "fullname",
+    "label": "Full Name",
+    "placeholder": "Type your full name here.",
+    "validator": "typeof data === \"string\" && " +
+      "/[a-zA-Z\\u4e00-\\u9fff0-9]{1,100}/.test(data)",
+    "validatorMessage": "include lowercase letters, uppercase letters, " +
+      "Chinese characters, numbers and have 1-100 characters long"
+  }]
+};
+
 module.exports = {
   testDBAddress: 'mongodb://localhost/excavatorTest',
 
@@ -10,7 +24,10 @@ module.exports = {
     form: {
       slug: 'music-festival',
       title: 'Music Festival Volunteer Application Form',
-      content: '{"form":"test"}'
+      content: JSON.stringify(form),
+      submit: {
+        fullname: 'fakename'
+      }
     }
   },
 
