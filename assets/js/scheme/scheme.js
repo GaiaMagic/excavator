@@ -40,14 +40,12 @@ directive('scheme', [
   '$compile',
   '$injector',
   '$interpolate',
-  'func.dom.input.restore.state',
   'func.enumerate',
   'schemes',
   function (
     $compile,
     $injector,
     $interpolate,
-    restoreState,
     enumerate,
     schemes
   ) {
@@ -84,7 +82,10 @@ directive('scheme', [
         $compile($elem.contents())($scope);
 
         // restore focus and selection start
-        if (state) restoreState(state, $elem[0]);
+        if (state) {
+          var restoreState = $injector.get('func.dom.input.restore.state');
+          restoreState(state, $elem[0]);
+        }
       }
 
       $scope.$on('update scheme view', updateSchemeView);
