@@ -29,6 +29,7 @@ gulp.task('watch', ['less', 'scripts'], function () {
 
   gulp.watch([
     'excavator.js',
+    'models/**/*.js',
     'routes/**/*.js'
   ]).on('change', function (file) {
     excavator.run();
@@ -52,7 +53,6 @@ gulp.task('watch', ['less', 'scripts'], function () {
   });
 
   gulp.watch([
-    'models/**/*.js',
     'vendors/**/*.js',
     'views/**/*.html'
   ]).on('change', function (file) {

@@ -6,6 +6,7 @@ controller('AdminEditController', [
   '$scope',
   '$timeout',
   '$document',
+  '$route',
   '$routeParams',
   'schemes',
   'fixtures.admin.edit',
@@ -22,6 +23,7 @@ controller('AdminEditController', [
     $scope,
     $timeout,
     $document,
+    $route,
     $routeParams,
     schemes,
     fixtures,
@@ -60,7 +62,11 @@ controller('AdminEditController', [
   this.schemedata = 'Scheme data will appear here once you save the scheme.';
   this.save = function () {
     var self = this;
-    createNew(currentForm, this.form.content).catch(function (data) {
+    createNew(currentForm, this.form.content).then(function () {
+      if (currentForm) {
+        $route.reload();
+      }
+    }).catch(function (data) {
       self.schemedata = data.content;
       save('schemedata', self.schemedata);
     });

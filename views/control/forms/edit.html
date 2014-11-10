@@ -22,7 +22,10 @@
   <div class="main-pane main-pane-right">
     <form class="form-form form-horizontal">
       <h3>
-        <span ng-if="aec.form.title">Editing {{aec.form.title}}</span>
+        <span ng-if="aec.form.title">Editing
+          <a href="/{{ aec.form.form.slug }}" target="_blank"
+            ng-bind="aec.form.title"></a>
+        </span>
         <span ng-if="!aec.form.title">Create New Form</span>
         <div class="btn-group btn-group-sm pull-right"
           ng-class="{open: addButtonClicked}">
