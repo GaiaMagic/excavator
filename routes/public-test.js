@@ -80,6 +80,27 @@ describe('Route /public', function () {
         done();
       });
     });
+
+    it('should list a form revision for /public/forms/xx/xx', function (done) {
+      request(excavator).
+      get('/public/forms/' + realForm.parent + '/' + realForm._id).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(res.body).to.be.an('object');
+        ['head', 'index'].forEach(function (head) {
+          expect(res.body[head]).to.be.an('object');
+          expect(res.body[head]._id).to.equal(realForm._id.toString());
+          expect(res.body[head].title).to.equal(real.title);
+          expect(res.body[head].content).to.equal(real.content);
+        });
+        expect(res.body.commits).to.be.an('array');
+        expect(res.body.commits).to.have.members([
+          realForm._id.toString()
+        ]);
+        done();
+      });
+    });
   });
 
   function expectFailure (data, status, type, done) {
