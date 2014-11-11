@@ -3,8 +3,16 @@ angular.module('excavator.routes', [
 ]).
 
 config([
-  '$routeProvider', '$locationProvider', 'resolver.form',
-  function($routeProvider, $locationProvider, formResolver) {
+  '$routeProvider',
+  '$locationProvider',
+  'resolver.form',
+  'resolver.submission',
+  function(
+    $routeProvider,
+    $locationProvider,
+    formResolver,
+    submissionResolver
+  ) {
     var needsAuth = [
       'backend.admin.login.status', '$location',
       function(status, $location) {
@@ -55,6 +63,15 @@ config([
       controller: 'AdminSubmissionsController as asc',
       resolve: {
         loggedIn: needsAuth
+      }
+    }).
+
+    when('/control/submissions/view/:subid', {
+      templateUrl: '/control/submissions/view.html',
+      controller: 'controller.control.submission.view as ccsv',
+      resolve: {
+        loggedIn: needsAuth,
+        currentSubmission: submissionResolver()
       }
     }).
 

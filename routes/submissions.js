@@ -11,7 +11,8 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/:submissionid', function (req, res, next) {
-  Submission.findById(req.params.submissionid).exec().
+  Submission.findById(req.params.submissionid).
+  populate('form form_revision').exec().
   then(function (submission) {
     if (!submission) return next('not-found');
     res.send(submission);

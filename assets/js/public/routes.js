@@ -1,5 +1,5 @@
 angular.module('excavator.public.routes', [
-  'excavator.resolver'
+  'excavator.resolver.form'
 ]).
 
 config([

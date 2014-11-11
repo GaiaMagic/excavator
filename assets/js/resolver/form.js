@@ -1,4 +1,4 @@
-angular.module('excavator.resolver', []).
+angular.module('excavator.resolver.form', []).
 
 constant('resolver.form', function formResolver (service) {
   return [

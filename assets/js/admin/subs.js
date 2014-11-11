@@ -8,4 +8,13 @@ controller('AdminSubmissionsController', [
       self.submissions = res.data;
     });
   }
+]).
+
+controller('controller.control.submission.view', [
+  'currentSubmission',
+  function (currentSubmission) {
+    if (!currentSubmission) return;
+
+    this.sub = currentSubmission;
+  }
 ]);

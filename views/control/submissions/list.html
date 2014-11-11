@@ -3,6 +3,7 @@
     <table class="table table-bordered table-hover">
       <thead>
         <tr>
+          <th>View</th>
           <th>Form</th>
           <th class="date">Created At</th>
         </tr>
@@ -14,6 +15,11 @@
           </td>
         </tr>
         <tr ng-repeat="sub in asc.submissions">
+          <td>
+            <a class="block" href="/control/submissions/view/{{ sub._id }}">
+              view
+            </a>
+          </td>
           <td>
             <a class="block" href="/control/forms/edit/{{ sub.form }}"
               ng-bind="sub.form_revision.title || '(untitled)'"></a>

@@ -102,8 +102,8 @@ describe('Route /backend/submissions', function () {
       end(function (err, res) {
         if (err) return done(err);
         expect(res.body).to.be.an('object');
-        expect(res.body.form).to.be.an('string');
-        expect(res.body.form_revision).to.be.an('string');
+        expect(res.body.form).to.be.an('object');
+        expect(res.body.form_revision).to.be.an('object');
         done();
       });
     });
