@@ -27,6 +27,10 @@ factory('func.array', [function () {
       var item = array[index];
       array[index] = array[index + 1];
       array[index + 1] = item;
+    },
+    push: function (array, what) {
+      if (!angular.isArray(array)) return;
+      array.push(what);
     }
   };
 }]);

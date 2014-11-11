@@ -1,32 +1,82 @@
 <div class="main-static">
-  <div class="col-xs-8 col-xs-offset-2">
-    <table class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>View</th>
-          <th>Form</th>
-          <th class="date">Created At</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-if="!asc.submissions || !asc.submissions.length">
-          <td colspan="4" class="text-center">
-            No submissions yet!
-          </td>
-        </tr>
-        <tr ng-repeat="sub in asc.submissions">
-          <td>
-            <a class="block" href="/control/submissions/view/{{ sub._id }}">
-              view
-            </a>
-          </td>
-          <td>
-            <a class="block" href="/control/forms/edit/{{ sub.form }}"
-              ng-bind="sub.form_revision.title || '(untitled)'"></a>
-          </td>
-          <td ng-bind="sub.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="col-xs-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">Latest submissions</div>
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>View</th>
+            <th>Form</th>
+            <th ng-repeat="model in ccsl.models track by $index"
+              ng-bind="model"></th>
+            <th class="date">Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-if="!ccsl.submissions || !ccsl.submissions.length">
+            <td colspan="4" class="text-center">
+              No submissions yet!
+            </td>
+          </tr>
+          <tr ng-repeat="sub in ccsl.submissions">
+            <td>
+              <a class="block" href="/control/submissions/view/{{ sub._id }}">
+                view
+              </a>
+            </td>
+            <td>
+              <a class="block" href="/control/forms/edit/{{ sub.form }}"
+                ng-bind="sub.form_revision.title || '(untitled)'"></a>
+            </td>
+            <td ng-repeat="model in ccsl.models track by $index"
+              ng-bind="sub.data[model]"></td>
+            <td ng-bind="sub.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-xs-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Columns
+        <div class="btn-group btn-group-xs pull-right">
+          <button class="btn btn-default"
+            ng-click="ccsl.array.push(ccsl.models, '')">
+            <span class="glyphicon glyphicon-plus"></span>
+          </button>
+          <button class="btn btn-default" ng-click="ccsl.reset()">
+            RESET
+          </button>
+        </div>
+      </div>
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="model in ccsl.models track by $index">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control" ng-model="ccsl.models[$index]">
+            <span class="input-group-btn">
+              <button class="btn btn-default"
+                ng-click="ccsl.array.duplicate(ccsl.models, $index)">
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+              <button class="btn btn-default"
+                ng-click="ccsl.array.delete(ccsl.models, $index)">
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+              <button class="btn btn-default"
+                ng-class="{disabled: ccsl.array.edgeT(ccsl.models, $index)}"
+                ng-click="ccsl.array.moveup(ccsl.models, $index)">
+                <span class="glyphicon glyphicon-chevron-up"></span>
+              </button>
+              <button class="btn btn-default"
+                ng-class="{disabled: ccsl.array.edgeB(ccsl.models, $index)}"
+                ng-click="ccsl.array.movedown(ccsl.models, $index)">
+                <span class="glyphicon glyphicon-chevron-down"></span>
+              </button>
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

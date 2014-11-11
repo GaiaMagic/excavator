@@ -6,11 +6,13 @@ config([
   '$routeProvider',
   '$locationProvider',
   'resolver.form',
+  'resolver.submissions',
   'resolver.submission',
   function(
     $routeProvider,
     $locationProvider,
     formResolver,
+    submissionsResolver,
     submissionResolver
   ) {
     var needsAuth = [
@@ -60,9 +62,10 @@ config([
 
     when('/control/submissions', {
       templateUrl: '/control/submissions/list.html',
-      controller: 'AdminSubmissionsController as asc',
+      controller: 'controller.control.submission.list as ccsl',
       resolve: {
-        loggedIn: needsAuth
+        loggedIn: needsAuth,
+        submissions: submissionsResolver()
       }
     }).
 

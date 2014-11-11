@@ -1,5 +1,17 @@
 angular.module('excavator.resolver.submission', []).
 
+constant('resolver.submissions', function submissionsResolver () {
+  return [
+    'backend.submission.list',
+    'func.panic',
+    function currentSubmissions (list, panic) {
+      return list().then(function (res) {
+        return res.data;
+      }, panic);
+    }
+  ];
+}).
+
 constant('resolver.submission', function submissionResolver () {
   return [
     '$rootScope',

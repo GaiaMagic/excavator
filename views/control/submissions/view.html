@@ -6,8 +6,8 @@
           <td class="form-sub-key">Form</td>
           <td>
             <span ng-bind="ccsv.sub.title"></span>
-            (<a href="/{{ ccsv.sub.sub.form.slug }}/{{ ccsv.sub.sub.form_revision._id }}"
-              target="_blank">permalink</a>)
+            <a href="/{{ ccsv.sub.sub.form.slug }}/{{ ccsv.sub.sub.form_revision._id }}"
+              target="_blank"><code ng-bind="ccsv.sub.sub.form_revision._id"></code></a>
             (<a href="/{{ ccsv.sub.sub.form.slug }}" target="_blank">latest</a>)
           </td>
         </tr>
