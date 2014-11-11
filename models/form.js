@@ -25,8 +25,11 @@ formSchema.pre('save', function (next) {
 formSchema.static('FindById', function (id) {
   var deferred = Q.defer();
   this.findById(id, function (err, form) {
-    if (err || !form) {
+    if (err) {
       return deferred.reject(err);
+    }
+    if (!form) {
+      return deferred.reject('not-found');
     }
     deferred.resolve(form);
   });

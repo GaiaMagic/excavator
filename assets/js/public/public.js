@@ -3,8 +3,8 @@ angular.module('excavator.public.public', []).
 factory('public.public.forms', [
   '$http',
   function ($http) {
-    return function (formid) {
-      return $http.get('/public/forms/' + formid);
+    return function (id, revid) {
+      return $http.get('/public/forms/' + id + (revid ? '/' + revid : ''));
     };
   }
 ]).

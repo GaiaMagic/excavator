@@ -11,7 +11,7 @@ config([
       templateUrl: '/public/index.html'
     }).
 
-    when('/:formid', {
+    when('/:formid/:formrevid?', {
       templateUrl: '/public/form.html',
       controller: 'FormController as form',
       resolve: {
