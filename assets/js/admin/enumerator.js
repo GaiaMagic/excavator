@@ -70,26 +70,35 @@ directive('enumerator', [
       };
       scope.check();
 
+      var isList = true;
       if (angular.isArray(defaultValue)) {
         scope.page = 'list';
         if (angular.isObject(defaultValue[0])) {
-          scope.customlabel = true;
-          scope.list = [];
-          scope.label = [];
+          var list = [];
+          var label = [];
           for (var i = 0; i < defaultValue.length; i++) {
-            scope.list.push(defaultValue[i].value);
-            scope.label.push(defaultValue[i].label);
+            if (angular.isUndefined(defaultValue[i].value)) {
+              isList = false;
+              break;
+            }
+            list.push(defaultValue[i].value);
+            label.push(defaultValue[i].label);
+          }
+          if (isList) {
+            scope.list = list;
+            scope.label = label;
+            scope.customlabel = true;
           }
         } else {
           scope.list = angular.copy(defaultValue);
         }
-      } else {
+      }
+      if (!isList) {
         var isCustom = true;
         var string = defaultValue.toString();
         var matches = string.match(/length:\s*(\d+)[\S\s]+i\s*\+\s*(\d+)/);
-        if (matches) {
+        if (matches && string.indexOf('label') === -1) {
           var n1 = +matches[1], n2 = +matches[2];
-          console.log(n1, n2)
           if (n1 > 0 && n2 > 0) {
             scope.min = n2;
             scope.max = n1 + n2 - 1;
@@ -98,7 +107,11 @@ directive('enumerator', [
         }
         if (isCustom) {
           scope.page = 'custom';
-          scope.custom = reindent(defaultValue);
+          if (angular.isFunction(defaultValue)) {
+            scope.custom = reindent(defaultValue);
+          } else {
+            scope.custom = angular.toJson(defaultValue, true);
+          }
         } else {
           scope.page = 'number';
         }
@@ -113,7 +126,7 @@ directive('enumerator', [
 
         if (scope.page === 'list') {
           var ret = scope.list.filter(function (p) {
-            return p;
+            return !(typeof p === 'string' && p.length === 0);
           }).map(function (p) {
             return stringORprimitive(p);
           });
@@ -180,11 +193,6 @@ directive('enumerator', [
         $elem.html(tpl.join(''));
         $compile($elem.contents())($scope);
         $scope.$enumerator = helper;
-
-        if (!window.opeen) {
-        $scope.$enumerator($scope, 'data', 'enum');
-        window.opeen = true;
-        }
       }
     };
   }
