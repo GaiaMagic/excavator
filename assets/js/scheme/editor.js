@@ -1,5 +1,17 @@
 angular.module('excavator.scheme.editor', []).
 
+filter('stringify', [
+  'func.formatter.function.reindent',
+  function (reindent) {
+    return function (value) {
+      if (angular.isFunction(value)) {
+        return reindent(value);
+      }
+      return angular.toJson(value, true);
+    };
+  }
+]).
+
 // code-editor
 directive('codeEditor', [
   'func.formatter.function.reindent',

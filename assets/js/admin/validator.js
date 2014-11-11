@@ -67,8 +67,8 @@ directive('validator', [
           }
         }
       }
-      scope.min = 0;
-      scope.max = 100;
+      scope.min = 1;
+      scope.max = 50;
       if (scope.page === 'string') {
         var matches = defaultString && defaultString.match(/\{(\d+),(\d+)\}/);
         if (matches) {
