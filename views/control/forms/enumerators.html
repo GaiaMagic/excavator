@@ -53,7 +53,7 @@
         <form class="form form-space" ng-show="page === 'list' && !showmulti">
           <ul class="list-group">
             <li class="list-group-item" ng-repeat="p in list track by $index">
-              <div class="input-group input-group-sm">
+              <div class="input-group input-group-sm input-group-compact">
                 <input type="text" class="half-size form-control"
                   placeholder="Label"
                   ng-model="label[$index]" ng-show="customlabel">

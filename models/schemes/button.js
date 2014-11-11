@@ -19,9 +19,6 @@ module.exports = {
         type: 'submit',
         label: 'Submit',
         class: 'btn-info'
-      }, {
-        type: 'button',
-        label: 'Cancel'
       }]
     },
     templateInit: [

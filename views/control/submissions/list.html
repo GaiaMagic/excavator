@@ -1,5 +1,5 @@
 <div class="main-static">
-  <div class="col-xs-9">
+  <div class="col-sm-9">
     <div class="panel panel-default">
       <div class="panel-heading">Latest submissions</div>
       <table class="table table-bordered table-hover">
@@ -36,7 +36,7 @@
       </table>
     </div>
   </div>
-  <div class="col-xs-3">
+  <div class="col-sm-3">
     <div class="panel panel-default">
       <div class="panel-heading">
         Columns
@@ -52,7 +52,7 @@
       </div>
       <ul class="list-group">
         <li class="list-group-item" ng-repeat="model in ccsl.models track by $index">
-          <div class="input-group input-group-sm">
+          <div class="input-group input-group-sm input-group-compact">
             <input type="text" class="form-control" ng-model="ccsl.models[$index]">
             <span class="input-group-btn">
               <button class="btn btn-default"

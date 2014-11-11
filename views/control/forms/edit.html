@@ -50,7 +50,9 @@
       </h3>
       <div class="main-pane-content">
         <h4 ng-repeat-start="scheme in aec.form.content.scheme">
-          <span ng-bind="scheme.label || scheme.type"></span>
+          <span ng-bind="scheme.label || '(no-label)'"></span>
+          <span class="label label-default label-type text-uppercase"
+            ng-bind="scheme.type"></span>
           <div class="btn-group btn-group-xs pull-right">
             <button class="btn btn-default"
               ng-click="aec.array.duplicate(aec.form.content.scheme, $index)">
