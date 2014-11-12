@@ -5,8 +5,6 @@ if (['development', 'production', 'test'].indexOf(environment) === -1) {
 }
 
 var mongoose = require('mongoose');
-var Admin = require('./models/admin');
-var defaultAdmin = 'caiguanhao';
 mongoose.connect('mongodb://localhost/excavator', function (err) {
   if (err) {
     console.error('Failed to connect to MongoDB.',
@@ -15,10 +13,20 @@ mongoose.connect('mongodb://localhost/excavator', function (err) {
   }
   console.log('MongoDB is running.');
 
+  var Admin = require('./models/admin');
+  var defaultAdmin = 'caiguanhao';
   Admin.register(defaultAdmin, '123456').then(function () {
     console.log('New admin has been created: ' + defaultAdmin);
   }, function () {
-    console.log('Already registered: ' + defaultAdmin);
+    console.log('Admin already registered: ' + defaultAdmin);
+  });
+
+  var Manager = require('./models/manager');
+  var defaultManager = 'newyork';
+  Manager.register(defaultManager, '123456').then(function () {
+    console.log('New manager has been created: ' + defaultManager);
+  }, function () {
+    console.log('Manager already registered: ' + defaultManager);
   });
 });
 

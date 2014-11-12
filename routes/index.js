@@ -18,6 +18,9 @@ var serveThisFileOnly = require('./serve-only');
 var controlIndex = path.join(root, 'views', 'control', 'index.html');
 excavator.use('/control', serveThisFileOnly(controlIndex));
 
+var managerIndex = path.join(root, 'views', 'manager', 'index.html');
+excavator.use('/manager', serveThisFileOnly(managerIndex));
+
 var defaultIndex = path.join(root, 'views', 'index.html');
 excavator.use(serveThisFileOnly(defaultIndex));
 
