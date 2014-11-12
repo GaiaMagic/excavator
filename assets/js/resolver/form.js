@@ -1,5 +1,17 @@
 angular.module('excavator.resolver.form', []).
 
+constant('resolver.forms', function formsResolver () {
+  return [
+    'backend.form.list',
+    'func.panic',
+    function currentForms (list, panic) {
+      return list().then(function (res) {
+        return res.data;
+      }, panic);
+    }
+  ];
+}).
+
 constant('resolver.form', function formResolver (service) {
   return [
     '$rootScope',

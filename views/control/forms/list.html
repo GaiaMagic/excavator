@@ -11,12 +11,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-if="!amc.forms || !amc.forms.length">
+        <tr ng-if="!ccfl.forms || !ccfl.forms.length">
           <td colspan="4" class="text-center">
             No forms has been created yet. <a href="/create">Create</a> one now.
           </td>
         </tr>
-        <tr ng-repeat="form in amc.forms">
+        <tr ng-repeat="form in ccfl.forms">
           <td class="slug">
             <a class="block" href="/{{ form.slug }}" target="_blank">
               <span class="glyphicon glyphicon-new-window"></span>

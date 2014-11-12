@@ -5,12 +5,14 @@ angular.module('excavator.routes', [
 config([
   '$routeProvider',
   '$locationProvider',
+  'resolver.forms',
   'resolver.form',
   'resolver.submissions',
   'resolver.submission',
   function(
     $routeProvider,
     $locationProvider,
+    formsResolver,
     formResolver,
     submissionsResolver,
     submissionResolver
@@ -54,9 +56,10 @@ config([
 
     when('/control/forms', {
       templateUrl: '/control/forms/list.html',
-      controller: 'AdminManageController as amc',
+      controller: 'controller.control.form.list as ccfl',
       resolve: {
-        loggedIn: needsAuth
+        loggedIn: needsAuth,
+        forms: formsResolver()
       }
     }).
 
