@@ -17,18 +17,20 @@
         </div>
         <hr>
         <form class="form form-space" ng-show="page === 'number'">
-          <div class="form-group">
-            <div class="input-group">
-              <div class="input-group-addon">MIN</div>
-              <input class="form-control" type="number"
-                placeholder="Minimum length" ng-model="min">
+          <div class="form-group row">
+            <div class="col-xs-6">
+              <div class="input-group">
+                <div class="input-group-addon">MIN</div>
+                <input class="form-control" type="number"
+                  placeholder="Minimum length" ng-model="min">
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <div class="input-group">
-              <div class="input-group-addon">MAX</div>
-              <input class="form-control" type="number"
-                placeholder="Maximum length" ng-model="max">
+            <div class="col-xs-6">
+              <div class="input-group">
+                <div class="input-group-addon">MAX</div>
+                <input class="form-control" type="number"
+                  placeholder="Maximum length" ng-model="max">
+              </div>
             </div>
           </div>
           <div class="form-group">
