@@ -95,7 +95,7 @@ factory('backend.admin.logout', [
   function (unset, goto) {
     return function () {
       unset();
-      goto('/');
+      goto('/control/login');
     };
   }
 ]);
