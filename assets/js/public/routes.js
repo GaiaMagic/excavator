@@ -13,7 +13,7 @@ config([
 
     when('/:formid/:formrevid?', {
       templateUrl: '/public/form.html',
-      controller: 'FormController as form',
+      controller: 'controller.public.form as cpf',
       resolve: {
         currentForm: formResolver('public.public.forms')
       }

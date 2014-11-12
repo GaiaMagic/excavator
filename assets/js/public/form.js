@@ -7,7 +7,7 @@ angular.module('excavator.public.form', [
   'excavator.scheme'
 ]).
 
-controller('FormController', [
+controller('controller.public.form', [
   'func.panic',
   'func.panic.alert',
   'currentForm',

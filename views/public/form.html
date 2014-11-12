@@ -1,25 +1,25 @@
-<div class="container" ng-if="form.form">
+<div class="container" ng-if="cpf.form">
   <div class="col-xs-10 col-xs-offset-1">
-    <h2 class="text-center" ng-bind="form.form.title"></h2>
+    <h2 class="text-center" ng-bind="cpf.form.title"></h2>
     <h5 class="text-center"
-      ng-if="form.form.isViewingRevision && !form.form.isLatest">
+      ng-if="cpf.form.isViewingRevision && !cpf.form.isLatest">
       This is an old version.
-      (<a href="{{ form.form.currentPermalink }}"
-        ng-bind="form.form.form.index._id"></a>)
-      (see the <a href="{{ form.form.latestPermalink }}">latest</a> one)
+      (<a href="{{ cpf.form.currentPermalink }}"
+        ng-bind="cpf.form.form.index._id"></a>)
+      (see the <a href="{{ cpf.form.latestPermalink }}">latest</a> one)
     </h5>
     <h5 class="text-center"
-      ng-if="form.form.isViewingRevision && form.form.isLatest">
+      ng-if="cpf.form.isViewingRevision && cpf.form.isLatest">
       This is the
-      <a href="{{ form.form.link }}">latest</a>
+      <a href="{{ cpf.form.link }}">latest</a>
       version.
-      (<a href="{{ form.form.currentPermalink }}"
-        ng-bind="form.form.form.index._id"></a>)
+      (<a href="{{ cpf.form.currentPermalink }}"
+        ng-bind="cpf.form.form.index._id"></a>)
     </h5>
     <hr>
-    <form class="form-horizontal" ng-submit="form.submit()">
-      <div scheme="scheme" scheme-data="form.form.content.data"
-        ng-repeat="scheme in form.form.content.scheme"></div>
+    <form class="form-horizontal" ng-submit="cpf.submit()">
+      <div scheme="scheme" scheme-data="cpf.form.content.data"
+        ng-repeat="scheme in cpf.form.content.scheme"></div>
     </form>
   </div>
 </div>
