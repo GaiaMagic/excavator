@@ -1,20 +1,20 @@
 <div class="main">
   <div class="main-pane">
-    <form class="form-horizontal" ng-submit="aec.submit()">
+    <form class="form-horizontal" ng-submit="ccfe.submit()">
       <h3>
         <span>Preview</span>
         <div class="btn-group btn-group-sm pull-right">
-          <button class="btn btn-default" ng-click="aec.clear()">
+          <button class="btn btn-default" ng-click="ccfe.clear()">
             Clear Data
           </button>
         </div>
       </h3>
       <div class="main-pane-content">
-        <div scheme="scheme" scheme-data="aec.form.content.data"
-          ng-repeat="scheme in aec.form.content.scheme"></div>
-        <div ng-if="aec.form.content.scheme.length > 0">
-          <pre ng-bind="aec.formdata"></pre>
-          <pre ng-bind="aec.schemedata"></pre>
+        <div scheme="scheme" scheme-data="ccfe.form.content.data"
+          ng-repeat="scheme in ccfe.form.content.scheme"></div>
+        <div ng-if="ccfe.form.content.scheme.length > 0">
+          <pre ng-bind="ccfe.formdata"></pre>
+          <pre ng-bind="ccfe.schemedata"></pre>
         </div>
       </div>
     </form>
@@ -22,11 +22,11 @@
   <div class="main-pane main-pane-right">
     <form class="form-form form-horizontal">
       <h3>
-        <span ng-if="aec.form.title">Editing
-          <a href="/{{ aec.form.form.slug }}" target="_blank"
-            ng-bind="aec.form.title"></a>
+        <span ng-if="ccfe.form.title">Editing
+          <a href="/{{ ccfe.form.form.slug }}" target="_blank"
+            ng-bind="ccfe.form.title"></a>
         </span>
-        <span ng-if="!aec.form.title">Create New Form</span>
+        <span ng-if="!ccfe.form.title">Create New Form</span>
         <div class="btn-group btn-group-sm pull-right"
           ng-class="{open: addButtonClicked}">
           <button type="button" class="btn btn-default dropdown-toggle"
@@ -34,42 +34,42 @@
             Add <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu">
-            <li ng-repeat="scheme in aec.schemes">
+            <li ng-repeat="scheme in ccfe.schemes">
               <a href ng-click="$parent.addButtonClicked=false;
-                aec.add(scheme.name, scheme.version)"
+                ccfe.add(scheme.name, scheme.version)"
                 ng-bind="scheme.title"></a>
             </li>
           </ul>
         </div>
         <div class="btn-group btn-group-sm pull-right">
-          <button class="btn btn-default" ng-click="aec.save()">
+          <button class="btn btn-default" ng-click="ccfe.save()">
             <span class="glyphicon glyphicon-floppy-disk"></span>
             Save
           </button>
         </div>
       </h3>
       <div class="main-pane-content">
-        <h4 ng-repeat-start="scheme in aec.form.content.scheme">
+        <h4 ng-repeat-start="scheme in ccfe.form.content.scheme">
           <span ng-bind="scheme.label || '(no-label)'"></span>
           <span class="label label-default label-type text-uppercase"
             ng-bind="scheme.type"></span>
           <div class="btn-group btn-group-xs pull-right">
             <button class="btn btn-default"
-              ng-click="aec.array.duplicate(aec.form.content.scheme, $index)">
+              ng-click="ccfe.array.duplicate(ccfe.form.content.scheme, $index)">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
             <button class="btn btn-default"
-              ng-click="aec.array.delete(aec.form.content.scheme, $index)">
+              ng-click="ccfe.array.delete(ccfe.form.content.scheme, $index)">
               <span class="glyphicon glyphicon-minus"></span>
             </button>
             <button class="btn btn-default"
-              ng-class="{disabled: aec.array.edgeT(aec.form.content.scheme, $index)}"
-              ng-click="aec.array.moveup(aec.form.content.scheme, $index)">
+              ng-class="{disabled: ccfe.array.edgeT(ccfe.form.content.scheme, $index)}"
+              ng-click="ccfe.array.moveup(ccfe.form.content.scheme, $index)">
               <span class="glyphicon glyphicon-chevron-up"></span>
             </button>
             <button class="btn btn-default"
-              ng-class="{disabled: aec.array.edgeB(aec.form.content.scheme, $index)}"
-              ng-click="aec.array.movedown(aec.form.content.scheme, $index)">
+              ng-class="{disabled: ccfe.array.edgeB(ccfe.form.content.scheme, $index)}"
+              ng-click="ccfe.array.movedown(ccfe.form.content.scheme, $index)">
               <span class="glyphicon glyphicon-chevron-down"></span>
             </button>
           </div>

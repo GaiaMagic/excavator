@@ -1,6 +1,6 @@
 angular.module('excavator.admin.login', []).
 
-controller('AdminLoginController', [
+controller('controller.control.admin.login', [
   'backend.admin.login',
   'func.location.goto',
   'func.panic',

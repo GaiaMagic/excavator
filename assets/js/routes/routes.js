@@ -31,12 +31,12 @@ config([
 
     when('/control/login', {
       templateUrl: '/control/login.html',
-      controller: 'AdminLoginController as alc',
+      controller: 'controller.control.admin.login as ccal',
     }).
 
     when('/control/forms/create', {
       templateUrl: '/control/forms/edit.html',
-      controller: 'AdminEditController as aec',
+      controller: 'controller.control.form.edit as ccfe',
       resolve: {
         loggedIn: needsAuth,
         currentForm: [function () {
@@ -47,7 +47,7 @@ config([
 
     when('/control/forms/edit/:formid', {
       templateUrl: '/control/forms/edit.html',
-      controller: 'AdminEditController as aec',
+      controller: 'controller.control.form.edit as ccfe',
       resolve: {
         loggedIn: needsAuth,
         currentForm: formResolver('backend.form.get')

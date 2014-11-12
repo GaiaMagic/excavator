@@ -2,7 +2,7 @@ angular.module('excavator.admin.edit', [
   'excavator.fixtures'
 ]).
 
-controller('AdminEditController', [
+controller('controller.control.form.edit', [
   '$scope',
   '$timeout',
   '$document',
