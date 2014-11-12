@@ -1,15 +1,42 @@
-angular.module('excavator.backend.admin', []).
+angular.module('excavator.backend.user', []).
 
-service('backend.admin.user.token.set', [
+constant('backend.user.scope', 'admins').
+constant('backend.user.token.name', 'admin.token').
+constant('backend.user.login.entry', '/control/login').
+
+constant('backend.user.auth.needed.resolver', [
+  '$location',
+  'backend.user.login.entry',
+  'backend.user.login.status',
+  function(
+    $location,
+    login,
+    status
+  ) {
+    return status.update().then(function (loggedIn) {
+      if (!loggedIn) $location.path(login);
+      return loggedIn;
+    });
+  }
+]).
+
+service('backend.user.user.token.set', [
   '$http',
   '$rootScope',
+  'backend.user.token.name',
   'func.localstorage.load',
   'func.localstorage.save',
-  function ($http, $rootScope, load, save) {
+  function (
+    $http,
+    $rootScope,
+    name,
+    load,
+    save
+  ) {
     return function (token) {
-      if (!token) token = load('usertoken');
+      if (!token) token = load(name);
       if (token) {
-        save('usertoken', token);
+        save(name, token);
         $http.defaults.headers.common.Authorization = 'token ' + token;
         $rootScope.$emit('request-login-status-update');
       }
@@ -17,24 +44,31 @@ service('backend.admin.user.token.set', [
   }
 ]).
 
-service('backend.admin.user.token.unset', [
+service('backend.user.user.token.unset', [
   '$http',
   '$rootScope',
+  'backend.user.token.name',
   'func.localstorage.remove',
-  function ($http, $rootScope, remove) {
+  function (
+    $http,
+    $rootScope,
+    name,
+    remove
+  ) {
     return function () {
-      remove('usertoken');
+      remove(name);
       delete $http.defaults.headers.common.Authorization;
       $rootScope.$emit('request-login-status-update');
     };
   }
 ]).
 
-service('backend.admin.login.status', [
+service('backend.user.login.status', [
   '$http',
   '$rootScope',
+  'backend.user.scope',
   'func.panic',
-  function ($http, $rootScope, panic) {
+  function ($http, $rootScope, scope, panic) {
     var self = this;
     self.loggedIn = false;
 
@@ -48,7 +82,7 @@ service('backend.admin.login.status', [
 
     self.update = function () {
       if (angular.isUndefined(self.updatePromise)) {
-        self.updatePromise = $http.get('/backend/admins/status').
+        self.updatePromise = $http.get('/backend/' + scope + '/status').
         then(function (res) {
           self.loggedIn = !!(res.data.status && res.data.status === 'OK');
           return self.loggedIn;
@@ -63,20 +97,21 @@ service('backend.admin.login.status', [
 
 run([
   '$rootScope',
-  'backend.admin.login.status',
-  'backend.admin.user.token.set',
+  'backend.user.login.status',
+  'backend.user.user.token.set',
   function ($rootScope, status, set) {
     $rootScope.$on('request-login-status-update', status.update);
     set();
   }
 ]).
 
-factory('backend.admin.login', [
+factory('backend.user.login', [
   '$http',
-  'backend.admin.user.token.set',
-  function ($http, set) {
+  'backend.user.scope',
+  'backend.user.user.token.set',
+  function ($http, scope, set) {
     return function (username, password) {
-      return $http.post('/backend/admins/login', {
+      return $http.post('/backend/' + scope + '/login', {
         username: username,
         password: password
       }).then(function (res) {
@@ -89,13 +124,14 @@ factory('backend.admin.login', [
   }
 ]).
 
-factory('backend.admin.logout', [
-  'backend.admin.user.token.unset',
+factory('backend.user.logout', [
+  'backend.user.login.entry',
+  'backend.user.user.token.unset',
   'func.location.goto',
-  function (unset, goto) {
+  function (login, unset, goto) {
     return function () {
       unset();
-      goto('/control/login');
+      goto(login);
     };
   }
 ]);

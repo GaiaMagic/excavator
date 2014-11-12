@@ -2,8 +2,8 @@ angular.module('excavator.admin.nav', []).
 
 directive('navView', [
   '$location',
-  'backend.admin.login.status',
-  'backend.admin.logout',
+  'backend.user.login.status',
+  'backend.user.logout',
   'func.panic.alert',
   function ($location, status, logout, alert) {
   return {

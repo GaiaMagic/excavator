@@ -5,6 +5,7 @@ angular.module('excavator.routes', [
 config([
   '$routeProvider',
   '$locationProvider',
+  'backend.user.auth.needed.resolver',
   'resolver.forms',
   'resolver.form',
   'resolver.submissions',
@@ -12,21 +13,12 @@ config([
   function(
     $routeProvider,
     $locationProvider,
+    authNeededResolver,
     formsResolver,
     formResolver,
     submissionsResolver,
     submissionResolver
   ) {
-    var needsAuth = [
-      'backend.admin.login.status', '$location',
-      function(status, $location) {
-        return status.update().then(function (loggedIn) {
-          if (!loggedIn) $location.path('/control/login');
-          return loggedIn;
-        });
-      }
-    ];
-
     $routeProvider.
 
     when('/control/login', {
@@ -38,7 +30,7 @@ config([
       templateUrl: '/control/forms/edit.html',
       controller: 'controller.control.form.edit as ccfe',
       resolve: {
-        loggedIn: needsAuth,
+        loggedIn: authNeededResolver,
         currentForm: [function () {
           return undefined;
         }]
@@ -49,7 +41,7 @@ config([
       templateUrl: '/control/forms/edit.html',
       controller: 'controller.control.form.edit as ccfe',
       resolve: {
-        loggedIn: needsAuth,
+        loggedIn: authNeededResolver,
         currentForm: formResolver('backend.form.get')
       }
     }).
@@ -58,7 +50,7 @@ config([
       templateUrl: '/control/forms/list.html',
       controller: 'controller.control.form.list as ccfl',
       resolve: {
-        loggedIn: needsAuth,
+        loggedIn: authNeededResolver,
         forms: formsResolver()
       }
     }).
@@ -67,7 +59,7 @@ config([
       templateUrl: '/control/submissions/list.html',
       controller: 'controller.control.submission.list as ccsl',
       resolve: {
-        loggedIn: needsAuth,
+        loggedIn: authNeededResolver,
         submissions: submissionsResolver()
       }
     }).
@@ -76,7 +68,7 @@ config([
       templateUrl: '/control/submissions/view.html',
       controller: 'controller.control.submission.view as ccsv',
       resolve: {
-        loggedIn: needsAuth,
+        loggedIn: authNeededResolver,
         currentSubmission: submissionResolver()
       }
     }).

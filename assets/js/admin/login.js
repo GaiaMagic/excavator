@@ -1,7 +1,7 @@
 angular.module('excavator.admin.login', []).
 
 controller('controller.control.admin.login', [
-  'backend.admin.login',
+  'backend.user.login',
   'func.location.goto',
   'func.panic',
   function (login, goto, panic) {
