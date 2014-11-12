@@ -21,6 +21,11 @@ module.exports = {
       password: 'cTHhHzCyNfeYv6KzyuGYAeaGoBHFVm8koTpLgERWLLMyWVmDo2',
       token: '313d4c51226c3ce901111e5dbfd82f645003435fb7856e0e18f29b84f437f1a1'
     },
+    manager: {
+      username: 'iamamanager',
+      password: 'QMeqhZk4rCyJFMtrbyUCGLbExgdFLZLJPnuTL6ztgW7JMbjWUY',
+      token: 'fd4666d9f4e14766bc19b25420bffd58a533ececcf15787a1e3992cbe02e57b5'
+    },
     form: {
       slug: 'music-festival',
       title: 'Music Festival Volunteer Application Form',

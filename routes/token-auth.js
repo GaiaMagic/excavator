@@ -1,6 +1,11 @@
-var Admin = require('../models/admin');
+var User = {
+  Admin:   require('../models/admin'),
+  Manager: require('../models/manager')
+};
 
-module.exports = function makeMiddleware (returnPromise) {
+module.exports = function makeMiddleware (options) {
+  options = options || {};
+
   return function authorizeMiddleware (req, res, next) {
     var auth = req.headers.authorization;
     var token;
@@ -9,9 +14,9 @@ module.exports = function makeMiddleware (returnPromise) {
       token = auth.slice(6);
     }
 
-    var promise = Admin.authorize(token);
+    var promise = (User[options.model] || User.Admin).authorize(token);
 
-    if (returnPromise) {
+    if (options.returnPromise) {
       return promise;
     }
 

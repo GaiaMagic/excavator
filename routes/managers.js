@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var Admin = require('../models/admin');
+var Manager = require('../models/manager');
 var jsonParser = require('body-parser').json();
 var panic = require('../lib/panic');
 
 router.get('/status', function (req, res, next) {
   require('./token-auth')({
-    model: 'Admin',
+    model: 'Manager',
     returnPromise: true
   })(req).then(function () {
     res.send({status: 'OK'});
@@ -19,7 +19,7 @@ router.get('/status', function (req, res, next) {
 });
 
 router.post('/login', jsonParser, function (req, res, next) {
-  Admin.authenticate(
+  Manager.authenticate(
     req.body.username,
     req.body.password
   ).then(function (user) {
