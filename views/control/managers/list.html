@@ -1,0 +1,28 @@
+<div class="main-static">
+  <div class="col-sm-8 col-sm-offset-2">
+    <div class="panel panel-default">
+      <div class="panel-heading">Managers</div>
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th class="date">Created At</th>
+            <th class="date">Updated At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-if="!ccml.managers || !ccml.managers.length">
+            <td colspan="4" class="text-center">
+              No managers yet!
+            </td>
+          </tr>
+          <tr ng-repeat="manager in ccml.managers">
+            <td ng-bind="manager.username"></td>
+            <td ng-bind="manager.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
+            <td ng-bind="manager.updated_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -4,6 +4,19 @@ var Manager = require('../models/manager');
 var jsonParser = require('body-parser').json();
 var panic = require('../lib/panic');
 
+var needsAdminAuth = require('./token-auth')({
+  model: 'Admin'
+});
+
+router.get('/', needsAdminAuth, function (req, res, next) {
+  Manager.find({}).sort('-created_at').skip(0).limit(20).exec().
+  then(function (managers) {
+    res.send(managers);
+  }, next);
+});
+
+// need no auth:
+
 router.get('/status', function (req, res, next) {
   require('./token-auth')({
     model: 'Manager',

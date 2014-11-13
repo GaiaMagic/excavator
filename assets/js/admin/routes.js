@@ -10,6 +10,7 @@ config([
   'resolver.form',
   'resolver.submissions',
   'resolver.submission',
+  'resolver.managers',
   function(
     $routeProvider,
     $locationProvider,
@@ -17,7 +18,8 @@ config([
     formsResolver,
     formResolver,
     submissionsResolver,
-    submissionResolver
+    submissionResolver,
+    managersResolver
   ) {
     $routeProvider.
 
@@ -70,6 +72,15 @@ config([
       resolve: {
         loggedIn: authNeededResolver,
         currentSubmission: submissionResolver()
+      }
+    }).
+
+    when('/control/managers', {
+      templateUrl: '/control/managers/list.html',
+      controller: 'controller.control.manager.list as ccml',
+      resolve: {
+        loggedIn: authNeededResolver,
+        managers: managersResolver()
       }
     }).
 

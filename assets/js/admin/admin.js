@@ -3,6 +3,7 @@ angular.module('excavator.admin', [
   'excavator.admin.enumerator',
   'excavator.admin.forms',
   'excavator.admin.login',
+  'excavator.admin.managers',
   'excavator.admin.nav',
   'excavator.admin.subs',
   'excavator.admin.validator'
