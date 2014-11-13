@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 var Q        = require('q');
 var panic    = require('../lib/panic');
+var Manager  = require('./manager');
 
 var formSchema = new Schema({
   published:  { type: Boolean, default: false },
@@ -20,6 +21,36 @@ formSchema.pre('save', function (next) {
     this.updated_at = Date.now();
   }
   next();
+});
+
+formSchema.method('addManager', function (managerID) {
+  var self = this;
+  var deferred = Q.defer();
+  Manager.findById(managerID, function (err, manager) {
+    if (err) return deferred.reject(err);
+    if (!manager) return deferred.reject('not-found');
+    for (var i = manager.forms.length - 1; i > -1; i--) {
+      if (manager.forms[i].equals(self._id)) {
+        manager.forms.splice(i, 1);
+      }
+    }
+    manager.forms.unshift(self._id);
+    manager.save(function (err) {
+      if (err) return deferred.reject(err);
+      deferred.resolve(manager);
+    });
+  });
+  return deferred.promise;
+});
+
+formSchema.static('addManager', function (formID, managerID) {
+  var deferred = Q.defer();
+  this.findById(formID, function (err, form) {
+    if (err) return deferred.reject(err);
+    if (!form) return deferred.reject('not-found');
+    deferred.resolve(form.addManager(managerID));
+  });
+  return deferred.promise;
 });
 
 formSchema.static('FindById', function (id) {

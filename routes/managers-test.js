@@ -54,6 +54,7 @@ describe('Route /backend/managers', function () {
           '_id',
           'username',
           'token',
+          'forms',
           'updated_at',
           'created_at',
           'banned'

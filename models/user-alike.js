@@ -4,11 +4,11 @@ var bcrypt   = require('bcrypt');
 var Q        = require('q');
 var panic    = require('../lib/panic');
 
-function makeUserAlikeSchema (schemaName) {
-  var MAX_ATTEMPTS = 5;
-  var LOCK_TIME = 2 * 60 * 60 * 1000;
+module.exports = makeUserAlikeSchema;
+module.exports.scheme = defaultSchema;
 
-  var userSchema = new Schema({
+function defaultSchema () {
+  return {
     username:       { type: String, unique: true, lowercase: 1 },
     password:       { type: String, select: false },
     token:          { type: String, unique: true },
@@ -17,7 +17,14 @@ function makeUserAlikeSchema (schemaName) {
     lock_until:     { type: Number, select: false },
     created_at:     { type: Date, default: Date.now },
     updated_at:     { type: Date, default: Date.now }
-  });
+  };
+}
+
+function makeUserAlikeSchema (schemaName, scheme) {
+  var MAX_ATTEMPTS = 5;
+  var LOCK_TIME = 2 * 60 * 60 * 1000;
+
+  var userSchema = new Schema(scheme || defaultSchema());
 
   // extra virtual keys:
 
@@ -288,5 +295,3 @@ function makeUserAlikeSchema (schemaName) {
 
   return model;
 }
-
-module.exports = makeUserAlikeSchema;

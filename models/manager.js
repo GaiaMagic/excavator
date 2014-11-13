@@ -1,3 +1,12 @@
+var mongoose   = require('mongoose');
+var Schema     = mongoose.Schema;
+
 var makeUser = require('./user-alike');
 
-module.exports = makeUser('Manager');
+var scheme = makeUser.scheme();
+
+scheme.forms = [
+  { type: Schema.ObjectId, ref: 'Form' }
+];
+
+module.exports = makeUser('Manager', scheme);

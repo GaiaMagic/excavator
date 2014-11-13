@@ -4,9 +4,10 @@ var Q            = require('q');
 var mongoose     = require('mongoose');
 var Form         = require('./form');
 var FormRevision = require('./form-revision');
+var Manager      = require('./manager');
 var panic        = require('../lib/panic');
 
-var real     =  config.fixtures.form;
+var real     =  config.fixturesOf('form', 'manager');
 
 var chai     = require('chai');
 var expect   = chai.expect;
@@ -223,6 +224,44 @@ describe('Form (w/ revision) database model', function () {
       });
 
       expectFailure(promise, 'revision-not-allowed-to-delete', done);
+    });
+
+    it('should allow manager to access the form', function (done) {
+      var realManager;
+      var form;
+      var form2;
+      Q.nbind(Manager.remove, Manager)({}).then(function () {
+        return Manager.register(real.username, real.password);
+      }).then(function (manager) {
+        realManager = manager;
+        return FormRevision.create(real.title, real.content);
+      }).then(function (revision) {
+        form = revision.parent;
+      }).then(function () {
+        return FormRevision.create(real.title, real.content);
+      }).then(function (revision) {
+        form2 = revision.parent;
+      }).then(function () {
+        return Form.addManager(form, realManager._id);
+      }).then(function () {
+        return Form.addManager(form2, realManager._id);
+      }).then(function () {
+        return Form.addManager(form, realManager._id);
+      }).then(function (manager) {
+        expect(manager).to.be.an('object');
+        expect(manager.toObject()).to.have.keys([
+          'username',
+          'token',
+          'forms',
+          'updated_at',
+          'created_at',
+          'banned',
+          '_id', '__v'
+        ]);
+        expect(manager.forms).to.be.an('array').and.have.length(2);
+        expect(manager.forms[0].toString()).to.equal(form.toString());
+        expect(manager.forms[1].toString()).to.equal(form2.toString());
+      }).then(done).catch(done);
     });
   });
 });
