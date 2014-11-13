@@ -82,6 +82,10 @@ describe('Submission database model', function () {
       expectFailure(promise, 'submission-not-allowed-to-delete', done);
     });
 
-    it('should only store acceptable data');
+    it('should only store acceptable data', function (done) {
+      expectFailure(Submission.submit(realForm._id, {
+        fullname: '@!#'
+      }), 'valdation-failed', done);
+    });
   });
 });
