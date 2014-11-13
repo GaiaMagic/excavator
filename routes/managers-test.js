@@ -2,10 +2,12 @@ var config    = require('../test/config');
 var mongoose  = require('mongoose');
 var request   = require('supertest');
 var excavator = require('./');
+var Admin     = require('../models/admin');
 var Manager   = require('../models/manager');
 var Q         = require('q');
 
 var real     = config.fixtures.manager;
+var realA    = config.fixtures.admin;
 
 var chai      = require('chai');
 var expect    = chai.expect;
@@ -13,6 +15,7 @@ var expect    = chai.expect;
 chai.should();
 
 describe('Route /backend/managers', function () {
+  var realAdmin;
   var realManager;
 
   before(function (done) {
@@ -22,13 +25,42 @@ describe('Route /backend/managers', function () {
     mongoose.connect(config.testDBAddress, createUser(done));
 
     function createUser (done) {
-      Manager.remove({}, function () {
-        Manager.register(real.username, real.password).then(function (manager) {
-          realManager = manager;
-          done();
-        }).catch(done);
-      });
+      Q.nbind(Admin.remove, Admin)({}).then(function () {
+        return Q.nbind(Manager.remove, Manager)({});
+      }).then(function () {
+        return Admin.register(realA.username, realA.password);
+      }).then(function (admin) {
+        realAdmin = admin;
+      }).then(function () {
+        return Manager.register(real.username, real.password);
+      }).then(function (manager) {
+        realManager = manager;
+      }).catch(done).finally(done);
     }
+  });
+
+  describe('Sub-route /', function () {
+    it('should return a list of managers', function (done) {
+      request(excavator).
+      get('/backend/managers').
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        var body = res.body;
+        expect(body).to.be.an('array');
+        expect(body[0]).to.have.keys([
+          '__v',
+          '_id',
+          'username',
+          'token',
+          'updated_at',
+          'created_at',
+          'banned'
+        ]);
+        done();
+      });
+    });
   });
 
   describe('Sub-route /status', function () {
