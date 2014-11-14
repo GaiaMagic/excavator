@@ -250,17 +250,28 @@ describe('Form (w/ revision) database model', function () {
       }).then(function (revision) {
         form2 = revision.parent;
       }).then(function () {
-        return expectFailure(Form.addManagers(form), 'invalid-managers');
+        return expectFailure(Form.updateManagers(form), 'invalid-operation');
       }).then(function () {
-        return Form.addManagers(form, realManager._id);
+        return expectFailure(Form.updateManagers(form, {
+          '54659fbd73baf47213aaedbc': true
+        }), 'invalid-manager');
       }).then(function () {
-        return Form.addManagers(form2, realManager._id);
+        var op = {};
+        op[realManager._id] = true;
+        return Form.updateManagers(form, op);
       }).then(function () {
-        return Form.addManagers(form, realManager._id);
+        var op = {};
+        op[realManager._id] = true;
+        return Form.updateManagers(form2, op);
       }).then(function () {
-        return Form.addManagers(form, [realManager._id, realManager._id]);
+        var op = {};
+        op[realManager._id] = true;
+        return Form.updateManagers(form, op);
       }).then(function () {
-        return Form.addManagers(form2, [realManager._id, realManager2._id]);
+        var op = {};
+        op[realManager._id] = true;
+        op[realManager2._id] = true;
+        return Form.updateManagers(form2, op);
       }).then(function (form) {
         expect(form).to.be.an('object');
         expect(form.toObject()).to.have.keys([
@@ -281,6 +292,19 @@ describe('Form (w/ revision) database model', function () {
       }).then(function (manager) {
         expect(manager.forms).to.be.an('array').and.have.length(1);
         expect(manager.forms[0].toString()).to.equal(form2.toString());
+      }).then(function () {
+        var op = {};
+        op[realManager._id] = false;
+        op[realManager2._id] = false;
+        return Form.updateManagers(form2, op);
+      }).then(function (form) {
+        return Q.nbind(Manager.findById, Manager)(realManager._id);
+      }).then(function (manager) {
+        expect(manager.forms).to.be.an('array').and.have.length(1);
+        expect(manager.forms[0].toString()).to.equal(form.toString());
+        return Q.nbind(Manager.findById, Manager)(realManager2._id);
+      }).then(function (manager) {
+        expect(manager.forms).to.be.an('array').and.have.length(0);
       }).then(done).catch(done);
     });
   });

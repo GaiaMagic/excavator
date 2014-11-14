@@ -23,35 +23,58 @@ formSchema.pre('save', function (next) {
   next();
 });
 
-formSchema.method('addManagers', function (managerIDs) {
+/**
+ * update managers' forms field
+ * @param  {object}  operation  an object whose keys are managers' IDs, if the
+ *                              value to the key is true, the form ID will be
+ *                              added to the top of the manager's forms array;
+ *                              if false, the form ID will be removed from the
+ *                              array.
+ * @return {promise}            a promise will be returned, if at least one
+ *                              manager does not exist, it rejects immediately
+ */
+formSchema.method('updateManagers', function (operation) {
   var self = this;
-  if (typeof managerIDs === 'string' ||
-    (typeof managerIDs === 'object' && !(managerIDs instanceof Array))
-  ) {
-    managerIDs = [managerIDs];
+  function valid (operation) {
+    if (typeof operation !== 'object' || operation instanceof Array) {
+      return false;
+    }
+    if (Object.keys(operation).length === 0) {
+      return false;
+    }
+    return true;
   }
-  if (!(managerIDs instanceof Array)) {
+  if (!valid(operation)) {
     return Q.reject(panic(422, {
-      type:    'invalid-managers',
-      message: 'Managers should be an array or a string.'
+      type:    'invalid-operation',
+      message: 'Invalid operation.'
     }));
   }
-  managerIDs = managerIDs.map(function (managerID) {
-    return managerID.toString();
-  });
-  managerIDs = managerIDs.filter(function (managerID, index) {
-    return managerIDs.indexOf(managerID) === index;
-  }).map(function (managerID) {
+  var keys = Object.keys(operation);
+  var managerIDs = keys.map(function (managerID) {
     return Q.nbind(Manager.findById, Manager)(managerID);
   });
-  return Q.all(managerIDs).then(function (managers) {
+  return Q.allSettled(managerIDs).then(function (managers) {
+    managers = managers.filter(function (manager) {
+      return manager.state === 'fulfilled' && manager.value;
+    }).map(function (manager) {
+      return manager.value;
+    });
+    if (managers.length !== keys.length) {
+      throw panic(422, {
+        type:    'invalid-manager',
+        message: 'At least one manager does not exist.'
+      });
+    }
     return Q.all(managers.map(function (manager) {
       for (var j = manager.forms.length - 1; j > -1; j--) {
         if (manager.forms[j].equals(self._id)) {
           manager.forms.splice(j, 1);
         }
       }
-      manager.forms.unshift(self._id);
+      if (operation[manager._id]) {
+        manager.forms.unshift(self._id);
+      }
       return Q.nbind(manager.save, manager)();
     }));
   }).then(function () {
@@ -59,12 +82,12 @@ formSchema.method('addManagers', function (managerIDs) {
   });
 });
 
-formSchema.static('addManagers', function (formID, managerIDs) {
+formSchema.static('updateManagers', function (formID, managerIDs) {
   var deferred = Q.defer();
   this.findById(formID, function (err, form) {
     if (err) return deferred.reject(err);
     if (!form) return deferred.reject('not-found');
-    deferred.resolve(form.addManagers(managerIDs));
+    deferred.resolve(form.updateManagers(managerIDs));
   });
   return deferred.promise;
 });
