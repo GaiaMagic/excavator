@@ -12,6 +12,15 @@ router.get('/', function (req, res, next) {
   }, next);
 });
 
+router.post('/:formid/managers', jsonParser, function (req, res, next) {
+  Form.updateManagers(
+    req.params.formid,
+    req.body
+  ).then(function (form) {
+    res.send(form);
+  }).catch(next);
+});
+
 router.get('/:formid', function (req, res, next) {
   Form.findById(req.params.formid).populate('head').exec().
   then(function (revision) {

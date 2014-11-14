@@ -5,6 +5,7 @@ var excavator = require('./');
 var Admin     = require('../models/admin');
 var Form      = require('../models/form');
 var FormRevision = require('../models/form-revision');
+var Manager   = require('../models/manager');
 
 var real      = config.fixturesOf('admin', 'form');
 
@@ -104,6 +105,68 @@ describe('Route /backend/forms', function () {
           realForm._id.toString()
         ]);
         done();
+      });
+    });
+
+    describe('Sub-route /managers', function () {
+      it('should return invalid-operation if no operation provided',
+      function (done) {
+        request(excavator).
+        post('/backend/forms/' + realForm.parent + '/managers').
+        set('Authorization', 'token ' + realAdmin.token).
+        expect(422).
+        end(function (err, res) {
+          if (err) return done(err);
+          expect(Object.keys(res.body)).to.have.members([
+            'status',
+            'type',
+            'message'
+          ]);
+          expect(res.body.type).to.equal('invalid-operation');
+          done();
+        });
+      });
+
+      it('should return invalid-operation if manager does not found',
+      function (done) {
+        request(excavator).
+        post('/backend/forms/' + realForm.parent + '/managers').
+        send({
+          '54659fbd73baf47213aaedbc': true
+        }).
+        set('Authorization', 'token ' + realAdmin.token).
+        expect(422).
+        end(function (err, res) {
+          if (err) return done(err);
+          expect(Object.keys(res.body)).to.have.members([
+            'status',
+            'type',
+            'message'
+          ]);
+          expect(res.body.type).to.equal('invalid-manager');
+          done();
+        });
+      });
+
+      it('should return a form with 200 OK if manager exists',
+      function (done) {
+        Manager.remove({}, function () {
+          Manager.register(real.username, real.password).
+          then(function (manager) {
+            var op = {};
+            op[manager._id] = true;
+            request(excavator).
+            post('/backend/forms/' + realForm.parent + '/managers').
+            send(op).
+            set('Authorization', 'token ' + realAdmin.token).
+            expect(200).
+            end(function (err, res) {
+              if (err) return done(err);
+              expect(res.body).to.be.an('object');
+              done();
+            });
+          });
+        });
       });
     });
   });
