@@ -39,9 +39,9 @@ router.get('/status', function (req, res, next) {
   require('./token-auth')({
     model: 'Manager',
     returnPromise: true
-  })(req).then(function () {
-    res.send({status: 'OK'});
-  }, function () {
+  })(req).then(function (user) {
+    res.send({status: 'OK', username: user.username});
+  }).catch(function () {
     next(panic(200, {
       type:    'invalid-token',
       message: 'Invalid token.'

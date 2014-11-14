@@ -75,6 +75,9 @@ service('backend.user.login.status', [
     $rootScope.$watch(function () {
       return self.loggedIn;
     }, function (val) {
+      if (!val) {
+        self.username = undefined;
+      }
       $rootScope.$broadcast('login-status-changed', val);
     });
 
@@ -85,6 +88,7 @@ service('backend.user.login.status', [
         self.updatePromise = $http.get('/backend/' + scope + '/status').
         then(function (res) {
           self.loggedIn = !!(res.data.status && res.data.status === 'OK');
+          self.username = res.data.username;
           return self.loggedIn;
         }, panic).finally(function () {
           self.updatePromise = undefined;

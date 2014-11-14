@@ -20,10 +20,10 @@ module.exports = function makeMiddleware (options) {
       return promise;
     }
 
-    promise.then(function (admin) {
+    promise.then(function (user) {
       req.authorizedUser = {
-        id: admin._id.toString(),
-        username: admin.username.toString()
+        id: user._id.toString(),
+        username: user.username.toString()
       };
       next();
     }, next);

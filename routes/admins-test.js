@@ -22,12 +22,11 @@ describe('Route /backend/admins', function () {
     mongoose.connect(config.testDBAddress, createUser(done));
 
     function createUser (done) {
-      Admin.remove({}, function () {
-        Admin.register(real.username, real.password).then(function (admin) {
-          realAdmin = admin;
-          done();
-        }).catch(done);
-      });
+      Q.nbind(Admin.remove, Admin)({}).then(function () {
+        return Admin.register(real.username, real.password);
+      }).then(function (admin) {
+        realAdmin = admin;
+      }).catch(done).finally(done);
     }
   });
 
@@ -69,9 +68,11 @@ describe('Route /backend/admins', function () {
       end(function (err, res) {
         if (err) return done(err);
         expect(Object.keys(res.body)).to.have.members([
-          'status'
+          'status',
+          'username'
         ]);
         expect(res.body.status).to.equal('OK');
+        expect(res.body.username).to.equal(real.username);
         done();
       });
     });

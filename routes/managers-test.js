@@ -152,9 +152,11 @@ describe('Route /backend/managers', function () {
       end(function (err, res) {
         if (err) return done(err);
         expect(Object.keys(res.body)).to.have.members([
-          'status'
+          'status',
+          'username'
         ]);
         expect(res.body.status).to.equal('OK');
+        expect(res.body.username).to.equal(real.username);
         done();
       });
     });
