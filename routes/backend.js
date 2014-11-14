@@ -10,4 +10,8 @@ router.use('/submissions', needsAdminAuth, require('./submissions'));
 
 router.use('/managers', require('./managers'));
 
+router.all('*', function (req, res, next) {
+  next('not-found');
+});
+
 module.exports = router;
