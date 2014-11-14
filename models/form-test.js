@@ -16,13 +16,17 @@ chai.should();
 
 describe('Form (w/ revision) database model', function () {
   function expectFailure (promise, type, done) {
-    return promise.then(function (revision) {
+    promise = promise.then(function (revision) {
       expect(revision).to.be.undefined;
     }, function (err) {
       expect(err).to.be.an.instanceof(Error);
       expect(err.panic).to.be.true;
       expect(err.type).to.equal(type);
-    }).then(done).catch(done);
+    });
+
+    if (done) promise = promise.then(done).catch(done);
+
+    return promise;
   }
 
   before(function (done) {
@@ -228,12 +232,16 @@ describe('Form (w/ revision) database model', function () {
 
     it('should allow manager to access the form', function (done) {
       var realManager;
+      var realManager2;
       var form;
       var form2;
       Q.nbind(Manager.remove, Manager)({}).then(function () {
         return Manager.register(real.username, real.password);
       }).then(function (manager) {
         realManager = manager;
+        return Manager.register(real.username + '2', real.password);
+      }).then(function (manager) {
+        realManager2 = manager;
         return FormRevision.create(real.title, real.content);
       }).then(function (revision) {
         form = revision.parent;
@@ -242,25 +250,37 @@ describe('Form (w/ revision) database model', function () {
       }).then(function (revision) {
         form2 = revision.parent;
       }).then(function () {
-        return Form.addManager(form, realManager._id);
+        return expectFailure(Form.addManagers(form), 'invalid-managers');
       }).then(function () {
-        return Form.addManager(form2, realManager._id);
+        return Form.addManagers(form, realManager._id);
       }).then(function () {
-        return Form.addManager(form, realManager._id);
-      }).then(function (manager) {
-        expect(manager).to.be.an('object');
-        expect(manager.toObject()).to.have.keys([
-          'username',
-          'token',
-          'forms',
+        return Form.addManagers(form2, realManager._id);
+      }).then(function () {
+        return Form.addManagers(form, realManager._id);
+      }).then(function () {
+        return Form.addManagers(form, [realManager._id, realManager._id]);
+      }).then(function () {
+        return Form.addManagers(form2, [realManager._id, realManager2._id]);
+      }).then(function (form) {
+        expect(form).to.be.an('object');
+        expect(form.toObject()).to.have.keys([
+          'commits',
+          'head',
+          'published',
           'updated_at',
           'created_at',
-          'banned',
+          'slug',
           '_id', '__v'
         ]);
+        return Q.nbind(Manager.findById, Manager)(realManager._id);
+      }).then(function (manager) {
         expect(manager.forms).to.be.an('array').and.have.length(2);
-        expect(manager.forms[0].toString()).to.equal(form.toString());
-        expect(manager.forms[1].toString()).to.equal(form2.toString());
+        expect(manager.forms[0].toString()).to.equal(form2.toString());
+        expect(manager.forms[1].toString()).to.equal(form.toString());
+        return Q.nbind(Manager.findById, Manager)(realManager2._id);
+      }).then(function (manager) {
+        expect(manager.forms).to.be.an('array').and.have.length(1);
+        expect(manager.forms[0].toString()).to.equal(form2.toString());
       }).then(done).catch(done);
     });
   });

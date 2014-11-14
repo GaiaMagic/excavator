@@ -23,32 +23,48 @@ formSchema.pre('save', function (next) {
   next();
 });
 
-formSchema.method('addManager', function (managerID) {
+formSchema.method('addManagers', function (managerIDs) {
   var self = this;
-  var deferred = Q.defer();
-  Manager.findById(managerID, function (err, manager) {
-    if (err) return deferred.reject(err);
-    if (!manager) return deferred.reject('not-found');
-    for (var i = manager.forms.length - 1; i > -1; i--) {
-      if (manager.forms[i].equals(self._id)) {
-        manager.forms.splice(i, 1);
-      }
-    }
-    manager.forms.unshift(self._id);
-    manager.save(function (err) {
-      if (err) return deferred.reject(err);
-      deferred.resolve(manager);
-    });
+  if (typeof managerIDs === 'string' ||
+    (typeof managerIDs === 'object' && !(managerIDs instanceof Array))
+  ) {
+    managerIDs = [managerIDs];
+  }
+  if (!(managerIDs instanceof Array)) {
+    return Q.reject(panic(422, {
+      type:    'invalid-managers',
+      message: 'Managers should be an array or a string.'
+    }));
+  }
+  managerIDs = managerIDs.map(function (managerID) {
+    return managerID.toString();
   });
-  return deferred.promise;
+  managerIDs = managerIDs.filter(function (managerID, index) {
+    return managerIDs.indexOf(managerID) === index;
+  }).map(function (managerID) {
+    return Q.nbind(Manager.findById, Manager)(managerID);
+  });
+  return Q.all(managerIDs).then(function (managers) {
+    return Q.all(managers.map(function (manager) {
+      for (var j = manager.forms.length - 1; j > -1; j--) {
+        if (manager.forms[j].equals(self._id)) {
+          manager.forms.splice(j, 1);
+        }
+      }
+      manager.forms.unshift(self._id);
+      return Q.nbind(manager.save, manager)();
+    }));
+  }).then(function () {
+    return self;
+  });
 });
 
-formSchema.static('addManager', function (formID, managerID) {
+formSchema.static('addManagers', function (formID, managerIDs) {
   var deferred = Q.defer();
   this.findById(formID, function (err, form) {
     if (err) return deferred.reject(err);
     if (!form) return deferred.reject('not-found');
-    deferred.resolve(form.addManager(managerID));
+    deferred.resolve(form.addManagers(managerIDs));
   });
   return deferred.promise;
 });
