@@ -4,7 +4,7 @@
       <div class="panel-heading">Latest submissions</div>
       <table class="table table-bordered table-hover">
         <thead>
-          <tr>
+          <tr ng-if="ccsl.submissions && ccsl.submissions.length">
             <th>View</th>
             <th>Form</th>
             <th ng-repeat="model in ccsl.models track by $index"
@@ -14,7 +14,7 @@
         </thead>
         <tbody>
           <tr ng-if="!ccsl.submissions || !ccsl.submissions.length">
-            <td colspan="4" class="text-center">
+            <td class="text-center">
               No submissions yet!
             </td>
           </tr>

@@ -1,20 +1,26 @@
-angular.module('excavator.manager.routes', []).
+angular.module('excavator.manager.routes', [
+  'excavator.resolver.submission'
+]).
 
 config([
   '$routeProvider',
   '$locationProvider',
   'backend.user.auth.needed.resolver',
+  'resolver.submissions',
   function(
     $routeProvider,
     $locationProvider,
-    authNeededResolver
+    authNeededResolver,
+    submissionsResolver
   ) {
     $routeProvider.
 
     when('/manager', {
       templateUrl: '/manager/submissions/list.html',
+      controller: 'controller.manager.manager.submission.list as ccsl',
       resolve: {
-        loggedIn: authNeededResolver
+        loggedIn: authNeededResolver,
+        submissions: submissionsResolver('backend.manager.submission.list')
       }
     }).
 

@@ -1,8 +1,8 @@
 angular.module('excavator.resolver.submission', []).
 
-constant('resolver.submissions', function submissionsResolver () {
+constant('resolver.submissions', function submissionsResolver (service) {
   return [
-    'backend.submission.list',
+    service,
     'func.panic',
     function currentSubmissions (list, panic) {
       return list().then(function (res) {

@@ -62,7 +62,7 @@ config([
       controller: 'controller.control.submission.list as ccsl',
       resolve: {
         loggedIn: authNeededResolver,
-        submissions: submissionsResolver()
+        submissions: submissionsResolver('backend.submission.list')
       }
     }).
 

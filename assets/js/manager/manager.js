@@ -1,13 +1,17 @@
 angular.module('excavator.manager.manager', [
   'ngRoute',
   'mgcrea.ngStrap.modal',
+  'excavator.backend.manager',
+  'excavator.backend.submission',
   'excavator.backend.user',
+  'excavator.func.array',
   'excavator.func.localstorage',
   'excavator.func.location',
   'excavator.func.panic',
   'excavator.manager.login',
   'excavator.manager.nav',
-  'excavator.manager.routes'
+  'excavator.manager.routes',
+  'excavator.manager.subs'
 ]).
 
 constant('backend.user.scope', 'managers').
