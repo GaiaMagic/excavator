@@ -4,9 +4,12 @@ var request   = require('supertest');
 var excavator = require('./');
 var Admin     = require('../models/admin');
 var Manager   = require('../models/manager');
+var Form      = require('../models/form');
+var FormRevision = require('../models/form-revision');
+var Submission = require('../models/submission');
 var Q         = require('q');
 
-var real     = config.fixtures.manager;
+var real     = config.fixturesOf('manager', 'form');
 var realA    = config.fixtures.admin;
 
 var chai      = require('chai');
@@ -27,6 +30,12 @@ describe('Route /backend/managers', function () {
     function createUser (done) {
       Q.nbind(Admin.remove, Admin)({}).then(function () {
         return Q.nbind(Manager.remove, Manager)({});
+      }).then(function () {
+        return Q.nbind(Form.remove, Form)({});
+      }).then(function () {
+        return Q.nbind(FormRevision.remove, FormRevision)({});
+      }).then(function () {
+        return Q.nbind(Submission.remove, Submission)({});
       }).then(function () {
         return Admin.register(realA.username, realA.password);
       }).then(function (admin) {
@@ -61,6 +70,47 @@ describe('Route /backend/managers', function () {
         ]);
         done();
       });
+    });
+  });
+
+  describe('Sub-route /submissions', function () {
+    function expectLength (length) {
+      var deferred = Q.defer();
+      request(excavator).
+      get('/backend/managers/submissions').
+      set('Authorization', 'token ' + realManager.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return deferred.reject(err);
+        var body = res.body;
+        expect(body).to.be.an('array').and.have.length(length);
+        deferred.resolve();
+      });
+      return deferred.promise;
+    }
+
+    it('should return only manager\'s submissions', function (done) {
+      expectLength(0).then(function () {
+        return FormRevision.create(real.title, real.content);
+      }).then(function (form) {
+        return Submission.submit(form._id, real.submit);
+      }).then(function (submission) {
+        var op = {};
+        op[realManager._id] = true;
+        return Form.updateManagers(submission.form, op);
+      }).then(function () {
+        return expectLength(1);
+      }).then(function () {
+        return FormRevision.create(real.title, real.content);
+      }).then(function (form) {
+        return Submission.submit(form._id, real.submit);
+      }).then(function (submission) {
+        var op = {};
+        op[realManager._id] = true;
+        return Form.updateManagers(submission.form, op);
+      }).then(function () {
+        return expectLength(2);
+      }).then(done).catch(done);
     });
   });
 
