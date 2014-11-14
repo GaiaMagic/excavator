@@ -30,4 +30,13 @@ factory('backend.form.list', [
       return $http.get('/backend/forms');
     };
   }
+]).
+
+factory('backend.form.update.managers', [
+  '$http',
+  function ($http) {
+    return function (formid, operation) {
+      return $http.post('/backend/forms/' + formid + '/managers', operation);
+    };
+  }
 ]);

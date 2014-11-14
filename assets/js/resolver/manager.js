@@ -10,11 +10,4 @@ constant('resolver.managers', function formsResolver () {
       }, panic);
     }
   ];
-}).
-
-constant('resolver.manager', function formResolver (service) {
-  return [
-    function () {
-    }
-  ];
 });

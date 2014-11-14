@@ -10,6 +10,7 @@ controller('controller.control.form.edit', [
   '$routeParams',
   'schemes',
   'fixtures.admin.edit',
+  'form.access.control',
   'form.create.new',
   'func.array',
   'func.dom.input.remember.state',
@@ -27,6 +28,7 @@ controller('controller.control.form.edit', [
     $routeParams,
     schemes,
     fixtures,
+    accessControl,
     createNew,
     funcArray,
     rememberState,
@@ -40,11 +42,12 @@ controller('controller.control.form.edit', [
   if (angular.isUndefined(currentForm)) {
     this.form = {};
     this.form.content = load('schemedata', parse) || fixtures;
-    this.form.title = undefined;
+    this.isNew = true;
   } else if (currentForm === false) {
     return panic('Form is corrupted.');
   } else {
     this.form = currentForm;
+    this.isNew = false;
   }
 
   this.formdata = 'Form data will appear here once you submit the form.';
@@ -70,6 +73,10 @@ controller('controller.control.form.edit', [
       self.schemedata = data.content;
       save('schemedata', self.schemedata);
     });
+  };
+
+  this.access = function () {
+    accessControl(currentForm);
   };
 
   this.schemes = schemes.list();

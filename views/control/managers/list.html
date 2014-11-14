@@ -6,6 +6,7 @@
         <thead>
           <tr>
             <th>Username</th>
+            <th class="number">Forms</th>
             <th class="date">Created At</th>
             <th class="date">Updated At</th>
           </tr>
@@ -18,6 +19,7 @@
           </tr>
           <tr ng-repeat="manager in ccml.managers">
             <td ng-bind="manager.username"></td>
+            <td ng-bind="manager.forms.length"></td>
             <td ng-bind="manager.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
             <td ng-bind="manager.updated_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
           </tr>
