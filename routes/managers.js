@@ -23,6 +23,15 @@ router.post('/', needsAdminAuth, jsonParser, function (req, res, next) {
   }).catch(next);
 });
 
+router.delete('/:id([a-f0-9]{24})', needsAdminAuth, function (req, res, next) {
+  Q.nbind(Manager.findById, Manager)(req.params.id).then(function (manager) {
+    if (!manager) return next('not-found');
+    return Q.nbind(manager.remove, manager)();
+  }).then(function () {
+    res.send({status: 'OK'});
+  }).catch(next);
+});
+
 var needsManagerAuth = require('./token-auth')({
   model: 'Manager'
 });
