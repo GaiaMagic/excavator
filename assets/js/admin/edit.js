@@ -76,7 +76,10 @@ controller('controller.control.form.edit', [
   };
 
   this.access = function () {
-    accessControl(currentForm);
+    var self = this;
+    accessControl(currentForm).then(function (form) {
+      self.form.form.managers = form.managers;
+    });
   };
 
   this.schemes = schemes.list();

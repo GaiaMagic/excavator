@@ -5,9 +5,10 @@
         <tr>
           <th class="slug">Slug</th>
           <th>Name</th>
+          <th class="number">Managers</th>
+          <th class="number">Rev.</th>
           <th class="date">Created At</th>
           <th class="date">Updated At</th>
-          <th class="number">Revisions</th>
         </tr>
       </thead>
       <tbody>
@@ -27,9 +28,10 @@
             <a class="block" href="/control/forms/edit/{{ form._id }}"
               ng-bind="form.head.title || '(untitled)'"></a>
           </td>
+          <td ng-bind="form.managers"></td>
+          <td ng-bind="form.commits.length"></td>
           <td ng-bind="form.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
           <td ng-bind="form.updated_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
-          <td ng-bind="form.commits.length"></td>
         </tr>
       </tbody>
     </table>
