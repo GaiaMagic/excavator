@@ -3,6 +3,7 @@ angular.module('excavator.backend.user', []).
 constant('backend.user.scope', 'admins').
 constant('backend.user.token.name', 'admin.token').
 constant('backend.user.login.entry', '/control/login').
+constant('backend.user.enable.token.param', false).
 
 constant('backend.user.auth.needed.resolver', [
   '$location',
@@ -101,11 +102,21 @@ service('backend.user.login.status', [
 
 run([
   '$rootScope',
+  '$location',
+  'backend.user.enable.token.param',
   'backend.user.login.status',
   'backend.user.user.token.set',
-  function ($rootScope, status, set) {
+  function ($rootScope, $location, tokenParamEnabled, status, set) {
     $rootScope.$on('request-login-status-update', status.update);
-    set();
+    if (tokenParamEnabled) {
+      var token = $location.search().token;
+      set(token);
+      if (token) {
+        $location.search('token', null);
+      }
+    } else {
+      set();
+    }
   }
 ]).
 

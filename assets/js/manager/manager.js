@@ -16,4 +16,5 @@ angular.module('excavator.manager.manager', [
 
 constant('backend.user.scope', 'managers').
 constant('backend.user.token.name', 'manager.token').
-constant('backend.user.login.entry', '/manager/login');
+constant('backend.user.login.entry', '/manager/login').
+constant('backend.user.enable.token.param', true);

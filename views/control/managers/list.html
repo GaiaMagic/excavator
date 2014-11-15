@@ -4,8 +4,9 @@
       <div class="panel-heading">Managers</div>
       <table class="table table-bordered table-hover">
         <thead>
-          <tr>
+          <tr ng-if="ccml.managers && ccml.managers.length">
             <th>Username</th>
+            <th>Actions</th>
             <th class="number">Forms</th>
             <th class="date">Created At</th>
             <th class="date">Updated At</th>
@@ -13,12 +14,16 @@
         </thead>
         <tbody>
           <tr ng-if="!ccml.managers || !ccml.managers.length">
-            <td colspan="4" class="text-center">
+            <td class="text-center">
               No managers yet!
             </td>
           </tr>
           <tr ng-repeat="manager in ccml.managers">
             <td ng-bind="manager.username"></td>
+            <td>
+              <a href="/manager?token={{ manager.token }}" target="_blank"
+                title="Log in as {{ manager.username }}">Log in</a>
+            </td>
             <td ng-bind="manager.forms.length"></td>
             <td ng-bind="manager.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
             <td ng-bind="manager.updated_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
