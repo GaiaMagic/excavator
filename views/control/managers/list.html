@@ -24,7 +24,10 @@
               <a href="/manager?token={{ manager.token }}" target="_blank"
                 title="Log in as {{ manager.username }}">Log in</a>
             </td>
-            <td ng-bind="manager.forms.length"></td>
+            <td>
+              <a href="/control/forms?manager={{ manager.username }}"
+                ng-bind="manager.forms.length" class="block"></a>
+            </td>
             <td ng-bind="manager.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
             <td ng-bind="manager.updated_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
           </tr>

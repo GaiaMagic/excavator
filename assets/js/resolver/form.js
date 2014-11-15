@@ -2,10 +2,14 @@ angular.module('excavator.resolver.form', []).
 
 constant('resolver.forms', function formsResolver () {
   return [
+    '$route',
     'backend.form.list',
     'func.panic',
-    function currentForms (list, panic) {
-      return list().then(function (res) {
+    function currentForms ($route, list, panic) {
+      var params = {};
+      var manager = $route.current.params.manager;
+      if (manager) params.manager = manager;
+      return list(params).then(function (res) {
         return res.data;
       }, panic);
     }

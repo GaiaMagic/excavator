@@ -51,6 +51,7 @@ config([
     when('/control/forms', {
       templateUrl: '/control/forms/list.html',
       controller: 'controller.control.form.list as ccfl',
+      reloadOnSearch: true,
       resolve: {
         loggedIn: authNeededResolver,
         forms: formsResolver()
