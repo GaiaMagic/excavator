@@ -2,14 +2,31 @@ var express = require('express');
 var router = express.Router();
 var Form = require('../models/form');
 var FormRevision = require('../models/form-revision');
+var Manager = require('../models/manager');
 var jsonParser = require('body-parser').json();
+var Q = require('q');
 
 router.get('/', function (req, res, next) {
-  Form.find({}).sort('-updated_at').skip(0).limit(20).
-  populate('head', 'title').exec().
-  then(function (revisions) {
-    res.send(revisions);
-  }, next);
+  var manager = req.query.manager;
+  var promise;
+
+  if (manager) {
+    promise = Manager.findOne({ username: manager }).populate('forms');
+    promise = Q.nbind(promise.exec, promise)().then(function (manager) {
+      if (!manager) return Q.resolve([]);
+      return Q.nbind(Form.populate, Form)(manager.forms, {
+        path: 'head',
+        select: 'title'
+      });
+    });
+  } else {
+    promise = Form.find({}).sort('-updated_at').skip(0).limit(20);
+    promise = promise.populate('head', 'title');
+    promise = Q.nbind(promise.exec, promise)();
+  }
+  promise.then(function (forms) {
+    res.send(forms);
+  }).catch(next)
 });
 
 router.post('/:formid/managers', jsonParser, function (req, res, next) {

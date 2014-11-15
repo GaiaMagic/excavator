@@ -6,6 +6,7 @@ var Admin     = require('../models/admin');
 var Form      = require('../models/form');
 var FormRevision = require('../models/form-revision');
 var Manager   = require('../models/manager');
+var Q         = require('q');
 
 var real      = config.fixturesOf('admin', 'form');
 
@@ -16,6 +17,7 @@ chai.should();
 
 describe('Route /backend/forms', function () {
   var realAdmin;
+  var realManager;
   var realForm;
 
   before(function (done) {
@@ -25,15 +27,20 @@ describe('Route /backend/forms', function () {
     mongoose.connect(config.testDBAddress, createUser(done));
 
     function createUser (done) {
-      Admin.remove({}, function () {
-        Admin.register(real.username, real.password).then(function (admin) {
-          realAdmin = admin;
-          return FormRevision.create(real.title, real.content).
-            then(function (form) {
-              realForm = form;
-            });
-        }).then(done).catch(done);
-      });
+      Q.nbind(Admin.remove, Admin)({}).then(function () {
+        return Q.nbind(Manager.remove, Manager)({});
+      }).then(function () {
+        return Admin.register(real.username, real.password);
+      }).then(function (admin) {
+        realAdmin = admin;
+        return FormRevision.create(real.title, real.content);
+      }).then(function (form) {
+        realForm = form;
+      }).then(function () {
+        return Manager.register(real.username, real.password);
+      }).then(function (manager) {
+        realManager = manager;
+      }).catch(done).finally(done);
     }
   });
 
@@ -48,6 +55,31 @@ describe('Route /backend/forms', function () {
         expect(res.body).to.be.an('array');
         done();
       });
+    });
+
+    it('should list forms of a specific manager', function (done) {
+      function expectLength (length) {
+        var deferred = Q.defer();
+        request(excavator).
+        get('/backend/forms?manager=' + realManager.username).
+        set('Authorization', 'token ' + realAdmin.token).
+        expect(200).
+        end(function (err, res) {
+          if (err) return deferred.reject(err);
+          var body = res.body;
+          expect(body).to.be.an('array').and.have.length(length);
+          deferred.resolve();
+        });
+        return deferred.promise;
+      }
+
+      expectLength(0).then(function () {
+        var op = {}
+        op[realManager._id] = true;
+        return Form.updateManagers(realForm.parent, op);
+      }).then(function (form) {
+        return expectLength(1);
+      }).then(done).catch(done);
     });
   });
 
@@ -150,22 +182,17 @@ describe('Route /backend/forms', function () {
 
       it('should return a form with 200 OK if manager exists',
       function (done) {
-        Manager.remove({}, function () {
-          Manager.register(real.username, real.password).
-          then(function (manager) {
-            var op = {};
-            op[manager._id] = true;
-            request(excavator).
-            post('/backend/forms/' + realForm.parent + '/managers').
-            send(op).
-            set('Authorization', 'token ' + realAdmin.token).
-            expect(200).
-            end(function (err, res) {
-              if (err) return done(err);
-              expect(res.body).to.be.an('object');
-              done();
-            });
-          });
+        var op = {};
+        op[realManager._id] = true;
+        request(excavator).
+        post('/backend/forms/' + realForm.parent + '/managers').
+        send(op).
+        set('Authorization', 'token ' + realAdmin.token).
+        expect(200).
+        end(function (err, res) {
+          if (err) return done(err);
+          expect(res.body).to.be.an('object');
+          done();
         });
       });
     });
