@@ -47,7 +47,8 @@ run([
                       'ng-click="set(managers, \'accessible\', false)">',
                       'Deselect All</button>',
                   '</div>',
-                  '<button type="submit" class="btn btn-info">Save</button>',
+                  '<button type="submit" class="btn btn-info" ',
+                    'ng-disabled="!changed()">Save</button>',
                 '</div>',
               '</div>',
             '</form>',
@@ -107,19 +108,26 @@ factory('form.access.control', [
           array[i][key] = value;
         }
       };
-      modal.$scope.submit = function () {
-        modal.hide();
+      function selected () {
+        var ret = {};
         var keys = Object.keys(accessibles);
-        var managers = modal.$scope.managers;
+        var managers = modal.$scope.managers || [];
         for (var i = 0; i < managers.length; i++) {
           var manager = managers[i];
           if (manager.accessible && keys.indexOf(manager._id) === -1) {
-            accessibles[manager._id] = true;
+            ret[manager._id] = true;
           } else if (angular.isDefined(accessibles[manager._id])) {
-            accessibles[manager._id] = managers[i].accessible;
+            ret[manager._id] = managers[i].accessible;
           }
         }
-        updateManagers(currentForm.form._id, accessibles).then(function (res) {
+        return ret;
+      }
+      modal.$scope.changed = function () {
+        return !angular.equals(accessibles, selected());
+      };
+      modal.$scope.submit = function () {
+        modal.hide();
+        updateManagers(currentForm.form._id, selected()).then(function (res) {
           alert('Successfully updated access control.', 'OK');
           deferred.resolve(res.data);
         }, function (err) {
