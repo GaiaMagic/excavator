@@ -3,8 +3,9 @@
     <form class="form-horizontal" ng-submit="ccfe.submit()">
       <h3>
         <span>Preview</span>
-        <div class="btn-group btn-group-sm pull-right">
-          <button class="btn btn-default" ng-click="ccfe.clear()">
+        <div class="btn-group btn-group-sm pull-right"
+          ng-show="ccfe.form.content.scheme.length > 0">
+          <button class="btn btn-default" ng-click="ccfe.clearData()">
             Clear Data
           </button>
         </div>
@@ -15,6 +16,10 @@
         <div ng-if="ccfe.form.content.scheme.length > 0">
           <pre ng-bind="ccfe.formdata"></pre>
           <pre ng-bind="ccfe.schemedata"></pre>
+        </div>
+        <div ng-if="!ccfe.form.content.scheme ||
+          !ccfe.form.content.scheme.length">
+          Nothing to preview.
         </div>
       </div>
     </form>
@@ -31,6 +36,7 @@
           ng-class="{open: addButtonClicked}">
           <button type="button" class="btn btn-default dropdown-toggle"
             ng-click="addButtonClicked=!addButtonClicked">
+            <span class="glyphicon glyphicon-plus"></span>
             Add <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu">
@@ -38,6 +44,11 @@
               <a href ng-click="$parent.addButtonClicked=false;
                 ccfe.add(scheme.name, scheme.version)"
                 ng-bind="scheme.title"></a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href ng-click="addButtonClicked=false; ccfe.clear()">
+                <span class="text-danger">Clear All</span></a>
             </li>
           </ul>
         </div>
@@ -81,6 +92,10 @@
         </h4>
         <div scheme="scheme" scheme-data="scheme" scheme-render="editor"></div>
         <hr ng-repeat-end>
+        <div ng-if="!ccfe.form.content.scheme ||
+          !ccfe.form.content.scheme.length">
+          To start, please click the 'Add' button, then select and add a scheme.
+        </div>
       </div>
     </form>
   </div>

@@ -41,7 +41,7 @@ controller('controller.control.form.edit', [
   ) {
   if (angular.isUndefined(currentForm)) {
     this.form = {};
-    this.form.content = load('schemedata', parse) || fixtures;
+    this.form.content = load('schemedata', parse) || {scheme:[]};
     this.isNew = true;
   } else if (currentForm === false) {
     return panic('Form is corrupted.');
@@ -55,7 +55,7 @@ controller('controller.control.form.edit', [
     this.formdata = angular.toJson(this.form.content.data, true);
   };
 
-  this.clear = function () {
+  this.clearData = function () {
     var data = this.form.content.data;
     for (var key in data) {
       delete data[key];
@@ -92,6 +92,11 @@ controller('controller.control.form.edit', [
       version: version
     }, scheme.schemeDefaults);
     this.form.content.scheme.push(schemeToAdd);
+  };
+
+  this.clear = function () {
+    this.form.content.scheme.splice(0);
+    remove('schemedata');
   };
 
   this.array = funcArray;
