@@ -19,7 +19,11 @@
             </td>
           </tr>
           <tr ng-repeat="manager in ccml.managers">
-            <td ng-bind="manager.username"></td>
+            <td>
+              <span ng-bind="manager.username"
+                ng-class="{'text-danger': manager.banned}"></span>
+              <span class="text-danger" ng-if="manager.banned">(banned)</span>
+            </td>
             <td>
               <div class="btn-group btn-group-xs">
                 <a class="btn btn-default"
@@ -28,6 +32,10 @@
                 <a class="btn btn-default"
                   title="Delete manager {{ manager.username }}"
                   ng-click="ccml.manager.delete(manager)">Delete</a>
+                <a class="btn btn-default"
+                  title="Ban manager {{ manager.username }}"
+                  ng-click="ccml.manager.ban(manager)">
+                  {{manager.banned&&'Unban'||'Ban'}} User</a>
               </div>
             </td>
             <td>

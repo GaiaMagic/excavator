@@ -1,5 +1,15 @@
 angular.module('excavator.backend.manager', []).
 
+factory('backend.manager.ban', [
+  '$http',
+  function ($http) {
+    return function (managerid, unban) {
+      var verb = unban ? 'delete' : 'post';
+      return $http[verb]('/backend/managers/' + managerid + '/ban');
+    };
+  }
+]).
+
 factory('backend.manager.list', [
   '$http',
   function ($http) {
