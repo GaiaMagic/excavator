@@ -21,6 +21,15 @@ factory('backend.manager.register', [
   }
 ]).
 
+factory('backend.manager.remove', [
+  '$http',
+  function ($http) {
+    return function (managerid) {
+      return $http.delete('/backend/managers/' + managerid);
+    };
+  }
+]).
+
 factory('backend.manager.submission.list', [
   '$http',
   function ($http) {

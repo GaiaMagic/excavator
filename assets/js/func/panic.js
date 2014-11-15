@@ -19,8 +19,12 @@ run([
               '</ul>',
             '</div>',
             '<div class="modal-footer">',
+              '<button type="button" class="btn ',
+                '{{ button.class || \'btn-default\' }}" ',
+                'ng-repeat="button in buttons" ng-click="button.click()" ',
+                'ng-bind="button.text"></button>',
               '<button type="button" class="btn btn-default" ',
-                'ng-click="$hide()">Close</button>',
+                'ng-if="!buttons" ng-click="$hide()">Close</button>',
             '</div>',
           '</div>',
         '</div>',
@@ -96,6 +100,41 @@ factory('func.panic.alert', [
           $timeout(hideEvent);
         });
       }
+    };
+  }
+]).
+
+factory('func.panic.confirm', [
+  '$modal',
+  '$q',
+  function ($modal, $q) {
+    /**
+     * show a confirm modal window
+     * @param  {string}   content  the body of the confirm window
+     * @param  {string}   title    the title of the confirm window
+     * @return {undefined}         this function returns nothing
+     */
+    return function (content, title, btnYes, btnNo) {
+      var deferred = $q.defer();
+      var modal = $modal({
+        title: title || 'Confirm',
+        content: content,
+        template: 'func.panic.modal.template'
+      });
+      modal.$scope.modalType = 'info';
+      modal.$scope.yes = function () {
+        deferred.resolve();
+        deferred = undefined;
+        modal.$scope.$hide();
+      };
+      modal.$scope.buttons = [
+        angular.extend({ text: 'Yes' }, btnYes, { click: modal.$scope.yes }),
+        angular.extend({ text: 'No'  }, btnNo,  { click: modal.$scope.$hide })
+      ];
+      modal.$scope.$on('modal.hide', function () {
+        if (deferred) deferred.reject();
+      });
+      return deferred.promise;
     };
   }
 ]);

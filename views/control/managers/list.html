@@ -21,8 +21,14 @@
           <tr ng-repeat="manager in ccml.managers">
             <td ng-bind="manager.username"></td>
             <td>
-              <a href="/manager?token={{ manager.token }}" target="_blank"
-                title="Log in as {{ manager.username }}">Log in</a>
+              <div class="btn-group btn-group-xs">
+                <a class="btn btn-default"
+                  href="/manager?token={{ manager.token }}" target="_blank"
+                  title="Log in as {{ manager.username }}">Log In</a>
+                <a class="btn btn-default"
+                  title="Delete manager {{ manager.username }}"
+                  ng-click="ccml.manager.delete(manager)">Delete</a>
+              </div>
             </td>
             <td>
               <a href="/control/forms?manager={{ manager.username }}"
