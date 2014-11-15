@@ -7,22 +7,29 @@ controller('controller.control.manager.list', [
   'backend.manager.remove',
   'managers',
   'func.panic',
+  'func.panic.alert',
   'func.panic.confirm',
-  function ($route, ban, register, remove, managers, panic, confirm) {
+  function ($route, ban, register, remove, managers, panic, alert, confirm) {
     this.managers = managers;
 
     this.manager = {
       ban: function (manager) {
-        confirm(
-          'Are you sure you want to ban manager ' + manager.username + ' ?',
-          undefined,
-          { class: 'btn-danger',
-            text: 'Yes, ban this manager' },
-          { text: 'Cancel' }
-        ).then(function () {
-          ban(manager._id, manager.banned).then(function () {
-            $route.reload();
-          }).catch(panic);
+        var promise;
+        if (manager.banned) {
+          promise = ban(manager._id, true).catch(panic);
+        } else {
+          promise = confirm(
+            'Are you sure you want to ban manager ' + manager.username + ' ?',
+            undefined,
+            { class: 'btn-danger',
+              text: 'Yes, ban this manager' },
+            { text: 'Cancel' }
+          ).then(function () {
+            return ban(manager._id, manager.banned).catch(panic);
+          });
+        }
+        promise.then(function () {
+          $route.reload();
         });
       },
       delete: function (manager) {
