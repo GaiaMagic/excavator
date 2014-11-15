@@ -9,6 +9,18 @@ factory('backend.manager.list', [
   }
 ]).
 
+factory('backend.manager.register', [
+  '$http',
+  function ($http) {
+    return function (username, password) {
+      return $http.post('/backend/managers', {
+        username: username,
+        password: password
+      });
+    };
+  }
+]).
+
 factory('backend.manager.submission.list', [
   '$http',
   function ($http) {
