@@ -20,7 +20,7 @@ function defaultSchema () {
   };
 }
 
-function makeUserAlikeSchema (schemaName, scheme) {
+function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
   var MAX_ATTEMPTS = 5;
   var LOCK_TIME = 2 * 60 * 60 * 1000;
 
@@ -288,6 +288,10 @@ function makeUserAlikeSchema (schemaName, scheme) {
     });
     return deferred.promise;
   });
+
+  if (typeof schemaFunc === 'function') {
+    schemaFunc(userSchema);
+  }
 
   var model;
 

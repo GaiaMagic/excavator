@@ -84,12 +84,24 @@ formSchema.method('updateManagers', function (operation) {
       return Q.nbind(manager.save, manager)();
     }));
   }).then(function () {
-    var promise = Manager.count({ forms: self._id });
-    return Q.nbind(promise.exec, promise)();
-  }).then(function (count) {
-    self.managers = count;
-    return Q.nbind(self.save, self)();
+    return self.countManagers(true);
   }).then(function () {
+    return self;
+  });
+});
+
+formSchema.method('countManagers', function (save) {
+  var self = this;
+  var promise = Q.nbind(Manager.count, Manager)({ forms: this._id }).
+  then(function (count) {
+    self.managers = count;
+  }).catch(function () {
+    self.managers = 0;
+  });
+  return promise.then(function () {
+    if (save) {
+      return Q.nbind(self.save, self)();
+    }
     return self;
   });
 });
