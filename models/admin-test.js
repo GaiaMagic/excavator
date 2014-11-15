@@ -194,6 +194,19 @@ describe('Admin database model', function () {
       expectFailure(Admin.authorize(real.token), 'invalid-token', done);
     });
 
+    it('should return user-is-banned if user is banned', function (done) {
+      var token;
+      var promise = Admin.register(real.username, real.password).
+      then(function (admin) {
+        token = admin.token;
+        admin.banned = true;
+        return Q.nbind(admin.save, admin)();
+      }).then(function (admin) {
+        return Admin.authorize(token);
+      });
+      expectFailure(promise, 'user-is-banned', done);
+    });
+
     it('should return valid user info if a valid token was provided',
     function (done) {
       var token;

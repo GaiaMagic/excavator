@@ -277,14 +277,20 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
       }));
       return deferred.promise;
     }
-    this.findOne({ token: token }, function (err, admin) {
-      if (err || !admin) {
+    this.findOne({ token: token }, function (err, user) {
+      if (err || !user) {
         return deferred.reject(panic(403, {
           type:    'invalid-token',
           message: 'Invalid token.'
         }));
       }
-      return deferred.resolve(admin);
+      if (user.banned) {
+        return deferred.reject(panic(403, {
+          type:    'user-is-banned',
+          message: 'User has been blocked by administrators.'
+        }));
+      }
+      return deferred.resolve(user);
     });
     return deferred.promise;
   });
