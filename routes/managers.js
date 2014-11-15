@@ -17,6 +17,12 @@ router.get('/', needsAdminAuth, function (req, res, next) {
   }, next);
 });
 
+router.post('/', needsAdminAuth, jsonParser, function (req, res, next) {
+  Manager.register(req.body.username, req.body.password).then(function (user) {
+    res.send({status: 'OK'});
+  }).catch(next);
+});
+
 var needsManagerAuth = require('./token-auth')({
   model: 'Manager'
 });

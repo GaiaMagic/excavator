@@ -71,6 +71,37 @@ describe('Route /backend/managers', function () {
         done();
       });
     });
+
+    it('should create a manager', function (done) {
+      var promise;
+      var username = real.username + 'test';
+      promise = Q.nbind(Manager.remove, Manager)({ username: username });
+      promise.then(function () {
+        promise = request(excavator).
+                  post('/backend/managers').
+                  set('Authorization', 'token ' + realAdmin.token).
+                  expect(422);
+        return Q.nbind(promise.end, promise)();
+      }).then(function () {
+        promise = request(excavator).
+                  post('/backend/managers').
+                  send({ username: username, password: real.password }).
+                  expect(403);
+        return Q.nbind(promise.end, promise)();
+      }).then(function () {
+        var deferred = Q.defer();
+        request(excavator).
+        post('/backend/managers').
+        send({ username: username, password: real.password }).
+        set('Authorization', 'token ' + realAdmin.token).
+        expect(200).
+        end(function (err, res) {
+          if (err) return deferred.reject(err);
+          deferred.resolve();
+        });
+        return deferred.promise;
+      }).then(done).catch(done);
+    });
   });
 
   describe('Sub-route /submissions', function () {
