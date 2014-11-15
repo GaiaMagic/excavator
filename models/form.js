@@ -10,6 +10,9 @@ var formSchema = new Schema({
   // slug is used for better URL, equal to form's _id if slug is empty
   slug:       { type: String, index: { unique: true }, trim: true },
 
+  // cached calculated value
+  managers:   { type: Number, default: 0 },
+
   head:       { type: Schema.ObjectId, ref: 'FormRevision' },
   commits:    [ { type: Schema.ObjectId, ref: 'FormRevision' } ],
   created_at: { type: Date, default: Date.now },
@@ -80,6 +83,12 @@ formSchema.method('updateManagers', function (operation) {
       }
       return Q.nbind(manager.save, manager)();
     }));
+  }).then(function () {
+    var promise = Manager.count({ forms: self._id });
+    return Q.nbind(promise.exec, promise)();
+  }).then(function (count) {
+    self.managers = count;
+    return Q.nbind(self.save, self)();
   }).then(function () {
     return self;
   });

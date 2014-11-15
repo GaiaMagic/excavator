@@ -69,8 +69,9 @@ describe('Form (w/ revision) database model', function () {
       expect(revision).to.be.an('object');
       expect(revision._id.toString()).to.be.a('string');
       expect(revision.parent).to.be.an('object');
-      expect(Object.keys(revision.parent.schema.paths)).to.have.members([
+      expect(revision.parent.schema.paths).to.have.keys([
         'published',
+        'managers',
         'slug',
         'head',
         'commits',
@@ -281,8 +282,10 @@ describe('Form (w/ revision) database model', function () {
           'updated_at',
           'created_at',
           'slug',
+          'managers',
           '_id', '__v'
         ]);
+        expect(form.managers).to.equal(2);
         return Q.nbind(Manager.findById, Manager)(realManager._id);
       }).then(function (manager) {
         expect(manager.forms).to.be.an('array').and.have.length(2);
@@ -298,6 +301,7 @@ describe('Form (w/ revision) database model', function () {
         op[realManager2._id] = false;
         return Form.updateManagers(form2, op);
       }).then(function (form) {
+        expect(form.managers).to.equal(0);
         return Q.nbind(Manager.findById, Manager)(realManager._id);
       }).then(function (manager) {
         expect(manager.forms).to.be.an('array').and.have.length(1);
