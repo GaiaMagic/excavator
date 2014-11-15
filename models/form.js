@@ -67,6 +67,9 @@ formSchema.method('updateManagers', function (operation) {
       });
     }
     return Q.all(managers.map(function (manager) {
+      if (operation[manager._id] && manager.forms.indexOf(self._id) > -1) {
+        return Q.resolve();
+      }
       for (var j = manager.forms.length - 1; j > -1; j--) {
         if (manager.forms[j].equals(self._id)) {
           manager.forms.splice(j, 1);

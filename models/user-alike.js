@@ -38,6 +38,10 @@ function makeUserAlikeSchema (schemaName, scheme) {
   // middleware:
 
   userSchema.pre('save', function (next) {
+    if (!this.isNew) {
+      this.updated_at = Date.now();
+    }
+
     if (this.isModified('username')) {
       if (!this.isNew) {
         return next(panic(422, {
