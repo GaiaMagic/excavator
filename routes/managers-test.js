@@ -109,26 +109,70 @@ describe('Route /backend/managers', function () {
   });
 
   describe('Sub-route /:managerid', function () {
-    it('should delete a manager', function (done) {
+    var realManager;
+
+    beforeEach(function (done) {
       var username = real.username + 'test';
       Q.nbind(Manager.remove, Manager)({username: username}).then(function () {
         return Manager.register(username, real.password);
       }).then(function (manager) {
-        var deferred = Q.defer();
-        request(excavator).
-        delete('/backend/managers/' + manager.id).
-        set('Authorization', 'token ' + realAdmin.token).
-        expect(200).
-        end(function (err, res) {
-          if (err) return deferred.reject(err);
-          deferred.resolve(res);
-        });
-        return deferred.promise;
-      }).then(function (res) {
+        realManager = manager;
+        done();
+      }).catch(done);
+    });
+
+    it('should delete a manager', function (done) {
+      request(excavator).
+      delete('/backend/managers/' + realManager.id).
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys(['status']);
         expect(res.body.status).to.equal('OK');
-      }).then(done).catch(done);
+        Manager.findById(realManager.id, function (err, manager) {
+          if (err) return done(err);
+          expect(manager).to.equal(null);
+          done();
+        });
+      });
+    });
+
+    it('should ban a manager', function (done) {
+      request(excavator).
+      post('/backend/managers/' + realManager.id + '/ban').
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.keys(['status']);
+        expect(res.body.status).to.equal('OK');
+        Manager.findById(realManager.id, function (err, manager) {
+          if (err) return done(err);
+          expect(manager.banned).to.equal(true);
+          done();
+        });
+      });
+    });
+
+    it('should unban a manager', function (done) {
+      request(excavator).
+      delete('/backend/managers/' + realManager.id + '/ban').
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.keys(['status']);
+        expect(res.body.status).to.equal('OK');
+        Manager.findById(realManager.id, function (err, manager) {
+          if (err) return done(err);
+          expect(manager.banned).to.equal(false);
+          done();
+        });
+      });
     });
   });
 
