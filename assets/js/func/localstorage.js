@@ -4,6 +4,10 @@ constant('func.localstorage.has', function (key) {
   return window.localStorage.hasOwnProperty(key);
 }).
 
+constant('func.localstorage.keys', function (key) {
+  return Object.keys(window.localStorage);
+}).
+
 constant('func.localstorage.load', function (key, transFunc) {
   var value = window.localStorage.getItem(key);
   if (angular.isFunction(transFunc)) {

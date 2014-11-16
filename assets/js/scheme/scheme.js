@@ -51,7 +51,7 @@ directive('scheme', [
   ) {
   return {
     link: function ($scope, $elem, $attrs) {
-      function updateSchemeView (e, state) {
+      function updateSchemeView (e, value, state) {
         var data = $scope.$eval($attrs.schemeData);
         var scheme = $scope.$eval($attrs.scheme);
         var proto = schemes.get(scheme.type, scheme.version);

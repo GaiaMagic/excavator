@@ -105,12 +105,12 @@ controller('controller.control.form.edit', [
   var debounce;
   $scope.$watch(function () {
     return self.form.content.scheme;
-  }, function () {
+  }, function (value) {
     if (debounce) {
       $timeout.cancel(debounce);
     }
     debounce = $timeout(function () {
-      $scope.$broadcast('update scheme view', rememberState());
+      $scope.$broadcast('update scheme view', value, rememberState());
       debounce = undefined;
     }, 500);
   }, true);
