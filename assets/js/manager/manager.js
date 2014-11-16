@@ -8,6 +8,7 @@ angular.module('excavator.manager.manager', [
   'excavator.func.localstorage',
   'excavator.func.location',
   'excavator.func.panic',
+  'excavator.func.scheme',
   'excavator.manager.login',
   'excavator.manager.nav',
   'excavator.manager.routes',

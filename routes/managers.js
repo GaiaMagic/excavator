@@ -91,7 +91,7 @@ function (req, res, next) {
     } else {
       return makePromise(Submission.find({
         form: { $in: manager.forms }
-      }).sort({ _id: -1 }));
+      }).sort({ _id: -1 }).populate('form_revision'));
     }
   }).then(function (submissions) {
     if (!submissions) return next('not-found');
