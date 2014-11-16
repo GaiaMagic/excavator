@@ -20,6 +20,12 @@ directive('navView', [
               '<li ng-class="{active: ifPathIs(\'/manager\')}">',
                 '<a href="/manager">All Submissions</a>',
               '</li>',
+              '<li ng-class="{active: ',
+                'ifPathHas(\'/manager/submissions/view\')}" ',
+                'ng-if="is(\'submission-view\')">',
+                '<a href="/manager/submissions/view/{{metaData.id}}">Viewing ',
+                  '{{metaData.title}}</a>',
+              '</li>',
             '</ul>',
             '<ul class="nav navbar-nav navbar-right">',
               '<li ng-if="status.loggedIn" class="dropdown" ',
@@ -49,10 +55,22 @@ directive('navView', [
         logout();
         alert('You have successfully logged out.');
       };
+      $scope.ifPathHas = function (path) {
+        if (path.slice(-1) !== '/') path += '/';
+        var currentPath = $scope.currentPath;
+        if (currentPath.slice(-1) !== '/') currentPath += '/';
+        return currentPath.slice(0, path.length) === path;
+      };
       $scope.ifPathIs = function (path) {
         return $scope.currentPath === path;
       };
+      $scope.is = function (type) {
+        return !!($scope.metaData && $scope.metaData.type === type);
+      };
       $scope.status = status;
+      $scope.$on('global-meta', function (e, data) {
+        $scope.metaData = data;
+      });
     }
   };
 }]);

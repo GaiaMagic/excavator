@@ -1,0 +1,35 @@
+<div class="main-static container">
+  <div class="col-xs-8 col-xs-offset-2">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td class="form-sub-key">Form</td>
+          <td>
+            <span ng-bind="ccsv.sub.title"></span>
+            <a href="/{{ ccsv.sub.sub.form.slug }}/{{ ccsv.sub.sub.form_revision._id }}"
+              target="_blank"><code ng-bind="ccsv.sub.sub.form_revision._id"></code></a>
+            (<a href="/{{ ccsv.sub.sub.form.slug }}" target="_blank">latest</a>)
+          </td>
+        </tr>
+        <tr>
+          <td class="form-sub-key">Data</td>
+          <td>
+            <table class="table table-bordered table-striped">
+              <tbody>
+                <tr ng-repeat="item in ccsv.sub.data">
+                  <td ng-bind="item.label" class="form-sub-key"></td>
+                  <td ng-bind="item.value"></td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="form-sub-key">Submiited On</td>
+          <td><span ng-bind="ccsv.sub.sub.created_at |
+            date: 'yyyy-MM-dd hh:mm:ss'"></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

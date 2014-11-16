@@ -72,7 +72,7 @@ config([
       controller: 'controller.control.submission.view as ccsv',
       resolve: {
         loggedIn: authNeededResolver,
-        currentSubmission: submissionResolver()
+        currentSubmission: submissionResolver('backend.submission.get')
       }
     }).
 

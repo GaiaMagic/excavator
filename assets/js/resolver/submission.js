@@ -12,11 +12,11 @@ constant('resolver.submissions', function submissionsResolver (service) {
   ];
 }).
 
-constant('resolver.submission', function submissionResolver () {
+constant('resolver.submission', function submissionResolver (service) {
   return [
     '$rootScope',
     '$route',
-    'backend.submission.get',
+    service,
     'func.panic',
     function currentSubmission ($rootScope, $route, get, panic) {
       var subid = $route.current.params.subid;

@@ -40,6 +40,15 @@ factory('backend.manager.remove', [
   }
 ]).
 
+factory('backend.manager.submission.get', [
+  '$http',
+  function ($http) {
+    return function (id) {
+      return $http.get('/backend/managers/submissions/' + id);
+    };
+  }
+]).
+
 factory('backend.manager.submission.list', [
   '$http',
   function ($http) {

@@ -7,11 +7,13 @@ config([
   '$locationProvider',
   'backend.user.auth.needed.resolver',
   'resolver.submissions',
+  'resolver.submission',
   function(
     $routeProvider,
     $locationProvider,
     authNeededResolver,
-    submissionsResolver
+    submissionsResolver,
+    submissionResolver
   ) {
     $routeProvider.
 
@@ -21,6 +23,15 @@ config([
       resolve: {
         loggedIn: authNeededResolver,
         submissions: submissionsResolver('backend.manager.submission.list')
+      }
+    }).
+
+    when('/manager/submissions/view/:subid', {
+      templateUrl: '/manager/submissions/view.html',
+      controller: 'controller.manager.manager.submission.view as ccsv',
+      resolve: {
+        loggedIn: authNeededResolver,
+        currentSubmission: submissionResolver('backend.manager.submission.get')
       }
     }).
 

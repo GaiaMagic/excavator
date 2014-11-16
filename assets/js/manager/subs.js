@@ -45,4 +45,13 @@ controller('controller.manager.manager.submission.list', [
 
     this.array = funcArray;
   }
+]).
+
+controller('controller.manager.manager.submission.view', [
+  'currentSubmission',
+  function (currentSubmission) {
+    if (!currentSubmission) return;
+
+    this.sub = currentSubmission;
+  }
 ]);
