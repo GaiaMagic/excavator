@@ -6,9 +6,10 @@
         <thead>
           <tr ng-if="ccsl.submissions && ccsl.submissions.length">
             <th>View</th>
-            <th>Form</th>
-            <th ng-repeat="model in ccsl.models track by $index"
-              ng-bind="model"></th>
+            <th ng-repeat="label in ccsl.labels track by $index">
+              <span ng-bind="ccsl.LABELS[label] || label"
+                title="Model name: {{ ccsl.models[label] || label }}"></span>
+            </th>
             <th class="date">Created At</th>
           </tr>
         </thead>
@@ -21,15 +22,12 @@
           <tr ng-repeat="sub in ccsl.submissions">
             <td>
               <a class="block" href="/control/submissions/view/{{ sub._id }}">
-                view
+                <span ng-bind="sub.form_revision.title"></span>
+                [#<span ng-bind="sub.form_index + 1"></span>]
               </a>
             </td>
-            <td>
-              <a class="block" href="/control/forms/edit/{{ sub.form }}"
-                ng-bind="sub.form_revision.title || '(untitled)'"></a>
-            </td>
-            <td ng-repeat="model in ccsl.models track by $index"
-              ng-bind="sub.data[model]"></td>
+            <td ng-repeat="label in ccsl.labels track by $index"
+              ng-bind="sub.data[label] || sub.data[ccsl.models[label]]"></td>
             <td ng-bind="sub.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
           </tr>
         </tbody>
@@ -42,7 +40,7 @@
         Columns
         <div class="btn-group btn-group-xs pull-right">
           <button class="btn btn-default"
-            ng-click="ccsl.array.push(ccsl.models, '')">
+            ng-click="ccsl.array.push(ccsl.labels, '')">
             <span class="glyphicon glyphicon-plus"></span>
           </button>
           <button class="btn btn-default" ng-click="ccsl.reset()">
@@ -50,27 +48,30 @@
           </button>
         </div>
       </div>
+      <div class="panel-body" ng-if="!ccsl.labels || !ccsl.labels.length">
+        <small>No columns! You may try RESET or ADD your own column.</small>
+      </div>
       <ul class="list-group">
-        <li class="list-group-item" ng-repeat="model in ccsl.models track by $index">
+        <li class="list-group-item" ng-repeat="model in ccsl.labels track by $index">
           <div class="input-group input-group-sm input-group-compact">
-            <input type="text" class="form-control" ng-model="ccsl.models[$index]">
+            <input type="text" class="form-control" ng-model="ccsl.labels[$index]">
             <span class="input-group-btn">
               <button class="btn btn-default"
-                ng-click="ccsl.array.duplicate(ccsl.models, $index)">
+                ng-click="ccsl.array.duplicate(ccsl.labels, $index)">
                 <span class="glyphicon glyphicon-plus"></span>
               </button>
               <button class="btn btn-default"
-                ng-click="ccsl.array.delete(ccsl.models, $index)">
+                ng-click="ccsl.array.delete(ccsl.labels, $index)">
                 <span class="glyphicon glyphicon-minus"></span>
               </button>
               <button class="btn btn-default"
-                ng-class="{disabled: ccsl.array.edgeT(ccsl.models, $index)}"
-                ng-click="ccsl.array.moveup(ccsl.models, $index)">
+                ng-class="{disabled: ccsl.array.edgeT(ccsl.labels, $index)}"
+                ng-click="ccsl.array.moveup(ccsl.labels, $index)">
                 <span class="glyphicon glyphicon-chevron-up"></span>
               </button>
               <button class="btn btn-default"
-                ng-class="{disabled: ccsl.array.edgeB(ccsl.models, $index)}"
-                ng-click="ccsl.array.movedown(ccsl.models, $index)">
+                ng-class="{disabled: ccsl.array.edgeB(ccsl.labels, $index)}"
+                ng-click="ccsl.array.movedown(ccsl.labels, $index)">
                 <span class="glyphicon glyphicon-chevron-down"></span>
               </button>
             </span>

@@ -1,5 +1,21 @@
 <div class="main-static">
   <div class="col-xs-8 col-xs-offset-2">
+    <h3>
+      <span ng-bind="ccsv.sub.sub.form_index + 1"></span> /
+      <span ng-bind="ccsv.sub.sub.form.submissions"></span>
+      <div class="btn-group btn-group-sm pull-right">
+        <a href="/control/submissions/view/{{ ccsv.sub.sub.newer }}"
+          class="btn btn-default" ng-class="{disabled: !ccsv.sub.sub.newer}">
+          <span class="glyphicon glyphicon-chevron-up"></span>
+          Newer
+        </a>
+        <a href="/control/submissions/view/{{ ccsv.sub.sub.older }}"
+          class="btn btn-default" ng-class="{disabled: !ccsv.sub.sub.older}">
+          <span class="glyphicon glyphicon-chevron-down"></span>
+          Older
+        </a>
+      </div>
+    </h3>
     <table class="table table-bordered">
       <tbody>
         <tr>
