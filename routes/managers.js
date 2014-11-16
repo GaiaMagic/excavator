@@ -75,11 +75,11 @@ function (req, res, next) {
         return Q.all([
           makePromise(Submission.find({
             _id:  { $gt: subid },
-            form: { $in: manager.forms }
+            form: submission.form._id
           }).sort({ _id: 1 }).limit(1).select('_id')),
           makePromise(Submission.find({
             _id:  { $lt: subid },
-            form: { $in: manager.forms }
+            form: submission.form._id
           }).sort({ _id: -1 }).limit(1).select('_id'))
         ]).then(function (ret) {
           submission = submission.toObject();

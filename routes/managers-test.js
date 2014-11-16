@@ -291,16 +291,19 @@ describe('Route /backend/managers', function () {
       }).then(function (submission) {
         realSub.push(submission._id.toString());
       }).then(function () {
+        // because newer and older is relative the same form,
+        // and realSub[0] is in a different form, so older and
+        // newer is still be null
         function moreExpectations (body) {
           expect(body.older).to.be.null;
-          expect(body.newer).to.be.a('string').and.equal(realSub[1]);
+          expect(body.newer).to.be.null;
           expect(body.form_index).to.equal(0);
           expect(body.form_revision_index).to.equal(0);
         }
         return expectExistence(realSub[0], 200, undefined, moreExpectations);
       }).then(function () {
         function moreExpectations (body) {
-          expect(body.older).to.be.a('string').and.equal(realSub[0]);
+          expect(body.older).to.be.null;
           expect(body.newer).to.be.a('string').and.equal(realSub[2]);
           expect(body.form_index).to.equal(0);
           expect(body.form_revision_index).to.equal(0);
