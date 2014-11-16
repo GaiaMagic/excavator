@@ -47,7 +47,10 @@
               <a class="block" href="/control/forms/edit/{{ form._id }}"
                 ng-bind="form.head.title || '(untitled)'"></a>
             </td>
-            <td ng-bind="form.submissions"></td>
+            <td>
+              <a href="/control/submissions?form={{ form.slug }}"
+                ng-bind="form.submissions" class="block"></a>
+            </td>
             <td>
               <a href class="block" ng-click="ccfl.access(form)"
                 ng-bind="form.managers"></a>

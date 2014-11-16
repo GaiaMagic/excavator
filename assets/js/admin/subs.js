@@ -1,6 +1,8 @@
 angular.module('excavator.admin.subs', []).
 
 controller('controller.control.submission.list', [
+  '$location',
+  '$routeParams',
   '$scope',
   'func.array',
   'func.localstorage.load',
@@ -8,6 +10,8 @@ controller('controller.control.submission.list', [
   'func.scheme.parse',
   'submissions',
   function (
+    $location,
+    $routeParams,
     $scope,
     funcArray,
     load,
@@ -17,6 +21,11 @@ controller('controller.control.submission.list', [
   ) {
     if (!angular.isArray(submissions)) return;
     var self = this;
+
+    this.form = $routeParams.form;
+    this.filter = function () {
+      $location.search('form', this.form || null);
+    };
 
     this.submissions = submissions;
 

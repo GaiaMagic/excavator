@@ -2,10 +2,14 @@ angular.module('excavator.resolver.submission', []).
 
 constant('resolver.submissions', function submissionsResolver (service) {
   return [
+    '$route',
     service,
     'func.panic',
-    function currentSubmissions (list, panic) {
-      return list().then(function (res) {
+    function currentSubmissions ($route, list, panic) {
+      var params = {};
+      var form = $route.current.params.form;
+      if (form) params.form = form;
+      return list(params).then(function (res) {
         return res.data;
       }, panic);
     }
