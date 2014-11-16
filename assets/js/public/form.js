@@ -22,6 +22,7 @@ controller('controller.public.form', [
     }
 
     this.form = currentForm;
+    this.form.content.data = {};
 
     this.submit = function () {
       var revid = currentForm.form.head._id;
