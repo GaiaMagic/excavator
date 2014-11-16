@@ -16,7 +16,7 @@ constant('resolver.forms', function formsResolver () {
   ];
 }).
 
-constant('resolver.form', function formResolver (service) {
+constant('resolver.form', function formResolver (service, options) {
   return [
     '$rootScope',
     '$route',
@@ -24,9 +24,17 @@ constant('resolver.form', function formResolver (service) {
     'func.panic',
     'func.scheme.parse',
     function currentForm ($rootScope, $route, get, panic, parse) {
-      var formid = $route.current.params.formid;
-      var formrevid = $route.current.params.formrevid;
+      options = options || {};
+      var formid = options.formId || $route.current.params.formid;
+      var formrevid = options.formRevId || $route.current.params.formrevid;
       return get(formid, formrevid).then(function (res) {
+        if (options.simple) {
+          return {
+            title: res.data.head.title,
+            form: res.data
+          };
+        }
+
         $rootScope.$broadcast('global-meta', undefined);
 
         var head = 'head';

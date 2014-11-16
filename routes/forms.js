@@ -20,7 +20,7 @@ router.get('/', function (req, res, next) {
       });
     });
   } else {
-    promise = Form.find({}).sort('-updated_at').skip(0).limit(20);
+    promise = Form.find({}).sort({ _id: -1 }).skip(0).limit(20);
     promise = promise.populate('head', 'title');
     promise = Q.nbind(promise.exec, promise)();
   }

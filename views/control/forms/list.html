@@ -27,13 +27,13 @@
       <table class="table table-bordered table-hover">
         <thead ng-if="ccfl.forms && ccfl.forms.length">
           <tr>
-            <th class="slug">Slug</th>
             <th>Name</th>
             <th class="number">Submissions</th>
             <th class="number">Managers</th>
             <th class="number">Rev.</th>
             <th class="date">Created At</th>
             <th class="date">Updated At</th>
+            <th class="slug">Slug</th>
           </tr>
         </thead>
         <tbody>
@@ -43,21 +43,24 @@
             </td>
           </tr>
           <tr ng-repeat="form in ccfl.forms">
+            <td>
+              <a class="block" href="/control/forms/edit/{{ form._id }}"
+                ng-bind="form.head.title || '(untitled)'"></a>
+            </td>
+            <td ng-bind="form.submissions"></td>
+            <td>
+              <a href class="block" ng-click="ccfl.access(form)"
+                ng-bind="form.managers"></a>
+            </td>
+            <td ng-bind="form.commits.length"></td>
+            <td ng-bind="form.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
+            <td ng-bind="form.updated_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
             <td class="slug">
               <a class="block" href="/{{ form.slug }}" target="_blank">
                 <span class="glyphicon glyphicon-new-window"></span>
                 {{ form.slug }}
               </a>
             </td>
-            <td>
-              <a class="block" href="/control/forms/edit/{{ form._id }}"
-                ng-bind="form.head.title || '(untitled)'"></a>
-            </td>
-            <td ng-bind="form.submissions"></td>
-            <td ng-bind="form.managers"></td>
-            <td ng-bind="form.commits.length"></td>
-            <td ng-bind="form.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
-            <td ng-bind="form.updated_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
           </tr>
         </tbody>
       </table>
