@@ -187,6 +187,9 @@ describe('Route /backend/managers', function () {
         if (err) return deferred.reject(err);
         var body = res.body;
         expect(body).to.be.an('array').and.have.length(length);
+        if (length > 1) {
+          expect(body[0].created_at).to.be.above(body[1].created_at);
+        }
         deferred.resolve();
       });
       return deferred.promise;
@@ -205,7 +208,7 @@ describe('Route /backend/managers', function () {
         return expectLength(1);
       }).then(function () {
         return FormRevision.create(real.title, real.content);
-      }).then(function (form) {
+      }).delay(200).then(function (form) {
         return Submission.submit(form._id, real.submit);
       }).then(function (submission) {
         var op = {};
@@ -216,7 +219,7 @@ describe('Route /backend/managers', function () {
       }).then(done).catch(done);
     });
 
-    function expectExistence (subid, status, reason) {
+    function expectExistence (subid, status, reason, moreExpectations) {
       var deferred = Q.defer();
       request(excavator).
       get('/backend/managers/submissions/' + subid).
@@ -238,8 +241,11 @@ describe('Route /backend/managers', function () {
             'created_at',
             'data',
             'form',
-            'form_revision'
+            'form_revision',
+            'newer',
+            'older'
           ]);
+          if (typeof moreExpectations === 'function') moreExpectations(body);
         }
         deferred.resolve();
       });
@@ -247,20 +253,57 @@ describe('Route /backend/managers', function () {
     }
 
     it('should return only details of manager\'s submission', function (done) {
-      FormRevision.create(real.title, real.content).then(function (form) {
+      var realForm;
+      var realSub = [];
+      Q.nbind(Submission.remove, Submission)({}).then(function () {
+        return FormRevision.create(real.title, real.content);
+      }).then(function (form) {
         var op = {};
         op[realManager._id] = true;
         return Form.updateManagers(form.parent, op);
       }).then(function (form) {
         return Submission.submit(form.head, real.submit);
       }).then(function (submission) {
-        return expectExistence(submission._id);
+        realSub.push(submission._id.toString());
+        function moreExpectations (body) {
+          expect(body.older).to.be.null;
+          expect(body.newer).to.be.null;
+        }
+        return expectExistence(realSub[0], 200, undefined, moreExpectations);
       }).then(function () {
         return FormRevision.create(real.title, real.content);
       }).then(function (form) {
+        realForm = form;
         return Submission.submit(form._id, real.submit);
       }).then(function (submission) {
+        realSub.push(submission._id.toString());
         return expectExistence(submission._id, 404, 'not-found');
+      }).then(function (form) {
+        var op = {};
+        op[realManager._id] = true;
+        return Form.updateManagers(realForm.parent, op);
+      }).then(function () {
+        return Submission.submit(realForm._id, real.submit);
+      }).then(function (submission) {
+        realSub.push(submission._id.toString());
+      }).then(function () {
+        function moreExpectations (body) {
+          expect(body.older).to.be.null;
+          expect(body.newer).to.be.a('string').and.equal(realSub[1]);
+        }
+        return expectExistence(realSub[0], 200, undefined, moreExpectations);
+      }).then(function () {
+        function moreExpectations (body) {
+          expect(body.older).to.be.a('string').and.equal(realSub[0]);
+          expect(body.newer).to.be.a('string').and.equal(realSub[2]);
+        }
+        return expectExistence(realSub[1], 200, undefined, moreExpectations);
+      }).then(function () {
+        function moreExpectations (body) {
+          expect(body.older).to.be.a('string').and.equal(realSub[1]);
+          expect(body.newer).to.be.null;
+        }
+        return expectExistence(realSub[2], 200, undefined, moreExpectations);
       }).then(done).catch(done);
     });
   });

@@ -59,21 +59,40 @@ var needsManagerAuth = require('./token-auth')({
 
 router.get('/submissions/:submissionid([a-f0-9]{24})?', needsManagerAuth,
 function (req, res, next) {
+  function makePromise (promise) {
+    return Q.nbind(promise.exec, promise)();
+  }
+
   Q.nbind(Manager.findById, Manager)(req.authorizedUser.id).
   then(function (manager) {
-    var promise;
     var subid = req.params.submissionid;
     if (subid) {
-      promise = Submission.findOne({
-        _id: subid,
+      return makePromise(Submission.findOne({
+        _id:  subid,
         form: { $in: manager.forms }
-      }).populate('form form_revision');
-    } else {
-      promise = Submission.find({
-        form: { $in: manager.forms }
+      }).populate('form form_revision')).then(function (submission) {
+        if (!submission) return;
+        return Q.all([
+          makePromise(Submission.find({
+            _id:  { $gt: subid },
+            form: { $in: manager.forms }
+          }).sort({ _id: 1 }).limit(1).select('_id')),
+          makePromise(Submission.find({
+            _id:  { $lt: subid },
+            form: { $in: manager.forms }
+          }).sort({ _id: -1 }).limit(1).select('_id'))
+        ]).then(function (ret) {
+          submission = submission.toObject();
+          submission.newer = ret[0][0] ? ret[0][0]._id : null;
+          submission.older = ret[1][0] ? ret[1][0]._id : null;
+          return submission;
+        });
       });
+    } else {
+      return makePromise(Submission.find({
+        form: { $in: manager.forms }
+      }).sort({ _id: -1 }));
     }
-    return Q.nbind(promise.exec, promise)();
   }).then(function (submissions) {
     if (!submissions) return next('not-found');
     res.send(submissions);
