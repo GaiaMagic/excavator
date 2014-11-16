@@ -57,14 +57,25 @@ var needsManagerAuth = require('./token-auth')({
   model: 'Manager'
 });
 
-router.get('/submissions', needsManagerAuth, function (req, res, next) {
+router.get('/submissions/:submissionid([a-f0-9]{24})?', needsManagerAuth,
+function (req, res, next) {
   Q.nbind(Manager.findById, Manager)(req.authorizedUser.id).
   then(function (manager) {
-    var promise = Submission.find({
-      form: { $in: manager.forms }
-    });
+    var promise;
+    var subid = req.params.submissionid;
+    if (subid) {
+      promise = Submission.findOne({
+        _id: subid,
+        form: { $in: manager.forms }
+      }).populate('form form_revision');
+    } else {
+      promise = Submission.find({
+        form: { $in: manager.forms }
+      });
+    }
     return Q.nbind(promise.exec, promise)();
   }).then(function (submissions) {
+    if (!submissions) return next('not-found');
     res.send(submissions);
   }).catch(next);
 });

@@ -215,6 +215,54 @@ describe('Route /backend/managers', function () {
         return expectLength(2);
       }).then(done).catch(done);
     });
+
+    function expectExistence (subid, status, reason) {
+      var deferred = Q.defer();
+      request(excavator).
+      get('/backend/managers/submissions/' + subid).
+      set('Authorization', 'token ' + realManager.token).
+      expect(status || 200).
+      end(function (err, res) {
+        if (err) return deferred.reject(err);
+        var body = res.body;
+        if (reason) {
+          expect(body).to.be.an('object').and.have.keys([
+            'status',
+            'type',
+            'message'
+          ]);
+          expect(body.type).to.equal(reason);
+        } else {
+          expect(body).to.be.an('object').and.have.keys([
+            '__v', '_id',
+            'created_at',
+            'data',
+            'form',
+            'form_revision'
+          ]);
+        }
+        deferred.resolve();
+      });
+      return deferred.promise;
+    }
+
+    it('should return only details of manager\'s submission', function (done) {
+      FormRevision.create(real.title, real.content).then(function (form) {
+        var op = {};
+        op[realManager._id] = true;
+        return Form.updateManagers(form.parent, op);
+      }).then(function (form) {
+        return Submission.submit(form.head, real.submit);
+      }).then(function (submission) {
+        return expectExistence(submission._id);
+      }).then(function () {
+        return FormRevision.create(real.title, real.content);
+      }).then(function (form) {
+        return Submission.submit(form._id, real.submit);
+      }).then(function (submission) {
+        return expectExistence(submission._id, 404, 'not-found');
+      }).then(done).catch(done);
+    });
   });
 
   describe('Sub-route /status', function () {
