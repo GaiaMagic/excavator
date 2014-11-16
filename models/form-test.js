@@ -44,18 +44,22 @@ describe('Form (w/ revision) database model', function () {
     it('should create a form automatically if no parent id is specified',
     function (done) {
       FormRevision.create(real.title, real.content).then(function (revision) {
+        return revision.populateParent();
+      }).then(function (revision) {
         expect(revision).to.be.an('object');
-        expect(Object.keys(revision.schema.paths)).to.have.members([
+        expect(revision.schema.paths).to.have.keys([
           'parent',
           'slug',
           'title',
           'content',
+          'submissions',
           'created_at',
           '_id', '__v']);
         expect(isNaN(new Date(revision.created_at))).to.be.false;
-        expect(revision.parent.toString()).to.be.a('string');
+        revision.parent.submissions.should.equal(0);
         revision.title.should.equal(real.title);
         revision.content.should.equal(real.content);
+        revision.submissions.should.equal(0);
       }).then(done).catch(done);
     });
 
@@ -75,15 +79,18 @@ describe('Form (w/ revision) database model', function () {
         'slug',
         'head',
         'commits',
+        'submissions',
         'created_at',
         'updated_at',
         '_id', '__v']);
+      expect(revision.submissions).to.equal(0);
+      expect(revision.parent.submissions).to.equal(0);
       expect(revision.parent.created_at).to.not.be.undefined;
       expect(revision.parent.updated_at).to.not.be.undefined;
       if (len === 1) {
         // when created, created_at equals to updated_at
-        expect(+new Date(revision.parent.created_at)).to.
-          equal(+new Date(revision.parent.updated_at));
+        expect(Math.abs(+new Date(revision.parent.created_at) -
+          +new Date(revision.parent.updated_at))).to.be.below(10);
       } else {
         // however, updated_at will be updated when changed
         expect(+new Date(revision.parent.created_at)).to.not.
@@ -283,6 +290,7 @@ describe('Form (w/ revision) database model', function () {
           'created_at',
           'slug',
           'managers',
+          'submissions',
           '_id', '__v'
         ]);
         expect(form.managers).to.equal(2);

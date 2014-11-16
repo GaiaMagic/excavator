@@ -5,10 +5,12 @@ var FormRevision = require('./form-revision');
 var panic        = require('../lib/panic');
 
 var submissionSchema = new Schema({
-  form:          { type: Schema.ObjectId, ref: 'Form' },
-  form_revision: { type: Schema.ObjectId, ref: 'FormRevision' },
-  data:          { type: Object },
-  created_at:    { type: Date, default: Date.now }
+  form:                { type: Schema.ObjectId, ref: 'Form' },
+  form_index:          { type: Number, default: 0 },
+  form_revision:       { type: Schema.ObjectId, ref: 'FormRevision' },
+  form_revision_index: { type: Number, default: 0 },
+  data:                { type: Object },
+  created_at:          { type: Date, default: Date.now }
 });
 
 submissionSchema.pre('save', function (next) {
@@ -20,12 +22,15 @@ submissionSchema.pre('save', function (next) {
   }
 
   var self = this;
-  FormRevision.findById(this.form_revision, function (err, formRev) {
+  FormRevision.findById(this.form_revision).populate('parent').
+  exec(function (err, formRev) {
     if (err || !formRev) return next(panic(422, {
       type:    'invalid-form',
       message: 'The form is invalid.'
     }));
-    self.form = formRev.parent;
+    self.form = formRev.parent._id;
+    self.form_index = formRev.parent.submissions;
+    self.form_revision_index = formRev.submissions;
 
     // validator
     try {
@@ -66,6 +71,21 @@ submissionSchema.pre('remove', function (next) {
     type:    'submission-not-allowed-to-delete',
     message: 'Submission should not be deleted.'
   }));
+});
+
+submissionSchema.post('save', function (submission) {
+  var Submission = this.constructor;
+  Submission.populate(submission, [
+    { path: 'form' },
+    { path: 'form_revision' }
+  ], function (err, submission) {
+    var op = { $inc: { submissions: 1 }};
+    var log = function (err) {
+      if (err) console.error(err);
+    };
+    submission.form.update(op, log);
+    submission.form_revision.update(op, log);
+  });
 });
 
 submissionSchema.method('Save', function () {

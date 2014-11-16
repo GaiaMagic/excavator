@@ -134,17 +134,21 @@ describe('Route /public', function () {
       expect(200).
       end(function (err, res) {
         if (err) return done(err);
-        expect(Object.keys(res.body)).to.have.members([
+        expect(res.body).to.have.keys([
           'data',
           'form',
+          'form_index',
           'form_revision',
+          'form_revision_index',
           'created_at',
           '_id',
           '__v'
         ]);
         expect(res.body._id).to.be.a('string');
         expect(res.body.form).to.be.a('string');
+        expect(res.body.form_index).to.equal(0);
         expect(res.body.form_revision).to.be.a('string');
+        expect(res.body.form_revision_index).to.equal(0);;
         expect(isNaN(new Date(res.body.created_at))).to.be.false;
         done();
       });

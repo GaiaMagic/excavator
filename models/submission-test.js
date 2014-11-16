@@ -50,10 +50,36 @@ describe('Submission database model', function () {
     });
 
     it('should have form id automatically once created', function (done) {
-      Submission.submit(realForm._id, real.submit).then(function (submission) {
+      Submission.submit(realForm._id, real.submit).delay(100).
+      then(function (submission) {
+        return Q.nbind(submission.populate, submission)('form form_revision');
+      }).then(function (submission) {
         expect(submission).to.be.an('object');
         expect(submission.form).to.be.an('object');
+        expect(submission.form.submissions).to.equal(1);
         expect(submission.form_revision).to.be.an('object');
+        expect(submission.form_revision.submissions).to.equal(1);
+        expect(submission.form_index).to.equal(0);
+        expect(submission.form_revision_index).to.equal(0);
+      }).then(function () {
+        return Submission.submit(realForm._id, real.submit);
+      }).delay(100).then(function (submission) {
+        return Q.nbind(submission.populate, submission)('form form_revision');
+      }).then(function (submission) {
+        expect(submission.form.submissions).to.equal(2);
+        expect(submission.form_revision.submissions).to.equal(2);
+        expect(submission.form_index).to.equal(1);
+        expect(submission.form_revision_index).to.equal(1);
+        return FormRevision.create(real.title, real.content, submission.form);
+      }).then(function (form) {
+        return Submission.submit(form._id, real.submit);
+      }).delay(100).then(function (submission) {
+        return Q.nbind(submission.populate, submission)('form form_revision');
+      }).then(function (submission) {
+        expect(submission.form.submissions).to.equal(3);
+        expect(submission.form_revision.submissions).to.equal(1);
+        expect(submission.form_index).to.equal(2);
+        expect(submission.form_revision_index).to.equal(0);
       }).then(done).catch(done);
     });
 

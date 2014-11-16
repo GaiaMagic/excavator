@@ -5,16 +5,19 @@ var formSchema = require('./form');
 var panic      = require('../lib/panic');
 
 var formRevisionSchema = new Schema({
-  parent:     { type: Schema.ObjectId, ref: 'Form' },
-  slug:       { type: String, trim: true },
-  title:      { type: String, trim: true },
+  parent:      { type: Schema.ObjectId, ref: 'Form' },
+  slug:        { type: String, trim: true },
+  title:       { type: String, trim: true },
 
   // content should be a JSON string rather than an Object,
   // as the content may have variable data types which may
   // cause security troubles
-  content:    { type: String },
+  content:     { type: String },
 
-  created_at: { type: Date, default: Date.now }
+  // cached calculated value
+  submissions: { type: Number, default: 0 },
+
+  created_at:  { type: Date, default: Date.now }
 });
 
 // basically we don't want these slugs to conflict with routes

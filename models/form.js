@@ -5,18 +5,19 @@ var panic    = require('../lib/panic');
 var Manager  = require('./manager');
 
 var formSchema = new Schema({
-  published:  { type: Boolean, default: false },
+  published:   { type: Boolean, default: false },
 
   // slug is used for better URL, equal to form's _id if slug is empty
-  slug:       { type: String, index: { unique: true }, trim: true },
+  slug:        { type: String, index: { unique: true }, trim: true },
 
   // cached calculated value
-  managers:   { type: Number, default: 0 },
+  managers:    { type: Number, default: 0 },
+  submissions: { type: Number, default: 0 },
 
-  head:       { type: Schema.ObjectId, ref: 'FormRevision' },
-  commits:    [ { type: Schema.ObjectId, ref: 'FormRevision' } ],
-  created_at: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now }
+  head:        { type: Schema.ObjectId, ref: 'FormRevision' },
+  commits:     [ { type: Schema.ObjectId, ref: 'FormRevision' } ],
+  created_at:  { type: Date, default: Date.now },
+  updated_at:  { type: Date, default: Date.now }
 });
 
 formSchema.pre('save', function (next) {
