@@ -29,6 +29,7 @@
           <tr>
             <th class="slug">Slug</th>
             <th>Name</th>
+            <th class="number">Submissions</th>
             <th class="number">Managers</th>
             <th class="number">Rev.</th>
             <th class="date">Created At</th>
@@ -52,6 +53,7 @@
               <a class="block" href="/control/forms/edit/{{ form._id }}"
                 ng-bind="form.head.title || '(untitled)'"></a>
             </td>
+            <td ng-bind="form.submissions"></td>
             <td ng-bind="form.managers"></td>
             <td ng-bind="form.commits.length"></td>
             <td ng-bind="form.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
