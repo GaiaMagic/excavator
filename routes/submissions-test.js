@@ -65,6 +65,27 @@ describe('Route /backend/submissions', function () {
         done();
       });
     });
+
+    it('should list submissions of a specific form', function (done) {
+      function expectLength (form, length) {
+        var deferred = Q.defer();
+        request(excavator).
+        get('/backend/submissions?form=' + form).
+        set('Authorization', 'token ' + realAdmin.token).
+        expect(200).
+        end(function (err, res) {
+          if (err) return deferred.reject(err);
+          var body = res.body;
+          expect(body).to.be.an('array').and.have.length(length);
+          deferred.resolve();
+        });
+        return deferred.promise;
+      }
+
+      expectLength(mongoose.Types.ObjectId(), 0).then(function () {
+        return expectLength(realForm.parent, 2);
+      }).then(done).catch(done);
+    });
   });
 
   describe('Sub-route /:submissionid', function () {

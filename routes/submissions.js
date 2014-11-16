@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var Form = require('../models/form');
 var Submission = require('../models/submission');
 var Q = require('q');
 
@@ -31,8 +32,22 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
       });
     });
   } else {
-    promise = makePromise(Submission.find({}).
-      sort({ _id: -1 }).populate('form_revision'));
+    var form = req.query.form;
+    if (form) {
+      promise = makePromise(Form.findOne(
+        /^[a-f0-9]{24}$/.test(form) ? { _id: form } : { slug: form }
+      )).then(function (form) {
+        if (!form) return;
+        return { form: form._id };
+      });
+    } else {
+      promise = Q({});
+    }
+    promise = promise.then(function (condition) {
+      if (!condition) return [];
+      return makePromise(Submission.find(condition).sort({ _id: -1 }).
+        populate('form_revision'));
+    });
   }
   promise.then(function (submissions) {
     if (!submissions) return next('not-found');
