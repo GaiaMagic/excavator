@@ -300,6 +300,35 @@ describe('Route /backend/managers', function () {
       }).then(done).catch(done);
     });
 
+    it('should return manager submissions of a specific form', function (done) {
+      function expectLength (form, length) {
+        var deferred = Q.defer();
+        request(excavator).
+        get('/backend/managers/submissions?form=' + form).
+        set('Authorization', 'token ' + realManager.token).
+        expect(200).
+        end(function (err, res) {
+          if (err) return deferred.reject(err);
+          var body = res.body;
+          expect(body).to.be.an('array').and.have.length(length);
+          deferred.resolve();
+        });
+        return deferred.promise;
+      }
+
+      FormRevision.create(real.title, real.content).then(function (form) {
+        return Submission.submit(form._id, real.submit);
+      }).then(function (submission) {
+        var op = {};
+        op[realManager._id] = true;
+        return Form.updateManagers(submission.form, op);
+      }).then(function (form) {
+        return expectLength(form._id, 1);
+      }).then(function (form) {
+        return expectLength(mongoose.Types.ObjectId(), 0);
+      }).then(done).catch(done);
+    });
+
     function expectExistence (subid, status, reason, moreExpectations) {
       var deferred = Q.defer();
       request(excavator).

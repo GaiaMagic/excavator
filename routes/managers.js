@@ -158,8 +158,19 @@ function (req, res, next) {
         });
       });
     } else {
+      var form = req.query.form;
+      var inTheseForms;
+      if (form) {
+        if (manager.forms.indexOf(form) > -1) {
+          inTheseForms = form;
+        } else {
+          return [];
+        }
+      } else {
+        inTheseForms = { $in: manager.forms };
+      }
       return makePromise(Submission.find({
-        form: { $in: manager.forms }
+        form: inTheseForms
       }).sort({ _id: -1 }).populate('form_revision'));
     }
   }).then(function (submissions) {
