@@ -66,6 +66,62 @@ router.route('/:id([a-f0-9]{24})/ban').
     }).catch(next);
   });
 
+router.post('/:id([a-f0-9]{24})/forms', needsAdminAuth, jsonParser,
+  function (req, res, next) {
+    var forms = req.body;
+    function checkForms (forms) {
+      if (!(forms instanceof Array)) return false;
+      if (forms.length === 0) return false;
+      for (var i = 0; i < forms.length; i++) {
+        if (typeof forms[i] !== 'string') {
+          return false;
+        }
+        if (!/^[0-9a-f]{24}$/.test(forms[i])) {
+          return false;
+        }
+      }
+      return true;
+    }
+    Q().then(function () {
+      if (!checkForms(forms)) {
+        return Q.reject(panic(422, {
+          type:    'invalid-form-id',
+          message: 'At least one form ID provided is not valid.'
+        }));
+      }
+    }).then(function () {
+      return Q.nbind(Manager.findById, Manager)(req.params.id);
+    }).then(function (manager) {
+      if (!manager) return next('not-found');
+      var Form = require('../models/form');
+      return Q.all(forms.map(function (form) {
+        return makePromise(Form.find({ _id: form }, { _id: 1 }));
+      })).then(function (forms) {
+        return {
+          manager: manager,
+          forms: forms
+        }
+      });
+    }).then(function (ret) {
+      var manager = ret.manager;
+      var forms = ret.forms;
+      var newForms = [];
+      for (var i = 0; i < forms.length; i++) {
+        if (!forms[i][0] || !forms[i][0].id) {
+          return Q.reject(panic(404, {
+            type:    'form-does-not-exist',
+            message: 'At least one form does not exist.'
+          }));
+        }
+        newForms.push(forms[i][0].id);
+      }
+      manager.forms = newForms;
+      return Q.nbind(manager.save, manager)();
+    }).then(function () {
+      res.send({status: 'OK'});
+    }).catch(next);
+  });
+
 var needsManagerAuth = require('./token-auth')({
   model: 'Manager'
 });

@@ -19,6 +19,7 @@ chai.should();
 
 describe('Route /backend/managers', function () {
   var realAdmin;
+  var realForm;
   var realManager;
 
   before(function (done) {
@@ -46,6 +47,7 @@ describe('Route /backend/managers', function () {
         realManager = manager;
         return FormRevision.create(real.title, real.content);
       }).then(function (form) {
+        realForm = form;
         var op = {};
         op[realManager._id] = true;
         return Form.updateManagers(form.parent, op);
@@ -207,6 +209,50 @@ describe('Route /backend/managers', function () {
           expect(manager.banned).to.equal(false);
           done();
         });
+      });
+    });
+
+    describe('when updating forms', function () {
+      function expectFailure (data, status, type, done) {
+        request(excavator).
+        post('/backend/managers/' + realManager.id + '/forms').
+        set('Authorization', 'token ' + realAdmin.token).
+        send(data).
+        expect(status).
+        end(function (err, res) {
+          if (err) return done(err);
+          if (type) {
+            expect(res.body).to.have.keys([
+              'status',
+              'type',
+              'message'
+            ]);
+            expect(res.body.type).to.equal(type);
+          } else {
+            expect(res.body).to.have.keys([
+              'status'
+            ]);
+            expect(res.body.status).to.equal('OK');
+          }
+          done();
+        });
+      }
+
+      it('should fail if form is invalid', function (done) {
+        expectFailure([], 422, 'invalid-form-id', function () {
+          expectFailure(undefined, 422, 'invalid-form-id', function () {
+            expectFailure(['test'], 422, 'invalid-form-id', done);
+          });
+        });
+      });
+
+      it('should fail if form does not exist', function (done) {
+        expectFailure([mongoose.Types.ObjectId()], 404,
+          'form-does-not-exist', done);
+      });
+
+      it('should success if form is valid and existing', function (done) {
+        expectFailure([realForm.parent], 200, undefined, done);
       });
     });
   });
