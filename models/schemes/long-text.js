@@ -25,7 +25,7 @@ module.exports = {
         '<div class="col-sm-10">',
           '<textarea class="form-control" rows="3" ',
             'ng-model="data.{{ model }}" ',
-            'placeholder="{{ placeholder || label }}"></textarea>',
+            'placeholder="{{ placeholder }}"></textarea>',
         '</div>',
       '</div>'
     ],
