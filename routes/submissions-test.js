@@ -44,8 +44,14 @@ describe('Route /backend/submissions', function () {
       }).then(function () {
         return Submission.submit(realForm._id, real.submit);
       }).delay(100).then(function (submission) {
+        return Q.nbind(Submission.findByIdAndUpdate, Submission)(
+          submission._id, { $set: { status: 1 } });
+      }).then(function (submission) {
         realSubmission = submission;
         return Submission.submit(realForm._id, real.submit);
+      }).then(function (submission) {
+        return Q.nbind(Submission.findByIdAndUpdate, Submission)(
+          submission._id, { $set: { status: 2 } });
       }).then(function (submission) {
         realSubmission2 = submission;
       }).catch(done).finally(done);
@@ -84,6 +90,29 @@ describe('Route /backend/submissions', function () {
 
       expectLength(mongoose.Types.ObjectId(), 0).then(function () {
         return expectLength(realForm.parent, 2);
+      }).then(done).catch(done);
+    });
+
+    it('should list submissions of a specific status', function (done) {
+      function expectLength (status, length) {
+        var deferred = Q.defer();
+        request(excavator).
+        get('/backend/submissions?status=' + status).
+        set('Authorization', 'token ' + realAdmin.token).
+        expect(200).
+        end(function (err, res) {
+          if (err) return deferred.reject(err);
+          var body = res.body;
+          expect(body).to.be.an('array').and.have.length(length);
+          deferred.resolve();
+        });
+        return deferred.promise;
+      }
+
+      expectLength(0, 0).then(function () {
+        return expectLength(1, 0); // 1 is not enabled yet, so no results
+      }).then(function () {
+        return expectLength(2, 1);
       }).then(done).catch(done);
     });
   });

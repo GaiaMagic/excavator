@@ -46,13 +46,19 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
       promise = Q({});
     }
     promise = promise.then(function (condition) {
-      if (!condition) return [];
-      var status = Status.findById(req.query.status);
+      if (!condition) return;
+      var status = req.query.status;
       if (status) {
-        condition.status = status.id;
+        status = Status.findById(status);
+        if (status) {
+          condition.status = status.id;
+        } else {
+          return;
+        }
       }
       return condition;
     }).then(function (condition) {
+      if (!condition) return []; // return 0 results if no condition
       return makePromise(Submission.find(condition).sort({ _id: -1 }).
         populate('form_revision'));
     });

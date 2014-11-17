@@ -5,6 +5,7 @@ var Submission = require('../models/submission');
 var jsonParser = require('body-parser').json();
 var panic = require('../lib/panic');
 var Q = require('q');
+var Status = require('../models/status');
 
 function makePromise (promise) {
   return Q.nbind(promise.exec, promise)();
@@ -169,9 +170,15 @@ function (req, res, next) {
       } else {
         inTheseForms = { $in: manager.forms };
       }
-      return makePromise(Submission.find({
+      var find = {
         form: inTheseForms
-      }).sort({ _id: -1 }).populate('form_revision'));
+      };
+      var status = Status.findById(req.query.status);
+      if (status) {
+        find.status = status.id;
+      }
+      return makePromise(Submission.find(find).
+        sort({ _id: -1 }).populate('form_revision'));
     }
   }).then(function (submissions) {
     if (!submissions) return next('not-found');

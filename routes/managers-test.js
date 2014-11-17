@@ -329,6 +329,41 @@ describe('Route /backend/managers', function () {
       }).then(done).catch(done);
     });
 
+    it('should return manager submissions of a specific status',
+    function (done) {
+      function expectLength (status, length) {
+        var deferred = Q.defer();
+        request(excavator).
+        get('/backend/managers/submissions?status=' + status).
+        set('Authorization', 'token ' + realManager.token).
+        expect(200).
+        end(function (err, res) {
+          if (err) return deferred.reject(err);
+          var body = res.body;
+          expect(body).to.be.an('array').and.have.length(length);
+          deferred.resolve();
+        });
+        return deferred.promise;
+      }
+
+      Q.nbind(Submission.remove, Submission)({}).then(function () {
+        return FormRevision.create(real.title, real.content);
+      }).then(function (form) {
+        return Submission.submit(form._id, real.submit);
+      }).then(function (submission) {
+        return Q.nbind(Submission.findByIdAndUpdate, Submission)(
+          submission._id, { $set: { status: 2 } });
+      }).then(function (submission) {
+        var op = {};
+        op[realManager._id] = true;
+        return Form.updateManagers(submission.form, op);
+      }).then(function (form) {
+        return expectLength(0, 0);
+      }).then(function (form) {
+        return expectLength(2, 1);
+      }).then(done).catch(done);
+    });
+
     function expectExistence (subid, status, reason, moreExpectations) {
       var deferred = Q.defer();
       request(excavator).
