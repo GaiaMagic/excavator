@@ -30,6 +30,10 @@ describe('Route /backend/forms', function () {
       Q.nbind(Admin.remove, Admin)({}).then(function () {
         return Q.nbind(Manager.remove, Manager)({});
       }).then(function () {
+        return Q.nbind(Form.remove, Form)({});
+      }).then(function () {
+        return Q.nbind(FormRevision.remove, FormRevision)({});
+      }).then(function () {
         return Admin.register(real.username, real.password);
       }).then(function (admin) {
         realAdmin = admin;
@@ -343,6 +347,51 @@ describe('Route /backend/forms', function () {
         expect(res.body.title).to.equal(real.title);
         expect(res.body.content).to.equal(real.content);
         expect(isNaN(new Date(res.body.created_at))).to.be.false;
+        done();
+      });
+    });
+  });
+
+  describe('Sub-route /search', function () {
+    it('should return recent forms if no query', function (done) {
+      request(excavator).
+      get('/backend/forms/search').
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(res.body).to.be.an('array');
+        var promise = Form.find({}).sort({ _id: -1 });
+        Q.nbind(promise.exec, promise)().then(function (forms) {
+          for (var i = 0; i < res.body.length; i++) {
+            expect(res.body[i]._id).to.equal(forms[i]._id.toString());
+          }
+        }).then(done).catch(done);
+      });
+    });
+
+    it('should return related search results', function (done) {
+      request(excavator).
+      get('/backend/forms/search?query=' + real.title.toUpperCase()).
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(res.body).to.be.an('array');
+        expect(res.body.length).to.be.at.least(1);
+        done();
+      });
+    });
+
+    it('should return no search results', function (done) {
+      request(excavator).
+      get('/backend/forms/search?query=' + real.title + 'fake').
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(res.body).to.be.an('array');
+        expect(res.body.length).to.equal(0);
         done();
       });
     });

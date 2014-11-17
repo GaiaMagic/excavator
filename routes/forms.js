@@ -6,6 +6,14 @@ var Manager = require('../models/manager');
 var jsonParser = require('body-parser').json();
 var Q = require('q');
 
+function QQ (promise) {
+  return Q.nbind(promise.exec, promise)();
+}
+
+function makeRegexp (input) {
+  return new RegExp(input.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), 'i');
+}
+
 router.get('/', function (req, res, next) {
   var manager = req.query.manager;
   var promise;
@@ -27,6 +35,27 @@ router.get('/', function (req, res, next) {
   promise.then(function (forms) {
     res.send(forms);
   }).catch(next)
+});
+
+router.get('/search', function (req, res, next) {
+  var query = req.query.query;
+  var find;
+  if (query) {
+    var regex = makeRegexp(query);
+    var conditions = [
+      { slug: regex },
+      { title: regex }
+    ];
+    if (/^[a-f0-9]{24}$/.test(query)) {
+      conditions.push({ _id: query });
+    }
+    find = { $or: conditions };
+  } else {
+    find = {};
+  }
+  QQ(Form.find(find).sort({ _id: -1 }).skip(0).limit(5)).then(function (forms) {
+    res.send(forms);
+  }).catch(next);
 });
 
 router.post('/:formid/managers', jsonParser, function (req, res, next) {
