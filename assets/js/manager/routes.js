@@ -1,4 +1,5 @@
 angular.module('excavator.manager.routes', [
+  'excavator.resolver.is',
   'excavator.resolver.submission'
 ]).
 
@@ -6,12 +7,14 @@ config([
   '$routeProvider',
   '$locationProvider',
   'backend.user.auth.needed.resolver',
+  'resolver.is',
   'resolver.submissions',
   'resolver.submission',
   function(
     $routeProvider,
     $locationProvider,
     authNeededResolver,
+    isResolver,
     submissionsResolver,
     submissionResolver
   ) {
@@ -31,6 +34,7 @@ config([
       controller: 'controller.shared.submission.view as cssv',
       resolve: {
         loggedIn: authNeededResolver,
+        setStatusPrefix: isResolver('/backend/managers'),
         currentSubmission: submissionResolver('backend.manager.submission.get')
       }
     }).

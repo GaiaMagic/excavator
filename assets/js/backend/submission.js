@@ -33,8 +33,9 @@ factory('backend.submission.list', [
 factory('backend.submission.status', [
   '$http',
   function ($http) {
-    return function (id, status) {
-      return $http.put('/backend/submissions/' + id + '/status/' + status);
+    return function (prefix, id, status) {
+      prefix = prefix || '/backend';
+      return $http.put(prefix + '/submissions/' + id + '/status/' + status);
     };
   }
 ]);

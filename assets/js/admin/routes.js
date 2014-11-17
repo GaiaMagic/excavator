@@ -8,6 +8,7 @@ config([
   'backend.user.auth.needed.resolver',
   'resolver.forms',
   'resolver.form',
+  'resolver.is',
   'resolver.submissions',
   'resolver.submission',
   'resolver.managers',
@@ -17,6 +18,7 @@ config([
     authNeededResolver,
     formsResolver,
     formResolver,
+    isResolver,
     submissionsResolver,
     submissionResolver,
     managersResolver
@@ -72,6 +74,7 @@ config([
       controller: 'controller.shared.submission.view as cssv',
       resolve: {
         loggedIn: authNeededResolver,
+        setStatusPrefix: isResolver(),
         currentSubmission: submissionResolver('backend.submission.get')
       }
     }).

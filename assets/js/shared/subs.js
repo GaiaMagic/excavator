@@ -93,12 +93,22 @@ controller('controller.shared.submission.list', [
 ]).
 
 controller('controller.shared.submission.view', [
+  '$injector',
   '$route',
   'backend.submission.status',
   'currentSubmission',
   'func.panic',
   'misc.statuses',
-  function ($route, setStatus, currentSubmission, panic, statuses) {
+  'setStatusPrefix',
+  function (
+    $injector,
+    $route,
+    setStatus,
+    currentSubmission,
+    panic,
+    statuses,
+    setStatusPrefix
+  ) {
     if (!currentSubmission) {
       return panic('Submission is corrupted.');
     }
@@ -113,7 +123,8 @@ controller('controller.shared.submission.view', [
     this.statuses = statuses;
 
     this.setStatus = function (status) {
-      setStatus(currentSubmission.sub._id, status.id).then(function () {
+      setStatus(setStatusPrefix, currentSubmission.sub._id, status.id).
+      then(function () {
         $route.reload();
       }, panic);
     };
