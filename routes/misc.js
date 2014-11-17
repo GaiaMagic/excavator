@@ -3,9 +3,7 @@ var router = express.Router();
 var STATUSES = require('../models/status');
 
 router.get('/statuses', function (req, res, next) {
-  res.send(STATUSES.filter(function (status) {
-    return status.enabled;
-  }));
+  res.send(STATUSES);
 });
 
 router.all('*', function (req, res, next) {

@@ -1,22 +1,28 @@
-angular.module('excavator.admin.subs', []).
+angular.module('excavator.admin.subs', [
+  'excavator.misc'
+]).
 
 controller('controller.control.submission.list', [
   '$location',
   '$routeParams',
   '$scope',
+  'backend.submission.status',
   'func.array',
   'func.localstorage.load',
   'func.localstorage.save',
   'func.scheme.parse',
+  'misc.statuses',
   'submissions',
   function (
     $location,
     $routeParams,
     $scope,
+    setStatus,
     funcArray,
     load,
     save,
     parse,
+    statuses,
     submissions
   ) {
     if (!angular.isArray(submissions)) return;
@@ -74,13 +80,27 @@ controller('controller.control.submission.list', [
     });
 
     this.array = funcArray;
+
+    this.statuses = statuses;
+
+    this.statusFilter = +$routeParams.status;
+    if (isNaN(this.statusFilter)) this.statusFilter = undefined;
+    $scope.$watch(function () {
+      return self.statusFilter;
+    }, function (val) {
+      if (angular.isDefined(val) && !angular.isNumber(val)) return;
+      $location.search('status', angular.isNumber(val) ? val : null);
+    });
   }
 ]).
 
 controller('controller.control.submission.view', [
+  '$route',
+  'backend.submission.status',
   'currentSubmission',
   'func.panic',
-  function (currentSubmission, panic) {
+  'misc.statuses',
+  function ($route, setStatus, currentSubmission, panic, statuses) {
     if (!currentSubmission) {
       return panic('Submission is corrupted.');
     }
@@ -90,6 +110,14 @@ controller('controller.control.submission.view', [
     this.isEmpty = function (object) {
       if (!angular.isObject(object)) return true;
       return Object.keys(object).length === 0;
+    };
+
+    this.statuses = statuses;
+
+    this.setStatus = function (status) {
+      setStatus(currentSubmission.sub._id, status.id).then(function () {
+        $route.reload();
+      }, panic);
     };
   }
 ]);

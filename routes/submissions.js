@@ -4,6 +4,7 @@ var Form = require('../models/form');
 var Submission = require('../models/submission');
 var Q = require('q');
 var panic = require('../lib/panic');
+var Status = require('../models/status');
 
 function makePromise (promise) {
   return Q.nbind(promise.exec, promise)();
@@ -46,6 +47,12 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
     }
     promise = promise.then(function (condition) {
       if (!condition) return [];
+      var status = Status.findById(req.query.status);
+      if (status) {
+        condition.status = status.id;
+      }
+      return condition;
+    }).then(function (condition) {
       return makePromise(Submission.find(condition).sort({ _id: -1 }).
         populate('form_revision'));
     });
@@ -59,8 +66,7 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
 router.put('/:submissionid([a-f0-9]{24})/status/:status([0-9]+)',
 function (req, res, next) {
   var id = req.params.submissionid;
-  var statuses = require('../models/status');
-  var status = statuses.findById(req.params.status);
+  var status = Status.findById(req.params.status);
   if (!status) {
     return next(panic(422, {
       type:    'invalid-status',

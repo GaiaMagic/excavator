@@ -32,7 +32,9 @@ var STATUSES = [
   }
 ];
 
-module.exports = STATUSES;
+module.exports = STATUSES.filter(function (status) {
+  return status.enabled;
+});
 module.exports.findById = findById;
 
 function findById (input) {

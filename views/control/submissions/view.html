@@ -43,6 +43,20 @@
           </td>
         </tr>
         <tr>
+          <td>Status</td>
+          <td>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default"
+                ng-click="ccsv.setStatus(status)"
+                ng-class="{active: ccsv.sub.sub.status === status.id}"
+                ng-repeat="status in ccsv.statuses">
+                <span class="label label-{{ status.type }}"
+                  ng-bind="status.label"></span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
           <td class="form-sub-key">Submiited On</td>
           <td><span ng-bind="ccsv.sub.sub.created_at |
             date: 'yyyy-MM-dd hh:mm:ss'"></span></td>

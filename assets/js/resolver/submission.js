@@ -8,7 +8,9 @@ constant('resolver.submissions', function submissionsResolver (service) {
     function currentSubmissions ($route, list, panic) {
       var params = {};
       var form = $route.current.params.form;
-      if (form) params.form = form;
+      if (angular.isDefined(form)) params.form = form;
+      var status = $route.current.params.status;
+      if (angular.isDefined(status)) params.status = status;
       return list(params).then(function (res) {
         var data = res.data;
         if (form) data.hasFormQuery = true;

@@ -12,10 +12,15 @@ gulp.task('less', function () {
 });
 
 gulp.task('scripts', function () {
-  return gulp.
+  gulp.
     src('assets/js/scheme/scheme.js').
     pipe($.browserify()).
     pipe(gulp.dest('dist/js/scheme'));
+
+  gulp.
+    src('assets/js/misc/misc.js').
+    pipe($.browserify()).
+    pipe(gulp.dest('dist/js/misc'));
 });
 
 gulp.task('watch', ['less', 'scripts'], function () {

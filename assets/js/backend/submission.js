@@ -28,4 +28,13 @@ factory('backend.submission.list', [
       return $http.get('/backend/submissions', {params: params});
     };
   }
+]).
+
+factory('backend.submission.status', [
+  '$http',
+  function ($http) {
+    return function (id, status) {
+      return $http.put('/backend/submissions/' + id + '/status/' + status);
+    };
+  }
 ]);
