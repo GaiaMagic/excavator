@@ -44,6 +44,13 @@ describe('Route /backend/managers', function () {
         return Manager.register(real.username, real.password);
       }).then(function (manager) {
         realManager = manager;
+        return FormRevision.create(real.title, real.content);
+      }).then(function (form) {
+        var op = {};
+        op[realManager._id] = true;
+        return Form.updateManagers(form.parent, op);
+      }).then(function (form) {
+        return;
       }).catch(done).finally(done);
     }
   });
@@ -67,6 +74,34 @@ describe('Route /backend/managers', function () {
           'updated_at',
           'created_at',
           'banned'
+        ]);
+        done();
+      });
+    });
+
+    it('should return details of a manager', function (done) {
+      request(excavator).
+      get('/backend/managers/' + realManager._id).
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        var body = res.body;
+        expect(body).to.be.a('object');
+        expect(body).to.have.keys([
+          '__v',
+          '_id',
+          'username',
+          'token',
+          'forms',
+          'updated_at',
+          'created_at',
+          'banned'
+        ]);
+        expect(body.forms).to.be.an('array');
+        expect(body.forms[0]).to.have.keys([
+          '_id',
+          'title'
         ]);
         done();
       });

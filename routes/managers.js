@@ -6,15 +6,28 @@ var jsonParser = require('body-parser').json();
 var panic = require('../lib/panic');
 var Q = require('q');
 
+function makePromise (promise) {
+  return Q.nbind(promise.exec, promise)();
+}
+
 var needsAdminAuth = require('./token-auth')({
   model: 'Admin'
 });
 
-router.get('/', needsAdminAuth, function (req, res, next) {
-  Manager.find({}).sort('-created_at').skip(0).limit(20).exec().
-  then(function (managers) {
+router.get('/:manid([a-f0-9]{24})?', needsAdminAuth, function (req, res, next) {
+  var promise;
+  var manid = req.params.manid;
+  if (manid) {
+    promise = makePromise(Manager.findById(manid).
+      populate([{path: 'forms', select: 'title'}]))
+  } else {
+    promise = makePromise(Manager.find({}).
+      sort({ _id: -1 }).skip(0).limit(20));
+  }
+  promise.then(function (managers) {
+    if (!managers) return next('not-found');
     res.send(managers);
-  }, next);
+  }).catch(next);
 });
 
 router.post('/', needsAdminAuth, jsonParser, function (req, res, next) {
