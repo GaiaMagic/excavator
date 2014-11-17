@@ -186,6 +186,26 @@ function (req, res, next) {
   }).catch(next);
 });
 
+router.put('/submissions/:submissionid([a-f0-9]{24})/status/:status([0-9]+)',
+needsManagerAuth, function (req, res, next) {
+  Q.nbind(Manager.findById, Manager)(req.authorizedUser.id).
+  then(function (manager) {
+    var id = req.params.submissionid;
+    var status = Status.findById(req.params.status);
+    if (!status) {
+      return Q.reject(panic(422, {
+        type:    'invalid-status',
+        message: 'Status does not exist.'
+      }));
+    }
+    return Q.nbind(Submission.findOneAndUpdate, Submission)({
+      _id: id, form: { $in: manager.forms }
+    }, { $set: { status: status.id } });
+  }).then(function (submission) {
+    res.send({status: 'OK'});
+  }).catch(next);
+});
+
 // need no auth:
 
 router.get('/status', function (req, res, next) {

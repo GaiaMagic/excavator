@@ -465,6 +465,61 @@ describe('Route /backend/managers', function () {
         return expectExistence(realSub[2], 200, undefined, moreExpectations);
       }).then(done).catch(done);
     });
+
+    function expectStatus (subid, status, type) {
+      var deferred = Q.defer();
+      request(excavator).
+      put('/backend/managers/submissions/' + subid + '/status/' + status).
+      set('Authorization', 'token ' + realManager.token).
+      expect(type ? 422 : 200).
+      end(function (err, res) {
+        if (err) return deferred.reject(err);
+        if (type) {
+          expect(res.body).to.have.keys([
+            'status',
+            'type',
+            'message'
+          ]);
+          expect(res.body.type).to.equal(type);
+        } else {
+          expect(res.body).to.have.keys([
+            'status'
+          ]);
+          expect(res.body.status).to.equal('OK');
+        }
+        deferred.resolve();
+      });
+      return deferred.promise;
+    }
+
+    it('should change status', function (done) {
+      var realSubmission;
+      Q.nbind(Submission.remove, Submission)({}).then(function () {
+        return FormRevision.create(real.title, real.content);
+      }).then(function (form) {
+        return Submission.submit(form._id, real.submit);
+      }).then(function (submission) {
+        return Q.nbind(Submission.findByIdAndUpdate, Submission)(
+          submission._id, { $set: { status: 1 } });
+      }).then(function (submission) {
+        realSubmission = submission;
+      }).then(function () {
+        return [
+          { s: 0,  t: undefined },
+          { s: 1,  t: 'invalid-status' },
+          { s: 2,  t: undefined },
+          { s: 3,  t: 'invalid-status' },
+          { s: 4,  t: undefined },
+          { s: 5,  t: undefined },
+          { s: 6,  t: 'invalid-status' },
+          { s: 7,  t: 'invalid-status' },
+        ].reduce(function (prev, curr) {
+          return prev.then(function () {
+            return expectStatus(realSubmission._id, curr.s, curr.t);
+          });
+        }, Q());
+      }).then(done).catch(done);
+    });
   });
 
   describe('Sub-route /status', function () {
