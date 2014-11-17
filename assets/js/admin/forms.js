@@ -33,6 +33,6 @@ controller('controller.control.form.list', [
       }).then(function () {
         $route.reload();
       });
-    }
+    };
   }
 ]);

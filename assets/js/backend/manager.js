@@ -10,6 +10,24 @@ factory('backend.manager.ban', [
   }
 ]).
 
+factory('backend.manager.form.save', [
+  '$http',
+  function ($http) {
+    return function (managerid, forms) {
+      return $http.post('/backend/managers/' + managerid + '/forms', forms);
+    };
+  }
+]).
+
+factory('backend.manager.get', [
+  '$http',
+  function ($http) {
+    return function (managerid) {
+      return $http.get('/backend/managers/' + managerid);
+    };
+  }
+]).
+
 factory('backend.manager.list', [
   '$http',
   function ($http) {

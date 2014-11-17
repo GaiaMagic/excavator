@@ -32,6 +32,15 @@ factory('backend.form.list', [
   }
 ]).
 
+factory('backend.form.search', [
+  '$http',
+  function ($http) {
+    return function (query) {
+      return $http.get('/backend/forms/search', {params: {query: query}});
+    };
+  }
+]).
+
 factory('backend.form.update.managers', [
   '$http',
   function ($http) {

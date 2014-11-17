@@ -9,10 +9,25 @@ controller('controller.control.manager.list', [
   'func.panic',
   'func.panic.alert',
   'func.panic.confirm',
-  function ($route, ban, register, remove, managers, panic, alert, confirm) {
+  'manager.access.control',
+  function (
+    $route,
+    ban,
+    register,
+    remove,
+    managers,
+    panic,
+    alert,
+    confirm,
+    accessControl
+  ) {
     this.managers = managers;
-
     this.manager = {
+      access: function (manager) {
+        accessControl(manager).then(function () {
+          $route.reload();
+        });
+      },
       ban: function (manager) {
         var promise;
         if (manager.banned) {

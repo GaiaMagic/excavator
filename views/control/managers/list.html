@@ -36,6 +36,9 @@
                   title="Ban manager {{ manager.username }}"
                   ng-click="ccml.manager.ban(manager)">
                   {{manager.banned&&'Unban'||'Ban'}} User</a>
+                <a class="btn btn-default"
+                  title="Allow / disallow form access to {{ manager.username }}"
+                  ng-click="ccml.manager.access(manager)">Form Access</a>
               </div>
             </td>
             <td>
