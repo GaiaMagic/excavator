@@ -77,12 +77,15 @@ describe('Form (w/ revision) database model', function () {
         'published',
         'managers',
         'slug',
+        'title',
         'head',
         'commits',
         'submissions',
         'created_at',
         'updated_at',
         '_id', '__v']);
+      expect(revision.parent.title).to.equal(revision.title);
+      expect(revision.parent.slug).to.equal(revision.parent._id.toString());
       expect(revision.submissions).to.equal(0);
       expect(revision.parent.submissions).to.equal(0);
       expect(revision.parent.created_at).to.not.be.undefined;
@@ -289,6 +292,7 @@ describe('Form (w/ revision) database model', function () {
           'updated_at',
           'created_at',
           'slug',
+          'title',
           'managers',
           'submissions',
           '_id', '__v'

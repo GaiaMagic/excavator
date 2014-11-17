@@ -128,6 +128,18 @@ describe('Route /backend/forms', function () {
       end(function (err, res) {
         if (err) return done(err);
         expect(res.body).to.be.an('object');
+        expect(res.body).to.have.keys([
+          'commits',
+          'head',
+          'published',
+          'updated_at',
+          'created_at',
+          'slug',
+          'title',
+          'managers',
+          'submissions',
+          '_id', '__v'
+        ]);
         expect(res.body.head).to.be.an('object');
         expect(res.body.head._id).to.equal(realForm._id.toString());
         expect(res.body.head.title).to.equal(real.title);

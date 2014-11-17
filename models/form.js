@@ -9,6 +9,7 @@ var formSchema = new Schema({
 
   // slug is used for better URL, equal to form's _id if slug is empty
   slug:        { type: String, index: { unique: true }, trim: true },
+  title:       { type: String, trim: true },
 
   // cached calculated value
   managers:    { type: Number, default: 0 },
@@ -148,6 +149,7 @@ formSchema.static('link', function (revision, form, hard) {
     form.head = revision._id;
     form.commits.unshift(revision._id);
     form.slug = revision.slug || form._id;
+    form.title = revision.title;
     action = form;
   } else {
     action = new self({
@@ -156,6 +158,7 @@ formSchema.static('link', function (revision, form, hard) {
       commits: [ revision._id ]
     });
     action.slug = revision.slug || action._id;
+    action.title = revision.title;
   }
 
   action.save(function (err) {
