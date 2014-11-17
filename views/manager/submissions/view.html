@@ -1,16 +1,16 @@
 <div class="main-static container">
   <div class="col-xs-8 col-xs-offset-2">
     <h3>
-      <span ng-bind="ccsv.sub.sub.form_index + 1"></span> /
-      <span ng-bind="ccsv.sub.sub.form.submissions"></span>
+      <span ng-bind="cssv.sub.sub.form_index + 1"></span> /
+      <span ng-bind="cssv.sub.sub.form.submissions"></span>
       <div class="btn-group btn-group-sm pull-right">
-        <a href="/manager/submissions/view/{{ ccsv.sub.sub.newer }}"
-          class="btn btn-default" ng-class="{disabled: !ccsv.sub.sub.newer}">
+        <a href="/manager/submissions/view/{{ cssv.sub.sub.newer }}"
+          class="btn btn-default" ng-class="{disabled: !cssv.sub.sub.newer}">
           <span class="glyphicon glyphicon-chevron-up"></span>
           Newer
         </a>
-        <a href="/manager/submissions/view/{{ ccsv.sub.sub.older }}"
-          class="btn btn-default" ng-class="{disabled: !ccsv.sub.sub.older}">
+        <a href="/manager/submissions/view/{{ cssv.sub.sub.older }}"
+          class="btn btn-default" ng-class="{disabled: !cssv.sub.sub.older}">
           <span class="glyphicon glyphicon-chevron-down"></span>
           Older
         </a>
@@ -21,20 +21,20 @@
         <tr>
           <td class="form-sub-key">Form</td>
           <td>
-            <span ng-bind="ccsv.sub.title"></span>
-            <a href="/{{ ccsv.sub.sub.form.slug }}/{{ ccsv.sub.sub.form_revision._id }}"
-              target="_blank"><code ng-bind="ccsv.sub.sub.form_revision._id"></code></a>
-            (<a href="/{{ ccsv.sub.sub.form.slug }}" target="_blank">latest</a>)
+            <span ng-bind="cssv.sub.title"></span>
+            <a href="/{{ cssv.sub.sub.form.slug }}/{{ cssv.sub.sub.form_revision._id }}"
+              target="_blank"><code ng-bind="cssv.sub.sub.form_revision._id"></code></a>
+            (<a href="/{{ cssv.sub.sub.form.slug }}" target="_blank">latest</a>)
           </td>
         </tr>
         <tr>
           <td class="form-sub-key">Data</td>
           <td>
-            <em ng-if="ccsv.isEmpty(ccsv.sub.data)">
+            <em ng-if="cssv.isEmpty(cssv.sub.data)">
               This submission is empty.</em>
             <table class="table table-bordered table-striped">
               <tbody>
-                <tr ng-repeat="item in ccsv.sub.data">
+                <tr ng-repeat="item in cssv.sub.data">
                   <td ng-bind="item.label" class="form-sub-key"></td>
                   <td ng-bind="item.value"></td>
                 </tr>
@@ -43,8 +43,22 @@
           </td>
         </tr>
         <tr>
+          <td>Status</td>
+          <td>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default"
+                ng-click="cssv.setStatus(status)"
+                ng-class="{active: cssv.sub.sub.status === status.id}"
+                ng-repeat="status in cssv.statuses">
+                <span class="label label-{{ status.type }}"
+                  ng-bind="status.label"></span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
           <td class="form-sub-key">Submiited On</td>
-          <td><span ng-bind="ccsv.sub.sub.created_at |
+          <td><span ng-bind="cssv.sub.sub.created_at |
             date: 'yyyy-MM-dd hh:mm:ss'"></span></td>
         </tr>
       </tbody>

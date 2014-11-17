@@ -12,7 +12,7 @@ angular.module('excavator.manager.manager', [
   'excavator.manager.login',
   'excavator.manager.nav',
   'excavator.manager.routes',
-  'excavator.manager.subs'
+  'excavator.shared.subs'
 ]).
 
 constant('backend.user.scope', 'managers').

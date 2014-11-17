@@ -6,6 +6,6 @@ angular.module('excavator.admin', [
   'excavator.admin.login',
   'excavator.admin.managers',
   'excavator.admin.nav',
-  'excavator.admin.subs',
-  'excavator.admin.validator'
+  'excavator.admin.validator',
+  'excavator.shared.subs'
 ]);

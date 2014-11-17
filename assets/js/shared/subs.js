@@ -1,22 +1,35 @@
-angular.module('excavator.manager.subs', []).
+angular.module('excavator.shared.subs', [
+  'excavator.misc'
+]).
 
-controller('controller.manager.manager.submission.list', [
+controller('controller.shared.submission.list', [
+  '$location',
+  '$routeParams',
   '$scope',
   'func.array',
   'func.localstorage.load',
   'func.localstorage.save',
   'func.scheme.parse',
+  'misc.statuses',
   'submissions',
   function (
+    $location,
+    $routeParams,
     $scope,
     funcArray,
     load,
     save,
     parse,
+    statuses,
     submissions
   ) {
     if (!angular.isArray(submissions)) return;
     var self = this;
+
+    this.form = $routeParams.form;
+    this.filter = function () {
+      $location.search('form', this.form || null);
+    };
 
     this.submissions = submissions;
 
@@ -65,13 +78,27 @@ controller('controller.manager.manager.submission.list', [
     });
 
     this.array = funcArray;
+
+    this.statuses = statuses;
+
+    this.statusFilter = +$routeParams.status;
+    if (isNaN(this.statusFilter)) this.statusFilter = undefined;
+    $scope.$watch(function () {
+      return self.statusFilter;
+    }, function (val) {
+      if (angular.isDefined(val) && !angular.isNumber(val)) return;
+      $location.search('status', angular.isNumber(val) ? val : null);
+    });
   }
 ]).
 
-controller('controller.manager.manager.submission.view', [
+controller('controller.shared.submission.view', [
+  '$route',
+  'backend.submission.status',
   'currentSubmission',
   'func.panic',
-  function (currentSubmission, panic) {
+  'misc.statuses',
+  function ($route, setStatus, currentSubmission, panic, statuses) {
     if (!currentSubmission) {
       return panic('Submission is corrupted.');
     }
@@ -81,6 +108,14 @@ controller('controller.manager.manager.submission.view', [
     this.isEmpty = function (object) {
       if (!angular.isObject(object)) return true;
       return Object.keys(object).length === 0;
+    };
+
+    this.statuses = statuses;
+
+    this.setStatus = function (status) {
+      setStatus(currentSubmission.sub._id, status.id).then(function () {
+        $route.reload();
+      }, panic);
     };
   }
 ]);

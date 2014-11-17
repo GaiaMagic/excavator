@@ -19,7 +19,7 @@ config([
 
     when('/manager/submissions', {
       templateUrl: '/manager/submissions/list.html',
-      controller: 'controller.manager.manager.submission.list as ccsl',
+      controller: 'controller.shared.submission.list as cssl',
       resolve: {
         loggedIn: authNeededResolver,
         submissions: submissionsResolver('backend.manager.submission.list')
@@ -28,7 +28,7 @@ config([
 
     when('/manager/submissions/view/:subid', {
       templateUrl: '/manager/submissions/view.html',
-      controller: 'controller.manager.manager.submission.view as ccsv',
+      controller: 'controller.shared.submission.view as cssv',
       resolve: {
         loggedIn: authNeededResolver,
         currentSubmission: submissionResolver('backend.manager.submission.get')

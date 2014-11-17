@@ -60,7 +60,7 @@ config([
 
     when('/control/submissions', {
       templateUrl: '/control/submissions/list.html',
-      controller: 'controller.control.submission.list as ccsl',
+      controller: 'controller.shared.submission.list as cssl',
       resolve: {
         loggedIn: authNeededResolver,
         submissions: submissionsResolver('backend.submission.list')
@@ -69,7 +69,7 @@ config([
 
     when('/control/submissions/view/:subid', {
       templateUrl: '/control/submissions/view.html',
-      controller: 'controller.control.submission.view as ccsv',
+      controller: 'controller.shared.submission.view as cssv',
       resolve: {
         loggedIn: authNeededResolver,
         currentSubmission: submissionResolver('backend.submission.get')

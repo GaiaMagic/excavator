@@ -1,31 +1,47 @@
 <div class="main-static container">
-  <div class="col-md-9">
+  <div class="col-sm-9">
     <div class="panel panel-default">
-      <div class="panel-heading">Latest submissions</div>
+      <div class="panel-heading">
+        Latest submissions
+        <div class="btn-group btn-group-xs pull-right">
+          <button type="button" class="btn btn-default"
+            ng-click="cssl.statusFilter = undefined"
+            ng-class="{active: cssl.statusFilter === undefined}">
+            Show All
+          </button>
+          <button type="button" class="btn btn-default"
+            ng-click="cssl.statusFilter = status.id"
+            ng-class="{active: cssl.statusFilter === status.id}"
+            ng-repeat="status in cssl.statuses">
+            <span class="text-{{ status.type }}" ng-bind="status.label"></span>
+          </button>
+        </div>
+      </div>
       <table class="table table-bordered table-hover">
         <thead>
-          <tr ng-if="ccsl.submissions && ccsl.submissions.length">
+          <tr ng-if="cssl.submissions && cssl.submissions.length">
             <th>View</th>
-            <th ng-repeat="label in ccsl.labels track by $index">
-              <span ng-bind="ccsl.LABELS[label] || label"
-                title="Model name: {{ ccsl.models[label] || label }}"></span>
+            <th ng-repeat="label in cssl.labels track by $index">
+              <span ng-bind="cssl.LABELS[label] || label"
+                title="Model name: {{ cssl.models[label] || label }}"></span>
             </th>
             <th class="date">Created At</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-if="!ccsl.submissions || !ccsl.submissions.length">
+          <tr ng-if="!cssl.submissions || !cssl.submissions.length">
             <td class="text-center">
               No submissions yet!
             </td>
           </tr>
-          <tr ng-repeat="sub in ccsl.submissions">
+          <tr ng-repeat="sub in cssl.submissions">
             <td>
-              <div class="pull-left" ng-if="!ccsl.submissions.hasFormQuery">
+              <div class="pull-left" ng-if="!cssl.submissions.hasFormQuery">
                 <a href="/manager/submissions?form={{ sub.form }}"><span
                   class="glyphicon glyphicon-chevron-right"></span></a>&nbsp;
               </div>
-              <div class="pull-left" ng-if="ccsl.submissions.hasFormQuery">
+              <div class="pull-left" ng-if="cssl.submissions.hasFormQuery">
                 <a href="/manager/submissions"><span
                   class="glyphicon glyphicon-chevron-left"></span></a>&nbsp;
               </div>
@@ -34,53 +50,76 @@
                 [#<span ng-bind="sub.form_index + 1"></span>]
               </a>
             </td>
-            <td ng-repeat="label in ccsl.labels track by $index"
-              ng-bind="sub.data[label] || sub.data[ccsl.models[label]]"></td>
+            <td ng-repeat="label in cssl.labels track by $index"
+              ng-bind="sub.data[label] || sub.data[cssl.models[label]]"></td>
             <td ng-bind="sub.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
+            <td>
+              <span ng-init="status = cssl.statuses.findById(sub.status)"
+                ng-bind="status.label" class="label label-{{ status.type }}"></span>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-  <div class="col-md-3">
+  <div class="col-sm-3">
+    <form ng-submit="cssl.filter()">
+      <div class="panel panel-default">
+        <div class="panel-heading">Filter</div>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>
+                <input type="text" class="form-control" ng-model="cssl.form"
+                  placeholder="Show only submissions of this form">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button class="btn btn-info" type="submit">Filter</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
     <div class="panel panel-default">
       <div class="panel-heading">
         Columns
         <div class="btn-group btn-group-xs pull-right">
           <button class="btn btn-default"
-            ng-click="ccsl.array.push(ccsl.labels, '')">
+            ng-click="cssl.array.push(cssl.labels, '')">
             <span class="glyphicon glyphicon-plus"></span>
           </button>
-          <button class="btn btn-default" ng-click="ccsl.reset()">
+          <button class="btn btn-default" ng-click="cssl.reset()">
             RESET
           </button>
         </div>
       </div>
-      <div class="panel-body" ng-if="!ccsl.labels || !ccsl.labels.length">
+      <div class="panel-body" ng-if="!cssl.labels || !cssl.labels.length">
         <small>No columns! You may try RESET or ADD your own column.</small>
       </div>
       <ul class="list-group">
-        <li class="list-group-item" ng-repeat="model in ccsl.labels track by $index">
+        <li class="list-group-item" ng-repeat="model in cssl.labels track by $index">
           <div class="input-group input-group-sm input-group-compact">
-            <input type="text" class="form-control" ng-model="ccsl.labels[$index]"
-              placeholder="Model / Label">
+            <input type="text" class="form-control" ng-model="cssl.labels[$index]">
             <span class="input-group-btn">
               <button class="btn btn-default"
-                ng-click="ccsl.array.duplicate(ccsl.labels, $index)">
+                ng-click="cssl.array.duplicate(cssl.labels, $index)">
                 <span class="glyphicon glyphicon-plus"></span>
               </button>
               <button class="btn btn-default"
-                ng-click="ccsl.array.delete(ccsl.labels, $index)">
+                ng-click="cssl.array.delete(cssl.labels, $index)">
                 <span class="glyphicon glyphicon-minus"></span>
               </button>
               <button class="btn btn-default"
-                ng-class="{disabled: ccsl.array.edgeT(ccsl.labels, $index)}"
-                ng-click="ccsl.array.moveup(ccsl.labels, $index)">
+                ng-class="{disabled: cssl.array.edgeT(cssl.labels, $index)}"
+                ng-click="cssl.array.moveup(cssl.labels, $index)">
                 <span class="glyphicon glyphicon-chevron-up"></span>
               </button>
               <button class="btn btn-default"
-                ng-class="{disabled: ccsl.array.edgeB(ccsl.labels, $index)}"
-                ng-click="ccsl.array.movedown(ccsl.labels, $index)">
+                ng-class="{disabled: cssl.array.edgeB(cssl.labels, $index)}"
+                ng-click="cssl.array.movedown(cssl.labels, $index)">
                 <span class="glyphicon glyphicon-chevron-down"></span>
               </button>
             </span>
