@@ -21,9 +21,13 @@
           </tr>
           <tr ng-repeat="sub in ccsl.submissions">
             <td>
-              <div class="pull-left">
+              <div class="pull-left" ng-if="!ccsl.submissions.hasFormQuery">
                 <a href="/control/submissions?form={{ sub.form }}"><span
                   class="glyphicon glyphicon-chevron-right"></span></a>&nbsp;
+              </div>
+              <div class="pull-left" ng-if="ccsl.submissions.hasFormQuery">
+                <a href="/control/submissions"><span
+                  class="glyphicon glyphicon-chevron-left"></span></a>&nbsp;
               </div>
               <a class="block" href="/control/submissions/view/{{ sub._id }}">
                 <span ng-bind="sub.form_revision.title"></span>

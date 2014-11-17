@@ -10,7 +10,9 @@ constant('resolver.submissions', function submissionsResolver (service) {
       var form = $route.current.params.form;
       if (form) params.form = form;
       return list(params).then(function (res) {
-        return res.data;
+        var data = res.data;
+        if (form) data.hasFormQuery = true;
+        return data;
       }, panic);
     }
   ];
@@ -27,8 +29,8 @@ constant('resolver.submission', function submissionResolver (service) {
       return get(subid).then(function (res) {
         $rootScope.$broadcast('global-meta', undefined);
 
+        res.data.data = res.data.data || {};
         var rawdata = res.data.data;
-        if (typeof rawdata !== 'object') return false;
 
         var rawscheme = angular.fromJson(res.data.form_revision.content);
         if (typeof rawscheme !== 'object') return false;

@@ -17,7 +17,7 @@ config([
   ) {
     $routeProvider.
 
-    when('/manager', {
+    when('/manager/submissions', {
       templateUrl: '/manager/submissions/list.html',
       controller: 'controller.manager.manager.submission.list as ccsl',
       resolve: {
@@ -41,7 +41,7 @@ config([
     }).
 
     otherwise({
-      redirectTo: '/manager'
+      redirectTo: '/manager/submissions'
     });
 
     $locationProvider.html5Mode(true);

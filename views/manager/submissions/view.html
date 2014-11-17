@@ -30,6 +30,8 @@
         <tr>
           <td class="form-sub-key">Data</td>
           <td>
+            <em ng-if="ccsv.isEmpty(ccsv.sub.data)">
+              This submission is empty.</em>
             <table class="table table-bordered table-striped">
               <tbody>
                 <tr ng-repeat="item in ccsv.sub.data">

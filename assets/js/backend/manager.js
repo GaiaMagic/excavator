@@ -70,8 +70,8 @@ factory('backend.manager.submission.get', [
 factory('backend.manager.submission.list', [
   '$http',
   function ($http) {
-    return function () {
-      return $http.get('/backend/managers/submissions');
+    return function (params) {
+      return $http.get('/backend/managers/submissions', {params: params});
     };
   }
 ]);

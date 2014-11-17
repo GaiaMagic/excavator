@@ -70,9 +70,17 @@ controller('controller.manager.manager.submission.list', [
 
 controller('controller.manager.manager.submission.view', [
   'currentSubmission',
-  function (currentSubmission) {
-    if (!currentSubmission) return;
+  'func.panic',
+  function (currentSubmission, panic) {
+    if (!currentSubmission) {
+      return panic('Submission is corrupted.');
+    }
 
     this.sub = currentSubmission;
+
+    this.isEmpty = function (object) {
+      if (!angular.isObject(object)) return true;
+      return Object.keys(object).length === 0;
+    };
   }
 ]);
