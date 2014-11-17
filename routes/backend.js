@@ -10,6 +10,8 @@ router.use('/submissions', needsAdminAuth, require('./submissions'));
 
 router.use('/managers', require('./managers'));
 
+router.use('/misc', require('./misc'));
+
 router.all('*', function (req, res, next) {
   next('not-found');
 });

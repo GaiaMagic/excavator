@@ -3,6 +3,7 @@ var router = express.Router();
 var Form = require('../models/form');
 var Submission = require('../models/submission');
 var Q = require('q');
+var panic = require('../lib/panic');
 
 function makePromise (promise) {
   return Q.nbind(promise.exec, promise)();
@@ -53,6 +54,23 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
     if (!submissions) return next('not-found');
     res.send(submissions);
   }).catch(next);
+});
+
+router.put('/:submissionid([a-f0-9]{24})/status/:status([0-9]+)',
+function (req, res, next) {
+  var id = req.params.submissionid;
+  var statuses = require('../models/status');
+  var status = statuses.findById(req.params.status);
+  if (!status) {
+    return next(panic(422, {
+      type:    'invalid-status',
+      message: 'Status does not exist.'
+    }));
+  }
+  Q.nbind(Submission.findByIdAndUpdate, Submission)(id,
+    { $set: { status: status.id } }).then(function (submission) {
+      res.send({status: 'OK'});
+    }).catch(next);
 });
 
 module.exports = router;

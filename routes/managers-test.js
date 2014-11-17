@@ -354,6 +354,7 @@ describe('Route /backend/managers', function () {
             'form_index',
             'form_revision',
             'form_revision_index',
+            'status',
             'newer',
             'older'
           ]);

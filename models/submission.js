@@ -10,6 +10,7 @@ var submissionSchema = new Schema({
   form_revision:       { type: Schema.ObjectId, ref: 'FormRevision' },
   form_revision_index: { type: Number, default: 0 },
   data:                { type: Object },
+  status:              { type: Number, default: 0 },
   created_at:          { type: Date, default: Date.now }
 });
 

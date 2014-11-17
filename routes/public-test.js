@@ -140,6 +140,7 @@ describe('Route /public', function () {
           'form_index',
           'form_revision',
           'form_revision_index',
+          'status',
           'created_at',
           '_id',
           '__v'

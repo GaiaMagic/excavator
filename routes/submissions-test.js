@@ -139,6 +139,7 @@ describe('Route /backend/submissions', function () {
           'form_index',
           'form_revision',
           'form_revision_index',
+          'status',
           'newer',
           'older'
         ]);
@@ -167,6 +168,49 @@ describe('Route /backend/submissions', function () {
           expect(body.form_revision_index).to.equal(1);
         });
       }).then(done).catch(done);
+    });
+
+    function expectStatus (status, type) {
+      var deferred = Q.defer();
+      request(excavator).
+      put('/backend/submissions/' + realSubmission._id + '/status/' + status).
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(type ? 422 : 200).
+      end(function (err, res) {
+        if (err) return deferred.reject(err);
+        if (type) {
+          expect(res.body).to.have.keys([
+            'status',
+            'type',
+            'message'
+          ]);
+          expect(res.body.type).to.equal(type);
+        } else {
+          expect(res.body).to.have.keys([
+            'status'
+          ]);
+          expect(res.body.status).to.equal('OK');
+        }
+        deferred.resolve();
+      });
+      return deferred.promise;
+    }
+
+    it('should change status', function (done) {
+      [
+        { s: 0,  t: undefined },
+        { s: 1,  t: 'invalid-status' },
+        { s: 2,  t: undefined },
+        { s: 3,  t: 'invalid-status' },
+        { s: 4,  t: undefined },
+        { s: 5,  t: undefined },
+        { s: 6,  t: 'invalid-status' },
+        { s: 7,  t: 'invalid-status' },
+      ].reduce(function (prev, curr) {
+        return prev.then(function () {
+          return expectStatus(curr.s, curr.t);
+        });
+      }, Q()).then(done).catch(done);
     });
   });
 });
