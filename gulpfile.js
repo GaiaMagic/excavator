@@ -21,6 +21,11 @@ gulp.task('scripts', function () {
     src('assets/js/misc/misc.js').
     pipe($.browserify()).
     pipe(gulp.dest('dist/js/misc'));
+
+  gulp.
+    src('assets/js/func/scheme.js').
+    pipe($.browserify()).
+    pipe(gulp.dest('dist/js/func'));
 });
 
 gulp.task('watch', ['less', 'scripts'], function () {

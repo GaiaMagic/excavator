@@ -3,6 +3,7 @@ var Schema       = mongoose.Schema;
 var Q            = require('q');
 var FormRevision = require('./form-revision');
 var panic        = require('../lib/panic');
+var undecorate   = require('../lib/decorate').undecorate;
 
 var submissionSchema = new Schema({
   form:                { type: Schema.ObjectId, ref: 'Form' },
@@ -43,7 +44,11 @@ submissionSchema.pre('save', function (next) {
       for (var i = 0; i < schemes.length; i++) {
         var scheme = schemes[i];
         if (!scheme.validator) continue;
-        var validator = new Function('data', 'return ' + scheme.validator);
+        var validator
+        validator = undecorate(scheme.validator);
+        if (!validator) {
+          validator = new Function('data', 'return ' + scheme.validator);
+        }
         var sd = data[scheme.model];
         if (validator(sd) !== true) {
           errorMsgs.push('Item "' + scheme.label + '" should ' +

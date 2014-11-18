@@ -1,4 +1,13 @@
-angular.module('excavator.public.public', []).
+angular.module('excavator.public.public', [
+  'mgcrea.ngStrap.datepicker'
+]).
+
+config([
+  '$datepickerProvider',
+  function ($datepickerProvider) {
+    $datepickerProvider.defaults.template = '/vendors/datepicker.html';
+  }
+]).
 
 factory('public.public.forms', [
   '$http',

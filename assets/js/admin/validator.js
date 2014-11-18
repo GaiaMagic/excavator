@@ -150,23 +150,38 @@ directive('validator', [
       };
     }
 
+    /**
+     * Options: the 'static' attribute to disable helper and editing
+     */
     return {
       restrict: 'E',
       link: function ($scope, $elem, $attrs) {
-        var tpl = [
-          '<div class="validator">',
-            '<textarea class="form-control monospace" rows="3" ',
-              'placeholder="JavaScript expression to pass validation" ',
-              'ng-model="', $attrs.for, '" ',
-              'ng-model-options="{ debounce: 500 }"></textarea>',
-            '<input type="text" class="form-control" ',
-              'placeholder="Help text" ',
-              'ng-model="', $attrs.for, 'Message">',
-            '<button type="button" class="btn btn-xs btn-default"',
-              'ng-click="$helper(this, \'', $attrs.for, '\')">',
-              'Open Helper...</button>',
-          '</div>'
-        ];
+        var tpl;
+        if (angular.isDefined($attrs.static)) {
+          tpl = [
+            '<div class="validator">',
+              '<pre><code ng-bind="', $attrs.for, '"></code></pre>',
+              '<input type="text" class="form-control" ',
+                'placeholder="Help text" ng-change="', $attrs.for,
+                  'Dirty = true" ng-model="', $attrs.for, 'Message">',
+            '</div>'
+          ];
+        } else {
+          tpl = [
+            '<div class="validator">',
+              '<textarea class="form-control monospace" rows="3" ',
+                'placeholder="JavaScript expression to pass validation" ',
+                'ng-model="', $attrs.for, '" ',
+                'ng-model-options="{ debounce: 500 }"></textarea>',
+              '<input type="text" class="form-control" ',
+                'placeholder="Help text" ',
+                'ng-model="', $attrs.for, 'Message">',
+              '<button type="button" class="btn btn-xs btn-default"',
+                'ng-click="$helper(this, \'', $attrs.for, '\')">',
+                'Open Helper...</button>',
+            '</div>'
+          ];
+        }
         $elem.html(tpl.join(''));
         $compile($elem.contents())($scope);
         $scope.$helper = helper;
