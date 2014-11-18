@@ -76,16 +76,16 @@ module.exports = {
     editor: [
       function () {
         var ret = [
-          '<div class="form-group">',
-            '<label class="col-sm-2 control-label">Label</label>',
-            '<div class="col-sm-10">',
+          '<div class="form-group col-md-12">',
+            '<label class="col-sm-12 col-12-2 control-label">Label</label>',
+            '<div class="col-sm-12 col-12-10">',
               '<input type="text" class="form-control" ',
                 'ng-model="data.label">',
             '</div>',
           '</div>',
-          '<div class="form-group">',
-            '<label class="col-sm-2 control-label">ENUM</label>',
-            '<div class="col-sm-10">',
+          '<div class="form-group col-md-12">',
+            '<label class="col-sm-12 col-12-2 control-label">ENUM</label>',
+            '<div class="col-sm-12 col-12-10">',
               '<enumerator for="data" attr="enum"></enumerator>',
             '</div>',
           '</div>'

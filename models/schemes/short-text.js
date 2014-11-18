@@ -40,10 +40,10 @@ module.exports = {
         };
         for (var name in fields) {
           ret = ret.concat([
-            '<div class="form-group">',
-              '<label class="col-sm-2 control-label">', fields[name],
+            '<div class="form-group col-md-6">',
+              '<label class="col-sm-3 control-label">', fields[name],
               '</label>',
-              '<div class="col-sm-10">',
+              '<div class="col-sm-9">',
                 '<input type="text" class="form-control" ',
                   'ng-model="data.', name, '">',
               '</div>',
@@ -51,9 +51,9 @@ module.exports = {
           ]);
         }
         ret = ret.concat([
-          '<div class="form-group">',
-            '<label class="col-sm-2 control-label">Validator</label>',
-            '<div class="col-sm-10">',
+          '<div class="form-group col-md-12">',
+            '<label class="col-sm-12 col-12-2 control-label">Validator</label>',
+            '<div class="col-sm-12 col-12-10">',
               '<validator for="data.validator"></validator>',
             '</div>',
           '</div>'
