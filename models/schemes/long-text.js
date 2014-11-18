@@ -19,11 +19,16 @@ module.exports = {
         this.data[this.scheme.model] = this.scheme.default;
       }
     ],
+    editorInit: [
+      function () {
+        this.scheme.rows = +this.scheme.rows || 3;
+      }
+    ],
     template: [
       '<div class="form-group">',
         '<label class="col-sm-2 control-label">{{ label }}</label>',
         '<div class="col-sm-10">',
-          '<textarea class="form-control" rows="3" ',
+          '<textarea class="form-control" rows="{{ rows || 3 }}" ',
             'ng-model="data.{{ model }}" ',
             'placeholder="{{ placeholder }}"></textarea>',
         '</div>',
@@ -35,6 +40,7 @@ module.exports = {
         var fields = {
           model: 'Model',
           label: 'Label',
+          rows: 'Rows',
           placeholder: 'Placeholder'
         };
         for (var name in fields) {
