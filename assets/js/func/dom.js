@@ -11,7 +11,9 @@ factory('func.dom.input.remember.state', [
       if (node === 'input' || node === 'textarea') {
         var all = $document[0].querySelectorAll(node);
         index = Array.prototype.indexOf.call(all, activeElement);
-        selectionStart = activeElement.selectionStart;
+        try {
+          selectionStart = activeElement.selectionStart;
+        } catch (e) {}
       }
       return {
         nodeName: node,
@@ -35,6 +37,7 @@ factory('func.dom.input.restore.state', [
           elems[state.nodeIndex].focus();
           $timeout(function () {
             var start = state.selectionStart;
+            if (start === -1) return;
             elems[state.nodeIndex].setSelectionRange(start, start);
           });
         }

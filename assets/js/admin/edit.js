@@ -95,6 +95,8 @@ controller('controller.control.form.edit', [
     }, scheme.schemeDefaults);
     this.form.content.scheme.push(schemeToAdd);
   };
+  this.add('hierarchy', '1.0')
+  this.add('button', '1.0')
 
   this.clear = function () {
     this.form.content.scheme.splice(0);
