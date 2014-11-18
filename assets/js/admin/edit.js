@@ -50,6 +50,8 @@ controller('controller.control.form.edit', [
     this.isNew = false;
   }
 
+  this.form.content.data = this.form.content.data || {};
+
   this.formdata = 'Form data will appear here once you submit the form.';
   this.submit = function () {
     this.formdata = angular.toJson(this.form.content.data, true);

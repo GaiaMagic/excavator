@@ -41,7 +41,8 @@ module.exports = {
         for (var name in fields) {
           ret = ret.concat([
             '<div class="form-group">',
-              '<label class="col-sm-2 control-label">', fields[name], '</label>',
+              '<label class="col-sm-2 control-label">', fields[name],
+              '</label>',
               '<div class="col-sm-10">',
                 '<input type="text" class="form-control" ',
                   'ng-model="data.', name, '">',

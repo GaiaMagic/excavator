@@ -37,6 +37,7 @@ gulp.task('watch', ['less', 'scripts'], function () {
     'models/**/*.js',
     'routes/**/*.js'
   ]).on('change', function (file) {
+    gulp.start('scripts');
     excavator.run();
     setTimeout(function () {
       excavator.notify(file);
@@ -61,7 +62,6 @@ gulp.task('watch', ['less', 'scripts'], function () {
     'vendors/**/*.js',
     'views/**/*.html'
   ]).on('change', function (file) {
-    gulp.start('scripts');
     excavator.notify(file);
   });
 });
