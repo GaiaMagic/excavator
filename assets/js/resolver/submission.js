@@ -40,6 +40,15 @@ constant('resolver.submission', function submissionResolver (service) {
         var data = [];
         var schemes = rawscheme.scheme;
         for (var i = 0; i < schemes.length; i++) {
+          if (angular.isArray(schemes[i].models)) {
+            schemes[i].models.forEach(function (model) {
+              data.push({
+                label: model.label,
+                value: rawdata[model.model]
+              });
+            });
+            continue;
+          }
           if (angular.isUndefined(rawdata[schemes[i].model])) continue;
           data.push({
             label: schemes[i].label || schemes[i].model,

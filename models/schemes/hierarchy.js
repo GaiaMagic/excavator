@@ -14,6 +14,55 @@ module.exports = {
   latest: '1.0',
 
   '1.0': {
+    validator: function (scheme, data) {
+      var errField;
+      var result = (function () {
+        if (typeof scheme !== 'object') return false;
+        if (typeof scheme.hierarchy !== 'string') return false;
+        if (!(scheme.models instanceof Array)) return false;
+
+        var hierarchies = require('../../lib/hierarchies/hierarchies');
+        var hierarchy;
+        try {
+          hierarchy = hierarchies.require(scheme.hierarchy);
+        } catch(e) {}
+        if (typeof hierarchy !== 'object') return false;
+
+        var current = hierarchy;
+        for (var i = 0; i < scheme.models.length; i++) {
+          var model = scheme.models[i].model;
+          errField = scheme.models[i].label;
+          if (typeof model !== 'string') return false;
+          var value = data[model];
+          if (typeof value !== 'string') return false;
+
+          if (current instanceof Array) {
+            return current.indexOf(value) > -1;
+          }
+
+          current = current[value];
+          if (typeof current !== 'object') return false;
+
+          if (current instanceof Array) {
+            if (current.length === 0) return true;
+          }
+        }
+
+        return false;
+      })();
+      var errorMsg;
+      if (result !== true) {
+        if (errField) {
+          errorMsg = 'Please choose one "' + errField + '".';
+        } else {
+          errorMsg = 'Internal error occurred while processing hierarchy.';
+        }
+      }
+      return {
+        result: result,
+        errorMsgs: errorMsg
+      };
+    },
     schemeDefaults: {},
     templateInit: [
       '$filter',

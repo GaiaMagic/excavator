@@ -4,6 +4,7 @@ var Q            = require('q');
 var FormRevision = require('./form-revision');
 var panic        = require('../lib/panic');
 var undecorate   = require('../lib/decorate').undecorate;
+var Schemes      = require('./schemes');
 
 var submissionSchema = new Schema({
   form:                { type: Schema.ObjectId, ref: 'Form' },
@@ -43,16 +44,45 @@ submissionSchema.pre('save', function (next) {
       var errorMsgs = [];
       for (var i = 0; i < schemes.length; i++) {
         var scheme = schemes[i];
-        if (!scheme.validator) continue;
-        var validator
-        validator = undecorate(scheme.validator);
-        if (!validator) {
-          validator = new Function('data', 'return ' + scheme.validator);
+
+        var serverScheme = Schemes[scheme.type];
+        if (typeof serverScheme !== 'object') {
+          errorMsgs.push('Scheme "' + scheme.type + '" does not exist.');
+          continue;
         }
-        var sd = data[scheme.model];
-        if (validator(sd) !== true) {
-          errorMsgs.push('Item "' + scheme.label + '" should ' +
-            scheme.validatorMessage + '.');
+        serverScheme = serverScheme[scheme.version];
+        if (typeof serverScheme !== 'object') {
+          errorMsgs.push('Scheme "' + scheme.type + '" with version "' +
+            scheme.version + '" does not exist.');
+          continue;
+        }
+
+        var validator = serverScheme.validator;
+        var validatorMessage = serverScheme.validatorMessage;
+
+        if (typeof scheme.validator === 'string' && scheme.validator) {
+          validator = undecorate(scheme.validator);
+          if (typeof validator !== 'function') {
+            validator = new Function('data', 'return ' + scheme.validator);
+          }
+        } else if (typeof scheme.validator === 'function') {
+          validator = scheme.validator;
+        }
+        if (typeof validator !== 'function') {
+          continue;
+        }
+        if (scheme.models instanceof Array) {
+          var validation = validator(scheme, data);
+          if (validation.result !== true) {
+            errorMsgs = errorMsgs.concat(validation.errorMsgs);
+          }
+        } else {
+          var sd = data[scheme.model];
+          if (validator(sd) !== true) {
+            validatorMessage = validatorMessage || scheme.validatorMessage;
+            errorMsgs.push('Item "' + scheme.label + '" should ' +
+              validatorMessage + '.');
+          }
         }
       }
       if (errorMsgs.length > 0) {

@@ -45,6 +45,16 @@ controller('controller.shared.submission.list', [
         var parsed = parse(rev.content);
         if (!angular.isArray(parsed.scheme)) continue;
         for (var j = 0; j < parsed.scheme.length; j++) {
+          if (angular.isArray(parsed.scheme[j].models)) {
+            parsed.scheme[j].models.forEach(function (model) {
+              models[model.label] = model.model;
+              LABELS[model.model] = model.label;
+              if (labels.indexOf(model.label) === -1) {
+                labels.push(model.label);
+              }
+            });
+            continue;
+          }
           var model = parsed.scheme[j].model;
           if (model.slice(0, 12) === 'undetermined') continue;
           var label = parsed.scheme[j].label || model;
