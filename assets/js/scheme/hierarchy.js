@@ -30,10 +30,21 @@ directive('hierarchy', [
         var models = formScheme.models;
         if (!models) return;
 
-        var url = $scope.$parent.hierarchy.location;
-        if (!url) return;
+        var hierarchy = $scope.$parent.hierarchy;
+        if (!hierarchy) return;
 
-        hierarchies.get(url).then(processHierarchy);
+        if (hierarchy.name === 'custom') {
+          try {
+            var custom = angular.fromJson(formScheme.hierarchyCustom);
+            if (angular.isObject(custom) && !angular.isArray(custom)) {
+              processHierarchy(custom);
+            }
+          } catch (e) {}
+        } else {
+          var url = $scope.$parent.hierarchy.location;
+          if (!url) return;
+          hierarchies.get(url).then(processHierarchy);
+        }
 
         function processHierarchy (data) {
           var slices = [];

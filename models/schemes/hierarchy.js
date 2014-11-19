@@ -24,7 +24,12 @@ module.exports = {
         var hierarchies = require('../../lib/hierarchies/hierarchies');
         var hierarchy;
         try {
-          hierarchy = hierarchies.require(scheme.hierarchy);
+          if (typeof scheme.hierarchyCustom === 'string') {
+            hierarchy = JSON.parse(scheme.hierarchyCustom);
+          }
+          if (typeof hierarchy !== 'object') {
+            hierarchy = hierarchies.require(scheme.hierarchy);
+          }
         } catch(e) {}
         if (typeof hierarchy !== 'object') return false;
 
@@ -65,41 +70,61 @@ module.exports = {
     },
     schemeDefaults: {},
     templateInit: [
-      '$filter',
       'misc.hierarchies',
-      function ($filter, hierarchies) {
-        if (this.scheme.hierarchy) {
-          this.hierarchy = $filter('filter')(hierarchies, {
-            name: this.scheme.hierarchy
-          }, true)[0];
+      function (hierarchies) {
+        if (this.scheme.hierarchy === 'custom') {
+          this.hierarchy = {
+            name: 'custom',
+            label: 'Custom',
+            data: [{}]
+          };
+        } else {
+          this.hierarchy = angular.copy(hierarchies.findByName(this.scheme.hierarchy));
         }
-        this.hierarchy = this.hierarchy || hierarchies[0];
       }
     ],
     editorInit: [
-      '$filter',
       'misc.hierarchies',
-      function ($filter, hierarchies) {
-        this.hierarchies = hierarchies;
-        if (this.data.hierarchy) {
-          this.hierarchy = $filter('filter')(hierarchies, {
-            name: this.data.hierarchy
-          }, true)[0];
+      function (hierarchies) {
+        this.presets = angular.copy(hierarchies);
+        var customPreset = {
+          name: 'custom',
+          label: 'Custom',
+          data: [{}]
+        };
+        this.presets.push(customPreset);
+
+        if (!this.hierarchy) {
+          var hierarchy = hierarchies.findByName(this.scheme.hierarchy);
+          if (hierarchy) {
+            this.hierarchy = angular.copy(hierarchy);
+          } else {
+            this.hierarchy = customPreset;
+            this.data.hierarchy = 'custom';
+            this.data.models = this.data.models || angular.copy([{}]);
+          }
         }
-        this.hierarchy = this.hierarchy || hierarchies[0];
-        this.data.hierarchy = this.hierarchy.name;
-        this.data.models = this.hierarchy.data
+
+        this.presetChanged = function () {
+          if (this.preset) {
+            this.hierarchy = hierarchies.findByName(this.preset.name);
+            this.data.hierarchy = this.preset.name;
+            delete this.data.hierarchyCustom;
+            this.data.models = angular.copy(this.preset.data);
+          }
+          this.preset = undefined;
+        };
       }
     ],
     template: [
       function () {
         return [
-          '<div hierarchy="hierarchy">',
+          '<div hierarchy>',
             '<div class="form-group" ng-if="!slices">',
               '<label class="col-sm-2 control-label" ',
                   'ng-bind="scheme.models[0].label"></label>',
               '<div class="col-sm-10">',
-                '<p class="form-control-static">Loading...</p>',
+                '<p class="form-control-static">No options available.</p>',
               '</div>',
             '</div>',
             '<div class="form-group" ng-repeat="slice in slices">',
@@ -121,22 +146,24 @@ module.exports = {
         var ret = [];
         ret = ret.concat([
           '<div class="form-group col-md-6">',
-            '<label class="col-sm-3 control-label">Type</label>',
+            '<label class="col-sm-3 control-label">Presets</label>',
             '<div class="col-sm-9">',
               '<select class="form-control" ng-options="',
-                'hier.name as hier.label for hier in hierarchies" ',
-                'ng-model="data.hierarchy"></select>',
+                'preset as preset.label group by preset.group for preset in presets" ',
+                'ng-model="preset" ng-change="presetChanged()">',
+                '<option value="">- Choose one preset -</option>',
+              '</select>',
             '</div>',
           '</div>',
           '<div class="form-group col-md-6">',
             '<label class="col-sm-3 control-label">Levels</label>',
             '<div class="col-sm-9">',
               '<input type="number" class="form-control" ',
-                'ng-model="hierarchy.data.length" min="1" max="10">',
+                'ng-model="data.models.length" min="1" max="10">',
             '</div>',
           '</div>'
         ]);
-        for (var i = 0; i < this.hierarchy.data.length; i++) {
+        for (var i = 0; i < this.data.models.length; i++) {
           ret = ret.concat([
             '<div class="form-group col-md-6">',
               '<label class="col-sm-3 control-label">Model #', i+1, '</label>',
@@ -154,6 +181,18 @@ module.exports = {
             '</div>'
           ]);
         }
+        ret = ret.concat([
+          '<div class="form-group col-md-12" ',
+            'ng-show="data.hierarchy === \'custom\'">',
+            '<label class="col-sm-12 col-12-2 control-label">Custom</label>',
+            '<div class="col-sm-12 col-12-10">',
+              '<textarea class="form-control monospace" rows="10" ',
+                'behave-editor ng-model="data.hierarchyCustom" ',
+                'ng-model-options="{ updateOn: \'blur\'}" ',
+                'placeholder="Type your JSON here..."></textarea>',
+            '</div>',
+          '</div>'
+        ]);
         return ret;
       }
     ]
