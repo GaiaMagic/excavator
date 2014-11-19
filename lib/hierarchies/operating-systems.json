@@ -1,0 +1,38 @@
+{
+  "Apple": {
+    "Apple II family": [ "Apple DOS", "Apple Pascal", "ProDOS", "GS/OS" ],
+    "Apple III": [ "Apple SOS" ],
+    "Apple Lisa":  [ "Lisa Workshop", "Lisa Operating System" ],
+    "Apple Macintosh": [ "Mac OS", "A/UX", "Rhapsody", "NeXTSTEP", "OS X", "OS X Server" ],
+    "Apple Network Server": [ "IBM AIX" ],
+    "Apple MessagePad": [ "Newton OS" ],
+    "iPhone, iPod Touch, iPad": [ "iOS" ],
+    "Embedded operating systems": [ "A/ROSE", "iPod software", "Unnamed NetBSD variant for Airport Extreme and Time Capsule" ]
+  },
+  "Microsoft": {
+    "Windows": [ "Windows 1.0", "Windows 2.0", "Windows 3.0", "Windows 3.1.x", "Windows for Workgroups 3.1", "Windows 3.2", "Windows for Workgroups 3.1.1", "Windows 95", "Windows 98", "Windows Millennium Edition" ],
+    "Windows NT": [ "Windows NT 3.1", "Windows NT 3.5", "Windows NT 3.51", "Windows NT 4.0", "Windows 2000", "Windows XP", "Windows Server 2003", "Windows Fundamentals for Legacy PCs", "Windows Vista", "Windows Azure", "Windows Home Server", "Windows Server 2008", "Windows 7", "Windows Server 2008 R2", "Windows Home Server 2011", "Windows Server 2012", "Windows 8", "Windows Phone 8", "Windows 8.1", "Windows Server 2012 R2", "Xbox One system software", "Windows Phone 8.1", "Windows 10" ],
+    "Windows CE": [ "Windows CE 3.0", "Windows CE 5.0", "Windows CE 6.0", "Windows Mobile", "Windows Phone 7", "Windows Phone 8", "Windows Phone 8.1" ],
+    "Xenix": [],
+    "MSX-DOS": [],
+    "MS-DOS": [],
+    "Singularity": [],
+    "Midori": [],
+    "Xbox 360 system software": []
+  },
+  "Linux": {
+    "Debian-based": [ "Debian", "64 Studio", "aptosid", "Astra Linux", "Bharat Operating System Solutions", "Canaima", "Corel Linux", "CrunchBang Linux", "Dreamlinux", "Elive", "Emdebian Grip", "Finnix", "gNewSense", "grml", "HandyLinux", "Instant WebKiosk", "Kali Linux", "Kanotix", "Knoppix", "Kurumin", "LEAF Project", "LiMux", "LinuxBBQ", "Linux Mint Debian Edition", "Maemo", "MEPIS", "MintPPC", "Musix GNU+Linux", "NepaLinux", "OpenZaurus", "Pardus", "Parsix", "Rxart", "Sacix", "Siduction", "Skolelinux", "SolusOS", "SolydXK", "SteamOS", "Sunwah Linux", "Symphony OS", "SalineOS", "TAILS", "Ubuntu", "Ulteo", "Univention Corporate Server", "Webconverger", "Vyatta" ],
+    "Knoppix-based": [ "Knoppix", "Damn Small Linux", "Feather Linux", "Hikarunix" ],
+    "Ubuntu-based": [ "Ubuntu", "Edubuntu", "Kubuntu", "Lubuntu", "Mythbuntu", "Ubuntu for Android", "Ubuntu GNOME", "UbuntuKylin", "Ubuntu Server", "Ubuntu Studio", "Ubuntu Touch", "Ubuntu TV", "Xubuntu", "Gobuntu", "Ubuntu JeOS", "Ubuntu Mobile", "Ubuntu Netbook Edition", "Aurora", "Baltix", "BackBox", "BackTrack", "BlankOn", "Buildix", "Bodhi Linux", "Cubuntu", "dyne:bolic", "EasyPeasy", "Element OS", "elementary OS", "Emmabuntüs", "GendBuntu", "Goobuntu", "gOS", "Guadalinex", "Iskolinux", "Joli OS", "HP Mi", "Impi Linux", "Karoshi", "Kuki Linux", "LiMux", "Linux Mint", "LinuxMCE", "LinuxTLE", "LliureX", "LOUD", "MAX", "Molinux", "Moon OS", "Nova", "Netrunner", "OpenGEU", "Peppermint OS", "Pinguy OS", "Poseidon Linux", "PUD", "Qimo 4 Kids", "Sabily", "Super OS", "Trisquel GNU/Linux", "TurnKey Linux Virtual Appliance Library", "UberStudent", "Vinux", "ZevenOS" ],
+    "Gentoo-based": [ "Gentoo", "Calculate Linux", "Chromium OS", "Funtoo Linux", "Gentoox", "Knopperdisk", "Pentoo", "Sabayon Linux", "SystemRescueCD", "Tin Hat Linux", "Ututo", "VidaLinux" ],
+    "Pacman-based": [ "Pacman", "Arch Linux", "Chakra Linux", "Frugalware Linux", "Antergos Linux", "ArchBang", "LinHES", "Manjaro Linux", "Parabola GNU/Linux-libre" ],
+    "RPM-based": [ "RPM", "aLinux", "ALT Linux", "Caldera OpenLinux", "cAos Linux", "Fedora", "Lycoris Desktop/LX", "Mageia", "Mandriva Linux", "openSUSE", "PCLinuxOS", "Red Hat Linux", "Turbolinux", "Vine Linux", "YOPER" ],
+    "Fedora-based": [ "Fedora", "Atomix", "Aurora SPARC Linux", "Berry Linux", "EduLinux", "EnGarde Secure Linux", "Fuduntu", "Hanthana", "K12LTSP", "Korora", "Linpus Linux", "MeeGo", "Moblin", "MythDora", "Network Security Toolkit", "Ojuba Linux", "Qubes OS", "Red Hat Enterprise Linux", "Russian Fedora Remix", "Trustix", "Xange", "Yellow Dog Linux" ],
+    "RHEL-based": [ "RHEL", "Asianux", "CentOS", "ClearOS", "Fermi Linux LTS", "Miracle Linux", "Oracle Linux", "Red Flag Linux", "Rocks Cluster Distribution", "Scientific Linux", "SME Server" ],
+    "Mandriva Linux-based": [ "Mandriva Linux", "Annvix", "TinyMe", "Trinity Rescue Kit", "Unity Linux" ],
+    "openSUSE-based": [ "openSUSE", "Cr OS Linux", "Linkat", "SUSE Linux Enterprise Desktop", "SUSE Linux Enterprise Server" ],
+    "Slackware-based": [ "Slackware", "Austrumi Linux", "BasicLinux", "Frugalware", "HostGIS", "KateOS", "MuLinux", "NimbleX", "Platypux", "Salix OS", "Sentry Firewall", "simpleLinux", "Slackintosh", "Slamd64", "Slax", "SuperGamer", "Topologilinux", "VectorLinux", "WinLinux", "Wolvix", "Zenwalk", "ZipSlack" ],
+    "Slax-based": [ "Slax", "DAVIX", "DNALinux", "Emnix", "Porteus" ],
+    "Others": [ "Alpine Linux", "Bifrost", "Billix", "Coyote Linux", "CRUX", "DD-WRT", "Devil-Linux", "Dragora GNU/Linux-Libre", "DSLinux", "ELinOS", "Familiar Linux", "fli4l", "Foresight Linux", "FREESCO", "GeeXboX", "GoboLinux", "IPCop", "Jlime", "Lightweight Portable Security (LPS)", "Lunar Linux", "MCC Interim Linux", "MkLinux", "Mobilinux", "MontaVista Linux", "NASLite", "Nitix", "OpenTV 5", "OpenWrt", "paldo", "PS2 Linux", "Puppy Linux", "rPath", "SliTaz GNU/Linux", "Smallfoot", "SmoothWall", "Softlanding Linux System", "Sorcerer", "Source Mage", "Stable Hybrid Release", "Thinstation", "Tinfoil Hat Linux", "Tiny Core Linux", "tomsrtbt", "Tor-ramdisk", "Yggdrasil Linux/GNU/X" ]
+  }
+}
