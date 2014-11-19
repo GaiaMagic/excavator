@@ -4,5 +4,6 @@ module.exports = {
   'multiple-choice': require('./multiple-choice'),
   'switch': require('./switch'),
   'date': require('./date'),
+  'hierarchy': require('./hierarchy'),
   'button': require('./button')
 };

@@ -1,5 +1,6 @@
 angular.module('excavator.scheme', [
-  'excavator.scheme.editor'
+  'excavator.scheme.editor',
+  'excavator.scheme.hierarchy'
 ]).
 
 service('schemes', ['func.error', function (error) {
