@@ -4,7 +4,7 @@ angular.module('excavator.scheme', [
 ]).
 
 service('schemes', ['func.error', function (error) {
-  this.all = require('../../../models/schemes/index.js');
+  this.all = require('./models/schemes/index.js');
 
   this.list = function () {
     var self = this;

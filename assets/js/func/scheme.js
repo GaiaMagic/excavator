@@ -1,10 +1,10 @@
 angular.module('excavator.func.scheme', []).
 
 constant('func.scheme.func.decorate',
-  require('../../../lib/decorate').decorate).
+  require('./lib/decorate').decorate).
 
 constant('func.scheme.func.undecorate',
-  require('../../../lib/decorate').undecorate).
+  require('./lib/decorate').undecorate).
 
 factory('func.scheme.parse', [
   'func.scheme.func.undecorate',

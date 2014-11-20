@@ -1,6 +1,6 @@
 angular.module('excavator.misc', []).
 
 constant('misc.hierarchies',
-  require('../../../lib/hierarchies/hierarchies.js')).
+  require('./lib/hierarchies/hierarchies.js')).
 
-constant('misc.statuses', require('../../../models/status.js'));
+constant('misc.statuses', require('./models/status.js'));
