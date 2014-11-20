@@ -78,8 +78,10 @@ function compile (src, dest) {
     })).
     pipe($.uglify()).
     pipe(jsFilter.restore()).
+    pipe($.rev()).
     pipe(assets.restore()).
     pipe($.useref()).
+    pipe($.revReplace()).
     pipe(gulp.dest(dest));
 }
 
@@ -95,12 +97,17 @@ gulp.task('compile:control', function () {
   return compile('views/control/index.html', 'dist/control');
 });
 
+gulp.task('compress', function () {
+  return gulp.src('dist/**').pipe($.gzip()).pipe(gulp.dest('dist'));
+});
+
 gulp.task('build', function (done) {
   runSequence(
     [ 'clean' ],
     [ 'dump:public',    'dump:manager',    'dump:control',
       'copy:json',      'copy:fonts',      'compile:less'    ],
     [ 'compile:public', 'compile:manager', 'compile:control' ],
+    [ 'compress' ],
     done
   );
 });
