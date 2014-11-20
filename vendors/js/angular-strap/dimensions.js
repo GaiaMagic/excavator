@@ -1,8 +1,15 @@
+/**
+ * angular-strap
+ * @version v2.1.3 - 2014-11-06
+ * @link http://mgcrea.github.io/angular-strap
+ * @author Olivier Louvignes (olivier@mg-crea.com)
+ * @license MIT License, http://www.opensource.org/licenses/MIT
+ */
 'use strict';
 
 angular.module('mgcrea.ngStrap.helpers.dimensions', [])
 
-  .factory('dimensions', function($document, $window) {
+  .factory('dimensions', ["$document", "$window", function($document, $window) {
 
     var jqLite = angular.element;
     var fn = {};
@@ -146,4 +153,4 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
 
     return fn;
 
-  });
+  }]);

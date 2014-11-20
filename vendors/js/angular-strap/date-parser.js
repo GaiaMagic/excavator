@@ -1,8 +1,15 @@
+/**
+ * angular-strap
+ * @version v2.1.3 - 2014-11-06
+ * @link http://mgcrea.github.io/angular-strap
+ * @author Olivier Louvignes (olivier@mg-crea.com)
+ * @license MIT License, http://www.opensource.org/licenses/MIT
+ */
 'use strict';
 
 angular.module('mgcrea.ngStrap.helpers.dateParser', [])
 
-.provider('$dateParser', function($localeProvider) {
+.provider('$dateParser', ["$localeProvider", function($localeProvider) {
 
   // define a custom ParseDate object to use instead of native Date 
   // to avoid date values wrapping when setting date component values
@@ -61,7 +68,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
     strict: false
   };
 
-  this.$get = function($locale, dateFilter) {
+  this.$get = ["$locale", "dateFilter", function($locale, dateFilter) {
 
     var DateParserFactory = function(config) {
 
@@ -131,8 +138,6 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
       };
 
       $dateParser.parse = function(value, baseDate, format) {
-        // check for date format special names
-        if(format) format = $locale.DATETIME_FORMATS[format] || format;
         if(angular.isDate(value)) value = dateFilter(value, format || $dateParser.$format);
         var formatRegex = format ? regExpForFormat(format) : regex;
         var formatSetMap = format ? setMapForFormat(format) : setMap;
@@ -182,23 +187,6 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         }
 
         return time;
-      };
-
-      /* Handle switch to/from daylight saving.
-      * Hours may be non-zero on daylight saving cut-over:
-      * > 12 when midnight changeover, but then cannot generate
-      * midnight datetime, so jump to 1AM, otherwise reset.
-      * @param  date  (Date) the date to check
-      * @return  (Date) the corrected date
-      *
-      * __ copied from jquery ui datepicker __
-      */
-      $dateParser.daylightSavingAdjust = function(date) {
-        if (!date) {
-          return null;
-        }
-        date.setHours(date.getHours() > 12 ? date.getHours() + 2 : 0);
-        return date;
       };
 
       // Private functions
@@ -254,6 +242,6 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
 
     return DateParserFactory;
 
-  };
+  }];
 
-});
+}]);
