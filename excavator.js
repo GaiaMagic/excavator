@@ -4,14 +4,22 @@ if (['development', 'production', 'test'].indexOf(environment) === -1) {
   environment = process.env.NODE_ENV;
 }
 
+var mongoDB = 'localhost';
+var mongoDBAddr = process.env.DB_PORT_27017_TCP_ADDR;
+var mongoDBPort = process.env.DB_PORT_27017_TCP_PORT;
+if (mongoDBAddr && mongoDBPort) {
+  mongoDB = mongoDBAddr + ':' + mongoDBPort;
+}
+mongoDB = 'mongodb://' + mongoDB + '/excavator'
+
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/excavator', function (err) {
+mongoose.connect(mongoDB, function (err) {
   if (err) {
     console.error('Failed to connect to MongoDB.',
                   'Have you started the service?');
     return;
   }
-  console.log('MongoDB is running.');
+  console.log('MongoDB is running: ' + mongoDB);
 
   var Admin = require('./models/admin');
   var defaultAdmin = 'caiguanhao';

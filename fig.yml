@@ -1,0 +1,21 @@
+# data-only container
+data:
+  image: busybox:latest
+  volumes:
+    - /data/db
+
+# mongodb
+db:
+  image: mongo:latest
+  volumes_from:
+    - data
+
+# node.js app
+app:
+  build: .
+  links:
+    - db
+  ports:
+    - '3000:3000'
+  environment:
+    NODE_ENV: production
