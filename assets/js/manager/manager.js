@@ -1,4 +1,5 @@
 angular.module('excavator.manager.manager', [
+  'angular-loading-bar',
   'ngRoute',
   'mgcrea.ngStrap.modal',
   'excavator.backend.manager',
