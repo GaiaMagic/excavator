@@ -8,7 +8,7 @@ directive('validator', [
     function helper (parentScope, attr) {
       var modal = $modal({
         title: 'Configure validator',
-        template: '/control/forms/validators.html'
+        template: '/forms/validators.html'
       });
       var scope = modal.$scope;
 

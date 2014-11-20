@@ -18,7 +18,7 @@ directive('enumerator', [
     function helper (parentScope, src, attr) {
       var modal = $modal({
         title: 'Configure enumerator',
-        template: '/control/forms/enumerators.html'
+        template: '/forms/enumerators.html'
       });
 
       var scope = modal.$scope;

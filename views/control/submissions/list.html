@@ -38,14 +38,14 @@
           <tr ng-repeat="sub in cssl.submissions">
             <td>
               <div class="pull-left" ng-if="!cssl.submissions.hasFormQuery">
-                <a href="/control/submissions?form={{ sub.form }}"><span
+                <a href="/submissions?form={{ sub.form }}"><span
                   class="glyphicon glyphicon-chevron-right"></span></a>&nbsp;
               </div>
               <div class="pull-left" ng-if="cssl.submissions.hasFormQuery">
-                <a href="/control/submissions"><span
+                <a href="/submissions"><span
                   class="glyphicon glyphicon-chevron-left"></span></a>&nbsp;
               </div>
-              <a class="block" href="/control/submissions/view/{{ sub._id }}">
+              <a class="block" href="/submissions/view/{{ sub._id }}">
                 <span ng-bind="sub.form_revision.title"></span>
                 [#<span ng-bind="sub.form_index + 1"></span>]
               </a>

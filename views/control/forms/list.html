@@ -40,16 +40,16 @@
           <tr ng-if="!ccfl.forms || !ccfl.forms.length">
             <td class="text-center">
               No forms has been created yet.
-              <a href="/control/forms/create">Create</a> one now.
+              <a href="/forms/create">Create</a> one now.
             </td>
           </tr>
           <tr ng-repeat="form in ccfl.forms">
             <td>
-              <a class="block" href="/control/forms/edit/{{ form._id }}"
+              <a class="block" href="/forms/edit/{{ form._id }}"
                 ng-bind="form.head.title || '(untitled)'"></a>
             </td>
             <td>
-              <a href="/control/submissions?form={{ form.slug }}"
+              <a href="/submissions?form={{ form.slug }}"
                 ng-bind="form.submissions" class="block"></a>
             </td>
             <td>

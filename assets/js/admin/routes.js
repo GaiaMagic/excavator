@@ -25,13 +25,13 @@ config([
   ) {
     $routeProvider.
 
-    when('/control/login', {
-      templateUrl: '/control/login.html',
+    when('/login', {
+      templateUrl: '/login.html',
       controller: 'controller.control.admin.login as ccal',
     }).
 
-    when('/control/forms/create', {
-      templateUrl: '/control/forms/edit.html',
+    when('/forms/create', {
+      templateUrl: '/forms/edit.html',
       controller: 'controller.control.form.edit as ccfe',
       resolve: {
         loggedIn: authNeededResolver,
@@ -41,8 +41,8 @@ config([
       }
     }).
 
-    when('/control/forms/edit/:formid', {
-      templateUrl: '/control/forms/edit.html',
+    when('/forms/edit/:formid', {
+      templateUrl: '/forms/edit.html',
       controller: 'controller.control.form.edit as ccfe',
       resolve: {
         loggedIn: authNeededResolver,
@@ -50,8 +50,8 @@ config([
       }
     }).
 
-    when('/control/forms', {
-      templateUrl: '/control/forms/list.html',
+    when('/forms', {
+      templateUrl: '/forms/list.html',
       controller: 'controller.control.form.list as ccfl',
       reloadOnSearch: true,
       resolve: {
@@ -60,8 +60,8 @@ config([
       }
     }).
 
-    when('/control/submissions', {
-      templateUrl: '/control/submissions/list.html',
+    when('/submissions', {
+      templateUrl: '/submissions/list.html',
       controller: 'controller.shared.submission.list as cssl',
       resolve: {
         loggedIn: authNeededResolver,
@@ -69,8 +69,8 @@ config([
       }
     }).
 
-    when('/control/submissions/view/:subid', {
-      templateUrl: '/control/submissions/view.html',
+    when('/submissions/view/:subid', {
+      templateUrl: '/submissions/view.html',
       controller: 'controller.shared.submission.view as cssv',
       resolve: {
         loggedIn: authNeededResolver,
@@ -79,8 +79,8 @@ config([
       }
     }).
 
-    when('/control/managers', {
-      templateUrl: '/control/managers/list.html',
+    when('/managers', {
+      templateUrl: '/managers/list.html',
       controller: 'controller.control.manager.list as ccml',
       resolve: {
         loggedIn: authNeededResolver,
@@ -89,7 +89,7 @@ config([
     }).
 
     otherwise({
-      redirectTo: '/control/forms'
+      redirectTo: '/forms'
     });
 
     $locationProvider.html5Mode(true);

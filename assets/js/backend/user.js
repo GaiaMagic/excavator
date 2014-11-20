@@ -2,20 +2,17 @@ angular.module('excavator.backend.user', []).
 
 constant('backend.user.scope', 'admins').
 constant('backend.user.token.name', 'admin.token').
-constant('backend.user.login.entry', '/control/login').
 constant('backend.user.enable.token.param', false).
 
 constant('backend.user.auth.needed.resolver', [
   '$location',
-  'backend.user.login.entry',
   'backend.user.login.status',
   function(
     $location,
-    login,
     status
   ) {
     return status.update().then(function (loggedIn) {
-      if (!loggedIn) $location.path(login);
+      if (!loggedIn) $location.path('/login');
       return loggedIn;
     });
   }
@@ -140,13 +137,12 @@ factory('backend.user.login', [
 ]).
 
 factory('backend.user.logout', [
-  'backend.user.login.entry',
   'backend.user.user.token.unset',
   'func.location.goto',
-  function (login, unset, goto) {
+  function (unset, goto) {
     return function () {
       unset();
-      goto(login);
+      goto('/login');
     };
   }
 ]);

@@ -109,7 +109,7 @@ factory('form.create.new', [
           create(form.title, content, undefined, slug).then(function (res) {
             alert('Successfully created ' + form.title + '. You will be ' +
               'redirected to the form edit page.', 'OK',
-              '/control/forms/edit/' + res.data.parent);
+              '/forms/edit/' + res.data.parent);
             deferred.resolve(res.data);
           }, function (err) {
             panic(err);

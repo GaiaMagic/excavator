@@ -20,8 +20,8 @@ config([
   ) {
     $routeProvider.
 
-    when('/manager/submissions', {
-      templateUrl: '/manager/submissions/list.html',
+    when('/submissions', {
+      templateUrl: '/submissions/list.html',
       controller: 'controller.shared.submission.list as cssl',
       resolve: {
         loggedIn: authNeededResolver,
@@ -29,23 +29,23 @@ config([
       }
     }).
 
-    when('/manager/submissions/view/:subid', {
-      templateUrl: '/manager/submissions/view.html',
+    when('/submissions/view/:subid', {
+      templateUrl: '/submissions/view.html',
       controller: 'controller.shared.submission.view as cssv',
       resolve: {
         loggedIn: authNeededResolver,
-        setStatusPrefix: isResolver('/backend/managers'),
+        setStatusPrefix: isResolver('/backends'),
         currentSubmission: submissionResolver('backend.manager.submission.get')
       }
     }).
 
-    when('/manager/login', {
-      templateUrl: '/manager/login.html',
+    when('/login', {
+      templateUrl: '/login.html',
       controller: 'controller.manager.manager.login as cmml',
     }).
 
     otherwise({
-      redirectTo: '/manager/submissions'
+      redirectTo: '/submissions'
     });
 
     $locationProvider.html5Mode(true);

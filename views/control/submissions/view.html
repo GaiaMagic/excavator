@@ -4,12 +4,12 @@
       <span ng-bind="cssv.sub.sub.form_index + 1"></span> /
       <span ng-bind="cssv.sub.sub.form.submissions"></span>
       <div class="btn-group btn-group-sm pull-right">
-        <a href="/control/submissions/view/{{ cssv.sub.sub.newer }}"
+        <a href="/submissions/view/{{ cssv.sub.sub.newer }}"
           class="btn btn-default" ng-class="{disabled: !cssv.sub.sub.newer}">
           <span class="glyphicon glyphicon-chevron-up"></span>
           Newer
         </a>
-        <a href="/control/submissions/view/{{ cssv.sub.sub.older }}"
+        <a href="/submissions/view/{{ cssv.sub.sub.older }}"
           class="btn btn-default" ng-class="{disabled: !cssv.sub.sub.older}">
           <span class="glyphicon glyphicon-chevron-down"></span>
           Older

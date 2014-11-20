@@ -8,11 +8,11 @@ config([
     $routeProvider.
 
     when('/', {
-      templateUrl: '/public/index.html'
+      templateUrl: '/index.html'
     }).
 
     when('/:formid/:formrevid?', {
-      templateUrl: '/public/form.html',
+      templateUrl: '/form.html',
       controller: 'controller.public.form as cpf',
       resolve: {
         currentForm: formResolver('public.public.forms')

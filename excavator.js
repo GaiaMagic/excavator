@@ -46,5 +46,5 @@ excavator.listen(excavator.get('port'), function () {
   console.log('Excavator is listening on port ' + excavator.get('port') +
     ' in ' + environment + ' mode.');
   console.log('Administrator interface: http://localhost:' +
-    excavator.get('port') + '/control/login')
+    excavator.get('port') + '/login')
 });

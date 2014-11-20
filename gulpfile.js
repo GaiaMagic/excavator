@@ -30,28 +30,28 @@ gulp.task('browserify', function () {
   browserify('assets/js/func/scheme.js', '.tmp/js/func');
 });
 
-function dump (src, dest, root) {
+function dump (src, dest) {
   return gulp.src(src).
     pipe($.replace(/^\s+/mg, '')).
     pipe($.angularTemplatecache('templates.js', {
-      root: root,
+      root: '/',
       module: 'excavator'
     })).
     pipe(gulp.dest(dest));
 }
 
 gulp.task('dump:public', function () {
-  return dump('views/public/*.html', '.tmp/public', '/public/');
+  return dump('views/public/*.html', '.tmp/public');
 });
 
 gulp.task('dump:manager', function () {
   var src = ['views/manager/**/*.html', '!views/manager/index.html'];
-  return dump(src, '.tmp/manager', '/manager/');
+  return dump(src, '.tmp/manager');
 });
 
 gulp.task('dump:control', function () {
   var src = ['views/control/**/*.html', '!views/control/index.html'];
-  return dump(src, '.tmp/control', '/control/');
+  return dump(src, '.tmp/control');
 });
 
 gulp.task('copy:json', function () {
