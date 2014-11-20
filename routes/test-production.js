@@ -1,9 +1,7 @@
 var path = require('path');
 var serveThisFileOnly = require('./serve-only');
 
-module.exports = {};
-
-module.exports.static = function productionConfigs (express, excavator, root) {
+module.exports = function productionConfigs (express, excavator, root) {
   express.static.mime.define({'text/javascript': ['js']});
   var dist = path.join(root, 'dist');
   excavator.use(function (req, res, next) {
@@ -18,9 +16,7 @@ module.exports.static = function productionConfigs (express, excavator, root) {
       express.static(path.join(dist, 'public')).apply(express.static, arguments);
     }
   });
-};
 
-module.exports.angular = function serverHTMLFiles (express, excavator, root) {
   excavator.use(function (req, res, next) {
     switch (req.hostname) {
     case 'control':

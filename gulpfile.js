@@ -112,13 +112,13 @@ gulp.task('build', function (done) {
   );
 });
 
-gulp.task('prod', function () {
+gulp.task('production-test', ['build'], function () {
   var gutil = require('gulp/node_modules/gulp-util');
   var errLogger = function () {
     gutil.log(gutil.colors.red.apply(undefined, arguments));
   };
   var excavator = $.express2('excavator.js', gutil.log, errLogger);
-  excavator.env = 'production';
+  excavator.env = 'test';
   excavator.run();
 });
 
