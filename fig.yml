@@ -16,6 +16,8 @@ app:
   links:
     - db
   ports:
-    - '3000:3000'
+    - '43210:3000'
   environment:
     NODE_ENV: production
+  volumes:
+    - /srv/excavator:/excavator/dist

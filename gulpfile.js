@@ -3,7 +3,7 @@ var runSequence = require('run-sequence');
 var $ = require('gulp-load-plugins')();
 
 gulp.task('clean', function (cb) {
-  require('del')(['dist', '.tmp'], cb);
+  require('del')(['dist/*', '.tmp'], cb);
 });
 
 gulp.task('less', function () {
