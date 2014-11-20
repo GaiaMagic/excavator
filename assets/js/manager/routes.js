@@ -6,6 +6,7 @@ angular.module('excavator.manager.routes', [
 config([
   '$routeProvider',
   '$locationProvider',
+  'backend.user.auth.success.resolver',
   'backend.user.auth.needed.resolver',
   'resolver.is',
   'resolver.submissions',
@@ -13,12 +14,17 @@ config([
   function(
     $routeProvider,
     $locationProvider,
+    authSuccessResolver,
     authNeededResolver,
     isResolver,
     submissionsResolver,
     submissionResolver
   ) {
     $routeProvider.
+
+    when('/', {
+      redirectTo: '/submissions'
+    }).
 
     when('/submissions', {
       templateUrl: '/submissions/list.html',
@@ -42,10 +48,13 @@ config([
     when('/login', {
       templateUrl: '/login.html',
       controller: 'controller.manager.manager.login as cmml',
+      resolve: {
+        loggedIn: authSuccessResolver
+      }
     }).
 
     otherwise({
-      redirectTo: '/submissions'
+      redirectTo: '/login'
     });
 
     $locationProvider.html5Mode(true);

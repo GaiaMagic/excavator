@@ -4,15 +4,29 @@ constant('backend.user.scope', 'admins').
 constant('backend.user.token.name', 'admin.token').
 constant('backend.user.enable.token.param', false).
 
-constant('backend.user.auth.needed.resolver', [
-  '$location',
+constant('backend.user.auth.success.resolver', [
   'backend.user.login.status',
+  'func.location.goto',
   function(
-    $location,
-    status
+    status,
+    goto
   ) {
     return status.update().then(function (loggedIn) {
-      if (!loggedIn) $location.path('/login');
+      if (loggedIn) goto('/');
+      return loggedIn;
+    });
+  }
+]).
+
+constant('backend.user.auth.needed.resolver', [
+  'backend.user.login.status',
+  'func.location.goto',
+  function(
+    status,
+    goto
+  ) {
+    return status.update().then(function (loggedIn) {
+      if (!loggedIn) goto('/login');
       return loggedIn;
     });
   }

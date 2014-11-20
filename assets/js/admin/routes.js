@@ -5,6 +5,7 @@ angular.module('excavator.routes', [
 config([
   '$routeProvider',
   '$locationProvider',
+  'backend.user.auth.success.resolver',
   'backend.user.auth.needed.resolver',
   'resolver.forms',
   'resolver.form',
@@ -15,6 +16,7 @@ config([
   function(
     $routeProvider,
     $locationProvider,
+    authSuccessResolver,
     authNeededResolver,
     formsResolver,
     formResolver,
@@ -25,9 +27,16 @@ config([
   ) {
     $routeProvider.
 
+    when('/', {
+      redirectTo: '/forms'
+    }).
+
     when('/login', {
       templateUrl: '/login.html',
       controller: 'controller.control.admin.login as ccal',
+      resolve: {
+        loggedIn: authSuccessResolver
+      }
     }).
 
     when('/forms/create', {
@@ -89,7 +98,7 @@ config([
     }).
 
     otherwise({
-      redirectTo: '/forms'
+      redirectTo: '/login'
     });
 
     $locationProvider.html5Mode(true);
