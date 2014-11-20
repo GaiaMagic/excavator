@@ -1,9 +1,16 @@
 angular.module('excavator.vendor.behave', []).
 
 directive('behaveEditor', [
-  function () {
+  '$window',
+  function ($window) {
     return {
       link: function ($scope, $element, $attrs) {
+        var Behave;
+        if (typeof require === 'undefined') {
+          Behave = $window.Behave;
+        } else {
+          Behave = require('./vendors/js/behave.js');
+        }
         new Behave({
           textarea: $element[0],
           replaceTab: true,
