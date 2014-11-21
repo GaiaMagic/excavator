@@ -1,0 +1,36 @@
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">
+        Manager</a>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li ng-class="{active: ifPathIs('/submissions')}">
+          <a href="/submissions">All Submissions</a>
+        </li>
+        <li ng-class="{active:
+          ifPathHas('/submissions/view')}"
+          ng-if="is('submission-view')">
+          <a href="/submissions/view/{{metaData.id}}">Viewing
+            {{metaData.title}}</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li ng-if="status.loggedIn" class="dropdown"
+          ng-class="{open: loggedInOpen}">
+          <a href ng-click="loggedInOpen=!loggedInOpen">Logged in as
+            <b ng-bind="status.username"></b>
+            <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href ng-click="logout();
+              loggedInOpen=false">Log out</a></li>
+          </ul>
+        </li>
+        <li ng-if="!status.loggedIn"
+          ng-class="{active: ifPathIs('/login')}">
+            <a href="/login">Log In</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

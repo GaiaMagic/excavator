@@ -1,64 +1,5 @@
 angular.module('excavator.form.access', []).
 
-run([
-  '$templateCache',
-  function (cache) {
-    cache.put('form.access.control.template', [
-      '<div class="modal" tabindex="-1" role="dialog">',
-        '<div class="modal-dialog">',
-          '<div class="modal-content">',
-            '<form class="form-horizontal" role="form" ng-submit="submit()">',
-              '<div class="modal-header" ng-show="title">',
-                '<button type="button" class="close" ',
-                  'ng-click="$hide()">&times;</button>',
-                '<h4 class="modal-title" ng-bind="title"></h4>',
-              '</div>',
-              '<div class="modal-body">',
-                '<div class="form-group">',
-                  '<label for="filter" class="col-sm-2 control-label">',
-                    'Managers</label>',
-                  '<div class="col-sm-10">',
-                    '<input type="text" class="form-control" id="filter" ',
-                      'placeholder="Enter keyword to filter managers" ',
-                      'ng-model="filter.username">',
-                  '</div>',
-                '</div>',
-                '<div class="form-group">',
-                  '<div class="col-sm-10 col-sm-offset-2">',
-                    '<div class="list-group">',
-                      '<a href class="list-group-item" ',
-                        'ng-click="manager.accessible=!manager.accessible" ',
-                        'ng-repeat="manager in managers | filter:filter">',
-                        '<span ng-bind="manager.username"></span>',
-                        '<span class="glyphicon glyphicon-ok pull-right" ',
-                          'ng-show="manager.accessible"></span>',
-                      '</a>',
-                    '</div>',
-                  '</div>',
-                '</div>',
-              '</div>',
-              '<div class="modal-footer">',
-                '<div class="btn-toolbar">',
-                  '<div class="btn-group">',
-                    '<button type="button" class="btn btn-default" ',
-                      'ng-click="set(managers, \'accessible\', true)">',
-                      'Select All</button>',
-                    '<button type="button" class="btn btn-default" ',
-                      'ng-click="set(managers, \'accessible\', false)">',
-                      'Deselect All</button>',
-                  '</div>',
-                  '<button type="submit" class="btn btn-info" ',
-                    'ng-disabled="!changed()">Save</button>',
-                '</div>',
-              '</div>',
-            '</form>',
-          '</div>',
-        '</div>',
-      '</div>'
-    ].join(''));
-  }
-]).
-
 factory('form.access.control', [
   '$injector',
   '$modal',
@@ -88,7 +29,7 @@ factory('form.access.control', [
       var modal;
       modal = $modal({
         title: 'Read-only access to ' + currentForm.title,
-        template: 'form.access.control.template'
+        template: '/forms/access.html'
       });
       var managers = $injector.invoke(managersResolver());
       var accessibles = {};

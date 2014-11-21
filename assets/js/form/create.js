@@ -1,63 +1,5 @@
 angular.module('excavator.form.create', []).
 
-run([
-  '$templateCache',
-  function (cache) {
-    cache.put('form.create.new.template', [
-      '<div class="modal" tabindex="-1" role="dialog">',
-        '<div class="modal-dialog">',
-          '<div class="modal-content">',
-            '<form class="form-horizontal" role="form" ng-submit="submit()">',
-              '<div class="modal-header" ng-show="title">',
-                '<button type="button" class="close" ',
-                  'ng-click="$hide()">&times;</button>',
-                '<h4 class="modal-title" ng-bind="title"></h4>',
-              '</div>',
-              '<div class="modal-body">',
-                '<div class="form-group" ng-if="form.parent">',
-                  '<label for="parent" class="col-sm-2 control-label">',
-                    'Parent</label>',
-                  '<div class="col-sm-10" ng-if="!parentDirty">',
-                    '<p class="form-control-static">',
-                      '<span ng-bind="form.parent"></span> ',
-                      '<a href ng-click="$parent.parentDirty=true">edit</a>',
-                    '</p>',
-                  '</div>',
-                  '<div class="col-sm-10" ng-if="parentDirty">',
-                    '<input type="text" class="form-control" id="parent" ',
-                      'placeholder="Parent of the form" ',
-                      'ng-model="form.parent">',
-                  '</div>',
-                '</div>',
-                '<div class="form-group">',
-                  '<label for="slug" class="col-sm-2 control-label">',
-                    'Slug</label>',
-                  '<div class="col-sm-10">',
-                    '<input type="text" class="form-control" id="slug" ',
-                      'placeholder="Slug of the form" ng-model="form.slug">',
-                  '</div>',
-                '</div>',
-                '<div class="form-group">',
-                  '<label for="title" class="col-sm-2 control-label">',
-                    'Title</label>',
-                  '<div class="col-sm-10">',
-                    '<input type="text" class="form-control" id="title" ',
-                      'placeholder="Title of the form" ng-model="form.title">',
-                  '</div>',
-                '</div>',
-              '</div>',
-              '<div class="modal-footer">',
-                '<button type="submit" class="btn btn-info" ',
-                  'ng-disabled="!form.title">Save</button>',
-              '</div>',
-            '</form>',
-          '</div>',
-        '</div>',
-      '</div>'
-    ].join(''));
-  }
-]).
-
 factory('form.create.new', [
   '$modal',
   '$q',
@@ -73,7 +15,7 @@ factory('form.create.new', [
       if (angular.isObject(currentForm)) {
         modal = $modal({
           title: 'Save Changes To ' + currentForm.title,
-          template: 'form.create.new.template'
+          template: '/forms/create.html'
         });
         modal.$scope.form = {
           title: currentForm.title,
@@ -99,7 +41,7 @@ factory('form.create.new', [
       } else {
         modal = $modal({
           title: 'Create New Form',
-          template: 'form.create.new.template'
+          template: '/forms/create.html'
         });
         modal.$scope.form = form;
         modal.$scope.submit = function () {
