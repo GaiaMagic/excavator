@@ -3,5 +3,17 @@
     "Username": "用户名",
     "Password": "密码",
     "Sign in": "登录"
+  },
+  "nav": {
+    "Form Generator Admin": "表格生成器管理界面",
+    "All Forms": "表格列表",
+    "Editing !!metaData.title!!": "正在编辑 !!metaData.title!!",
+    "Create": "创建表格",
+    "Submissions": "提交列表",
+    "Viewing !!metaData.title!!": "正在查看 !!metaData.title!!",
+    "Managers": "经理",
+    "Logged in as": "已登录：",
+    "Log out": "注销",
+    "Log In": "登录"
   }
 }

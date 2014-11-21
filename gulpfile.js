@@ -145,7 +145,8 @@ gulp.task('watch', function () {
   });
 
   gulp.watch([
-    'assets/**/*.js'
+    'assets/**/*.js',
+    'lib/i18n/*.json',
   ]).on('change', function (file) {
     gulp.start('browserify');
     excavator.notify(file);
