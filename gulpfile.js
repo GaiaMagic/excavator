@@ -28,6 +28,7 @@ gulp.task('browserify', function () {
   browserify('assets/js/scheme/scheme.js', '.tmp/js/scheme');
   browserify('assets/js/misc/misc.js', '.tmp/js/misc');
   browserify('assets/js/func/scheme.js', '.tmp/js/func');
+  browserify('assets/js/i18n/dictionary.js', '.tmp/js/i18n');
 });
 
 function dump (src, dest) {
@@ -172,4 +173,12 @@ gulp.task('default', function (done) {
     [ 'watch' ],
     done
   );
+});
+
+gulp.task('gettext', function () {
+  var gettext = require('a5r-i18n-gettext');
+  return gulp.src('views/**/*.html').pipe(gettext({
+    file: 'lib/i18n/dictionary.%code%.json',
+    langs: ['zh']
+  })).pipe(gulp.dest('.'));
 });

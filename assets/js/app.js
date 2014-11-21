@@ -4,6 +4,7 @@ angular.module('excavator', [
   'excavator.backend',
   'excavator.form',
   'excavator.func',
+  'excavator.i18n',
   'excavator.routes',
   'excavator.scheme',
   'excavator.vendor'

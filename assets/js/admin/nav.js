@@ -5,7 +5,8 @@ directive('navView', [
   'backend.user.login.status',
   'backend.user.logout',
   'func.panic.alert',
-  function ($location, status, logout, alert) {
+  'i18n.linguist',
+  function ($location, status, logout, alert, linguist) {
   return {
     scope: true,
     template: [
@@ -42,6 +43,12 @@ directive('navView', [
               '</li>',
             '</ul>',
             '<ul class="nav navbar-nav navbar-right">',
+              '<li><a class="btn-group btn-group-xs">',
+                '<button type="button" class="btn btn-default" ',
+                  'ng-class="{active: linguist.lang === key}" ',
+                  'ng-repeat="(key, lang) in linguist.langs" ng-bind="lang" ',
+                  'ng-click="linguist.setLang(key)"></button>',
+              '</a></li>',
               '<li ng-if="status.loggedIn" class="dropdown" ',
                 'ng-class="{open: loggedInOpen}">',
                 '<a href ng-click="loggedInOpen=!loggedInOpen">Logged in as ',
@@ -85,6 +92,7 @@ directive('navView', [
       $scope.$on('global-meta', function (e, data) {
         $scope.metaData = data;
       });
+      $scope.linguist = linguist;
     }
   };
 }]);
