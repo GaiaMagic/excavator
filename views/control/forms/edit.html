@@ -2,12 +2,11 @@
   <div class="main-pane">
     <form class="form-horizontal" ng-submit="ccfe.submit()">
       <h3>
-        <span>Preview</span>
+        <span i18n="forms::Preview"></span>
         <div class="btn-group btn-group-sm pull-right"
           ng-show="ccfe.form.content.scheme.length > 0">
-          <button class="btn btn-default" ng-click="ccfe.clearData()">
-            Clear Data
-          </button>
+          <button class="btn btn-default" ng-click="ccfe.clearData()"
+            i18n="forms::Clear Data"></button>
         </div>
       </h3>
       <div class="main-pane-content">
@@ -18,8 +17,7 @@
           <pre ng-bind="ccfe.schemedata"></pre>
         </div>
         <div ng-if="!ccfe.form.content.scheme ||
-          !ccfe.form.content.scheme.length">
-          Nothing to preview.
+          !ccfe.form.content.scheme.length" i18n="forms::Nothing to preview.">
         </div>
       </div>
     </form>
@@ -28,19 +26,20 @@
     <form class="form-form form-horizontal"
       historian="ccfe.form.content.scheme">
       <h3>
-        <span ng-if="!ccfe.isNew">Editing
+        <span ng-if="!ccfe.isNew">
+          <span i18n="forms::Editing"></span>
           <a href="/{{ ccfe.form.form.slug }}" target="_blank"
             ng-bind="ccfe.form.title"></a>
         </span>
-        <span ng-if="ccfe.isNew">Create New Form</span>
+        <span ng-if="ccfe.isNew" i18n="forms::Create New Form"></span>
         <div class="btn-group btn-group-sm pull-right">
           <button type="button" ng-click="undo(false)" class="btn btn-default"
-            ng-disabled="!undoable(false)">
+            ng-disabled="!undoable(false)" i18n="{title:'forms::Undo'}">
             <span class="glyphicon glyphicon-share-alt flip-horizontally">
             </span>
           </button>
           <button type="button" ng-click="undo(true)" class="btn btn-default"
-            ng-disabled="!undoable(true)">
+            ng-disabled="!undoable(true)" i18n="{title:'forms::Redo'}">
             <span class="glyphicon glyphicon-share-alt"></span>
           </button>
         </div>
@@ -49,7 +48,7 @@
           <button type="button" class="btn btn-default dropdown-toggle"
             ng-click="addButtonClicked=!addButtonClicked">
             <span class="glyphicon glyphicon-plus"></span>
-            Add <span class="caret"></span>
+            <span i18n="forms::Add"></span> <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu">
             <li ng-repeat="scheme in ccfe.schemes">
@@ -60,19 +59,20 @@
             <li class="divider"></li>
             <li>
               <a href ng-click="addButtonClicked=false; ccfe.clear()">
-                <span class="text-danger">Clear All</span></a>
+                <span class="text-danger" i18n="forms::Clear All"></span></a>
             </li>
           </ul>
         </div>
         <div class="btn-group btn-group-sm pull-right">
           <button class="btn btn-default" ng-click="ccfe.save()">
             <span class="glyphicon glyphicon-floppy-disk"></span>
-            Save
+            <span i18n="forms::Save"></span>
           </button>
           <button class="btn btn-default" ng-click="ccfe.access()"
             ng-if="!ccfe.isNew">
             <span class="glyphicon glyphicon-user"></span>
-            Access (<span ng-bind="ccfe.form.form.managers"></span>)
+            <span i18n="forms::Access"></span>
+            (<span ng-bind="ccfe.form.form.managers"></span>)
           </button>
         </div>
       </h3>
@@ -106,8 +106,8 @@
           scheme-render="editor"></div>
         <hr ng-repeat-end>
         <div ng-if="!ccfe.form.content.scheme ||
-          !ccfe.form.content.scheme.length">
-          To start, please click the 'Add' button, then select and add a scheme.
+          !ccfe.form.content.scheme.length" i18n="forms::To start, please click
+          the 'Add' button, then choose a scheme.">
         </div>
       </div>
     </form>

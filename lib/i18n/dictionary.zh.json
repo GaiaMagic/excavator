@@ -15,5 +15,30 @@
     "Logged in as": "已登录：",
     "Log out": "注销",
     "Log In": "登录"
+  },
+  "forms": {
+    "Managers": "经理",
+    "Enter keyword to filter managers": "输入关键词筛选经理",
+    "Select All": "全选",
+    "Select None": "全不选",
+    "Save": "保存",
+    "Parent": "属于",
+    "edit": "修改",
+    "Parent of the form": "修改自此表格",
+    "Slug": "短名",
+    "Slug of the form": "表格短名",
+    "Title": "标题",
+    "Title of the form": "表格标题",
+    "Preview": "预览",
+    "Clear Data": "清空输入",
+    "Nothing to preview.": "无可预览的内容。",
+    "Editing": "正在编辑",
+    "Create New Form": "创建新表格",
+    "Undo": "撤销",
+    "Redo": "重做",
+    "Add": "添加",
+    "Clear All": "清空",
+    "Access": "访问权",
+    "To start, please click the 'Add' button, then choose a scheme.": "请按“添加”按钮添加项目。"
   }
 }

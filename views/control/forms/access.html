@@ -9,11 +9,11 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label for="filter" class="col-sm-2 control-label">
-              Managers</label>
+            <label for="filter" class="col-sm-2 control-label"
+              i18n="forms::Managers"></label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="filter"
-                placeholder="Enter keyword to filter managers"
+                i18n="{placeholder: 'forms::Enter keyword to filter managers'}"
                 ng-model="filter.username">
             </div>
           </div>
@@ -35,14 +35,14 @@
           <div class="btn-toolbar">
             <div class="btn-group">
               <button type="button" class="btn btn-default"
-                ng-click="set(managers, 'accessible', true)">
-                Select All</button>
+                ng-click="set(managers, 'accessible', true)"
+                i18n="forms::Select All"></button>
               <button type="button" class="btn btn-default"
-                ng-click="set(managers, 'accessible', false)">
-                Deselect All</button>
+                ng-click="set(managers, 'accessible', false)"
+                i18n="forms::Select None"></button>
             </div>
             <button type="submit" class="btn btn-info"
-              ng-disabled="!changed()">Save</button>
+              ng-disabled="!changed()" i18n="forms::Save"></button>
           </div>
         </div>
       </form>

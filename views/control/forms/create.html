@@ -9,40 +9,43 @@
         </div>
         <div class="modal-body">
           <div class="form-group" ng-if="form.parent">
-            <label for="parent" class="col-sm-2 control-label">
-              Parent</label>
+            <label for="parent" class="col-sm-2 control-label"
+              i18n="forms::Parent"></label>
             <div class="col-sm-10" ng-if="!parentDirty">
               <p class="form-control-static">
                 <span ng-bind="form.parent"></span>
-                <a href ng-click="$parent.parentDirty=true">edit</a>
+                <a href ng-click="$parent.parentDirty=true"
+                  i18n="forms::edit"></a>
               </p>
             </div>
             <div class="col-sm-10" ng-if="parentDirty">
               <input type="text" class="form-control" id="parent"
-                placeholder="Parent of the form"
+                i18n="{placeholder: 'forms::Parent of the form'}"
                 ng-model="form.parent">
             </div>
           </div>
           <div class="form-group">
-            <label for="slug" class="col-sm-2 control-label">
-              Slug</label>
+            <label for="slug" class="col-sm-2 control-label"
+              i18n="forms::Slug"></label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="slug"
-                placeholder="Slug of the form" ng-model="form.slug">
+                i18n="{placeholder: 'forms::Slug of the form'}"
+                ng-model="form.slug">
             </div>
           </div>
           <div class="form-group">
-            <label for="title" class="col-sm-2 control-label">
-              Title</label>
+            <label for="title" class="col-sm-2 control-label"
+              i18n="forms::Title"></label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="title"
-                placeholder="Title of the form" ng-model="form.title">
+                i18n="{placeholder: 'forms::Title of the form'}"
+                ng-model="form.title">
             </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-info"
-            ng-disabled="!form.title">Save</button>
+            ng-disabled="!form.title" i18n="forms::Save"></button>
         </div>
       </form>
     </div>

@@ -28,6 +28,7 @@ service('i18n.linguist', [
 
     this.translate = function (src, scope) {
       if (!angular.isString(src)) return '(undefined)';
+      src = src.replace(/[\n\s]{1,}/g, ' ');
       var parts = src.split('::');
       var l = parts.length;
       var def = parts[l - 1];
