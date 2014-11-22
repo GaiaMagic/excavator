@@ -2,18 +2,19 @@
   <div class="col-xs-3">
     <form ng-submit="ccfl.filter()">
       <div class="panel panel-default">
-        <div class="panel-heading">Filter</div>
+        <div class="panel-heading" i18n="forms::Filter"></div>
         <table class="table">
           <tbody>
             <tr>
               <td>
                 <input type="text" class="form-control" ng-model="ccfl.manager"
-                  placeholder="Show only forms of this manager">
+                  i18n="{placeholder: 'forms::Show only forms of this manager'}">
               </td>
             </tr>
             <tr>
               <td>
-                <button class="btn btn-info" type="submit">Filter</button>
+                <button class="btn btn-info" type="submit"
+                  i18n="forms::Filter"></button>
               </td>
             </tr>
           </tbody>
@@ -23,24 +24,25 @@
   </div>
   <div class="col-xs-9">
     <div class="panel panel-default">
-      <div class="panel-heading">Forms</div>
+      <div class="panel-heading" i18n="forms::Forms"></div>
       <table class="table table-bordered table-hover">
         <thead ng-if="ccfl.forms && ccfl.forms.length">
           <tr>
-            <th>Name</th>
-            <th class="number">Submissions</th>
-            <th class="number">Managers</th>
-            <th class="number">Rev.</th>
-            <th class="date">Created At</th>
-            <th class="date">Updated At</th>
-            <th class="slug">Slug</th>
+            <th i18n="forms::Name"></th>
+            <th class="number" i18n="forms::Submissions"></th>
+            <th class="number" i18n="forms::Managers"></th>
+            <th class="number" i18n="forms::Rev."></th>
+            <th class="date" i18n="forms::Created At"></th>
+            <th class="date" i18n="forms::Updated At"></th>
+            <th class="slug" i18n="forms::Slug"></th>
           </tr>
         </thead>
         <tbody>
           <tr ng-if="!ccfl.forms || !ccfl.forms.length">
             <td class="text-center">
-              No forms has been created yet.
-              <a href="/forms/create">Create</a> one now.
+              <span i18n="forms::No forms has been created yet."></span>
+              <a href="/forms/create" class="btn btn-xs btn-info"
+                i18n="forms::Create"></a>
             </td>
           </tr>
           <tr ng-repeat="form in ccfl.forms">
@@ -62,7 +64,7 @@
             <td class="slug">
               <a class="block" href="/{{ form.slug }}" target="_blank">
                 <span class="glyphicon glyphicon-new-window"></span>
-                {{ form.slug }}
+                <span ng-bind="form.slug"></span>
               </a>
             </td>
           </tr>

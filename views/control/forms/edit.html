@@ -78,7 +78,7 @@
       </h3>
       <div class="main-pane-content">
         <h4 ng-repeat-start="scheme in ccfe.form.content.scheme">
-          <span ng-bind="scheme.label || '(no-label)'"></span>
+          <span i18n="forms::!! scheme.label || '(unlabeled)' !!"></span>
           <span class="label label-default label-type text-uppercase"
             ng-bind="scheme.type"></span>
           <div class="btn-group btn-group-xs pull-right">
