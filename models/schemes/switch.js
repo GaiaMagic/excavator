@@ -96,12 +96,13 @@ module.exports = {
       }
     ],
     editor: [
-      function () {
+      'i18n.translate',
+      function (tr) {
         var ret = [];
         var fields = {
-          model: 'Model',
-          label: 'Label',
-          default: 'Default'
+          model: tr('schemes::switch::Model'),
+          label: tr('schemes::switch::Label'),
+          default: tr('schemes::switch::Default')
         };
         for (var name in fields) {
           ret = ret.concat([
@@ -116,13 +117,15 @@ module.exports = {
         }
         ret = ret.concat([
           '<div class="form-group col-md-12">',
-            '<label class="col-sm-12 col-12-2 control-label">ENUM</label>',
+            '<label class="col-sm-12 col-12-2 control-label">',
+              tr('schemes::switch::ENUM'), '</label>',
             '<div class="col-sm-12 col-12-10">',
               '<enumerator for="data" attr="enum"></enumerator>',
             '</div>',
           '</div>',
           '<div class="form-group col-md-12">',
-            '<label class="col-sm-12 col-12-2 control-label">Validator</label>',
+            '<label class="col-sm-12 col-12-2 control-label">',
+              tr('schemes::switch::Validator'), '</label>',
             '<div class="col-sm-12 col-12-10">',
               '<validator for="data.validator"></validator>',
             '</div>',

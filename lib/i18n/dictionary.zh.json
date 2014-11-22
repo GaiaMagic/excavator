@@ -44,5 +44,63 @@
     "Form data will appear here once you submit the form.": "提交表格时将在此显示提交内容。",
     "Scheme data will appear here once you save the scheme.": "保存表格时将在此显示表格源码。",
     "No such item.": "项目不存在。"
+  },
+  "schemes": {
+    "button": {
+      "Label": "标签",
+      "ENUM": "枚举"
+    },
+    "date": {
+      "String": "字串",
+      "Timestamp": "时间戳",
+      "Date": "日期",
+      "ISO Date": "ISO日期",
+      "Model": "字段",
+      "Label": "标签",
+      "Placeholder": "提示",
+      "Default": "默认",
+      "Format": "格式",
+      "Type": "类型",
+      "Min": "始于",
+      "Max": "终于"
+    },
+    "hierarchy": {
+      "Custom": "自定",
+      "Presets": "预设",
+      "Choose one preset": "选择预设",
+      "Levels": "层数",
+      "Model": "字段",
+      "Label": "标签",
+      "Type your JSON here...": "在此输入JSON..."
+    },
+    "long-text": {
+      "Model": "字段",
+      "Label": "标签",
+      "Rows": "行数",
+      "Placeholder": "提示",
+      "Default": "默认",
+      "Validator": "验证"
+    },
+    "multiple-choice": {
+      "Model": "字段",
+      "Label": "标签",
+      "Default": "默认",
+      "ENUM": "枚举",
+      "Validator": "验证"
+    },
+    "short-text": {
+      "Model": "字段",
+      "Label": "标签",
+      "Placeholder": "提示",
+      "Default": "默认",
+      "Validator": "验证"
+    },
+    "switch": {
+      "Model": "字段",
+      "Label": "标签",
+      "Default": "默认",
+      "ENUM": "枚举",
+      "Validator": "验证"
+    }
   }
 }

@@ -90,6 +90,11 @@ directive('scheme', [
       }
 
       $scope.$on('update scheme view', updateSchemeView);
+      if ($attrs.schemeRender === 'editor') {
+        $scope.$on('language change', function () {
+          updateSchemeView();
+        });
+      }
       updateSchemeView();
     }
   };

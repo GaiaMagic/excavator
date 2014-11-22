@@ -191,7 +191,8 @@ gulp.task('gettext', function () {
   var gettext = require('a5r-i18n-gettext');
   return gulp.src([
     'views/**/*.html',
-    'assets/js/admin/edit.js'
+    'assets/js/admin/edit.js',
+    'models/schemes/*.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.%code%.json',
     langs: ['zh']

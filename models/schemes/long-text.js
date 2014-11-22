@@ -35,13 +35,14 @@ module.exports = {
       '</div>'
     ],
     editor: [
-      function () {
+      'i18n.translate',
+      function (tr) {
         var ret = [];
         var fields = {
-          model: 'Model',
-          label: 'Label',
-          rows: 'Rows',
-          placeholder: 'Placeholder'
+          model: tr('schemes::long-text::Model'),
+          label: tr('schemes::long-text::Label'),
+          rows: tr('schemes::long-text::Rows'),
+          placeholder: tr('schemes::long-text::Placeholder')
         };
         for (var name in fields) {
           ret = ret.concat([
@@ -56,14 +57,16 @@ module.exports = {
         }
         ret = ret.concat([
           '<div class="form-group col-md-12">',
-            '<label class="col-sm-12 col-12-2 control-label">Default</label>',
+            '<label class="col-sm-12 col-12-2 control-label">',
+              tr('schemes::long-text::Default'), '</label>',
             '<div class="col-sm-12 col-12-10">',
               '<textarea class="form-control" rows="3" ',
                 'ng-model="data.default"></textarea>',
             '</div>',
           '</div>',
           '<div class="form-group col-md-12">',
-            '<label class="col-sm-12 col-12-2 control-label">Validator</label>',
+            '<label class="col-sm-12 col-12-2 control-label">',
+              tr('schemes::long-text::Validator'), '</label>',
             '<div class="col-sm-12 col-12-10">',
               '<validator for="data.validator"></validator>',
             '</div>',

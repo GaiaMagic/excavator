@@ -74,17 +74,20 @@ module.exports = {
       }
     ],
     editor: [
-      function () {
+      'i18n.translate',
+      function (tr) {
         var ret = [
           '<div class="form-group col-md-12">',
-            '<label class="col-sm-12 col-12-2 control-label">Label</label>',
+            '<label class="col-sm-12 col-12-2 control-label">',
+              tr('schemes::button::Label'), '</label>',
             '<div class="col-sm-12 col-12-10">',
               '<input type="text" class="form-control" ',
                 'ng-model="data.label">',
             '</div>',
           '</div>',
           '<div class="form-group col-md-12">',
-            '<label class="col-sm-12 col-12-2 control-label">ENUM</label>',
+            '<label class="col-sm-12 col-12-2 control-label">',
+              tr('schemes::button::ENUM'), '</label>',
             '<div class="col-sm-12 col-12-10">',
               '<enumerator for="data" attr="enum"></enumerator>',
             '</div>',

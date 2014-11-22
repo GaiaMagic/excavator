@@ -22,20 +22,21 @@ module.exports = {
     ],
     editorInit: [
       '$filter',
-      function ($filter) {
+      'i18n.translate',
+      function ($filter, tr) {
         var format = 'yyyy-MM-dd';
         this.datetypes = [
           {
-            label: 'String',
+            label: tr('schemes::date::String'),
             value: 'string'
           }, {
-            label: 'Timestamp',
+            label: tr('schemes::date::Timestamp'),
             value: 'number'
           }, {
-            label: 'Date',
+            label: tr('schemes::date::Date'),
             value: 'date'
           }, {
-            label: 'ISO Date',
+            label: tr('schemes::date::ISO Date'),
             value: 'iso'
           }
         ];
@@ -92,14 +93,15 @@ module.exports = {
       }
     ],
     editor: [
-      function () {
+      'i18n.translate',
+      function (tr) {
         var ret = [];
         var fields = {
-          model: 'Model',
-          label: 'Label',
-          placeholder: 'Placeholder',
-          default: 'Default',
-          dateformat: 'Format'
+          model: tr('schemes::date::Model'),
+          label: tr('schemes::date::Label'),
+          placeholder: tr('schemes::date::Placeholder'),
+          default: tr('schemes::date::Default'),
+          dateformat: tr('schemes::date::Format')
         };
         for (var name in fields) {
           ret = ret.concat([
@@ -115,7 +117,8 @@ module.exports = {
         }
         ret = ret.concat([
           '<div class="form-group col-md-6">',
-            '<label class="col-sm-3 control-label">Type</label>',
+            '<label class="col-sm-3 control-label">',
+              tr('schemes::date::Type'), '</label>',
             '<div class="col-sm-9">',
               '<select class="form-control" ng-options="',
                 'item.value as item.label for item in datetypes" ',
@@ -125,7 +128,8 @@ module.exports = {
         ]);
         ret = ret.concat([
           '<div class="form-group col-md-6">',
-            '<label class="col-sm-3 control-label">Min</label>',
+            '<label class="col-sm-3 control-label">',
+              tr('schemes::date::Min'), '</label>',
             '<div class="col-sm-9">',
               '<input type="text" class="form-control" ',
                 'ng-model="data.datemin" bs-datepicker ',
@@ -135,7 +139,8 @@ module.exports = {
             '</div>',
           '</div>',
           '<div class="form-group col-md-6">',
-            '<label class="col-sm-3 control-label">Max</label>',
+            '<label class="col-sm-3 control-label">',
+              tr('schemes::date::Max'), '</label>',
             '<div class="col-sm-9">',
               '<input type="text" class="form-control" ',
                 'ng-model="data.datemax" bs-datepicker ',

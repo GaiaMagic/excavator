@@ -84,12 +84,13 @@ module.exports = {
       }
     ],
     editorInit: [
+      'i18n.translate',
       'misc.hierarchies',
-      function (hierarchies) {
+      function (tr, hierarchies) {
         this.presets = angular.copy(hierarchies);
         var customPreset = {
           name: 'custom',
-          label: 'Custom',
+          label: tr('schemes::hierarchy::Custom'),
           data: [{}]
         };
         this.presets.push(customPreset);
@@ -142,21 +143,26 @@ module.exports = {
       }
     ],
     editor: [
-      function () {
+      'i18n.translate',
+      function (tr) {
         var ret = [];
         ret = ret.concat([
           '<div class="form-group col-md-6">',
-            '<label class="col-sm-3 control-label">Presets</label>',
+            '<label class="col-sm-3 control-label">',
+              tr('schemes::hierarchy::Presets'), '</label>',
             '<div class="col-sm-9">',
-              '<select class="form-control" ng-options="',
-                'preset as preset.label group by preset.group for preset in presets" ',
+              '<select class="form-control" ng-options="preset as ',
+                'preset.label group by preset.group for preset in presets" ',
                 'ng-model="preset" ng-change="presetChanged()">',
-                '<option value="">- Choose one preset -</option>',
+                '<option value="">',
+                  '- ', tr('schemes::hierarchy::Choose one preset'), ' -',
+                '</option>',
               '</select>',
             '</div>',
           '</div>',
           '<div class="form-group col-md-6">',
-            '<label class="col-sm-3 control-label">Levels</label>',
+            '<label class="col-sm-3 control-label">',
+              tr('schemes::hierarchy::Levels'), '</label>',
             '<div class="col-sm-9">',
               '<input type="number" class="form-control" ',
                 'ng-model="data.models.length" min="1" max="10">',
@@ -166,14 +172,16 @@ module.exports = {
         for (var i = 0; i < this.data.models.length; i++) {
           ret = ret.concat([
             '<div class="form-group col-md-6">',
-              '<label class="col-sm-3 control-label">Model #', i+1, '</label>',
+              '<label class="col-sm-3 control-label">',
+                tr('schemes::hierarchy::Model'), ' #', i+1, '</label>',
               '<div class="col-sm-9">',
                 '<input type="text" class="form-control" ',
                   'ng-model="data.models[', i, '].model">',
               '</div>',
             '</div>',
             '<div class="form-group col-md-6">',
-              '<label class="col-sm-3 control-label">Label #', i+1, '</label>',
+              '<label class="col-sm-3 control-label">',
+                tr('schemes::hierarchy::Label'), ' #', i+1, '</label>',
               '<div class="col-sm-9">',
                 '<input type="text" class="form-control" ',
                   'ng-model="data.models[', i, '].label">',
@@ -184,12 +192,13 @@ module.exports = {
         ret = ret.concat([
           '<div class="form-group col-md-12" ',
             'ng-show="data.hierarchy === \'custom\'">',
-            '<label class="col-sm-12 col-12-2 control-label">Custom</label>',
+            '<label class="col-sm-12 col-12-2 control-label">',
+              tr('schemes::hierarchy::Custom'), '</label>',
             '<div class="col-sm-12 col-12-10">',
               '<textarea class="form-control monospace" rows="10" ',
                 'behave-editor ng-model="data.hierarchyCustom" ',
-                'ng-model-options="{ updateOn: \'blur\'}" ',
-                'placeholder="Type your JSON here..."></textarea>',
+                'ng-model-options="{ updateOn: \'blur\'}" placeholder="', tr(
+                'schemes::hierarchy::Type your JSON here...'), '"></textarea>',
             '</div>',
           '</div>'
         ]);

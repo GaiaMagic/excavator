@@ -30,13 +30,14 @@ module.exports = {
       '</div>'
     ],
     editor: [
-      function () {
+      'i18n.translate',
+      function (tr) {
         var ret = [];
         var fields = {
-          model: 'Model',
-          label: 'Label',
-          placeholder: 'Placeholder',
-          default: 'Default'
+          model: tr('schemes::short-text::Model'),
+          label: tr('schemes::short-text::Label'),
+          placeholder: tr('schemes::short-text::Placeholder'),
+          default: tr('schemes::short-text::Default')
         };
         for (var name in fields) {
           ret = ret.concat([
@@ -52,7 +53,8 @@ module.exports = {
         }
         ret = ret.concat([
           '<div class="form-group col-md-12">',
-            '<label class="col-sm-12 col-12-2 control-label">Validator</label>',
+            '<label class="col-sm-12 col-12-2 control-label">',
+              tr('schemes::short-text::Validator'), '</label>',
             '<div class="col-sm-12 col-12-10">',
               '<validator for="data.validator"></validator>',
             '</div>',
