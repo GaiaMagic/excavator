@@ -6,6 +6,6 @@ angular.module('excavator.vendor.angular.strap', [
 config([
   '$datepickerProvider',
   function ($datepickerProvider) {
-    $datepickerProvider.defaults.template = '/vendors/datepicker.html';
+    $datepickerProvider.defaults.template = '/datepicker.html';
   }
 ]);

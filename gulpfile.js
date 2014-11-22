@@ -42,16 +42,27 @@ function dump (src, dest) {
 }
 
 gulp.task('dump:public', function () {
-  return dump('views/public/*.html', '.tmp/public');
+  var src = [
+    'views/public/*.html',
+    'views/vendors/*.html'
+  ];
+  return dump(src, '.tmp/public');
 });
 
 gulp.task('dump:manager', function () {
-  var src = ['views/manager/**/*.html', '!views/manager/index.html'];
+  var src = [
+    'views/manager/**/*.html',
+    '!views/manager/index.html'
+  ];
   return dump(src, '.tmp/manager');
 });
 
 gulp.task('dump:control', function () {
-  var src = ['views/control/**/*.html', '!views/control/index.html'];
+  var src = [
+    'views/control/**/*.html',
+    '!views/control/index.html',
+    'views/vendors/*.html'
+  ];
   return dump(src, '.tmp/control');
 });
 

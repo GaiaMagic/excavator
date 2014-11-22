@@ -32,8 +32,9 @@ module.exports = function developmentConfigs (express, excavator) {
     views = path.join(root, 'dist');
   }
 
+  var Static = express.static;
+
   excavator.use(function (req, res, next) {
-    var Static = express.static;
     switch (req.hostname) {
     case 'control', 'localhost':
       return Static(path.join(views, 'control')).apply(Static, arguments);
@@ -43,6 +44,8 @@ module.exports = function developmentConfigs (express, excavator) {
       return Static(path.join(views, 'public')).apply(Static, arguments);
     }
   });
+
+  excavator.use(Static(path.join(views, 'vendors')));
 
   excavator.use(function (req, res, next) {
     switch (req.hostname) {
