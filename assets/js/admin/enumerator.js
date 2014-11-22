@@ -6,7 +6,8 @@ directive('enumerator', [
   '$parse',
   'func.array',
   'func.formatter.function.reindent',
-  function ($compile, $modal, $parse, funcArray, reindent) {
+  'i18n.translate',
+  function ($compile, $modal, $parse, funcArray, reindent, tr) {
     function stringORprimitive (string) {
       try {
         return new Function('return ' + string)();
@@ -17,7 +18,7 @@ directive('enumerator', [
 
     function helper (parentScope, src, attr) {
       var modal = $modal({
-        title: 'Configure enumerator',
+        title: tr('forms::Configure enumerator'),
         template: '/forms/enumerators.html'
       });
 
@@ -27,13 +28,13 @@ directive('enumerator', [
       var defaultValue = data[attr];
 
       scope.pages = [{
-        label: 'NUMBER RANGE',
+        label: tr('forms::NUMBER RANGE'),
         value: 'number'
       }, {
-        label: 'LIST',
+        label: tr('forms::LIST'),
         value: 'list'
       }, {
-        label: 'CUSTOM',
+        label: tr('forms::CUSTOM'),
         value: 'custom'
       }];
 
@@ -60,13 +61,16 @@ directive('enumerator', [
           try {
             var ret = new Function('return ' + scope.custom)();
             if (angular.isFunction(ret)) ret = ret();
-            if (!(ret instanceof Array)) throw 'Return value should be an array.';
+            if (!(ret instanceof Array)) {
+              throw tr('forms::Return value should be an array.');
+            }
           } catch (e) {
             scope.errors = e.message ? e.message : e;
             return;
           }
         }
-        scope.errors = 'No errors (as of ' + (new Date).toJSON() + ').';
+        scope.errors = tr('forms::No errors') +
+          ' (' + (new Date).toJSON() + ').';
       };
       scope.check();
 
@@ -187,7 +191,7 @@ directive('enumerator', [
             '<button type="button" class="btn btn-xs btn-default"',
               'ng-click="$enumerator(this, \'', $attrs.for,
               '\', \'', $attrs.attr, '\')">',
-              'Open Helper...</button>',
+              tr('forms::Open Helper...'), '</button>',
           '</div>'
         ];
         $elem.html(tpl.join(''));

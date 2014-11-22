@@ -11,7 +11,7 @@
           <div class="row">
             <div class="col-xs-6">
               <div class="panel panel-default">
-                <div class="panel-heading">Search results</div>
+                <div class="panel-heading" i18n="forms::Search results"></div>
                 <div class="list-group">
                   <div class="list-group-item">
                     <input class="form-control" type="text"
@@ -23,9 +23,9 @@
                     <a href="/forms/edit/{{ result._id }}"
                       target="_blank" ng-bind="result.title"></a>
                     <div class="pull-right">
-                      <button class="btn btn-xs btn-success"
+                      <button class="btn btn-xs btn-success" i18n="forms::Add"
                         type="button" ng-click="add(forms, result)">
-                        Add</button>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -33,21 +33,20 @@
             </div>
             <div class="col-xs-6">
               <div class="panel panel-default">
-                <div class="panel-heading">Current forms</div>
+                <div class="panel-heading" i18n="forms::Current forms"></div>
                 <div class="list-group">
                   <div class="list-group-item"
                     ng-if="!forms || !forms.length">
-                    <p>This manager will have no access to any form.
-                    </p>
+                    <p i18n="forms::This manager will have no access to any form."></p>
                   </div>
                   <div class="list-group-item"
                     ng-repeat="form in forms">
                     <a href="/forms/edit/{{ form._id }}"
                       target="_blank" ng-bind="form.title"></a>
                     <div class="pull-right">
-                      <button class="btn btn-xs btn-danger"
+                      <button class="btn btn-xs btn-danger" i18n="forms::Remove"
                         type="button" ng-click="remove(forms, $index)">
-                        Remove</button>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -58,7 +57,7 @@
         <div class="modal-footer">
           <div class="btn-toolbar">
             <button type="submit" class="btn btn-info"
-              ng-disabled="!changed()">Save</button>
+              ng-disabled="!changed()" i18n="forms::Save"></button>
           </div>
         </div>
       </form>

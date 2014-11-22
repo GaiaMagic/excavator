@@ -193,6 +193,8 @@ gulp.task('gettext', function () {
   return gulp.src([
     'views/**/*.html',
     'assets/js/admin/edit.js',
+    'assets/js/admin/enumerator.js',
+    'assets/js/admin/validator.js',
     'models/schemes/*.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.%code%.json',

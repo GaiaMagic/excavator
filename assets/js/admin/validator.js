@@ -3,11 +3,12 @@ angular.module('excavator.admin.validator', []).
 directive('validator', [
   '$compile',
   '$modal',
-  function ($compile, $modal) {
+  'i18n.translate',
+  function ($compile, $modal, tr) {
 
     function helper (parentScope, attr) {
       var modal = $modal({
-        title: 'Configure validator',
+        title: tr('forms::Configure validator'),
         template: '/forms/validators.html'
       });
       var scope = modal.$scope;
@@ -15,16 +16,16 @@ directive('validator', [
       var defaultString = parentScope.$eval(attr);
 
       scope.pages = [{
-        label: 'STRING',
+        label: tr('forms::STRING'),
         value: 'string'
       }, {
-        label: 'NUMERIC',
+        label: tr('forms::NUMERIC'),
         value: 'numeric'
       }, {
-        label: 'CHOICES',
+        label: tr('forms::CHOICES'),
         value: 'choices'
       }, {
-        label: 'BOOLEAN',
+        label: tr('forms::BOOLEAN'),
         value: 'boolean'
       }];
 
@@ -44,20 +45,20 @@ directive('validator', [
         scope.choices.splice(index + 1, 0, '');
       };
       scope.charsets = [{
-        label: 'Lowercase letters',
-        say: 'lowercase letters',
+        label: tr('forms::Lowercase letters'),
+        say: tr('forms::lowercase letters'),
         value: 'a-z'
       }, {
-        label: 'Uppercase letters',
-        say: 'uppercase letters',
+        label: tr('forms::Uppercase letters'),
+        say: tr('forms::uppercase letters'),
         value: 'A-Z'
       }, {
-        label: 'Chinese',
-        say: 'Chinese characters',
+        label: tr('forms::Chinese'),
+        say: tr('forms::Chinese characters'),
         value: '\\u4e00-\\u9fff'
       }, {
-        label: 'Numeric',
-        say: 'numbers',
+        label: tr('forms::Numeric'),
+        say: tr('forms::numbers'),
         value: '0-9'
       }];
       if (defaultString) {
@@ -126,7 +127,7 @@ directive('validator', [
         }
 
         if (scope.page === 'boolean') {
-          return 'be yes or no';
+          return tr('forms::be yes or no');
         }
 
         if (scope.page === 'numeric') {
@@ -161,24 +162,24 @@ directive('validator', [
           tpl = [
             '<div class="validator">',
               '<pre><code ng-bind="', $attrs.for, '"></code></pre>',
-              '<input type="text" class="form-control" ',
-                'placeholder="Help text" ng-change="', $attrs.for,
+              '<input type="text" class="form-control" placeholder="',
+                tr('forms::Help text'), '" ng-change="', $attrs.for,
                   'Dirty = true" ng-model="', $attrs.for, 'Message">',
             '</div>'
           ];
         } else {
           tpl = [
             '<div class="validator">',
-              '<textarea class="form-control monospace" rows="3" ',
-                'placeholder="JavaScript expression to pass validation" ',
+              '<textarea class="form-control monospace" rows="3" placeholder="',
+                tr('forms::JavaScript expression to pass validation'), '" ',
                 'ng-model="', $attrs.for, '" ',
                 'ng-model-options="{ debounce: 500 }"></textarea>',
               '<input type="text" class="form-control" ',
-                'placeholder="Help text" ',
+                'placeholder="', tr('forms::Help text'), '" ',
                 'ng-model="', $attrs.for, 'Message">',
               '<button type="button" class="btn btn-xs btn-default"',
                 'ng-click="$helper(this, \'', $attrs.for, '\')">',
-                'Open Helper...</button>',
+                tr('forms::Open Helper...'), '</button>',
             '</div>'
           ];
         }

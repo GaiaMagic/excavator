@@ -20,14 +20,14 @@
           <div class="form-group row">
             <div class="col-xs-6">
               <div class="input-group">
-                <div class="input-group-addon">MIN</div>
+                <div class="input-group-addon" i18n="forms::MIN"></div>
                 <input class="form-control" type="number"
                   placeholder="Minimum length" ng-model="min">
               </div>
             </div>
             <div class="col-xs-6">
               <div class="input-group">
-                <div class="input-group-addon">MAX</div>
+                <div class="input-group-addon" i18n="forms::MAX"></div>
                 <input class="form-control" type="number"
                   placeholder="Maximum length" ng-model="max">
               </div>
@@ -35,9 +35,9 @@
           </div>
           <div class="form-group">
             <div class="input-group">
-              <div class="input-group-addon">TPL</div>
-              <input class="form-control" type="text"
-                placeholder="Template for the label, use %d for the number"
+              <div class="input-group-addon" i18n="forms::TPL"></div>
+              <input class="form-control" type="text" i18n="{placeholder:
+                'forms::Template for the label, use %d for the number'}"
                 ng-model="tpl">
             </div>
           </div>
@@ -48,8 +48,8 @@
               placeholder="Text will be split into a list"></textarea>
           </div>
           <div class="form-group">
-            <button type="button" class="btn btn-default"
-              ng-click="multi2list(); showmulti = false">OK</button>
+            <button type="button" class="btn btn-default" i18n="forms::OK"
+              ng-click="multi2list(); showmulti = false"></button>
           </div>
         </form>
         <form class="form form-space" ng-show="page === 'list' && !showmulti">
@@ -88,18 +88,18 @@
             <div class="btn-group btn-group-xs">
               <button class="btn btn-default" ng-click="array.push(list, '')">
                 <span class="glyphicon glyphicon-plus"></span>
-                Add
+                <span i18n="forms::Add"></span>
               </button>
               <button class="btn btn-default" ng-click="showmulti=true">
                 <span class="glyphicon glyphicon-plus"></span>
-                From multiline text...
+                <span i18n="forms::From multiline text..."></span>
               </button>
             </div>
             <div class="btn-group btn-group-xs">
               <button class="btn btn-default"
                 ng-class="{active: customlabel}"
-                ng-click="customlabel=!customlabel">
-                Custom Label {{customlabel&&'enabled'||'disabled'}}
+                ng-click="customlabel=!customlabel"
+                i18n="forms::Custom Label !!customlabel&&'Enabled'||'Disabled'!!">
               </button>
             </div>
           </div>
@@ -107,13 +107,13 @@
         <form class="form form-space" ng-show="page === 'custom'">
           <div class="form-group">
             <textarea class="form-control monospace" rows="10"
-              behave-editor ng-model="custom"
-              placeholder="Type your JavaScript function or JSON here...">
+              behave-editor ng-model="custom" i18n="{placeholder:
+              'forms::Type your JavaScript function or JSON here...'}">
             </textarea>
           </div>
           <div class="form-group">
             <button type="button" class="btn btn-default"
-              ng-click="check()">Syntax check</button>
+              ng-click="check()" i18n="forms::Syntax check"></button>
           </div>
           <pre ng-bind="errors"></pre>
         </form>
@@ -121,7 +121,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default"
-          ng-click="ok()">OK, use this enumerator.</button>
+          ng-click="ok()" i18n="forms::OK, use this enumerator."></button>
       </div>
     </div>
   </div>
