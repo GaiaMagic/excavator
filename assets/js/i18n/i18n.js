@@ -45,6 +45,15 @@ service('i18n.linguist', [
   }
 ]).
 
+factory('i18n.translate', [
+  'i18n.linguist',
+  function (linguist) {
+    return function (string) {
+      return linguist.translate(string);
+    };
+  }
+]).
+
 directive('i18n', [
   'i18n.linguist',
   function (linguist) {

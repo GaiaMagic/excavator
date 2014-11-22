@@ -20,6 +20,7 @@ controller('controller.control.form.edit', [
   'func.scheme.parse',
   'func.panic',
   'currentForm',
+  'i18n.translate',
   function (
     $scope,
     $timeout,
@@ -37,14 +38,15 @@ controller('controller.control.form.edit', [
     save,
     parse,
     panic,
-    currentForm
+    currentForm,
+    tr
   ) {
   if (angular.isUndefined(currentForm)) {
     this.form = {};
     this.form.content = load('schemedata', parse) || {scheme:[]};
     this.isNew = true;
   } else if (currentForm === false) {
-    return panic('Form is corrupted.');
+    return panic(tr('forms::Form is corrupted.'));
   } else {
     this.form = currentForm;
     this.isNew = false;
@@ -52,7 +54,8 @@ controller('controller.control.form.edit', [
 
   this.form.content.data = this.form.content.data || {};
 
-  this.formdata = 'Form data will appear here once you submit the form.';
+  this.formdata = tr('forms::Form data will appear here ' +
+    'once you submit the form.');
   this.submit = function () {
     this.formdata = angular.toJson(this.form.content.data, true);
   };
@@ -64,7 +67,8 @@ controller('controller.control.form.edit', [
     }
   };
 
-  this.schemedata = 'Scheme data will appear here once you save the scheme.';
+  this.schemedata = tr('forms::Scheme data will appear here ' +
+    'once you save the scheme.');
   this.save = function () {
     var self = this;
     createNew(currentForm, this.form.content).then(function () {
@@ -88,7 +92,7 @@ controller('controller.control.form.edit', [
 
   this.add = function (name, version) {
     var scheme = schemes.get(name, version);
-    if (angular.isUndefined(scheme)) return panic('No such item.');
+    if (angular.isUndefined(scheme)) return panic(tr('forms::No such item.'));
     var schemeToAdd = angular.extend({
       type: name,
       version: version

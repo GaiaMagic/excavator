@@ -39,6 +39,10 @@
     "Add": "添加",
     "Clear All": "清空",
     "Access": "访问权",
-    "To start, please click the 'Add' button, then choose a scheme.": "请按“添加”按钮添加项目。"
+    "To start, please click the 'Add' button, then choose a scheme.": "请按“添加”按钮添加项目。",
+    "Form is corrupted.": "表格已损毁。",
+    "Form data will appear here once you submit the form.": "提交表格时将在此显示提交内容。",
+    "Scheme data will appear here once you save the scheme.": "保存表格时将在此显示表格源码。",
+    "No such item.": "项目不存在。"
   }
 }
