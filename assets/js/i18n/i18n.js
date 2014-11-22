@@ -4,9 +4,11 @@ angular.module('excavator.i18n', [
 
 service('i18n.linguist', [
   '$rootScope',
+  'func.localstorage.load',
+  'func.localstorage.save',
   'i18n.dictionary',
-  function ($rootScope, dictionary) {
-    this.lang = 'zh';
+  function ($rootScope, load, save, dictionary) {
+    this.lang = load('lang') || 'zh';
     this.dict = dictionary(this.lang);
 
     this.langs = {
@@ -17,10 +19,12 @@ service('i18n.linguist', [
     this.setLang = function (langcode) {
       this.lang = langcode;
       this.dict = dictionary(this.lang);
+      save('lang', this.lang);
       $rootScope.$broadcast('language change');
     };
 
     this.transform = function (text, scope) {
+      if (!scope) return text;
       return text.replace(/!!(.+?)!!/g, function (p0, p1) {
         return scope.$eval(p1);
       });
@@ -31,7 +35,7 @@ service('i18n.linguist', [
       src = src.replace(/[\n\s]{1,}/g, ' ');
       var parts = src.split('::');
       var l = parts.length;
-      var def = parts[l - 1];
+      var def = this.transform(parts[l - 1], scope);
       var current = this.dict;
       for (var i = 0; i < l + 1; i++) {
         if (angular.isUndefined(current)) return def;
