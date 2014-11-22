@@ -44,6 +44,7 @@ function dump (src, dest) {
 gulp.task('dump:public', function () {
   var src = [
     'views/public/*.html',
+    '!views/public/index.html',
     'views/vendors/*.html'
   ];
   return dump(src, '.tmp/public');
@@ -98,7 +99,7 @@ function compile (src, dest) {
 }
 
 gulp.task('compile:public', function () {
-  return compile('views/index.html', 'dist/public');
+  return compile('views/public/index.html', 'dist/public');
 });
 
 gulp.task('compile:manager', function () {

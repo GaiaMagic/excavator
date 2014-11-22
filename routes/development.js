@@ -36,7 +36,8 @@ module.exports = function developmentConfigs (express, excavator) {
 
   excavator.use(function (req, res, next) {
     switch (req.hostname) {
-    case 'control', 'localhost':
+    case 'control':
+    case 'localhost':
       return Static(path.join(views, 'control')).apply(Static, arguments);
     case 'manager':
       return Static(path.join(views, 'manager')).apply(Static, arguments);
@@ -49,7 +50,8 @@ module.exports = function developmentConfigs (express, excavator) {
 
   excavator.use(function (req, res, next) {
     switch (req.hostname) {
-    case 'control', 'localhost':
+    case 'control':
+    case 'localhost':
       var controlIndex = path.join(views, 'control', 'index.html');
       return serveThisFileOnly(controlIndex).apply(express, arguments);
     case 'manager':

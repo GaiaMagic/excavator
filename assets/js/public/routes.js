@@ -8,7 +8,7 @@ config([
     $routeProvider.
 
     when('/', {
-      templateUrl: '/index.html'
+      templateUrl: '/nothing.html'
     }).
 
     when('/:formid/:formrevid?', {

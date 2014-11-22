@@ -1,10 +1,68 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="nothing">
-        Nothing to show here.
-        <a href="https://youyanchu.com/">Move on</a>.
-      </div>
-    </div>
-  </div>
-</div>
+<!DOCTYPE html>
+<html ng-app="excavator">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <!-- @exclude -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/bootstrap-theme.css">
+  <link rel="stylesheet" href="/css/public.css">
+  <!-- @endexclude -->
+  <!-- build:css(vendors) /0.vendors.css -->
+  <!-- @if build=true !>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+  <!-- @endif -->
+  <!-- endbuild -->
+  <!-- build:css(.tmp) /1.excavator.css -->
+  <!-- @if build=true !>
+  <link rel="stylesheet" href="/css/public.css">
+  <!-- @endif -->
+  <!-- endbuild -->
+  <base href="/">
+</head>
+
+<body>
+  <div ng-view></div>
+
+  <!-- @exclude -->
+  <script src="/js/angular.js"></script>
+  <script src="/js/angular-route.js"></script>
+  <!-- @endexclude -->
+  <!-- build:js(vendors) /0.vendors.js -->
+  <!-- @if build=true !>
+  <script src="/js/angular.min.js"></script>
+  <script src="/js/angular-route.min.js"></script>
+  <!-- @endif -->
+  <!-- endbuild -->
+  <!-- build:js(vendors) /1.vendors.js -->
+  <script src="/js/angular-strap/dimensions.js"></script>
+  <script src="/js/angular-strap/modal.js"></script>
+  <script src="/js/angular-strap/tooltip.js"></script>
+  <script src="/js/angular-strap/date-parser.js"></script>
+  <script src="/js/angular-strap/datepicker.js"></script>
+  <!-- endbuild -->
+  <!-- build:js({assets,.tmp}) /2.excavator.js -->
+  <script src="/js/func/enumerate.js"></script>
+  <script src="/js/func/error.js"></script>
+  <script src="/js/func/panic.js"></script>
+  <script src="/js/func/scheme.js"></script>
+  <script src="/js/misc/misc.js"></script>
+  <script src="/js/public.js"></script>
+  <script src="/js/public/form.js"></script>
+  <script src="/js/public/public.js"></script>
+  <script src="/js/public/routes.js"></script>
+  <script src="/js/resolver/form.js"></script>
+  <script src="/js/scheme/scheme.js"></script>
+  <script src="/js/scheme/editor.js"></script>
+  <script src="/js/scheme/hierarchy.js"></script>
+  <!-- @if build=true !>
+  <script src="/public/templates.js"></script>
+  <!-- @endif -->
+  <!-- endbuild -->
+</body>
+
+</html>
