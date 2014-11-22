@@ -5,8 +5,9 @@ data:
     - /data/db
 
 # mongodb
+# remember to also update excavator.js if you change this service name
 db:
-  image: mongo:latest
+  image: mongo:2.6.5
   volumes_from:
     - data
 
@@ -17,7 +18,5 @@ app:
     - db
   ports:
     - '43210:3000'
-  environment:
-    NODE_ENV: production
   volumes:
     - /srv/excavator:/excavator/dist

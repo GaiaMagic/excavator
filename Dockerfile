@@ -12,8 +12,8 @@ ADD . /excavator
 
 WORKDIR /excavator
 
+RUN gulp build
+
 ENV NODE_ENV production
 
-EXPOSE 3000
-
-CMD gulp build && node excavator.js
+CMD node excavator.js
