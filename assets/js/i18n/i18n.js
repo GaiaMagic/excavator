@@ -53,7 +53,12 @@ factory('i18n.translate', [
   '$interpolate',
   'i18n.linguist',
   function ($interpolate, linguist) {
-    return function (string, context) {
+    return function (string, context, options) {
+      if (angular.isObject(options)) {
+        if (options.fake) {
+          return string;
+        }
+      }
       var translated = linguist.translate(string);
       if (context) {
         translated = $interpolate(translated)(context);

@@ -54,8 +54,8 @@ controller('controller.control.form.edit', [
 
   this.form.content.data = this.form.content.data || {};
 
-  this.formdata = tr('forms::Form data will appear here ' +
-    'once you submit the form.');
+  this.def_formdata = tr('forms::Form data will appear here ' +
+    'once you submit the form.', undefined, { fake: true });
   this.submit = function () {
     this.formdata = angular.toJson(this.form.content.data, true);
   };
@@ -67,8 +67,8 @@ controller('controller.control.form.edit', [
     }
   };
 
-  this.schemedata = tr('forms::Scheme data will appear here ' +
-    'once you save the scheme.');
+  this.def_schemedata = tr('forms::Scheme data will appear here ' +
+    'once you save the scheme.', undefined, { fake: true });
   this.save = function () {
     var self = this;
     createNew(currentForm, this.form.content).then(function () {

@@ -13,8 +13,8 @@
         <div scheme="scheme" scheme-data="ccfe.form.content.data"
           ng-repeat="scheme in ccfe.form.content.scheme"></div>
         <div ng-if="ccfe.form.content.scheme.length > 0">
-          <pre ng-bind="ccfe.formdata"></pre>
-          <pre ng-bind="ccfe.schemedata"></pre>
+          <pre ng-bind="ccfe.formdata || ccfe.tr(ccfe.def_formdata)"></pre>
+          <pre ng-bind="ccfe.schemedata || ccfe.tr(ccfe.def_schemedata)"></pre>
         </div>
         <div ng-if="!ccfe.form.content.scheme ||
           !ccfe.form.content.scheme.length" i18n="forms::Nothing to preview.">
