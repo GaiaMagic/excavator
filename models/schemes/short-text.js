@@ -1,7 +1,7 @@
 module.exports = {
   name: 'short-text',
 
-  title: 'Short Text',
+  title: 'Short Text', /* tr('schemes::Short Text') */
 
   maintainers: [
     'caiguanhao <caiguanhao@gmail.com>'

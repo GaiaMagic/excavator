@@ -1,7 +1,7 @@
 module.exports = {
   name: 'date',
 
-  title: 'Date',
+  title: 'Date', /* tr('schemes::Date') */
 
   maintainers: [
     'caiguanhao <caiguanhao@gmail.com>'

@@ -1,7 +1,7 @@
 module.exports = {
   name: 'switch',
 
-  title: 'Switch',
+  title: 'Switch', /* tr('schemes::Switch') */
 
   maintainers: [
     'caiguanhao <caiguanhao@gmail.com>'

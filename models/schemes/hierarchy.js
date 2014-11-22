@@ -1,7 +1,7 @@
 module.exports = {
   name: 'hierarchy',
 
-  title: 'Hierarchy',
+  title: 'Hierarchy', /* tr('schemes::Hierarchy') */
 
   maintainers: [
     'caiguanhao <caiguanhao@gmail.com>'

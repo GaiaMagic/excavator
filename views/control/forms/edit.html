@@ -54,7 +54,7 @@
             <li ng-repeat="scheme in ccfe.schemes">
               <a href ng-click="$parent.addButtonClicked=false;
                 ccfe.add(scheme.name, scheme.version)"
-                ng-bind="scheme.title"></a>
+                ng-bind="ccfe.tr('schemes::' + scheme.title)"></a>
             </li>
             <li class="divider"></li>
             <li>

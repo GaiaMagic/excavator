@@ -106,6 +106,7 @@ controller('controller.control.form.edit', [
   };
 
   this.array = funcArray;
+  this.tr = tr;
 
   var self = this;
   var debounce;

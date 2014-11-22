@@ -1,7 +1,7 @@
 module.exports = {
   name: 'button',
 
-  title: 'Button',
+  title: 'Button', /* tr('schemes::Button') */
 
   maintainers: [
     'caiguanhao <caiguanhao@gmail.com>'

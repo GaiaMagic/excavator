@@ -99,10 +99,12 @@
     "JavaScript expression to pass validation": "用于验证的 JavaScript 表达式"
   },
   "schemes": {
+    "Button": "按钮",
     "button": {
       "Label": "标签",
       "ENUM": "枚举"
     },
+    "Date": "日期",
     "date": {
       "String": "字串",
       "Timestamp": "时间戳",
@@ -117,6 +119,7 @@
       "Min": "始于",
       "Max": "终于"
     },
+    "Hierarchy": "树形下拉选项",
     "hierarchy": {
       "Custom": "自定",
       "Presets": "预设",
@@ -126,6 +129,7 @@
       "Label": "标签",
       "Type your JSON here...": "在此输入JSON..."
     },
+    "Long Text": "多行文字",
     "long-text": {
       "Model": "字段",
       "Label": "标签",
@@ -134,6 +138,7 @@
       "Default": "默认",
       "Validator": "验证"
     },
+    "Multiple Choice": "下拉选项",
     "multiple-choice": {
       "Model": "字段",
       "Label": "标签",
@@ -141,6 +146,7 @@
       "ENUM": "枚举",
       "Validator": "验证"
     },
+    "Short Text": "单行文字",
     "short-text": {
       "Model": "字段",
       "Label": "标签",
@@ -148,6 +154,7 @@
       "Default": "默认",
       "Validator": "验证"
     },
+    "Switch": "横向选项",
     "switch": {
       "Model": "字段",
       "Label": "标签",

@@ -1,7 +1,7 @@
 module.exports = {
   name: 'multiple-choice',
 
-  title: 'Multiple Choice',
+  title: 'Multiple Choice', /* tr('schemes::Multiple Choice') */
 
   maintainers: [
     'caiguanhao <caiguanhao@gmail.com>'

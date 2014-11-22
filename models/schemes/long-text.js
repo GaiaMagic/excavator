@@ -1,7 +1,7 @@
 module.exports = {
   name: 'long-text',
 
-  title: 'Long Text',
+  title: 'Long Text', /* tr('schemes::Long Text') */
 
   maintainers: [
     'caiguanhao <caiguanhao@gmail.com>'
