@@ -123,7 +123,7 @@ directive('validator', [
           var ret = scope.choices.filter(function (choice) {
             return choice;
           }).map(angular.toJson).join(', ');
-          return ret ? ('contain one of ' + ret) : '';
+          return ret ? (tr('forms::be one of the following: ') + ret) : '';
         }
 
         if (scope.page === 'boolean') {
@@ -131,7 +131,9 @@ directive('validator', [
         }
 
         if (scope.page === 'numeric') {
-          return 'be a number between ' + scope.min + ' to ' + scope.max;
+          return tr('forms::be a number between {{min}} to {{max}}', {
+            min: scope.min, max: scope.max
+          });
         }
 
         var ret = [];
@@ -141,8 +143,12 @@ directive('validator', [
           }
         }
         var con = '';
-        if (ret.length > 0) con = 'include ' + ret.join(', ') + ' and ';
-        return con + 'have ' + scope.min + '-' + scope.max + ' characters';
+        if (ret.length > 0) {
+          con = tr('forms::include {{inc.join(", ")}} and ', { inc: ret });
+        }
+        return con + tr('forms::have {{min}}-{{max}} characters', {
+          min: scope.min, max: scope.max
+        });
       };
       scope.ok = function () {
         modal.hide();

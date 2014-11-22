@@ -50,10 +50,15 @@ service('i18n.linguist', [
 ]).
 
 factory('i18n.translate', [
+  '$interpolate',
   'i18n.linguist',
-  function (linguist) {
-    return function (string) {
-      return linguist.translate(string);
+  function ($interpolate, linguist) {
+    return function (string, context) {
+      var translated = linguist.translate(string);
+      if (context) {
+        translated = $interpolate(translated)(context);
+      }
+      return translated;
     };
   }
 ]).
