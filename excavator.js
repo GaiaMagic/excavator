@@ -4,41 +4,12 @@ if (['development', 'production', 'test'].indexOf(environment) === -1) {
   environment = process.env.NODE_ENV;
 }
 
-var mongoDB = 'localhost';
-var mongoDBAddr = process.env.DB_PORT_27017_TCP_ADDR;
-var mongoDBPort = process.env.DB_PORT_27017_TCP_PORT;
-if (mongoDBAddr && mongoDBPort) {
-  mongoDB = mongoDBAddr + ':' + mongoDBPort;
-}
-mongoDB = 'mongodb://' + mongoDB + '/excavator'
-
-var mongoose = require('mongoose');
-mongoose.connect(mongoDB, function (err) {
-  if (err) {
-    console.error('Failed to connect to MongoDB.',
-                  'Have you started the service?');
-    return;
-  }
-  console.log('MongoDB is running: ' + mongoDB);
-
-  var Admin = require('./models/admin');
-  var defaultAdmin = 'caiguanhao';
-  Admin.register(defaultAdmin, '123456').then(function () {
-    console.log('New admin has been created: ' + defaultAdmin);
-  }, function () {
-    console.log('Admin already registered: ' + defaultAdmin);
-  });
-
-  var Manager = require('./models/manager');
-  var defaultManager = 'newyork';
-  Manager.register(defaultManager, '123456').then(function () {
-    console.log('New manager has been created: ' + defaultManager);
-  }, function () {
-    console.log('Manager already registered: ' + defaultManager);
-  });
-});
-
+var connect2MongoDB = require('./models');
 var excavator = require('./routes');
+
+var address = getFigMongoDBServiceAddress('db') || 'localhost';
+
+connect2MongoDB('mongodb://' + address + '/excavator');
 
 excavator.set('port', 3000);
 
@@ -48,3 +19,12 @@ excavator.listen(excavator.get('port'), function () {
   console.log('Administrator interface: http://localhost:' +
     excavator.get('port') + '/login')
 });
+
+function getFigMongoDBServiceAddress (service) {
+  var prefix = service.toUpperCase() + '_PORT_27017_TCP_';
+  var mongoDBAddr = process.env[prefix + 'ADDR'];
+  var mongoDBPort = process.env[prefix + 'PORT'];
+  if (mongoDBAddr && mongoDBPort) {
+    return mongoDBAddr + ':' + mongoDBPort;
+  }
+}
