@@ -6,7 +6,8 @@ directive('navView', [
   'backend.user.logout',
   'func.panic.alert',
   'i18n.linguist',
-  function ($location, status, logout, alert, linguist) {
+  'i18n.translate',
+  function ($location, status, logout, alert, linguist, tr) {
   return {
     scope: true,
     templateUrl: '/nav.html',
@@ -17,7 +18,7 @@ directive('navView', [
       });
       $scope.logout = function () {
         logout();
-        alert('You have successfully logged out.');
+        alert(tr('login::You have successfully logged out.'));
       };
       $scope.ifPathHas = function (path) {
         if (path.slice(-1) !== '/') path += '/';

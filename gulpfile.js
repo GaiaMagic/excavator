@@ -210,6 +210,7 @@ gulp.task('gettext', function () {
     'views/manager/**/*.html',
     'views/vendors/**/*.html',
     'assets/js/func/panic.js',
+    'assets/js/manager/nav.js',
     'models/status.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.manager.%code%.json',
@@ -218,6 +219,7 @@ gulp.task('gettext', function () {
 
   gulp.src([
     'views/vendors/**/*.html',
+    'assets/js/public/form.js',
     'assets/js/func/panic.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.public.%code%.json',

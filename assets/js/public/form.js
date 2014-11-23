@@ -11,12 +11,13 @@ controller('controller.public.form', [
   'func.panic',
   'func.panic.alert',
   'currentForm',
+  'i18n.translate',
   'public.public.forms.submit',
-  function (panic, alert, currentForm, submitForm) {
+  function (panic, alert, currentForm, tr, submitForm) {
     if (angular.isUndefined(currentForm)) {
       return;
     } else if (currentForm === false) {
-      return panic('Form is corrupted.');
+      return panic(tr('forms::Form is corrupted.'));
     } else {
       this.form = currentForm;
     }
@@ -27,7 +28,7 @@ controller('controller.public.form', [
     this.submit = function () {
       var revid = currentForm.form.head._id;
       submitForm(revid, this.form.content.data).then(function () {
-        alert('Thank you.', 'OK');
+        alert(tr('forms::Thank you.'), tr('forms::Success'));
       }, panic);
     };
   }

@@ -8,5 +8,10 @@
     "Confirm": "确认",
     "Yes": "是",
     "No": "否"
+  },
+  "forms": {
+    "Form is corrupted.": "表格已损毁。",
+    "Thank you.": "谢谢。",
+    "Success": "成功"
   }
 }

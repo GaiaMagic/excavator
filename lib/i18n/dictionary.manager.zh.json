@@ -2,7 +2,8 @@
   "login": {
     "Username": "用户名",
     "Password": "密码",
-    "Sign in": "登录"
+    "Sign in": "登录",
+    "You have successfully logged out.": "你已成功注销。"
   },
   "nav": {
     "Manager": "表格管理经理",
