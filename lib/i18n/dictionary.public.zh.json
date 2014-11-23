@@ -1,0 +1,12 @@
+{
+  "panic": {
+    "Close": "关闭",
+    "Unable to access network. Check your network settings.": "无法访问网络。请检查你的网络设定。",
+    "Unexpected error was encountered.": "发生意外错误。",
+    "Error": "错误",
+    "Info": "信息",
+    "Confirm": "确认",
+    "Yes": "是",
+    "No": "否"
+  }
+}

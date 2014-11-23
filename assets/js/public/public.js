@@ -1,4 +1,6 @@
 angular.module('excavator.public.public', [
+  'excavator.func.localstorage',
+  'excavator.i18n',
   'mgcrea.ngStrap.datepicker'
 ]).
 
