@@ -62,7 +62,8 @@
             <td ng-bind="form.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
             <td ng-bind="form.updated_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
             <td class="slug">
-              <a class="block" href="/{{ form.slug }}" target="_blank">
+              <a class="block" target="_blank"
+                href="//{{ ccfl.domains.public }}/{{ form.slug }}">
                 <span class="glyphicon glyphicon-new-window"></span>
                 <span ng-bind="form.slug"></span>
               </a>

@@ -1,4 +1,5 @@
 var panic = require('../lib/panic');
+var DOMAINS = require('../domains');
 
 var User = {
   Admin:   require('../models/admin'),
@@ -40,7 +41,8 @@ function statusRoute (model) {
     })(req).then(function (user) {
       res.send({
         status: 'OK',
-        username: user.username
+        username: user.username,
+        domains: DOMAINS[process.env.NODE_ENV] || {}
       });
     }).catch(function () {
       next(panic(200, {

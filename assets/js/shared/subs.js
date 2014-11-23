@@ -114,6 +114,7 @@ controller('controller.shared.submission.view', [
   'i18n.translate',
   'misc.statuses',
   'setStatusPrefix',
+  'shared.domains',
   function (
     $injector,
     $route,
@@ -122,7 +123,8 @@ controller('controller.shared.submission.view', [
     panic,
     tr,
     statuses,
-    setStatusPrefix
+    setStatusPrefix,
+    domains
   ) {
     if (!currentSubmission) {
       return panic('Submission is corrupted.');
@@ -137,6 +139,7 @@ controller('controller.shared.submission.view', [
 
     this.statuses = statuses;
     this.tr = tr;
+    this.domains = domains;
 
     this.setStatus = function (status) {
       setStatus(setStatusPrefix, currentSubmission.sub._id, status.id).

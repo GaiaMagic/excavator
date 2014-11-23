@@ -8,6 +8,7 @@ controller('controller.control.form.list', [
   'form.access.control',
   'forms',
   'resolver.form',
+  'shared.domains',
   function (
     $injector,
     $location,
@@ -15,7 +16,8 @@ controller('controller.control.form.list', [
     $routeParams,
     accessControl,
     forms,
-    formResolver
+    formResolver,
+    domains
   ) {
     this.forms = forms;
     this.manager = $routeParams.manager;
@@ -34,5 +36,6 @@ controller('controller.control.form.list', [
         $route.reload();
       });
     };
+    this.domains = domains;
   }
 ]);

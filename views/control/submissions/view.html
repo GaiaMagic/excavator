@@ -22,9 +22,11 @@
           <td class="form-sub-key" i18n="subs::Form"></td>
           <td>
             <span ng-bind="cssv.sub.title"></span>
-            <a href="/{{ cssv.sub.sub.form.slug }}/{{ cssv.sub.sub.form_revision._id }}"
-              target="_blank"><code ng-bind="cssv.sub.sub.form_revision._id"></code></a>
-            (<a href="/{{ cssv.sub.sub.form.slug }}" target="_blank" i18n="subs::latest"></a>)
+            <a href="//{{ cssv.domains.public }}/{{ cssv.sub.sub.form.slug }}/{{
+              cssv.sub.sub.form_revision._id }}" target="_blank">
+              <code ng-bind="cssv.sub.sub.form_revision._id"></code></a>
+            (<a href="//{{ cssv.domains.public }}/{{ cssv.sub.sub.form.slug }}"
+              target="_blank" i18n="subs::latest"></a>)
           </td>
         </tr>
         <tr>

@@ -10,6 +10,7 @@ controller('controller.control.manager.list', [
   'func.panic.alert',
   'func.panic.confirm',
   'manager.access.control',
+  'shared.domains',
   function (
     $route,
     ban,
@@ -19,8 +20,10 @@ controller('controller.control.manager.list', [
     panic,
     alert,
     confirm,
-    accessControl
+    accessControl,
+    domains
   ) {
+    this.domains = domains;
     this.managers = managers;
     this.manager = {
       access: function (manager) {

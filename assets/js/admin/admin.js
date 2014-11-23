@@ -7,5 +7,6 @@ angular.module('excavator.admin', [
   'excavator.admin.managers',
   'excavator.admin.nav',
   'excavator.admin.validator',
+  'excavator.shared.domains',
   'excavator.shared.subs'
 ]);

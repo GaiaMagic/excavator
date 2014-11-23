@@ -1,0 +1,12 @@
+{
+  "development": {
+    "public": "public:3000",
+    "manager": "manager:3000",
+    "control": "control:3000"
+  },
+  "production": {
+    "public": "form.youyanchu.com",
+    "manager": "manager.form.youyanchu.com",
+    "control": "control.form.youyanchu.com"
+  }
+}

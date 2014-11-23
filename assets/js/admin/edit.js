@@ -21,6 +21,7 @@ controller('controller.control.form.edit', [
   'func.panic',
   'currentForm',
   'i18n.translate',
+  'shared.domains',
   function (
     $scope,
     $timeout,
@@ -39,7 +40,8 @@ controller('controller.control.form.edit', [
     parse,
     panic,
     currentForm,
-    tr
+    tr,
+    domains
   ) {
   if (angular.isUndefined(currentForm)) {
     this.form = {};
@@ -107,6 +109,7 @@ controller('controller.control.form.edit', [
 
   this.array = funcArray;
   this.tr = tr;
+  this.domains = domains;
 
   var self = this;
   var debounce;

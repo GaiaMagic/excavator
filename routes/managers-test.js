@@ -530,7 +530,7 @@ describe('Route /backend/managers', function () {
       expect(200).
       end(function (err, res) {
         if (err) return done(err);
-        expect(Object.keys(res.body)).to.have.members([
+        expect(res.body).to.have.keys([
           'status',
           'type',
           'message'
@@ -559,9 +559,10 @@ describe('Route /backend/managers', function () {
       expect(200).
       end(function (err, res) {
         if (err) return done(err);
-        expect(Object.keys(res.body)).to.have.members([
+        expect(res.body).to.have.keys([
           'status',
-          'username'
+          'username',
+          'domains'
         ]);
         expect(res.body.status).to.equal('OK');
         expect(res.body.username).to.equal(real.username);

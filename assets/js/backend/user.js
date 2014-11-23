@@ -80,7 +80,8 @@ service('backend.user.login.status', [
   '$rootScope',
   'backend.user.scope',
   'func.panic',
-  function ($http, $rootScope, scope, panic) {
+  'shared.domains',
+  function ($http, $rootScope, scope, panic, domains) {
     var self = this;
     self.loggedIn = false;
 
@@ -101,6 +102,7 @@ service('backend.user.login.status', [
         then(function (res) {
           self.loggedIn = !!(res.data.status && res.data.status === 'OK');
           self.username = res.data.username;
+          angular.extend(domains, res.data.domains);
           return self.loggedIn;
         }, panic).finally(function () {
           self.updatePromise = undefined;
