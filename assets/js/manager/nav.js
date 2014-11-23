@@ -5,7 +5,8 @@ directive('navView', [
   'backend.user.login.status',
   'backend.user.logout',
   'func.panic.alert',
-  function ($location, status, logout, alert) {
+  'i18n.linguist',
+  function ($location, status, logout, alert, linguist) {
   return {
     scope: true,
     templateUrl: '/nav.html',
@@ -34,6 +35,7 @@ directive('navView', [
       $scope.$on('global-meta', function (e, data) {
         $scope.metaData = data;
       });
+      $scope.linguist = linguist;
     }
   };
 }]);

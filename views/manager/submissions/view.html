@@ -7,33 +7,33 @@
         <a href="/submissions/view/{{ cssv.sub.sub.newer }}"
           class="btn btn-default" ng-class="{disabled: !cssv.sub.sub.newer}">
           <span class="glyphicon glyphicon-chevron-up"></span>
-          Newer
+          <span i18n="subs::Newer"></span>
         </a>
         <a href="/submissions/view/{{ cssv.sub.sub.older }}"
           class="btn btn-default" ng-class="{disabled: !cssv.sub.sub.older}">
           <span class="glyphicon glyphicon-chevron-down"></span>
-          Older
+          <span i18n="subs::Older"></span>
         </a>
       </div>
     </h3>
     <table class="table table-bordered">
       <tbody>
         <tr>
-          <td class="form-sub-key">Form</td>
+          <td class="form-sub-key" i18n="subs::Form"></td>
           <td>
             <span ng-bind="cssv.sub.title"></span>
             <a href="//{{ cssv.domains.public }}/{{ cssv.sub.sub.form.slug }}/{{
               cssv.sub.sub.form_revision._id }}" target="_blank">
               <code ng-bind="cssv.sub.sub.form_revision._id"></code></a>
             (<a href="//{{ cssv.domains.public }}/{{ cssv.sub.sub.form.slug }}"
-              target="_blank">latest</a>)
+              target="_blank" i18n="subs::latest"></a>)
           </td>
         </tr>
         <tr>
-          <td class="form-sub-key">Data</td>
+          <td class="form-sub-key" i18n="subs::Data"></td>
           <td>
-            <em ng-if="cssv.isEmpty(cssv.sub.data)">
-              This submission is empty.</em>
+            <em ng-if="cssv.isEmpty(cssv.sub.data)"
+              i18n="subs::This submission is empty."></em>
             <table class="table table-bordered table-striped">
               <tbody>
                 <tr ng-repeat="item in cssv.sub.data">
@@ -45,7 +45,7 @@
           </td>
         </tr>
         <tr>
-          <td>Status</td>
+          <td i18n="subs::Status"></td>
           <td>
             <div class="btn-group">
               <button type="button" class="btn btn-default"
@@ -53,13 +53,13 @@
                 ng-class="{active: cssv.sub.sub.status === status.id}"
                 ng-repeat="status in cssv.statuses">
                 <span class="label label-{{ status.type }}"
-                  ng-bind="status.label"></span>
+                  ng-bind="cssv.tr('subs::statuses::' + status.label)"></span>
               </button>
             </div>
           </td>
         </tr>
         <tr>
-          <td class="form-sub-key">Submiited On</td>
+          <td class="form-sub-key" i18n="subs::Submiited On"></td>
           <td><span ng-bind="cssv.sub.sub.created_at |
             date: 'yyyy-MM-dd hh:mm:ss'"></span></td>
         </tr>

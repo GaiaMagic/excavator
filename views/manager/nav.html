@@ -1,35 +1,41 @@
 <nav class="navbar navbar-default" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="/">
-        Manager</a>
+      <a class="navbar-brand" href="/" i18n="nav::Manager"></a>
     </div>
     <div>
       <ul class="nav navbar-nav">
         <li ng-class="{active: ifPathIs('/submissions')}">
-          <a href="/submissions">All Submissions</a>
+          <a href="/submissions" i18n="nav::Submissions"></a>
         </li>
         <li ng-class="{active:
           ifPathHas('/submissions/view')}"
           ng-if="is('submission-view')">
-          <a href="/submissions/view/{{metaData.id}}">Viewing
-            {{metaData.title}}</a>
+          <a href="/submissions/view/{{metaData.id}}"
+            i18n="nav::Viewing !!metaData.title!!"></a>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        <li><a class="btn-group btn-group-xs">
+          <button type="button" class="btn btn-default"
+            ng-class="{active: linguist.lang === key}"
+            ng-repeat="(key, lang) in linguist.langs" ng-bind="lang"
+            ng-click="linguist.setLang(key)"></button>
+        </a></li>
         <li ng-if="status.loggedIn" class="dropdown"
           ng-class="{open: loggedInOpen}">
-          <a href ng-click="loggedInOpen=!loggedInOpen">Logged in as
+          <a href ng-click="loggedInOpen=!loggedInOpen">
+            <span i18n="nav::Logged in as"></span>
             <b ng-bind="status.username"></b>
             <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href ng-click="logout();
-              loggedInOpen=false">Log out</a></li>
+              loggedInOpen=false" i18n="nav::Log out"></a></li>
           </ul>
         </li>
         <li ng-if="!status.loggedIn"
           ng-class="{active: ifPathIs('/login')}">
-            <a href="/login">Log In</a></li>
+            <a href="/login" i18n="nav::Log In"></a></li>
       </ul>
     </div>
   </div>

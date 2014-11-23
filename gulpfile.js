@@ -29,6 +29,7 @@ gulp.task('browserify', function () {
   browserify('assets/js/misc/misc.js', '.tmp/js/misc');
   browserify('assets/js/func/scheme.js', '.tmp/js/func');
   browserify('assets/js/i18n/dictionary.js', '.tmp/js/i18n');
+  browserify('assets/js/manager/dictionary.js', '.tmp/js/manager');
 });
 
 function dump (src, dest) {
@@ -190,8 +191,9 @@ gulp.task('default', function (done) {
 
 gulp.task('gettext', function () {
   var gettext = require('a5r-i18n-gettext');
-  return gulp.src([
-    'views/**/*.html',
+
+  gulp.src([
+    'views/control/**/*.html',
     'assets/js/admin/edit.js',
     'assets/js/admin/enumerator.js',
     'assets/js/admin/validator.js',
@@ -199,6 +201,14 @@ gulp.task('gettext', function () {
     'models/status.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.%code%.json',
+    langs: ['zh']
+  })).pipe(gulp.dest('.'));
+
+  gulp.src([
+    'views/manager/**/*.html',
+    'models/status.js'
+  ]).pipe(gettext({
+    file: 'lib/i18n/dictionary.manager.%code%.json',
     langs: ['zh']
   })).pipe(gulp.dest('.'));
 });
