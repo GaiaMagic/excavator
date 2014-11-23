@@ -3,6 +3,7 @@ var Schema   = mongoose.Schema;
 var bcrypt   = require('bcrypt');
 var Q        = require('q');
 var panic    = require('../lib/panic');
+var tr       = require('../lib/i18n').tr;
 
 module.exports = makeUserAlikeSchema;
 module.exports.scheme = defaultSchema;
@@ -46,36 +47,36 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
       if (!this.isNew) {
         return next(panic(422, {
           type:    'username-is-unchangeable',
-          message: 'Username is not allowed to change.'
+          message: tr('Username is not allowed to change.')
         }));
       }
 
       if (typeof this.username !== 'string' || this.username.length === 0) {
         return next(panic(422, {
           type:    'username-is-required',
-          message: 'Username is required.'
+          message: tr('Username is required.')
         }));
       }
 
       if (this.username.length < 3) {
         return next(panic(422, {
           type:    'username-is-too-short',
-          message: 'Username is too short. It needs at least 3 characters.'
+          message: tr('Username is too short. It needs at least 3 characters.')
         }));
       }
 
       if (this.username.length > 20) {
         return next(panic(422, {
           type:    'username-is-too-long',
-          message: 'Username is too long. Its length should not be over 20.'
+          message: tr('Username is too long. Its length should not be over 20.')
         }));
       }
 
       if (!/^[a-z0-9_\-]{3,20}$/.test(this.username)) {
         return next(panic(422, {
           type:    'malformed-username',
-          message: 'A username should include lowercase letters, numbers, ' +
-                   'underscore or hyphen (dash).'
+          message: tr('A username should include lowercase letters, numbers, ' +
+                      'underscore or hyphen (dash).')
         }));
       }
     }
@@ -84,21 +85,21 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
       if (typeof this.password !== 'string' || this.password.length === 0) {
         return next(panic(422, {
           type:    'password-is-required',
-          message: 'Password is required.'
+          message: tr('Password is required.')
         }));
       }
 
       if (this.password.length < 6) {
         return next(panic(422, {
           type:    'password-is-too-short',
-          message: 'Password is too short. It needs at least 6 characters.'
+          message: tr('Password is too short. It needs at least 6 characters.')
         }));
       }
 
       if (this.password.length > 50) {
         return next(panic(422, {
           type:    'password-is-too-long',
-          message: 'Password is too long. Its length should not be over 50.'
+          message: tr('Password is too long. Its length should not be over 50.')
         }));
       }
 
@@ -139,13 +140,13 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
         if (err.code === 11000) {
           err = panic(409, {
             type:    'username-has-been-taken',
-            message: 'Username has been taken. Use another one.'
+            message: tr('Username has been taken. Use another one.')
           });
         }
         if (!err.panic) {
           err = panic(500, {
             type:    'internal-server-error',
-            message: 'Unexpected server error was encountered.'
+            message: tr('Unexpected server error was encountered.')
           });
         }
         return deferred.reject(err);
@@ -174,7 +175,7 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
       if (err) {
         return deferred.reject(panic(500, {
           type:    'internal-server-error',
-          message: 'Unexpected server error was encountered.'
+          message: tr('Unexpected server error was encountered.')
         }));
       }
 
@@ -212,14 +213,14 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
       if (err || !user) {
         return deferred.reject(panic(422, {
           type:    'invalid-username',
-          message: 'User does not exist.'
+          message: tr('User does not exist.')
         }));
       }
 
       if (user.locked) {
         return deferred.reject(panic(429, {
           type:    'user-exceeds-max-login-attempts',
-          message: 'User has been locked due to too many failed logins.'
+          message: tr('User has been locked due to too many failed logins.')
         }));
       }
 
@@ -243,12 +244,12 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
           if (err) {
             return deferred.reject(panic(500, {
               type:    'internal-server-error',
-              message: 'Unexpected server error was encountered.'
+              message: tr('Unexpected server error was encountered.')
             }));
           }
           deferred.reject(panic(403, {
             type:    'invalid-password',
-            message: 'Password is wrong.'
+            message: tr('Password is wrong.')
           }));
         });
       }
@@ -256,7 +257,7 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
       if (user.banned) {
         return deferred.reject(panic(403, {
           type:    'user-is-banned',
-          message: 'User has been blocked by administrators.'
+          message: tr('User has been blocked by administrators.')
         }));
       }
 
@@ -273,7 +274,7 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
     if (typeof token !== 'string' || token.length !== 64) {
       deferred.reject(panic(403, {
         type:    'invalid-token',
-        message: 'Invalid token.'
+        message: tr('Please log-in again.')
       }));
       return deferred.promise;
     }
@@ -281,13 +282,13 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
       if (err || !user) {
         return deferred.reject(panic(403, {
           type:    'invalid-token',
-          message: 'Invalid token.'
+          message: tr('Please log-in again.')
         }));
       }
       if (user.banned) {
         return deferred.reject(panic(403, {
           type:    'user-is-banned',
-          message: 'User has been blocked by administrators.'
+          message: tr('User has been blocked by administrators.')
         }));
       }
       return deferred.resolve(user);

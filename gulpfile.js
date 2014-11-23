@@ -149,7 +149,7 @@ gulp.task('watch', function () {
   gulp.watch([
     'excavator.js',
     'lib/**/*.js',
-    'lib/**/backend.*.js',
+    'lib/i18n/backend.*.json',
     'models/**/*.js',
     'routes/**/*.js'
   ]).on('change', function (file) {
@@ -232,6 +232,8 @@ gulp.task('gettext', function () {
   })).pipe(gulp.dest('.'));
 
   gulp.src([
+    'models/*.js',
+    '!models/status.js',
     'routes/**/*.js'
   ]).pipe(gettext({
     file: 'lib/i18n/backend.%code%.json',

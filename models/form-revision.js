@@ -3,6 +3,7 @@ var Schema     = mongoose.Schema;
 var Q          = require('q');
 var formSchema = require('./form');
 var panic      = require('../lib/panic');
+var tr         = require('../lib/i18n').tr;
 
 var formRevisionSchema = new Schema({
   parent:      { type: Schema.ObjectId, ref: 'Form' },
@@ -41,7 +42,7 @@ formRevisionSchema.pre('save', function (next) {
     if (typeof this.slug !== 'string' || this.slug.length > 100) {
       return next(panic(422, {
         type:    'invalid-slug',
-        message: 'Slug should be a string with less than 100 characters.'
+        message: tr('Slug should be a string with less than 100 characters.')
       }));
     }
 
@@ -50,14 +51,14 @@ formRevisionSchema.pre('save', function (next) {
     if (!/^[a-zA-Z0-9-]+$/.test(slug)) {
       return next(panic(422, {
         type:    'malformed-slug',
-        message: 'Slug should contain letters, numbers or hyphen (dash).'
+        message: tr('Slug should contain letters, numbers or hyphen (dash).')
       }));
     }
 
     if (RESERVED_SLUGS.indexOf(slug) > -1) {
       return next(panic(409, {
         type:    'reserved-slug',
-        message: 'This slug is reserved for internal use only.'
+        message: tr('This slug is reserved for internal use only.')
       }));
     }
   }
@@ -65,35 +66,35 @@ formRevisionSchema.pre('save', function (next) {
   if (typeof this.title !== 'string' || this.title.length === 0) {
     return next(panic(422, {
       type:    'title-is-required',
-      message: 'Title is required.'
+      message: tr('Title is required.')
     }));
   }
 
   if (this.title.length > 100) {
     return next(panic(413, {
       type:    'title-is-too-long',
-      message: 'Title is too long. Its length should be less than 100.'
+      message: tr('Title is too long. Its length should be less than 100.')
     }));
   }
 
   if (typeof this.content !== 'string' || this.content.length === 0) {
     return next(panic(422, {
       type:    'content-is-required',
-      message: 'Content is required.'
+      message: tr('Content is required.')
     }));
   }
 
   if (this.content.length > 10 * 1024) {
     return next(panic(413, {
       type:    'content-is-too-large',
-      message: 'Content is too large. Its length should be less than 10K.'
+      message: tr('Content is too large. Its length should be less than 10K.')
     }));
   }
 
   if (!this.isNew) {
     return next(panic(422, {
       type:    'revision-not-allowed-to-edit',
-      message: 'Revision should not be edited.'
+      message: tr('Revision should not be edited.')
     }));
   }
 
@@ -107,7 +108,7 @@ formRevisionSchema.pre('save', function (next) {
     } catch (e) {
       return next(panic(422, {
         type:    'content-is-not-valid-json',
-        message: 'Content should be a valid JSON string.'
+        message: tr('Content should be a valid JSON string.')
       }));
     }
   }
@@ -130,7 +131,7 @@ formRevisionSchema.pre('save', function (next) {
 formRevisionSchema.pre('remove', function (next) {
   next(panic(422, {
     type:    'revision-not-allowed-to-delete',
-    message: 'Revision should not be deleted.'
+    message: tr('Revision should not be deleted.')
   }));
 });
 

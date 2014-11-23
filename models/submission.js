@@ -5,6 +5,7 @@ var FormRevision = require('./form-revision');
 var panic        = require('../lib/panic');
 var undecorate   = require('../lib/decorate').undecorate;
 var Schemes      = require('./schemes');
+var tr           = require('../lib/i18n').tr;
 
 var submissionSchema = new Schema({
   form:                { type: Schema.ObjectId, ref: 'Form' },
@@ -20,7 +21,7 @@ submissionSchema.pre('save', function (next) {
   if (!this.isNew) {
     return next(panic(422, {
       type:    'submission-not-allowed-to-edit',
-      message: 'Submission should not be edited.'
+      message: tr('Submission should not be edited.')
     }));
   }
 
@@ -29,7 +30,7 @@ submissionSchema.pre('save', function (next) {
   exec(function (err, formRev) {
     if (err || !formRev) return next(panic(422, {
       type:    'invalid-form',
-      message: 'The form is invalid.'
+      message: tr('The form is invalid.')
     }));
     self.form = formRev.parent._id;
     self.form_index = formRev.parent.submissions;
@@ -94,7 +95,7 @@ submissionSchema.pre('save', function (next) {
     } catch (e) {
       return next(panic(422, {
         type: 'parse-error',
-        message: 'Unable to process data for now.'
+        message: tr('Unable to process data for now.')
       }));
     }
 
@@ -105,7 +106,7 @@ submissionSchema.pre('save', function (next) {
 submissionSchema.pre('remove', function (next) {
   next(panic(422, {
     type:    'submission-not-allowed-to-delete',
-    message: 'Submission should not be deleted.'
+    message: tr('Submission should not be deleted.')
   }));
 });
 
@@ -132,7 +133,7 @@ submissionSchema.method('Save', function () {
       if (!err.panic) {
         err = panic(500, {
           type:    'internal-server-error',
-          message: 'Unexpected server error was encountered.'
+          message: tr('Unexpected server error was encountered.')
         });
       }
       return deferred.reject(err);

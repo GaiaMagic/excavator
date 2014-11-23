@@ -3,6 +3,7 @@ var Schema   = mongoose.Schema;
 var panic    = require('../lib/panic');
 var Q        = require('q');
 var extend   = require('extend');
+var tr       = require('../lib/i18n').tr;
 
 var settingSchema = new Schema({
   settings: { type: Object }
@@ -15,7 +16,7 @@ settingSchema.pre('save', function (next) {
       if (count > 0) {
         return next(panic(409, {
           type:    'settings-should-be-more-than-one',
-          message: 'Create more than one settings is not allowed.'
+          message: tr('Create more than one settings is not allowed.')
         }));
       }
       return next();
@@ -27,7 +28,7 @@ settingSchema.pre('save', function (next) {
 settingSchema.pre('remove', function (next) {
   next(panic(422, {
     type:    'settings-not-allowed-to-delete',
-    message: 'Settings should not be deleted.'
+    message: tr('Settings should not be deleted.')
   }));
 });
 

@@ -3,6 +3,7 @@ var Schema   = mongoose.Schema;
 var Q        = require('q');
 var panic    = require('../lib/panic');
 var Manager  = require('./manager');
+var tr       = require('../lib/i18n').tr;
 
 var formSchema = new Schema({
   published:   { type: Boolean, default: false },
@@ -52,7 +53,7 @@ formSchema.method('updateManagers', function (operation) {
   if (!valid(operation)) {
     return Q.reject(panic(422, {
       type:    'invalid-operation',
-      message: 'Invalid operation.'
+      message: tr('Invalid operation.')
     }));
   }
   var keys = Object.keys(operation);
@@ -68,7 +69,7 @@ formSchema.method('updateManagers', function (operation) {
     if (managers.length !== keys.length) {
       throw panic(422, {
         type:    'invalid-manager',
-        message: 'At least one manager does not exist.'
+        message: tr('At least one manager does not exist.')
       });
     }
     return Q.all(managers.map(function (manager) {
@@ -166,7 +167,7 @@ formSchema.static('link', function (revision, form, hard) {
       if (err.code === 11000) {
         err = panic(409, {
           type:    'slug-has-been-taken',
-          message: 'Slug has been taken. Use another one.'
+          message: tr('Slug has been taken. Use another one.')
         });
       }
       return deferred.reject(err);
