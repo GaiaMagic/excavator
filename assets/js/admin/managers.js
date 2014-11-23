@@ -9,6 +9,7 @@ controller('controller.control.manager.list', [
   'func.panic',
   'func.panic.alert',
   'func.panic.confirm',
+  'i18n.translate',
   'manager.access.control',
   'shared.domains',
   function (
@@ -20,6 +21,7 @@ controller('controller.control.manager.list', [
     panic,
     alert,
     confirm,
+    tr,
     accessControl,
     domains
   ) {
@@ -37,11 +39,13 @@ controller('controller.control.manager.list', [
           promise = ban(manager._id, true).catch(panic);
         } else {
           promise = confirm(
-            'Are you sure you want to ban manager ' + manager.username + ' ?',
+            tr('forms::Are you sure you want to ban manager {{username}} ?', {
+              username: manager.username
+            }),
             undefined,
             { class: 'btn-danger',
-              text: 'Yes, ban this manager' },
-            { text: 'Cancel' }
+              text: tr('forms::Yes, ban this manager') },
+            { text: tr('forms::Cancel') }
           ).then(function () {
             return ban(manager._id, manager.banned).catch(panic);
           });
@@ -52,11 +56,13 @@ controller('controller.control.manager.list', [
       },
       delete: function (manager) {
         confirm(
-          'Are you sure you want to delete manager ' + manager.username + ' ?',
+          tr('forms::Are you sure you want to delete manager {{username}} ?', {
+            username: manager.username
+          }),
           undefined,
           { class: 'btn-danger',
-            text: 'Yes, delete this manager' },
-          { text: 'Cancel' }
+            text: tr('forms::Yes, delete this manager') },
+          { text: tr('forms::Cancel') }
         ).then(function () {
           remove(manager._id).then(function () {
             $route.reload();

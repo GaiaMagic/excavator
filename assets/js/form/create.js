@@ -7,14 +7,17 @@ factory('form.create.new', [
   'func.panic',
   'func.panic.alert',
   'func.scheme.stringify',
-  function ($modal, $q, create, panic, alert, stringify) {
+  'i18n.translate',
+  function ($modal, $q, create, panic, alert, stringify, tr) {
     var form = {};
     return function (currentForm, schemeData) {
       var deferred = $q.defer();
       var modal;
       if (angular.isObject(currentForm)) {
         modal = $modal({
-          title: 'Save Changes To ' + currentForm.title,
+          title: tr('forms::Save Changes To {{title}}', {
+            title: currentForm.title
+          }),
           template: '/forms/create.html'
         });
         modal.$scope.form = {
@@ -29,7 +32,9 @@ factory('form.create.new', [
           var parent = modal.$scope.form.parent;
           var slug = modal.$scope.form.slug;
           create(title, content, parent, slug).then(function (res) {
-            alert('Successfully updated ' + title + '.', 'OK');
+            alert(tr('forms::Successfully updated {{title}}.', {
+              title: title
+            }), tr('forms::Success'));
             deferred.resolve(res.data);
           }, function (err) {
             panic(err);
@@ -40,7 +45,7 @@ factory('form.create.new', [
         };
       } else {
         modal = $modal({
-          title: 'Create New Form',
+          title: tr('forms::Create New Form'),
           template: '/forms/create.html'
         });
         modal.$scope.form = form;
@@ -49,9 +54,16 @@ factory('form.create.new', [
           var content = stringify(schemeData);
           var slug = form.slug;
           create(form.title, content, undefined, slug).then(function (res) {
-            alert('Successfully created ' + form.title + '. You will be ' +
-              'redirected to the form edit page.', 'OK',
-              '/forms/edit/' + res.data.parent);
+            alert(
+              tr(
+                'forms::Successfully created {{title}}. You will be ' +
+                'redirected to the form edit page.', {
+                  title: form.title
+                }
+              ),
+              tr('forms::Success'),
+              '/forms/edit/' + res.data.parent
+            );
             deferred.resolve(res.data);
           }, function (err) {
             panic(err);

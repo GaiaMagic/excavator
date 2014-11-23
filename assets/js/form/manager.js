@@ -7,13 +7,16 @@ factory('manager.access.control', [
   'backend.form.search',
   'backend.manager.form.save',
   'func.panic',
+  'i18n.translate',
   'resolver.manager',
-  function ($injector, $modal, $q, search, save, panic, managerResolver) {
+  function ($injector, $modal, $q, search, save, panic, tr, managerResolver) {
     return function (user) {
       var deferred = $q.defer();
       var modal;
       modal = $modal({
-        title: 'Form access for ' + user.username,
+        title: tr('forms::Form access for {{username}}', {
+          username: user.username
+        }),
         template: '/forms/manager.html'
       });
       modal.$scope.remove = function (list, index) {
@@ -37,6 +40,8 @@ factory('manager.access.control', [
         });
       });
       function update () {
+        if (!angular.isArray(modal.$scope.forms)) return;
+        if (!angular.isArray(results)) return;
         var added = modal.$scope.forms.map(function (form) {
           return form._id;
         });
@@ -49,6 +54,7 @@ factory('manager.access.control', [
         managerId: user._id
       })).then(function (user) {
         modal.$scope.forms = user.forms;
+        update();
         forms = user.forms.map(function (form) {
           return form._id;
         });

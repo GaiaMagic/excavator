@@ -194,9 +194,10 @@ gulp.task('gettext', function () {
 
   gulp.src([
     'views/control/**/*.html',
-    'assets/js/admin/edit.js',
-    'assets/js/admin/enumerator.js',
-    'assets/js/admin/validator.js',
+    'views/vendors/**/*.html',
+    'assets/js/admin/*.js',
+    'assets/js/form/*.js',
+    'assets/js/func/panic.js',
     'models/schemes/*.js',
     'models/status.js'
   ]).pipe(gettext({
@@ -206,6 +207,8 @@ gulp.task('gettext', function () {
 
   gulp.src([
     'views/manager/**/*.html',
+    'views/vendors/**/*.html',
+    'assets/js/func/panic.js',
     'models/status.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.manager.%code%.json',

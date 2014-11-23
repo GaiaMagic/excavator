@@ -7,6 +7,7 @@ factory('form.access.control', [
   'backend.form.update.managers',
   'func.panic',
   'func.panic.alert',
+  'i18n.translate',
   'resolver.managers',
   function (
     $injector,
@@ -15,20 +16,23 @@ factory('form.access.control', [
     updateManagers,
     panic,
     alert,
+    tr,
     managersResolver
   ) {
     var form = {};
     return function (currentForm) {
       var deferred = $q.defer();
       if (!angular.isObject(currentForm)) {
-        panic('You must create a form first, so its access control settings ' +
-          'can be modified.');
+        panic(tr('forms::You must create a form first, so its access ' +
+          'control settings can be modified.'));
         deferred.reject();
         return deferred.promise;
       }
       var modal;
       modal = $modal({
-        title: 'Read-only access to ' + currentForm.title,
+        title: tr('forms::Read-only access to {{title}}', {
+          title: currentForm.title
+        }),
         template: '/forms/access.html'
       });
       var managers = $injector.invoke(managersResolver());
@@ -69,7 +73,8 @@ factory('form.access.control', [
       modal.$scope.submit = function () {
         modal.hide();
         updateManagers(currentForm.form._id, selected()).then(function (res) {
-          alert('Successfully updated access control.', 'OK');
+          alert(tr('forms::Successfully updated access control.'),
+            tr('forms::Success'));
           deferred.resolve(res.data);
         }, function (err) {
           panic(err);

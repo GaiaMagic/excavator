@@ -62,6 +62,7 @@
     "No forms has been created yet.": "尚没有创建过表格。",
     "Create": "创建",
     "Search results": "搜索结果",
+    "Search form": "搜索表格",
     "Current forms": "现有表格",
     "This manager will have no access to any form.": "此经理将无权限访问任何表格。",
     "Remove": "移除",
@@ -77,6 +78,11 @@
     "Return value should be an array.": "返回值必须为数组。",
     "No errors": "无错误",
     "Open Helper...": "配置...",
+    "Are you sure you want to ban manager {{username}} ?": "确定要查封经理 {{username}} ？",
+    "Yes, ban this manager": "是，查封这个经理",
+    "Cancel": "取消",
+    "Are you sure you want to delete manager {{username}} ?": "确定要删除经理 {{username}} ？",
+    "Yes, delete this manager": "是，删除这个经理",
     "Configure validator": "配置验证方法",
     "STRING": "字串",
     "NUMERIC": "数字",
@@ -96,7 +102,15 @@
     "include {{inc.join(\", \")}} and ": "包含{{inc.join(\"、\")}}且",
     "have {{min}}-{{max}} characters": "有{{min}}至{{max}}个字符",
     "Help text": "验证失败时显示的文字",
-    "JavaScript expression to pass validation": "用于验证的 JavaScript 表达式"
+    "JavaScript expression to pass validation": "用于验证的 JavaScript 表达式",
+    "You must create a form first, so its access control settings can be modified.": "你必须要先创建一个表格才可以修改它的权限。",
+    "Read-only access to {{title}}": "{{title}} 的只读权限",
+    "Successfully updated access control.": "成功更新访问权限。",
+    "Success": "成功",
+    "Save Changes To {{title}}": "保存对 {{title}} 的更改",
+    "Successfully updated {{title}}.": "成功更新 {{title}} 。",
+    "Successfully created {{title}}. You will be redirected to the form edit page.": "成功创建 {{title}} 。即将跳转到该表格的编辑页。",
+    "Form access for {{username}}": "用户 {{username}} 的表格访问权限"
   },
   "managers": {
     "Managers": "经理",
@@ -143,6 +157,16 @@
       "Pending": "待审中",
       "Rejected": "已拒绝"
     }
+  },
+  "panic": {
+    "Close": "关闭",
+    "Unable to access network. Check your network settings.": "无法访问网络。请检查你的网络设定。",
+    "Unexpected error was encountered.": "发生意外错误。",
+    "Error": "错误",
+    "Info": "信息",
+    "Confirm": "确认",
+    "Yes": "是",
+    "No": "否"
   },
   "schemes": {
     "Button": "按钮",

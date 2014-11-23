@@ -2,7 +2,8 @@ angular.module('excavator.func.panic', []).
 
 factory('func.panic', [
   '$modal',
-  function ($modal) {
+  'i18n.translate',
+  function ($modal, tr) {
     return function (err) {
       var details;
       var errorMsg;
@@ -16,14 +17,15 @@ factory('func.panic', [
           errorMsgs = details.messages;
         } else {
           if (err.status === 0) {
-            errorMsg = 'Unable to access network. Check your network settings.';
+            errorMsg = tr('panic::Unable to access network. ' +
+              'Check your network settings.');
           } else {
-            errorMsg = 'Unexpected error was encountered.';
+            errorMsg = tr('panic::Unexpected error was encountered.');
           }
         }
       }
       var modal = $modal({
-        title: 'Error',
+        title: tr('panic::Error'),
         content: errorMsg,
         template: '/panic.html'
       });
@@ -37,7 +39,8 @@ factory('func.panic.alert', [
   '$location',
   '$modal',
   '$timeout',
-  function ($location, $modal, $timeout) {
+  'i18n.translate',
+  function ($location, $modal, $timeout, tr) {
     /**
      * show an alert modal window
      * @param  {string}   content  the body of the alert window
@@ -49,7 +52,7 @@ factory('func.panic.alert', [
      */
     return function (content, title, hide) {
       var modal = $modal({
-        title: title || 'Info',
+        title: title || tr('panic::Info'),
         content: content,
         template: '/panic.html'
       });
@@ -74,7 +77,8 @@ factory('func.panic.alert', [
 factory('func.panic.confirm', [
   '$modal',
   '$q',
-  function ($modal, $q) {
+  'i18n.translate',
+  function ($modal, $q, tr) {
     /**
      * show a confirm modal window
      * @param  {string}   content  the body of the confirm window
@@ -84,7 +88,7 @@ factory('func.panic.confirm', [
     return function (content, title, btnYes, btnNo) {
       var deferred = $q.defer();
       var modal = $modal({
-        title: title || 'Confirm',
+        title: title || tr('panic::Confirm'),
         content: content,
         template: '/panic.html'
       });
@@ -95,8 +99,12 @@ factory('func.panic.confirm', [
         modal.$scope.$hide();
       };
       modal.$scope.buttons = [
-        angular.extend({ text: 'Yes' }, btnYes, { click: modal.$scope.yes }),
-        angular.extend({ text: 'No'  }, btnNo,  { click: modal.$scope.$hide })
+        angular.extend({ text: tr('panic::Yes') }, btnYes, {
+          click: modal.$scope.yes
+        }),
+        angular.extend({ text: tr('panic::No')  }, btnNo,  {
+          click: modal.$scope.$hide
+        })
       ];
       modal.$scope.$on('modal.hide', function () {
         if (deferred) deferred.reject();
