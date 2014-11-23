@@ -110,8 +110,8 @@
     "Success": "成功",
     "Save Changes To {{title}}": "保存对 {{title}} 的更改",
     "Successfully updated {{title}}.": "成功更新 {{title}} 。",
-    "Successfully created {{title}}. You will be redirected to the form edit page.": "成功创建 {{title}} 。即将跳转到该表格的编辑页。",
-    "Form access for {{username}}": "用户 {{username}} 的表格访问权限"
+    "Form access for {{username}}": "用户 {{username}} 的表格访问权限",
+    "Successfully created {{title}}. You will be redirected to the form edit page.": "成功创建 {{title}} 。即将跳转到该表格的编辑页。"
   },
   "managers": {
     "Managers": "经理",
@@ -169,6 +169,23 @@
     "Yes": "是",
     "No": "否"
   },
+  "hierarchy": {
+    "_": {
+      "Presets": "预设"
+    },
+    "DoC": {
+      "Districts of China": "中国城镇",
+      "Province": "省",
+      "City": "市",
+      "District": "区"
+    },
+    "OS": {
+      "Operating Systems": "操作系统",
+      "Brand": "品牌",
+      "Type": "类型",
+      "System": "系统"
+    }
+  },
   "schemes": {
     "Button": "按钮",
     "button": {
@@ -192,12 +209,12 @@
     },
     "Hierarchy": "树形下拉选项",
     "hierarchy": {
-      "Custom": "自定",
       "Presets": "预设",
-      "Choose one preset": "选择预设",
+      "— Choose one preset —": "— 选择预设 —",
       "Levels": "层数",
       "Model": "字段",
       "Label": "标签",
+      "Custom": "自定",
       "Type your JSON here...": "在此输入JSON..."
     },
     "Long Text": "多行文字",
@@ -232,6 +249,12 @@
       "Default": "默认",
       "ENUM": "枚举",
       "Validator": "验证"
+    }
+  },
+  "template": {
+    "hierarchy": {
+      "No options available.": "无可用选项。",
+      "— Please choose one —": "— 请选择 —"
     }
   }
 }

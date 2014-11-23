@@ -199,6 +199,7 @@ gulp.task('gettext', function () {
     'assets/js/admin/*.js',
     'assets/js/form/*.js',
     'assets/js/func/panic.js',
+    'lib/hierarchies/hierarchies.js',
     'models/schemes/*.js',
     'models/status.js'
   ]).pipe(gettext({
@@ -218,11 +219,13 @@ gulp.task('gettext', function () {
   })).pipe(gulp.dest('.'));
 
   gulp.src([
+    'models/schemes/*.js',
     'views/vendors/**/*.html',
     'assets/js/public/form.js',
     'assets/js/func/panic.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.public.%code%.json',
-    langs: ['zh']
+    langs: ['zh'],
+    excludeRootKeys: ['schemes']
   })).pipe(gulp.dest('.'));
 });

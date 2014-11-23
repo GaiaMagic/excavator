@@ -76,6 +76,7 @@ module.exports = {
           this.hierarchy = {
             name: 'custom',
             label: 'Custom',
+            i18nPrefix: 'schemes::hierarchy::',
             data: [{}]
           };
         } else {
@@ -90,7 +91,8 @@ module.exports = {
         this.presets = angular.copy(hierarchies);
         var customPreset = {
           name: 'custom',
-          label: tr('schemes::hierarchy::Custom'),
+          label: 'Custom',
+          i18nPrefix: 'schemes::hierarchy::',
           data: [{}]
         };
         this.presets.push(customPreset);
@@ -111,21 +113,37 @@ module.exports = {
             this.hierarchy = hierarchies.findByName(this.preset.name);
             this.data.hierarchy = this.preset.name;
             delete this.data.hierarchyCustom;
-            this.data.models = angular.copy(this.preset.data);
+            models = angular.copy(this.preset.data);
+            for (var i = 0; i < models.length; i++) {
+              if (!models[i].label) continue;
+              models[i].label = tr(this.preset.i18nPrefix + models[i].label);
+            }
+            this.data.models = models;
           }
           this.preset = undefined;
+        };
+
+        this.$trg = function translateGroup (preset) {
+          if (!preset.group) return;
+          return tr('hierarchy::_::' + preset.group);
+        };
+        this.$trl = function translateLabel (preset) {
+          return tr(preset.i18nPrefix + preset.label);
         };
       }
     ],
     template: [
-      function () {
+      'i18n.translate',
+      function (tr) {
         return [
           '<div hierarchy>',
             '<div class="form-group" ng-if="!slices">',
               '<label class="col-sm-2 control-label" ',
                   'ng-bind="scheme.models[0].label"></label>',
               '<div class="col-sm-10">',
-                '<p class="form-control-static">No options available.</p>',
+                '<p class="form-control-static">',
+                  tr('template::hierarchy::No options available.'),
+                '</p>',
               '</div>',
             '</div>',
             '<div class="form-group" ng-repeat="slice in slices">',
@@ -135,7 +153,8 @@ module.exports = {
                 '<select ng-options="item for item in slice" ',
                   'ng-model="selects[$index]" class="form-control">',
                   '<option value="" ng-if="$index === 0">',
-                  '- Please choose one -</option></select>',
+                    tr('template::hierarchy::— Please choose one —'),
+                  '</option></select>',
               '</div>',
             '</div>',
           '</div>'
@@ -152,10 +171,10 @@ module.exports = {
               tr('schemes::hierarchy::Presets'), '</label>',
             '<div class="col-sm-9">',
               '<select class="form-control" ng-options="preset as ',
-                'preset.label group by preset.group for preset in presets" ',
+                '$trl(preset) group by $trg(preset) for preset in presets" ',
                 'ng-model="preset" ng-change="presetChanged()">',
                 '<option value="">',
-                  '- ', tr('schemes::hierarchy::Choose one preset'), ' -',
+                  tr('schemes::hierarchy::— Choose one preset —'),
                 '</option>',
               '</select>',
             '</div>',

@@ -1,4 +1,10 @@
 {
+  "template": {
+    "hierarchy": {
+      "No options available.": "无可用选项。",
+      "— Please choose one —": "— 请选择 —"
+    }
+  },
   "panic": {
     "Close": "关闭",
     "Unable to access network. Check your network settings.": "无法访问网络。请检查你的网络设定。",
