@@ -68,7 +68,6 @@ module.exports = {
         errorMsgs: errorMsg
       };
     },
-    schemeDefaults: {},
     templateInit: [
       'misc.hierarchies',
       function (hierarchies) {

@@ -189,6 +189,7 @@
   "schemes": {
     "Button": "按钮",
     "button": {
+      "Submit": "提交",
       "Label": "标签",
       "ENUM": "枚举"
     },
@@ -228,6 +229,10 @@
     },
     "Multiple Choice": "下拉选项",
     "multiple-choice": {
+      "Yes, I do.": "是，我接受",
+      "YES": "是",
+      "No, I don't": "不，我拒绝",
+      "NO": "否",
       "Model": "字段",
       "Label": "标签",
       "Default": "默认",
@@ -244,6 +249,8 @@
     },
     "Switch": "横向选项",
     "switch": {
+      "YES": "是",
+      "NO": "否",
       "Model": "字段",
       "Label": "标签",
       "Default": "默认",

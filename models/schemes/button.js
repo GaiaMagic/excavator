@@ -14,13 +14,20 @@ module.exports = {
   latest: '1.0',
 
   '1.0': {
-    schemeDefaults: {
-      enum: [{
-        type: 'submit',
-        label: 'Submit',
-        class: 'btn-info'
-      }]
-    },
+    schemeDefaults: [
+      'i18n.translate',
+      function (tr) {
+        return {
+          enum: [
+            {
+              type: 'submit',
+              label: tr('schemes::button::Submit'),
+              class: 'btn-info'
+            }
+          ]
+        };
+      }
+    ],
     templateInit: [
       'func.enumerate',
       'func.enumerate.stat',

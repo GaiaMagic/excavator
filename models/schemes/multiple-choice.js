@@ -14,17 +14,22 @@ module.exports = {
   latest: '1.0',
 
   '1.0': {
-    schemeDefaults: {
-      enum: [{
-        label: 'Yes, I do.',
-        value: true,
-        group: 'YES'
-      }, {
-        label: 'No, I don\'t',
-        value: false,
-        group: 'NO'
-      }]
-    },
+    schemeDefaults: [
+      'i18n.translate',
+      function (tr) {
+        return {
+          enum: [{
+            label: tr('schemes::multiple-choice::Yes, I do.'),
+            value: true,
+            group: tr('schemes::multiple-choice::YES')
+          }, {
+            label: tr('schemes::multiple-choice::No, I don\'t'),
+            value: false,
+            group: tr('schemes::multiple-choice::NO')
+          }]
+        };
+      }
+    ],
     templateInit: [
       'func.enumerate',
       'func.enumerate.stat',

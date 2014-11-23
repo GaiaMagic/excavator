@@ -14,15 +14,20 @@ module.exports = {
   latest: '1.0',
 
   '1.0': {
-    schemeDefaults: {
-      enum: [{
-        label: 'YES',
-        value: true
-      }, {
-        label: 'NO',
-        value: false
-      }]
-    },
+    schemeDefaults: [
+      'i18n.translate',
+      function (tr) {
+        return {
+          enum: [{
+            label: tr('schemes::switch::YES'),
+            value: true
+          }, {
+            label: tr('schemes::switch::NO'),
+            value: false
+          }]
+        };
+      }
+    ],
     templateInit: [
       'func.enumerate',
       'func.enumerate.stat',

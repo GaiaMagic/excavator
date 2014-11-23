@@ -1,15 +1,11 @@
-angular.module('excavator.admin.edit', [
-  'excavator.fixtures'
-]).
+angular.module('excavator.admin.edit', []).
 
 controller('controller.control.form.edit', [
+  '$injector',
   '$scope',
   '$timeout',
-  '$document',
   '$route',
-  '$routeParams',
   'schemes',
-  'fixtures.admin.edit',
   'form.access.control',
   'form.create.new',
   'func.array',
@@ -23,13 +19,11 @@ controller('controller.control.form.edit', [
   'i18n.translate',
   'shared.domains',
   function (
+    $injector,
     $scope,
     $timeout,
-    $document,
     $route,
-    $routeParams,
     schemes,
-    fixtures,
     accessControl,
     createNew,
     funcArray,
@@ -95,10 +89,14 @@ controller('controller.control.form.edit', [
   this.add = function (name, version) {
     var scheme = schemes.get(name, version);
     if (angular.isUndefined(scheme)) return panic(tr('forms::No such item.'));
+    var schemeDefaults;
+    if (angular.isArray(scheme.schemeDefaults)) {
+      schemeDefaults = $injector.invoke(scheme.schemeDefaults);
+    }
     var schemeToAdd = angular.extend({
       type: name,
       version: version
-    }, scheme.schemeDefaults);
+    }, schemeDefaults);
     this.form.content.scheme.push(schemeToAdd);
   };
 

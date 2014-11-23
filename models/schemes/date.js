@@ -14,7 +14,6 @@ module.exports = {
   latest: '1.0',
 
   '1.0': {
-    schemeDefaults: {},
     templateInit: [
       function () {
         this.data[this.scheme.model] = this.scheme.default;
