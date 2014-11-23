@@ -10,6 +10,7 @@ controller('controller.shared.submission.list', [
   'func.localstorage.load',
   'func.localstorage.save',
   'func.scheme.parse',
+  'i18n.translate',
   'misc.statuses',
   'submissions',
   function (
@@ -20,6 +21,7 @@ controller('controller.shared.submission.list', [
     load,
     save,
     parse,
+    tr,
     statuses,
     submissions
   ) {
@@ -88,6 +90,7 @@ controller('controller.shared.submission.list', [
     });
 
     this.array = funcArray;
+    this.tr = tr;
 
     this.statuses = statuses;
 
@@ -108,6 +111,7 @@ controller('controller.shared.submission.view', [
   'backend.submission.status',
   'currentSubmission',
   'func.panic',
+  'i18n.translate',
   'misc.statuses',
   'setStatusPrefix',
   function (
@@ -116,6 +120,7 @@ controller('controller.shared.submission.view', [
     setStatus,
     currentSubmission,
     panic,
+    tr,
     statuses,
     setStatusPrefix
   ) {
@@ -131,6 +136,7 @@ controller('controller.shared.submission.view', [
     };
 
     this.statuses = statuses;
+    this.tr = tr;
 
     this.setStatus = function (status) {
       setStatus(setStatusPrefix, currentSubmission.sub._id, status.id).

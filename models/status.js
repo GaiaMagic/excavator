@@ -3,32 +3,32 @@ var STATUSES = [
     id:      0,
     enabled: true,
     type:    'default',
-    label:   'Undecided'
+    label:   'Undecided' /* tr('subs::statuses::Undecided') */
   }, {
     id:      1,
     enabled: false,
     type:    'primary',
-    label:   'Unknown'
+    label:   'Unknown'   /* tr('subs::statuses::Unknown') */
   }, {
     id:      2,
     enabled: true,
     type:    'success',
-    label:   'Passed'
+    label:   'Passed'    /* tr('subs::statuses::Passed') */
   }, {
     id:      3,
     enabled: false,
     type:    'info',
-    label:   'Unknown'
+    label:   'Unknown'   /* tr('subs::statuses::Unknown') */
   }, {
     id:      4,
     enabled: true,
     type:    'warning',
-    label:   'Pending'
+    label:   'Pending'   /* tr('subs::statuses::Pending') */
   }, {
     id:      5,
     enabled: true,
     type:    'danger',
-    label:   'Rejected'
+    label:   'Rejected'  /* tr('subs::statuses::Rejected') */
   }
 ];
 

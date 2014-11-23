@@ -2,37 +2,38 @@
   <div class="col-sm-9">
     <div class="panel panel-default">
       <div class="panel-heading">
-        Latest submissions
+        <span i18n="subs::Submissions"></span>
         <div class="btn-group btn-group-xs pull-right">
           <button type="button" class="btn btn-default"
             ng-click="cssl.statusFilter = undefined"
-            ng-class="{active: cssl.statusFilter === undefined}">
-            Show All
+            ng-class="{active: cssl.statusFilter === undefined}"
+            i18n="subs::Show All">
           </button>
           <button type="button" class="btn btn-default"
             ng-click="cssl.statusFilter = status.id"
             ng-class="{active: cssl.statusFilter === status.id}"
             ng-repeat="status in cssl.statuses">
-            <span class="text-{{ status.type }}" ng-bind="status.label"></span>
+            <span class="text-{{ status.type }}"
+            ng-bind="cssl.tr('subs::statuses::' + status.label)"></span>
           </button>
         </div>
       </div>
       <table class="table table-bordered table-hover">
         <thead>
           <tr ng-if="cssl.submissions && cssl.submissions.length">
-            <th>View</th>
+            <th i18n="subs::View"></th>
             <th ng-repeat="label in cssl.labels track by $index">
               <span ng-bind="cssl.LABELS[label] || label"
                 title="Model name: {{ cssl.models[label] || label }}"></span>
             </th>
-            <th class="date">Created At</th>
-            <th>Status</th>
+            <th class="date" i18n="subs::Created At"></th>
+            <th i18n="subs::Status"></th>
           </tr>
         </thead>
         <tbody>
           <tr ng-if="!cssl.submissions || !cssl.submissions.length">
             <td class="text-center">
-              No submissions yet!
+              <span i18n="subs::No submissions yet!"></span>
             </td>
           </tr>
           <tr ng-repeat="sub in cssl.submissions">
@@ -55,7 +56,8 @@
             <td ng-bind="sub.created_at | date: 'yyyy-MM-dd hh:mm:ss'"></td>
             <td>
               <span ng-init="status = cssl.statuses.findById(sub.status)"
-                ng-bind="status.label" class="label label-{{ status.type }}"></span>
+                ng-bind="cssl.tr('subs::statuses::' + status.label)"
+                class="label label-{{ status.type }}"></span>
             </td>
           </tr>
         </tbody>
@@ -65,18 +67,19 @@
   <div class="col-sm-3">
     <form ng-submit="cssl.filter()">
       <div class="panel panel-default">
-        <div class="panel-heading">Filter</div>
+        <div class="panel-heading" i18n="subs::Filter"></div>
         <table class="table">
           <tbody>
             <tr>
               <td>
                 <input type="text" class="form-control" ng-model="cssl.form"
-                  placeholder="Show only submissions of this form">
+                  i18n="{placeholder: 'subs::Show only submissions of this form'}">
               </td>
             </tr>
             <tr>
               <td>
-                <button class="btn btn-info" type="submit">Filter</button>
+                <button class="btn btn-info" type="submit" i18n="subs::Filter">
+                </button>
               </td>
             </tr>
           </tbody>
@@ -85,19 +88,19 @@
     </form>
     <div class="panel panel-default">
       <div class="panel-heading">
-        Columns
+        <span i18n="subs::Columns"></span>
         <div class="btn-group btn-group-xs pull-right">
           <button class="btn btn-default"
             ng-click="cssl.array.push(cssl.labels, '')">
             <span class="glyphicon glyphicon-plus"></span>
           </button>
-          <button class="btn btn-default" ng-click="cssl.reset()">
-            RESET
-          </button>
+          <button class="btn btn-default" ng-click="cssl.reset()"
+            i18n="subs::RESET"></button>
         </div>
       </div>
       <div class="panel-body" ng-if="!cssl.labels || !cssl.labels.length">
-        <small>No columns! You may try RESET or ADD your own column.</small>
+        <small i18n="subs::No columns! You may try RESET or ADD your own column.">
+        </small>
       </div>
       <ul class="list-group">
         <li class="list-group-item" ng-repeat="model in cssl.labels track by $index">

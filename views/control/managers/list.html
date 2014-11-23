@@ -1,44 +1,45 @@
 <div class="main-static">
   <div class="col-sm-9">
     <div class="panel panel-default">
-      <div class="panel-heading">Managers</div>
+      <div class="panel-heading" i18n="managers::Managers"></div>
       <table class="table table-bordered table-hover">
         <thead>
           <tr ng-if="ccml.managers && ccml.managers.length">
-            <th>Username</th>
-            <th>Actions</th>
-            <th class="number">Forms</th>
-            <th class="date">Created At</th>
-            <th class="date">Updated At</th>
+            <th i18n="managers::Username"></th>
+            <th i18n="managers::Actions"></th>
+            <th class="number" i18n="managers::Forms"></th>
+            <th class="date" i18n="managers::Created At"></th>
+            <th class="date" i18n="managers::Updated At"></th>
           </tr>
         </thead>
         <tbody>
           <tr ng-if="!ccml.managers || !ccml.managers.length">
             <td class="text-center">
-              No managers yet!
+              <span i18n="managers::No managers yet!"></span>
             </td>
           </tr>
           <tr ng-repeat="manager in ccml.managers">
             <td>
               <span ng-bind="manager.username"
                 ng-class="{'text-danger': manager.banned}"></span>
-              <span class="text-danger" ng-if="manager.banned">(banned)</span>
+              <span class="text-danger" ng-if="manager.banned"
+                i18n="managers::(banned)"></span>
             </td>
             <td>
               <div class="btn-group btn-group-xs">
-                <a class="btn btn-default"
+                <a class="btn btn-default" i18n="managers::Log In"
                   href="/manager?token={{ manager.token }}" target="_blank"
-                  title="Log in as {{ manager.username }}">Log In</a>
-                <a class="btn btn-default"
+                  title="Log in as {{ manager.username }}"></a>
+                <a class="btn btn-default" i18n="managers::Delete"
                   title="Delete manager {{ manager.username }}"
-                  ng-click="ccml.manager.delete(manager)">Delete</a>
+                  ng-click="ccml.manager.delete(manager)"></a>
                 <a class="btn btn-default"
                   title="Ban manager {{ manager.username }}"
-                  ng-click="ccml.manager.ban(manager)">
-                  {{manager.banned&&'Unban'||'Ban'}} User</a>
-                <a class="btn btn-default"
+                  ng-click="ccml.manager.ban(manager)"
+                  i18n="managers::!!manager.banned&&'Unban'||'Ban'!! User"></a>
+                <a class="btn btn-default" i18n="managers::Form Access"
                   title="Allow / disallow form access to {{ manager.username }}"
-                  ng-click="ccml.manager.access(manager)">Form Access</a>
+                  ng-click="ccml.manager.access(manager)"></a>
               </div>
             </td>
             <td>
@@ -55,26 +56,28 @@
   <div class="col-sm-3">
     <form ng-submit="ccml.manager.register()">
       <div class="panel panel-default">
-        <div class="panel-heading">Add Manager</div>
+        <div class="panel-heading" i18n="managers::Add Manager"></div>
         <table class="table">
           <tbody>
             <tr>
               <td>
                 <input type="text" class="form-control"
-                  ng-model="ccml.manager.username" placeholder="Username">
+                  ng-model="ccml.manager.username"
+                  i18n="{placeholder: 'managers::Username'}">
               </td>
             </tr>
             <tr>
               <td>
                 <input type="password" class="form-control"
-                  ng-model="ccml.manager.password" placeholder="Password">
+                  ng-model="ccml.manager.password"
+                  i18n="{placeholder: 'managers::Password'}">
               </td>
             </tr>
             <tr>
               <td>
                 <button class="btn btn-info" type="submit"
                   ng-disabled="!ccml.manager.username ||
-                  !ccml.manager.password">Add manager</button>
+                  !ccml.manager.password" i18n="managers::Add manager"></button>
               </td>
             </tr>
           </tbody>

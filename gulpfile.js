@@ -195,7 +195,8 @@ gulp.task('gettext', function () {
     'assets/js/admin/edit.js',
     'assets/js/admin/enumerator.js',
     'assets/js/admin/validator.js',
-    'models/schemes/*.js'
+    'models/schemes/*.js',
+    'models/status.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.%code%.json',
     langs: ['zh']
