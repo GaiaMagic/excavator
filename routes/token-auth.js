@@ -1,9 +1,11 @@
+var panic = require('../lib/panic');
+
 var User = {
   Admin:   require('../models/admin'),
   Manager: require('../models/manager')
 };
 
-module.exports = function makeMiddleware (options) {
+function tokenAuth (options) {
   options = options || {};
 
   return function authorizeMiddleware (req, res, next) {
@@ -28,4 +30,26 @@ module.exports = function makeMiddleware (options) {
       next();
     }, next);
   };
-};
+}
+
+function statusRoute (model) {
+  return function (req, res, next) {
+    tokenAuth({
+      model: model,
+      returnPromise: true
+    })(req).then(function (user) {
+      res.send({
+        status: 'OK',
+        username: user.username
+      });
+    }).catch(function () {
+      next(panic(200, {
+        type:    'invalid-token',
+        message: 'Invalid token.'
+      }));
+    });
+  }
+}
+
+module.exports = tokenAuth;
+module.exports.statusRoute = statusRoute;

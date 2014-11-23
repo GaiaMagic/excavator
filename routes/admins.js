@@ -4,19 +4,7 @@ var Admin = require('../models/admin');
 var jsonParser = require('body-parser').json();
 var panic = require('../lib/panic');
 
-router.get('/status', function (req, res, next) {
-  require('./token-auth')({
-    model: 'Admin',
-    returnPromise: true
-  })(req).then(function (user) {
-    res.send({status: 'OK', username: user.username});
-  }).catch(function () {
-    next(panic(200, {
-      type:    'invalid-token',
-      message: 'Invalid token.'
-    }));
-  });
-});
+router.get('/status', require('./token-auth').statusRoute('Admin'));
 
 router.post('/login', jsonParser, function (req, res, next) {
   Admin.authenticate(
