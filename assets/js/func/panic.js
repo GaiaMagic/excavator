@@ -1,38 +1,5 @@
 angular.module('excavator.func.panic', []).
 
-run([
-  '$templateCache',
-  function (cache) {
-    cache.put('func.panic.modal.template', [
-      '<div class="modal" tabindex="-1" role="dialog">',
-        '<div class="modal-dialog">',
-          '<div class="modal-content panel-{{ modalType }}">',
-            '<div class="modal-header panel-heading" ng-show="title">',
-              '<button type="button" class="close" ',
-                'ng-click="$hide()">&times;</button>',
-              '<h4 class="modal-title" ng-bind="title"></h4>',
-            '</div>',
-            '<div class="modal-body">',
-              '<p ng-bind="content" ng-if="!errorMsgs"></p>',
-              '<ul ng-if="errorMsgs">',
-                '<li ng-repeat="msg in errorMsgs" ng-bind="msg"></li>',
-              '</ul>',
-            '</div>',
-            '<div class="modal-footer">',
-              '<button type="button" class="btn ',
-                '{{ button.class || \'btn-default\' }}" ',
-                'ng-repeat="button in buttons" ng-click="button.click()" ',
-                'ng-bind="button.text"></button>',
-              '<button type="button" class="btn btn-default" ',
-                'ng-if="!buttons" ng-click="$hide()">Close</button>',
-            '</div>',
-          '</div>',
-        '</div>',
-      '</div>'
-    ].join(''));
-  }
-]).
-
 factory('func.panic', [
   '$modal',
   function ($modal) {
@@ -58,7 +25,7 @@ factory('func.panic', [
       var modal = $modal({
         title: 'Error',
         content: errorMsg,
-        template: 'func.panic.modal.template'
+        template: '/panic.html'
       });
       modal.$scope.modalType = 'danger';
       modal.$scope.errorMsgs = errorMsgs;
@@ -84,7 +51,7 @@ factory('func.panic.alert', [
       var modal = $modal({
         title: title || 'Info',
         content: content,
-        template: 'func.panic.modal.template'
+        template: '/panic.html'
       });
       modal.$scope.modalType = 'info';
       var hideEvent;
@@ -119,7 +86,7 @@ factory('func.panic.confirm', [
       var modal = $modal({
         title: title || 'Confirm',
         content: content,
-        template: 'func.panic.modal.template'
+        template: '/panic.html'
       });
       modal.$scope.modalType = 'info';
       modal.$scope.yes = function () {
