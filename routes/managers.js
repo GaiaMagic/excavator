@@ -6,6 +6,7 @@ var jsonParser = require('body-parser').json();
 var panic = require('../lib/panic');
 var Q = require('q');
 var Status = require('../models/status');
+var tr = require('../lib/i18n').tr;
 
 function makePromise (promise) {
   return Q.nbind(promise.exec, promise)();
@@ -87,7 +88,7 @@ router.post('/:id([a-f0-9]{24})/forms', needsAdminAuth, jsonParser,
       if (!checkForms(forms)) {
         return Q.reject(panic(422, {
           type:    'invalid-form-id',
-          message: 'At least one form ID provided is not valid.'
+          message: tr('At least one form ID provided is not valid.')
         }));
       }
     }).then(function () {
@@ -111,7 +112,7 @@ router.post('/:id([a-f0-9]{24})/forms', needsAdminAuth, jsonParser,
         if (!forms[i][0] || !forms[i][0].id) {
           return Q.reject(panic(404, {
             type:    'form-does-not-exist',
-            message: 'At least one form does not exist.'
+            message: tr('At least one form does not exist.')
           }));
         }
         newForms.push(forms[i][0].id);
@@ -195,7 +196,7 @@ needsManagerAuth, function (req, res, next) {
     if (!status) {
       return Q.reject(panic(422, {
         type:    'invalid-status',
-        message: 'Status does not exist.'
+        message: tr('Status does not exist.')
       }));
     }
     return Q.nbind(Submission.findOneAndUpdate, Submission)({
@@ -222,7 +223,7 @@ router.post('/login', jsonParser, function (req, res, next) {
     if (err.type === 'invalid-username' || err.type === 'invalid-password') {
       err = panic(403, {
         type:    'invalid-username-or-password',
-        message: 'Either username or password is wrong.'
+        message: tr('Either username or password is wrong.')
       });
     }
     next(err);

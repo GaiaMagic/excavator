@@ -3,13 +3,19 @@ angular.module('excavator.i18n', [
 ]).
 
 service('i18n.linguist', [
+  '$http',
   '$rootScope',
   'func.localstorage.load',
   'func.localstorage.save',
   'i18n.dictionary',
-  function ($rootScope, load, save, dictionary) {
-    this.lang = load('lang') || 'zh';
-    this.dict = dictionary(this.lang);
+  function ($http, $rootScope, load, save, dictionary) {
+    this._setLang = function (langcode) {
+      this.lang = langcode;
+      this.dict = dictionary(this.lang);
+      $http.defaults.headers.common.Lang = this.lang;
+    };
+
+    this._setLang(load('lang') || 'zh');
 
     this.langs = {
       'en': 'EN',
@@ -17,8 +23,7 @@ service('i18n.linguist', [
     };
 
     this.setLang = function (langcode) {
-      this.lang = langcode;
-      this.dict = dictionary(this.lang);
+      this._setLang(langcode);
       save('lang', this.lang);
       $rootScope.$broadcast('language change');
     };

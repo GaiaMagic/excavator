@@ -1,5 +1,6 @@
 var panic = require('../lib/panic');
 var DOMAINS = require('../domains');
+var tr = require('../lib/i18n').tr;
 
 var User = {
   Admin:   require('../models/admin'),
@@ -47,7 +48,7 @@ function statusRoute (model) {
     }).catch(function () {
       next(panic(200, {
         type:    'invalid-token',
-        message: 'Invalid token.'
+        message: tr('Please log-in again.')
       }));
     });
   }

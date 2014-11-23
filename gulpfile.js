@@ -148,6 +148,8 @@ gulp.task('watch', function () {
 
   gulp.watch([
     'excavator.js',
+    'lib/**/*.js',
+    'lib/**/backend.*.js',
     'models/**/*.js',
     'routes/**/*.js'
   ]).on('change', function (file) {
@@ -160,7 +162,7 @@ gulp.task('watch', function () {
 
   gulp.watch([
     'assets/**/*.js',
-    'lib/i18n/*.json',
+    'lib/i18n/*.json'
   ]).on('change', function (file) {
     gulp.start('browserify');
     excavator.notify(file);
@@ -227,5 +229,12 @@ gulp.task('gettext', function () {
     file: 'lib/i18n/dictionary.public.%code%.json',
     langs: ['zh'],
     excludeRootKeys: ['schemes']
+  })).pipe(gulp.dest('.'));
+
+  gulp.src([
+    'routes/**/*.js'
+  ]).pipe(gettext({
+    file: 'lib/i18n/backend.%code%.json',
+    langs: ['zh']
   })).pipe(gulp.dest('.'));
 });

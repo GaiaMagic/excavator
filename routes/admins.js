@@ -3,6 +3,7 @@ var router = express.Router();
 var Admin = require('../models/admin');
 var jsonParser = require('body-parser').json();
 var panic = require('../lib/panic');
+var tr = require('../lib/i18n').tr;
 
 router.get('/status', require('./token-auth').statusRoute('Admin'));
 
@@ -18,7 +19,7 @@ router.post('/login', jsonParser, function (req, res, next) {
     if (err.type === 'invalid-username' || err.type === 'invalid-password') {
       err = panic(403, {
         type:    'invalid-username-or-password',
-        message: 'Either username or password is wrong.'
+        message: tr('Either username or password is wrong.')
       });
     }
     next(err);

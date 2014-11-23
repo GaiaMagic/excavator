@@ -5,6 +5,7 @@ var Submission = require('../models/submission');
 var Q = require('q');
 var panic = require('../lib/panic');
 var Status = require('../models/status');
+var tr = require('../lib/i18n').tr;
 
 function makePromise (promise) {
   return Q.nbind(promise.exec, promise)();
@@ -76,7 +77,7 @@ function (req, res, next) {
   if (!status) {
     return next(panic(422, {
       type:    'invalid-status',
-      message: 'Status does not exist.'
+      message: tr('Status does not exist.')
     }));
   }
   Q.nbind(Submission.findByIdAndUpdate, Submission)(id,

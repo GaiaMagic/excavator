@@ -1,0 +1,9 @@
+{
+  "Either username or password is wrong.": "用户名或密码错误。",
+  "The resource you requested does not exist.": "你请求的资源不存在。",
+  "Unknown server error.": "服务器发送错误。",
+  "At least one form ID provided is not valid.": "至少有一个表格的ID是不正确的。",
+  "At least one form does not exist.": "至少有一个表格已不存在。",
+  "Status does not exist.": "状态不存在。",
+  "Please log-in again.": "请重新登录。"
+}
