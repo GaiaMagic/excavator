@@ -4,7 +4,8 @@ directive('validator', [
   '$compile',
   '$modal',
   'i18n.translate',
-  function ($compile, $modal, tr) {
+  'misc.general.validators',
+  function ($compile, $modal, tr, generalValidators) {
 
     function helper (parentScope, attr) {
       var modal = $modal({
@@ -16,6 +17,9 @@ directive('validator', [
       var defaultString = parentScope.$eval(attr);
 
       scope.pages = [{
+        label: tr('forms::GENERAL'),
+        value: 'general'
+      }, {
         label: tr('forms::STRING'),
         value: 'string'
       }, {
@@ -29,15 +33,26 @@ directive('validator', [
         value: 'boolean'
       }];
 
-      if (!defaultString || /("|')string\1/.test(defaultString)) {
-        scope.page = 'string';
-      } else if (/("|')number\1/.test(defaultString)) {
-        scope.page = 'numeric';
-      } else if (defaultString.indexOf('true') > -1 &&
-        defaultString.indexOf('false') > -1) {
-        scope.page = 'boolean';
-      } else {
-        scope.page = 'choices';
+      scope.generals = generalValidators(tr);
+      for (var i = 0; i < scope.generals.length; i++) {
+        if (scope.generals[i].value === defaultString) {
+          scope.page = 'general';
+          scope.general = scope.generals[i];
+        }
+      }
+
+      if (!scope.page) {
+        if (/("|')string\1/.test(defaultString)) {
+          scope.page = 'string';
+        } else if (/("|')number\1/.test(defaultString)) {
+          scope.page = 'numeric';
+        } else if (angular.isString(defaultString) &&
+          defaultString.indexOf('true') > -1 &&
+          defaultString.indexOf('false') > -1) {
+          scope.page = 'boolean';
+        } else {
+          scope.page = 'general';
+        }
       }
 
       scope.choices = [''];
@@ -92,6 +107,12 @@ directive('validator', [
         }
       }
       scope.make = function () {
+        if (scope.page === 'general') {
+          var general = scope.general;
+          if (!angular.isObject(general)) return 'false';
+          return general.value;
+        }
+
         if (scope.page === 'choices') {
           var ret = scope.choices.filter(function (choice) {
             return choice;
@@ -119,11 +140,18 @@ directive('validator', [
           '}/.test(data)';
       };
       scope.say = function () {
+        if (scope.page === 'general') {
+          var general = scope.general;
+          if (!angular.isObject(general)) return tr('forms::be empty');
+          return general.say;
+        }
+
         if (scope.page === 'choices') {
           var ret = scope.choices.filter(function (choice) {
             return choice;
           }).map(angular.toJson).join(', ');
-          return ret ? (tr('forms::be one of the following: ') + ret) : '';
+          return ret ? (tr('forms::be one of the following: ') + ret) :
+            tr('forms::be empty');
         }
 
         if (scope.page === 'boolean') {

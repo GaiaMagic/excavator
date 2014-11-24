@@ -16,6 +16,14 @@
             ng-repeat="p in pages"></button>
         </div>
         <hr>
+        <form class="form form-space" ng-show="page === 'general'">
+          <div class="form-group">
+            <select class="form-control" ng-model="general"
+              ng-options="general as general.label for general in generals">
+              <option value="" i18n="forms::— Choose one —"></option>
+            </select>
+          </div>
+        </form>
         <form class="form form-space" ng-show="page === 'string'">
           <div class="form-group row">
             <div class="col-xs-6">

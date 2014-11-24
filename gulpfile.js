@@ -203,6 +203,7 @@ gulp.task('gettext', function () {
     'assets/js/func/panic.js',
     'lib/hierarchies/hierarchies.js',
     'models/schemes/*.js',
+    'models/general-validators.js',
     'models/status.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.%code%.json',
@@ -234,6 +235,7 @@ gulp.task('gettext', function () {
   gulp.src([
     'models/*.js',
     'models/schemes/hierarchy.js',
+    '!models/general-validators.js',
     '!models/status.js',
     'routes/**/*.js'
   ]).pipe(gettext({
