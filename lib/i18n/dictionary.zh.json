@@ -171,7 +171,9 @@
   },
   "hierarchy": {
     "_": {
-      "Presets": "预设"
+      "Presets": "预设",
+      "Please choose one \"{{field}}\".": "请选择一个“{{field}}”。",
+      "Internal error occurred while processing hierarchy.": "处理数据时发生内部错误。"
     },
     "DoC": {
       "Districts of China": "中国城镇",

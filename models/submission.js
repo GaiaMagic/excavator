@@ -48,13 +48,18 @@ submissionSchema.pre('save', function (next) {
 
         var serverScheme = Schemes[scheme.type];
         if (typeof serverScheme !== 'object') {
-          errorMsgs.push('Scheme "' + scheme.type + '" does not exist.');
+          errorMsgs.push(tr('Scheme "{{type}}" does not exist.', {
+            type: scheme.type
+          }));
           continue;
         }
         serverScheme = serverScheme[scheme.version];
         if (typeof serverScheme !== 'object') {
-          errorMsgs.push('Scheme "' + scheme.type + '" with version "' +
-            scheme.version + '" does not exist.');
+          errorMsgs.push(tr('Scheme "{{type}}" with version "{{version}}" ' +
+            'does not exist.', {
+              type: scheme.type,
+              version: scheme.version
+            }));
           continue;
         }
 
@@ -73,7 +78,7 @@ submissionSchema.pre('save', function (next) {
           continue;
         }
         if (scheme.models instanceof Array) {
-          var validation = validator(scheme, data);
+          var validation = validator.call({ tr: tr }, scheme, data);
           if (validation.result !== true) {
             errorMsgs = errorMsgs.concat(validation.errorMsgs);
           }
@@ -81,8 +86,10 @@ submissionSchema.pre('save', function (next) {
           var sd = data[scheme.model];
           if (validator(sd) !== true) {
             validatorMessage = validatorMessage || scheme.validatorMessage;
-            errorMsgs.push('Item "' + scheme.label + '" should ' +
-              validatorMessage + '.');
+            errorMsgs.push(tr('Item "{{label}}" should {{msg}}.', {
+                label: scheme.label,
+                msg: validatorMessage
+              }));
           }
         }
       }

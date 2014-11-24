@@ -57,10 +57,14 @@ module.exports = {
       })();
       var errorMsg;
       if (result !== true) {
+        var tr = this.tr;
         if (errField) {
-          errorMsg = 'Please choose one "' + errField + '".';
+          errorMsg = tr('hierarchy::_::Please choose one "{{field}}".', {
+            field: errField
+          });
         } else {
-          errorMsg = 'Internal error occurred while processing hierarchy.';
+          errorMsg = tr('hierarchy::_::Internal error occurred while ' +
+            'processing hierarchy.');
         }
       }
       return {

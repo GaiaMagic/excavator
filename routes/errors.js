@@ -21,7 +21,9 @@ module.exports = function (err, req, res, next) {
       message: err.message
     };
     if (err.messages instanceof Array && err.messages.length > 0) {
-      errObj.messages = err.messages;
+      errObj.messages = err.messages.map(function (msg) {
+        return i18n.translate(msg, langcode);
+      });
       if (!err.message) {
         errObj.message = err.messages[0];
       }

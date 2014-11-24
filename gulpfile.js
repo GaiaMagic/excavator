@@ -228,15 +228,17 @@ gulp.task('gettext', function () {
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.public.%code%.json',
     langs: ['zh'],
-    excludeRootKeys: ['schemes']
+    excludeRootKeys: ['schemes', 'hierarchy']
   })).pipe(gulp.dest('.'));
 
   gulp.src([
     'models/*.js',
+    'models/schemes/hierarchy.js',
     '!models/status.js',
     'routes/**/*.js'
   ]).pipe(gettext({
     file: 'lib/i18n/backend.%code%.json',
-    langs: ['zh']
+    langs: ['zh'],
+    excludeRootKeys: ['schemes', 'template']
   })).pipe(gulp.dest('.'));
 });
