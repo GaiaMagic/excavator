@@ -56,6 +56,8 @@ controller('controller.control.form.edit', [
     this.formdata = angular.toJson(this.form.content.data, true);
   };
 
+  this.showPreview = true;
+
   this.clearData = function () {
     var data = this.form.content.data;
     for (var key in data) {
