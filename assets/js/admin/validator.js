@@ -166,7 +166,7 @@ directive('validator', [
         var tpl;
         if (angular.isDefined($attrs.static)) {
           tpl = [
-            '<div class="validator">',
+            '<div class="validator validator-static">',
               '<pre><code ng-bind="', $attrs.for, '"></code></pre>',
               '<input type="text" class="form-control" placeholder="',
                 tr('forms::Help text'), '" ng-change="', $attrs.for,

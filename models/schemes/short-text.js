@@ -41,7 +41,7 @@ module.exports = {
         };
         for (var name in fields) {
           ret = ret.concat([
-            '<div class="form-group col-md-6">',
+            '<div class="form-group col-md-6 col-lg-4">',
               '<label class="col-sm-3 control-label">', fields[name],
               '</label>',
               '<div class="col-sm-9">',
