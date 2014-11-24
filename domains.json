@@ -5,8 +5,8 @@
     "control": "control:3000"
   },
   "production": {
-    "public": "form.youyanchu.com",
-    "manager": "manager.form.youyanchu.com",
-    "control": "control.form.youyanchu.com"
+    "public": "form.gaiamagic.com",
+    "manager": "manager.form.gaiamagic.com",
+    "control": "control.form.gaiamagic.com"
   }
 }
