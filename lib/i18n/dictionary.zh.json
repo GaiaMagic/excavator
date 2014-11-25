@@ -39,7 +39,6 @@
     "Add": "添加",
     "Clear All": "清空",
     "Access": "访问权",
-    "!! scheme.label || '(unlabeled)' !!": "!! scheme.label || '(无标签)' !!",
     "To start, please click the 'Add' button, then choose a scheme.": "请按“添加”按钮添加项目。",
     "Nothing to preview.": "无可预览的内容。",
     "MIN": "最小值",
@@ -69,6 +68,7 @@
     "Remove": "移除",
     "— Choose one —": "— 请选择 —",
     "OK, use this validator.": "好，使用这个验证方法。",
+    "(unlabeled)": "(无标签)",
     "Form is corrupted.": "表格已损毁。",
     "Form data will appear here once you submit the form.": "提交表格时将在此显示提交内容。",
     "Scheme data will appear here once you save the scheme.": "保存表格时将在此显示表格源码。",
@@ -113,6 +113,7 @@
     "Success": "成功",
     "Save Changes To {{title}}": "保存对 {{title}} 的更改",
     "Successfully updated {{title}}.": "成功更新 {{title}} 。",
+    "Successfully created {{title}}. You will be redirected to the form edit page.": "成功创建 {{title}} 。即将跳转到该表格的编辑页。",
     "Form access for {{username}}": "用户 {{username}} 的表格访问权限",
     "Chinese mobile phone number": "中国手机号码",
     "be a valid 11-digit Chinese mobile phone number": "为正确的11位数字的中国手机号码",
@@ -125,8 +126,7 @@
     "Credit card number (Luhn validation)": "信用卡号码（Luhn算法）",
     "be a valid credit card number": "为正确的信用卡号码",
     "Resident ID Card": "中国居民身份证号码",
-    "be a valid 18-digit resident ID card number": "为18位居民身份证号码",
-    "Successfully created {{title}}. You will be redirected to the form edit page.": "成功创建 {{title}} 。即将跳转到该表格的编辑页。"
+    "be a valid 18-digit resident ID card number": "为18位居民身份证号码"
   },
   "managers": {
     "Managers": "经理",

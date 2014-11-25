@@ -1,3 +1,7 @@
+/*
+  for gettext:
+    - tr('forms::(unlabeled)')
+*/
 angular.module('excavator.admin.edit', []).
 
 controller('controller.control.form.edit', [

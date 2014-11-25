@@ -31,6 +31,15 @@ service('i18n.linguist', [
     this.transform = function (text, scope) {
       if (!scope) return text;
       return text.replace(/!!(.+?)!!/g, function (p0, p1) {
+        if (!scope.$i18nWatch) {
+          var unwatch = scope.$watch(p1, function () {
+            scope.$emit('language change');
+          });
+          scope.$i18nWatch = true;
+          scope.$on('$destroy', function () {
+            unwatch();
+          });
+        }
         return scope.$eval(p1);
       });
     };
@@ -78,7 +87,7 @@ directive('i18n', [
   function (linguist) {
     return {
       link: function ($scope, $element, $attrs) {
-        $scope.$on('language change', onLanguageChange)
+        $scope.$on('language change', onLanguageChange);
         $scope.$emit('language change');
         function onLanguageChange () {
           var attr = $attrs.i18n.trim();
