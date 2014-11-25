@@ -216,9 +216,9 @@ module.exports = {
         ret = ret.concat([
           '<div class="form-group col-md-12" ',
             'ng-show="data.hierarchy === \'custom\'">',
-            '<label class="col-sm-12 col-12-2 control-label">',
+            '<label class="col-sm-12 col-12-3 control-label">',
               tr('schemes::hierarchy::Custom'), '</label>',
-            '<div class="col-sm-12 col-12-10">',
+            '<div class="col-sm-12 col-12-9">',
               '<textarea class="form-control monospace" rows="10" ',
                 'behave-editor ng-model="data.hierarchyCustom" ',
                 'ng-model-options="{ updateOn: \'blur\'}" placeholder="', tr(
