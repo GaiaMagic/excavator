@@ -40,7 +40,7 @@ config([
       controller: 'controller.shared.submission.view as cssv',
       resolve: {
         loggedIn: authNeededResolver,
-        setStatusPrefix: isResolver('/backends'),
+        setStatusPrefix: isResolver('/backend/managers'),
         currentSubmission: submissionResolver('backend.manager.submission.get')
       }
     }).
