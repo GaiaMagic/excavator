@@ -10,9 +10,28 @@ https://circleci.com/gh/lyoooooooo/excavator)
 
 ## Deploy
 
-* Install `docker` and `fig`.
-* Run `fig up -d`.
-* Configure `nginx`.
+* Install `make`, `docker` and `fig`.
+* Run `make` to build the images and start all containers.
+
+This will create 4 containers:
+
+* excavator_backend_1
+* excavator_frontend_1
+* excavator_db_1
+* excavator_data_1
+
+`excavator_data_1` is VERY IMPORTANT, because it has all the data. You must
+NOT remove it once it's created. Other three containers/images are free to
+remove/recreate.
+
+* Run `make start` or `make restart` to recreate all containers.
+* Run `make reload` if you want to rebuild front-end files.
+
+You can now visit backend `curl localhost:43210 -i` and frontend
+`ls /srv/excavator` on the host system.
+
+By recreating images, you will find there are many `<none>` images in
+`docker images`, you can use `make clean` to remove these old images.
 
 ## Test
 

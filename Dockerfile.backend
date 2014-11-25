@@ -1,0 +1,15 @@
+FROM node:0.10.33
+
+MAINTAINER Cai Guanhao (caiguanhao@gmail.com)
+
+ADD package.backend.json /excavator/package.json
+
+WORKDIR /excavator
+
+ENV NODE_ENV production
+
+RUN npm --loglevel warn install
+
+ADD . /excavator
+
+CMD node excavator.js

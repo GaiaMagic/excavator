@@ -1,3 +1,5 @@
+# don't use `fig build` or `fig up` manually, use `make`
+
 # data-only container
 data:
   image: busybox:latest
@@ -11,12 +13,16 @@ db:
   volumes_from:
     - data
 
-# node.js app
-app:
+# backend
+backend:
   build: .
   links:
     - db
   ports:
     - '43210:3000'
+
+# frontend
+frontend:
+  build: .
   volumes:
     - /srv/excavator:/excavator/dist
