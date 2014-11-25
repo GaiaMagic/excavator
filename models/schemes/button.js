@@ -89,6 +89,7 @@ module.exports = {
               tr('schemes::button::Label'), '</label>',
             '<div class="col-sm-12 col-12-10">',
               '<input type="text" class="form-control" ',
+                'ng-model-options="{ updateOn: \'blur\'}" ',
                 'ng-model="data.label">',
             '</div>',
           '</div>',

@@ -126,6 +126,6 @@ controller('controller.control.form.edit', [
     debounce = $timeout(function () {
       $scope.$broadcast('update scheme view', value, rememberState());
       debounce = undefined;
-    }, 500);
+    }, 100);
   }, true);
 }]);

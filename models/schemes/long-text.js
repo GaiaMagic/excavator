@@ -50,6 +50,7 @@ module.exports = {
               '<label class="col-sm-3 control-label">', fields[name], '</label>',
               '<div class="col-sm-9">',
                 '<input type="text" class="form-control" ',
+                  'ng-model-options="{ updateOn: \'blur\'}" ',
                   'ng-model="data.', name, '">',
               '</div>',
             '</div>'
@@ -61,6 +62,7 @@ module.exports = {
               tr('schemes::long-text::Default'), '</label>',
             '<div class="col-sm-12 col-12-10">',
               '<textarea class="form-control" rows="3" ',
+                'ng-model-options="{ updateOn: \'blur\'}" ',
                 'ng-model="data.default"></textarea>',
             '</div>',
           '</div>',

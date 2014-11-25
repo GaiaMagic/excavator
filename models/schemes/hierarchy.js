@@ -198,6 +198,7 @@ module.exports = {
                 tr('schemes::hierarchy::Model'), ' #', i+1, '</label>',
               '<div class="col-sm-9">',
                 '<input type="text" class="form-control" ',
+                  'ng-model-options="{ updateOn: \'blur\'}" ',
                   'ng-model="data.models[', i, '].model">',
               '</div>',
             '</div>',
@@ -206,6 +207,7 @@ module.exports = {
                 tr('schemes::hierarchy::Label'), ' #', i+1, '</label>',
               '<div class="col-sm-9">',
                 '<input type="text" class="form-control" ',
+                  'ng-model-options="{ updateOn: \'blur\'}" ',
                   'ng-model="data.models[', i, '].label">',
               '</div>',
             '</div>'

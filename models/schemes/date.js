@@ -109,6 +109,7 @@ module.exports = {
               '</label>',
               '<div class="col-sm-9">',
                 '<input type="text" class="form-control" ',
+                  'ng-model-options="{ updateOn: \'blur\'}" ',
                   'ng-model="data.', name, '">',
               '</div>',
             '</div>'
@@ -131,6 +132,7 @@ module.exports = {
               tr('schemes::date::Min'), '</label>',
             '<div class="col-sm-9">',
               '<input type="text" class="form-control" ',
+                'ng-model-options="{ updateOn: \'blur\'}" ',
                 'ng-model="data.datemin" bs-datepicker ',
                 'data-max-date="[[ data.datemax ]]" ',
                 'data-date-format="yyyy-MM-dd" ',
@@ -142,6 +144,7 @@ module.exports = {
               tr('schemes::date::Max'), '</label>',
             '<div class="col-sm-9">',
               '<input type="text" class="form-control" ',
+                'ng-model-options="{ updateOn: \'blur\'}" ',
                 'ng-model="data.datemax" bs-datepicker ',
                 'data-min-date="[[ data.datemin ]]" ',
                 'data-date-format="yyyy-MM-dd" ',

@@ -95,6 +95,7 @@ module.exports = {
               '<label class="col-sm-3 control-label">', fields[name], '</label>',
               '<div class="col-sm-9">',
                 '<input type="text" class="form-control" ',
+                  'ng-model-options="{ updateOn: \'blur\'}" ',
                   'ng-model="data.', name, '">',
               '</div>',
             '</div>'
