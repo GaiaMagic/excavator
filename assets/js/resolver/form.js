@@ -20,10 +20,11 @@ constant('resolver.form', function formResolver (service, options) {
   return [
     '$rootScope',
     '$route',
+    '$timeout',
     service,
     'func.panic',
     'func.scheme.parse',
-    function currentForm ($rootScope, $route, get, panic, parse) {
+    function currentForm ($rootScope, $route, $timeout, get, panic, parse) {
       options = options || {};
       var formid = options.formId || $route.current.params.formid;
       var formrevid = options.formRevId || $route.current.params.formrevid;
@@ -58,10 +59,12 @@ constant('resolver.form', function formResolver (service, options) {
         if (!angular.isObject(content) ||
             !angular.isObject(content.scheme)) return false;
 
-        $rootScope.$broadcast('global-meta', {
-          type: 'form-edit',
-          title: title,
-          id: res.data._id
+        $timeout(function () {
+          $rootScope.$broadcast('global-meta', {
+            type: 'form-edit',
+            title: title,
+            id: res.data._id
+          });
         });
 
         var link = '/' + slug;
