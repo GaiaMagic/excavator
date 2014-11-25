@@ -151,6 +151,18 @@ describe('Form (w/ revision) database model', function () {
         'content-is-not-valid-json', done);
     });
 
+    it('should fail if the content has wrong key', function (done) {
+      var invalidcontent = '{"test":"false"}';
+      expectFailure(FormRevision.create(real.title, invalidcontent),
+        'content-is-not-valid-json-only-scheme-allowed', done);
+    });
+
+    it('should fail if the content has other keys', function (done) {
+      var invalidcontent = '{"scheme":[],"data":[]}';
+      expectFailure(FormRevision.create(real.title, invalidcontent),
+        'content-is-not-valid-json-only-scheme-allowed', done);
+    });
+
     it('should fail if slug is invalid', function (done) {
       expectFailure(FormRevision.create(real.title, real.content,
         undefined, repeat(real.slug, 10)), 'invalid-slug', done);

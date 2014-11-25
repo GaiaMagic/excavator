@@ -28,7 +28,7 @@ factory('form.create.new', [
         modal.$scope.submit = function () {
           modal.hide();
           var title = modal.$scope.form.title;
-          var content = stringify(schemeData);
+          var content = stringify(schemeData, ['scheme']);
           var parent = modal.$scope.form.parent;
           var slug = modal.$scope.form.slug;
           create(title, content, parent, slug).then(function (res) {
@@ -51,7 +51,7 @@ factory('form.create.new', [
         modal.$scope.form = form;
         modal.$scope.submit = function () {
           modal.hide();
-          var content = stringify(schemeData);
+          var content = stringify(schemeData, ['scheme']);
           var slug = form.slug;
           create(form.title, content, undefined, slug).then(function (res) {
             alert(

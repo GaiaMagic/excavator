@@ -18,6 +18,7 @@ controller('controller.control.form.edit', [
   'func.localstorage.remove',
   'func.localstorage.save',
   'func.scheme.parse',
+  'func.scheme.stringify',
   'func.panic',
   'currentForm',
   'i18n.translate',
@@ -36,6 +37,7 @@ controller('controller.control.form.edit', [
     remove,
     save,
     parse,
+    stringify,
     panic,
     currentForm,
     tr,
@@ -69,8 +71,6 @@ controller('controller.control.form.edit', [
     }
   };
 
-  this.def_schemedata = tr('forms::Scheme data will appear here ' +
-    'once you save the scheme.', undefined, { fake: true });
   this.save = function () {
     var self = this;
     createNew(currentForm, this.form.content).then(function () {
@@ -78,7 +78,6 @@ controller('controller.control.form.edit', [
         $route.reload();
       }
     }).catch(function (data) {
-      self.schemedata = data.content;
       save('schemedata', self.schemedata);
     });
   };
@@ -125,6 +124,7 @@ controller('controller.control.form.edit', [
     }
     debounce = $timeout(function () {
       $scope.$broadcast('update scheme view', value, rememberState());
+      self.schemedata = stringify(self.form.content, ['scheme']);
       debounce = undefined;
     }, 100);
   }, true);

@@ -21,7 +21,14 @@ factory('func.scheme.stringify', [
   'func.formatter.function.reindent',
   'func.scheme.func.decorate',
   function (reindent, decorate) {
-    return function (object) {
+    return function (object, allowedKeys) {
+      if (angular.isArray(allowedKeys)) {
+        var obj = {};
+        allowedKeys.forEach(function (key) {
+          obj[key] = object[key];
+        });
+        object = obj;
+      }
       return JSON.stringify(object, function (key, val) {
         if (angular.isString(key) && key.charAt(0) === '$') {
           val = undefined;

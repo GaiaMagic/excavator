@@ -104,6 +104,14 @@ formRevisionSchema.pre('save', function (next) {
       if (typeof parsed !== 'object') {
         throw 'parsed JSON is not an object';
       }
+      var keys = Object.keys(parsed);
+      if (keys.length !== 1 || keys.toString() !== 'scheme') {
+        return next(panic(422, {
+          type:    'content-is-not-valid-json-only-scheme-allowed',
+          message: tr('Content should be a valid JSON string ' +
+            '(only scheme is allowed).')
+        }));
+      }
       this.content = JSON.stringify(parsed);
     } catch (e) {
       return next(panic(422, {
