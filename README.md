@@ -33,6 +33,18 @@ You can now visit backend `curl localhost:43210 -i` and frontend
 By recreating images, you will find there are many `<none>` images in
 `docker images`, you can use `make clean` to remove these old images.
 
+Other useful `make` commands:
+
+* `make help` to see help information
+* `make db` to enter the MongoDB system
+* `make mongo` to directly connect to db via `mongo`
+* `make mongodump` to dump excavator database to current directory
+* `make mongorestore` to restore the backed-up database in current directory
+* `make mongorestore-drop` to drop before restore
+* `make data` to enter where the MongoDB data files are
+* `make node` to enter the system where the backend application runs
+* `make dist` to view the source and the dist directory
+
 ## Test
 
 ```
