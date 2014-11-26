@@ -1,24 +1,34 @@
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var $ = require('gulp-load-plugins')();
-var exec = require('child_process').exec;
-var Q = require('q');
+
 var info = {
-  git: {}
+  git: {
+    headCommit: process.env.GIT_HEAD_COMMIT,
+    headDate: process.env.GIT_HEAD_DATE,
+    headAuthor: process.env.GIT_HEAD_AUTHOR,
+    headFileCount: process.env.GIT_HEAD_FILE_COUNT,
+    user: process.env.GIT_USER
+  }
 };
-Q.all([
-  Q.nfcall(exec, 'git rev-parse HEAD'),
-  Q.nfcall(exec, 'git --no-pager show --format="%ad" --quiet HEAD'),
-  Q.nfcall(exec, 'git --no-pager show --format="%ae" --quiet HEAD'),
-  Q.nfcall(exec, 'git ls-files | wc -l'),
-  Q.nfcall(exec, 'git config --get user.email')
-]).then(function (ret) {
-  info.git.headCommit = ret[0][0].trim();
-  info.git.headDate = ret[1][0].trim();
-  info.git.headAuthor = ret[2][0].trim();
-  info.git.headFileCount = ret[3][0].trim();
-  info.git.user = ret[4][0].trim();
-});
+
+if (!process.env.GIT_HEAD_COMMIT) {
+  var exec = require('child_process').exec;
+  var Q = require('q');
+  Q.all([
+    Q.nfcall(exec, 'git rev-parse HEAD'),
+    Q.nfcall(exec, 'git --no-pager show --format="%ad" --quiet HEAD'),
+    Q.nfcall(exec, 'git --no-pager show --format="%ae" --quiet HEAD'),
+    Q.nfcall(exec, 'git ls-files | wc -l'),
+    Q.nfcall(exec, 'git config --get user.email')
+  ]).then(function (ret) {
+    info.git.headCommit = ret[0][0].trim();
+    info.git.headDate = ret[1][0].trim();
+    info.git.headAuthor = ret[2][0].trim();
+    info.git.headFileCount = ret[3][0].trim();
+    info.git.user = ret[4][0].trim();
+  });
+}
 
 gulp.task('clean', function (cb) {
   require('del')(['dist/*', '.tmp'], cb);

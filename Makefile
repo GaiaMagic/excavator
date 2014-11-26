@@ -1,3 +1,10 @@
+GIT_ENV = @GIT_HEAD_COMMIT="$(shell git rev-parse HEAD)" \
+	GIT_HEAD_DATE="$(shell git --no-pager show --format="%ad" --quiet HEAD)" \
+	GIT_HEAD_AUTHOR="$(shell git --no-pager show --format="%ae" --quiet HEAD)" \
+	GIT_HEAD_FILE_COUNT="$(shell git ls-files | wc -l | xargs)" \
+	GIT_USER="$(shell git config --get user.email)" \
+	$(1)
+
 all: backend frontend start clean
 
 backend:
@@ -11,13 +18,13 @@ frontend:
 	mv Dockerfile Dockerfile.frontend
 
 start:
-	fig up -d
+	$(call GIT_ENV,fig up -d)
 
 restart: start
 
+# this will rebuild front-end files
 reload:
-	# this will rebuild front-end files
-	fig up -d --no-recreate
+	$(call GIT_ENV,fig up -d --no-recreate)
 
 clean:
 	@sudo docker images | grep -q '<none>' && \

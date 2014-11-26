@@ -24,5 +24,11 @@ backend:
 # frontend
 frontend:
   build: .
+  environment:
+    - GIT_HEAD_COMMIT
+    - GIT_HEAD_DATE
+    - GIT_HEAD_AUTHOR
+    - GIT_HEAD_FILE_COUNT
+    - GIT_USER
   volumes:
     - /srv/excavator:/excavator/dist
