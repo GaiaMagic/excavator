@@ -9,7 +9,7 @@
       <div class="modal-body">
         <p ng-bind="content" ng-if="!errorMsgs"></p>
         <ul ng-if="errorMsgs">
-          <li ng-repeat="msg in errorMsgs" ng-bind="msg"></li>
+          <li ng-repeat="msg in errorMsgs track by $index" ng-bind="msg"></li>
         </ul>
       </div>
       <div class="modal-footer">
