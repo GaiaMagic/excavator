@@ -183,6 +183,22 @@
     "Yes": "是",
     "No": "否"
   },
+  "timeago": {
+    "just now": "刚刚",
+    "{{n}} seconds ago": "{{n}}秒前",
+    "1 minute ago": "一分钟前",
+    "{{n}} minutes ago": "{{n}}分钟前",
+    "1 hour ago": "一小时前",
+    "{{n}} hours ago": "{{n}}小时前",
+    "1 day ago": "一天前",
+    "{{n}} days ago": "{{n}}天前",
+    "1 week ago": "一个星期前",
+    "{{n}} weeks ago": "{{n}}个星期前",
+    "1 month ago": "一个月前",
+    "{{n}} months ago": "{{n}}个月前",
+    "1 year ago": "一年前",
+    "{{n}} years ago": "{{n}}年前"
+  },
   "hierarchy": {
     "_": {
       "Presets": "预设",

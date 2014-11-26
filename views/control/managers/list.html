@@ -46,8 +46,12 @@
               <a href="/forms?manager={{ manager.username }}"
                 ng-bind="manager.forms.length" class="block"></a>
             </td>
-            <td ng-bind="manager.created_at | date: 'yyyy-MM-dd HH:mm:ss'"></td>
-            <td ng-bind="manager.updated_at | date: 'yyyy-MM-dd HH:mm:ss'"></td>
+            <td>
+              <span time-ago="manager.created_at"></span>
+            </td>
+            <td>
+              <span time-ago="manager.updated_at"></span>
+            </td>
           </tr>
         </tbody>
       </table>

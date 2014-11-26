@@ -60,8 +60,11 @@
         </tr>
         <tr>
           <td class="form-sub-key" i18n="subs::Submiited On"></td>
-          <td><span ng-bind="cssv.sub.sub.created_at |
-            date: 'yyyy-MM-dd HH:mm:ss'"></span></td>
+          <td>
+            <strong time-ago="cssv.sub.sub.created_at"></strong>
+            <small ng-bind="cssv.sub.sub.created_at |
+              date: 'yyyy-MM-dd HH:mm:ss'"></small>
+          </td>
         </tr>
       </tbody>
     </table>

@@ -256,6 +256,7 @@ gulp.task('gettext', function () {
     'assets/js/admin/*.js',
     'assets/js/form/*.js',
     'assets/js/func/panic.js',
+    'lib/timeago.js',
     'lib/hierarchies/hierarchies.js',
     'models/schemes/*.js',
     'models/general-validators.js',
@@ -270,6 +271,7 @@ gulp.task('gettext', function () {
     'views/vendors/**/*.html',
     'assets/js/func/panic.js',
     'assets/js/manager/nav.js',
+    'lib/timeago.js',
     'models/status.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.manager.%code%.json',

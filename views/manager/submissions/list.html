@@ -53,7 +53,9 @@
             </td>
             <td ng-repeat="label in cssl.labels track by $index"
               ng-bind="sub.data[label] || sub.data[cssl.models[label]]"></td>
-            <td ng-bind="sub.created_at | date: 'yyyy-MM-dd HH:mm:ss'"></td>
+            <td>
+              <span time-ago="sub.created_at"></span>
+            </td>
             <td>
               <span ng-init="status = cssl.statuses.findById(sub.status)"
                 ng-bind="cssl.tr('subs::statuses::' + status.label)"
