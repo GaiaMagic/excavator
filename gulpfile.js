@@ -53,7 +53,7 @@ gulp.task('browserify', function () {
 
 function dump (src, dest) {
   return gulp.src(src).
-    pipe($.replace(/^\s+/mg, '')).
+    pipe($.justReplace(/^\s+/mg, '')).
     pipe($.angularTemplatecache('templates.js', {
       root: '/',
       module: 'excavator'
@@ -116,15 +116,32 @@ function compile (src, dest) {
     pipe(assets.restore()).
     pipe($.useref()).
     pipe($.revReplace()).
-    pipe($.replace(/%HEAD_COMMIT%/g, info.git.headCommit)).
-    pipe($.replace(/%HEAD_AUTHOR%/g, info.git.headAuthor)).
-    pipe($.replace(/%HEAD_DATE%/g, info.git.headDate)).
-    pipe($.replace(/%HEAD_FILE_COUNT%/g, info.git.headFileCount)).
-    pipe($.replace(/%USER%/g, info.git.user)).
-    pipe($.replace(/%DATE%/g, new Date)).
-    pipe($.replace(/%TIME_USED%/g, function () {
-      return (+new Date - start) / 1000 + ' s';
-    })).
+    pipe($.justReplace([
+      {
+        search: /%HEAD_COMMIT%/g,
+        replacement: info.git.headCommit
+      }, {
+        search: /%HEAD_AUTHOR%/g,
+        replacement: info.git.headAuthor
+      }, {
+        search: /%HEAD_DATE%/g,
+        replacement: info.git.headDate
+      }, {
+        search: /%HEAD_FILE_COUNT%/g,
+        replacement: info.git.headFileCount
+      }, {
+        search: /%USER%/g,
+        replacement: info.git.user
+      }, {
+        search: /%DATE%/g,
+        replacement: new Date
+      }, {
+        search: /%TIME_USED%/g,
+        replacement: function () {
+          return (+new Date - start) / 1000 + ' s';
+        }
+      }
+    ])).
     pipe(gulp.dest(dest));
 }
 
