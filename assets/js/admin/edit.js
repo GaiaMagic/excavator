@@ -66,19 +66,19 @@ controller('controller.control.form.edit', [
     this.formdata = angular.toJson(this.form.content.data, true);
   };
 
-  this.showPreview = true;
-  this.showCode = false;
-  this.togglePreview = function () {
-    if (this.showCode) {
-      this.showCode = false;
+  this.views = ['preview', 'code'];
+  this.view = load('editorview') || this.views[0];
+  this.setView = function (view) {
+    if (this.view === view) {
+      this.view = undefined;
+      save('editorview', 'none');
+      return;
     }
-    this.showPreview = !this.showPreview;
+    this.view = view;
+    save('editorview', this.view);
   };
-  this.toggleCode = function () {
-    if (this.showPreview) {
-      this.showPreview = false;
-    }
-    this.showCode = !this.showCode;
+  this.hasView = function () {
+    return this.views.indexOf(this.view) > -1;
   };
 
   this.clearData = function () {

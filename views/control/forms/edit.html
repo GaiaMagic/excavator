@@ -10,13 +10,14 @@
         <span ng-if="ccfe.isNew" i18n="forms::Create New Form"></span>
         <div class="btn-group btn-group-sm pull-right">
           <button type="button" class="btn btn-default"
-            ng-class="{active: ccfe.showPreview}"
-            ng-click="ccfe.togglePreview()">
+            ng-class="{active: ccfe.view === 'preview'}"
+            ng-click="ccfe.setView('preview')">
             <span class="glyphicon glyphicon-search"></span>
             <span i18n="forms::Preview"></span>
           </button>
           <button type="button" class="btn btn-default"
-            ng-class="{active: ccfe.showCode}" ng-click="ccfe.toggleCode()">
+            ng-class="{active: ccfe.view === 'code'}"
+            ng-click="ccfe.setView('code')">
             <span class="glyphicon glyphicon-edit"></span>
             <span i18n="forms::Code"></span>
           </button>
@@ -66,8 +67,7 @@
         </div>
       </h3>
     </div>
-    <div class="editor-left" ng-class="{true: 'col-xs-8',
-    false: 'col-xs-12'}[ccfe.showPreview || ccfe.showCode]">
+    <div class="editor-left" ng-class="ccfe.hasView()&&'col-xs-8'||'col-xs-12'">
       <form class="form-form form-horizontal" historian="ccfe.form.content.scheme">
         <h4 class="scheme-header" ng-repeat-start="scheme in ccfe.form.content.scheme">
           <span ng-bind="scheme.label || ccfe.tr('forms::(unlabeled)')"></span>
@@ -103,7 +103,7 @@
         </div>
       </form>
     </div>
-    <div class="editor-right col-xs-4" ng-show="ccfe.showPreview">
+    <div class="editor-right col-xs-4" ng-show="ccfe.view === 'preview'">
       <form class="form-horizontal" ng-submit="ccfe.submit()">
         <div>
           <div scheme="scheme" scheme-data="ccfe.form.content.data"
@@ -119,7 +119,7 @@
         </div>
       </form>
     </div>
-    <div class="editor-right col-xs-4" ng-show="ccfe.showCode">
+    <div class="editor-right col-xs-4" ng-show="ccfe.view === 'code'">
       <form class="form-horizontal code-view" ng-submit="ccfe.update()">
         <textarea class="form-control monospace code-view-editor"
           i18n="{placeholder: 'forms::Put your scheme code here.'}" rows="30"
