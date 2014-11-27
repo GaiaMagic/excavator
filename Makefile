@@ -38,9 +38,9 @@ reload:
 clean:
 	@sudo docker images | grep -q '<none>' && \
 	sudo docker images | awk 'NR==1||/<none>/' && echo \
-	"Press Enter to remove this 'none' images." && read ANS && \
+	"Press Enter to remove these useless old '<none>' images." && read ANS && \
 	sudo docker images | grep '<none>' | awk '{print $$3}' | \
-		xargs -n1 sudo docker rmi || echo "Nothing to clean."
+		xargs -n1 sudo docker rmi || echo "Good! No useless images to clean."
 
 help:
 	@printf ""\
