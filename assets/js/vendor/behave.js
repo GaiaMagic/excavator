@@ -22,6 +22,23 @@ directive('behaveEditor', [
           autoIndent: true,
           fence: false
         });
+        var name = $attrs.behaveEditor;
+        if (name) {
+          $scope['$get' + name] = function () {
+            return $element[0].value;
+          };
+          $scope['$set' + name] = function (value) {
+            $element[0].value = value;
+          };
+          var old;
+          $element.on('change keyup paste', function () {
+            if (typeof old === 'string' && old !== this.value) {
+              $scope.$emit(name + ' changed');
+              $scope.$apply();
+            }
+            old = this.value;
+          });
+        }
       }
     };
   }

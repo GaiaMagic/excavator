@@ -20,6 +20,7 @@ controller('controller.control.form.edit', [
   'func.scheme.parse',
   'func.scheme.stringify',
   'func.panic',
+  'func.panic.confirm',
   'currentForm',
   'i18n.translate',
   'shared.domains',
@@ -39,10 +40,13 @@ controller('controller.control.form.edit', [
     parse,
     stringify,
     panic,
+    confirm,
     currentForm,
     tr,
     domains
   ) {
+  var self = this;
+
   if (angular.isUndefined(currentForm)) {
     this.form = {};
     this.form.content = load('schemedata', parse) || {scheme:[]};
@@ -63,12 +67,26 @@ controller('controller.control.form.edit', [
   };
 
   this.showPreview = true;
+  this.showCode = false;
+  this.togglePreview = function () {
+    if (this.showCode) {
+      this.showCode = false;
+    }
+    this.showPreview = !this.showPreview;
+  };
+  this.toggleCode = function () {
+    if (this.showPreview) {
+      this.showPreview = false;
+    }
+    this.showCode = !this.showCode;
+  };
 
   this.clearData = function () {
     var data = this.form.content.data;
     for (var key in data) {
       delete data[key];
     }
+    this.submit();
   };
 
   this.save = function () {
@@ -110,11 +128,54 @@ controller('controller.control.form.edit', [
     remove('schemedata');
   };
 
+  /* since behave.js changes the events on textareas with ng-model,
+   * currently there is no easy way to use ng-model directly, so
+   * use the old method
+   */
+  this.update = function (parsed) {
+    try {
+      var data = $scope.$getschemedata();
+      var parsed = parse(data);
+      if (typeof parsed !== 'object' || !(parsed.scheme instanceof Array)) {
+        throw tr('forms::Could not update the code because ' +
+          'the code is not valid.');
+      }
+      delete this.form.content.scheme;
+      angular.extend(this.form.content, parsed);
+      this.codeViewEditorDirty = false;
+    } catch (e) {
+      if (e instanceof Error && e.message) {
+        panic(e.message);
+      } else {
+        panic(e);
+      }
+    }
+  };
+  $scope.$on('schemedata changed', function () {
+    self.codeViewEditorDirty = true;
+  });
+  this.reset = function () {
+    confirm(
+      tr('forms::Are you sure you want to reset the code?'),
+      undefined,
+      { class: 'btn-primary', text: tr('forms::Yes, reset code') },
+      { text: tr('forms::Cancel') }
+    ).
+    then(function () {
+      $scope.$setschemedata(self.setschemedata());
+      self.codeViewEditorDirty = false;
+    });
+  };
+
   this.array = funcArray;
   this.tr = tr;
   this.domains = domains;
 
-  var self = this;
+  this.setschemedata = function () {
+    this.schemedata = stringify(this.form.content, ['scheme']);
+    return this.schemedata;
+  };
+
   var debounce;
   $scope.$watch(function () {
     return self.form.content.scheme;
@@ -124,7 +185,7 @@ controller('controller.control.form.edit', [
     }
     debounce = $timeout(function () {
       $scope.$broadcast('update scheme view', value, rememberState());
-      self.schemedata = stringify(self.form.content, ['scheme']);
+      self.setschemedata();
       debounce = undefined;
     }, 100);
   }, true);

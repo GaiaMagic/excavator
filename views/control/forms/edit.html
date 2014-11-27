@@ -8,22 +8,18 @@
             target="_blank" ng-bind="ccfe.form.title"></a>
         </span>
         <span ng-if="ccfe.isNew" i18n="forms::Create New Form"></span>
-        <div class="btn-group btn-group-sm pull-right"
-          ng-class="{open: previewMoreButtonClicked}">
+        <div class="btn-group btn-group-sm pull-right">
           <button type="button" class="btn btn-default"
             ng-class="{active: ccfe.showPreview}"
-            ng-click="ccfe.showPreview=!ccfe.showPreview">
+            ng-click="ccfe.togglePreview()">
             <span class="glyphicon glyphicon-search"></span>
             <span i18n="forms::Preview"></span>
           </button>
-          <button type="button" class="btn btn-default dropdown-toggle"
-            ng-click="previewMoreButtonClicked=!previewMoreButtonClicked">
-            <span class="caret"></span>
+          <button type="button" class="btn btn-default"
+            ng-class="{active: ccfe.showCode}" ng-click="ccfe.toggleCode()">
+            <span class="glyphicon glyphicon-edit"></span>
+            <span i18n="forms::Code"></span>
           </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href ng-click="ccfe.clearData(); previewMoreButtonClicked=false"
-              i18n="forms::Clear Data"></a></li>
-          </ul>
         </div>
         <div class="btn-group btn-group-sm pull-right">
           <button type="button" ng-click="undo(false)" class="btn btn-default"
@@ -71,7 +67,7 @@
       </h3>
     </div>
     <div class="editor-left" ng-class="{true: 'col-xs-8',
-    false: 'col-xs-12'}[ccfe.showPreview]">
+    false: 'col-xs-12'}[ccfe.showPreview || ccfe.showCode]">
       <form class="form-form form-horizontal" historian="ccfe.form.content.scheme">
         <h4 class="scheme-header" ng-repeat-start="scheme in ccfe.form.content.scheme">
           <span ng-bind="scheme.label || ccfe.tr('forms::(unlabeled)')"></span>
@@ -114,11 +110,30 @@
             ng-repeat="scheme in ccfe.form.content.scheme"></div>
           <div ng-if="ccfe.form.content.scheme.length > 0">
             <pre ng-bind="ccfe.formdata || ccfe.tr(ccfe.def_formdata)"></pre>
-            <pre ng-bind="ccfe.schemedata"></pre>
+            <a class="btn btn-default" href ng-click="ccfe.clearData()"
+              i18n="forms::Clear Data"></a>
           </div>
           <div ng-if="!ccfe.form.content.scheme ||
             !ccfe.form.content.scheme.length" i18n="forms::Nothing to preview.">
           </div>
+        </div>
+      </form>
+    </div>
+    <div class="editor-right col-xs-4" ng-show="ccfe.showCode">
+      <form class="form-horizontal code-view" ng-submit="ccfe.update()">
+        <textarea class="form-control monospace code-view-editor"
+          i18n="{placeholder: 'forms::Put your scheme code here.'}" rows="30"
+          ng-model="ccfe.schemedata" behave-editor="schemedata"></textarea>
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-default" type="submit"
+            ng-disabled="!ccfe.codeViewEditorDirty">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            <span i18n="forms::Update Code"></span>
+          </button>
+          <button class="btn btn-default" type="button" ng-click="ccfe.reset()"
+            ng-disabled="ccfe.codeViewEditorDirty!==true">
+            <span i18n="forms::Reset"></span>
+          </button>
         </div>
       </form>
     </div>
