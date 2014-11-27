@@ -97,6 +97,10 @@ gulp.task('dump:control', function () {
   return dump(src, '.tmp/control');
 });
 
+gulp.task('copy:images', function () {
+  gulp.src('assets/**/*.png').pipe(gulp.dest('dist/public'));
+});
+
 gulp.task('copy:json', function () {
   gulp.src('lib/**/*.json').pipe(gulp.dest('dist/public'));
   gulp.src('lib/**/*.json').pipe(gulp.dest('dist/manager'));
@@ -176,7 +180,7 @@ gulp.task('build', function (done) {
     [ 'clean' ],
     [ 'dump:public',    'dump:manager',    'dump:control',
       'copy:json',      'copy:fonts',      'compile:less'    ],
-    [ 'compile:public', 'compile:manager', 'compile:control' ],
+    [ 'compile:public', 'compile:manager', 'compile:control', 'copy:images' ],
     [ 'compress' ],
     done
   );

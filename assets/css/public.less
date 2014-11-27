@@ -6,5 +6,114 @@
 }
 
 .main {
-  padding: 30px 0 200px;
+  padding: 30px 0 50px;
+}
+
+html, body {
+  height: 100%;
+  background-color: #e14245;
+}
+
+.main-form {
+  background-color: #fff;
+  border-radius: 10px;
+  &.col-xs-10 {
+    width: 94%;
+  }
+  &.col-xs-offset-1 {
+    margin-left: 3%;
+  }
+}
+
+.pro {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-image: url(/images/bg.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.pro-logo {
+  @width: 730px;
+  @height: 414px;
+  width: @width;
+  height: @height;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -@width / 2;
+  margin-top: -@height / 2;
+  background-image: url(/images/logo.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.pro-button {
+  @width: 100px;
+  @height: 40px;
+  width: @width;
+  height: @height;
+  position: absolute;
+  left: 50%;
+  top: 88%;
+  margin-left: -@width / 2;
+  margin-top: -@height / 2;
+  text-align: center;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.5),
+       screen and (min-resolution: 144dpi),
+       screen and (min-resolution: 1.5dppx) {
+  .pro {
+    background-image: url(/images/bg@2x.png);
+  }
+  .pro-logo {
+    background-image: url(/images/logo@2x.png);
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .pro {
+    background-image: url(/images/bg-tablet.png);
+  }
+  .pro-logo {
+    background-image: url(/images/logo-tablet.png);
+    background-size: contain;
+    width: 80%;
+    margin-left: 0;
+    left: 10%;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.5) and (max-width: 1024px),
+       screen and (min-resolution: 144dpi)              and (max-width: 1024px),
+       screen and (min-resolution: 1.5dppx)             and (max-width: 1024px) {
+  .pro {
+    background-image: url(/images/bg-tablet@2x.png);
+  }
+  .pro-logo {
+    background-image: url(/images/logo-tablet@2x.png);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .pro {
+    background-image: url(/images/bg-mobile.png);
+  }
+  .pro-logo {
+    background-image: url(/images/logo-mobile.png);
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.5) and (max-width: 480px),
+       screen and (min-resolution: 144dpi)              and (max-width: 480px),
+       screen and (min-resolution: 1.5dppx)             and (max-width: 480px) {
+  .pro {
+    background-image: url(/images/bg-mobile@2x.png);
+  }
+  .pro-logo {
+    background-image: url(/images/logo-mobile@2x.png);
+  }
 }
