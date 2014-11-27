@@ -11,6 +11,18 @@ config([
   }
 ]).
 
+run([
+  '$rootScope',
+  '$document',
+  function ($rootScope, $document) {
+    $rootScope.$on('global-meta', function (e, val) {
+      if (angular.isObject(val) && angular.isString(val.title)) {
+        $document[0].title = val.title;
+      }
+    });
+  }
+]).
+
 factory('public.public.forms', [
   '$http',
   function ($http) {
