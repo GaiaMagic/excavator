@@ -25,7 +25,6 @@ directive('hierarchy', [
       scope: true,
       link: function ($scope, $element, $attrs) {
         var formScheme = $scope.$parent.scheme;
-        var formData = $scope.$parent.data;
 
         var models = formScheme.models;
         if (!models) return;
@@ -51,17 +50,24 @@ directive('hierarchy', [
           slices[0] = Object.keys(data);
           $scope.slices = slices;
 
-          var selects = [];
-          for (var i = 0; i < models.length; i++) {
-            if (!angular.isObject(models[i])) continue;
-            var select = formData[models[i].model];
-            if (angular.isUndefined(select)) break;
-            selects.push(select);
-          }
-          $scope.selects = selects;
-
-          var unwatch = $scope.$watchCollection('selects', onSelectsChange);
-          $scope.$on('$destroy', function() { unwatch(); });
+          var unwatch = $scope.$watch('data', function (data) {
+            var selects = [];
+            for (var i = 0; i < models.length; i++) {
+              if (!angular.isObject(models[i])) continue;
+              var select = data[models[i].model];
+              if (angular.isUndefined(select)) break;
+              selects.push(select);
+            }
+            $scope.selects = selects;
+            if (selects.length === 0) {
+              $scope.slices.length = 1;
+            }
+          }, true);
+          var unwatchColl = $scope.$watchCollection('selects', onSelectsChange);
+          $scope.$on('$destroy', function() {
+            unwatchColl();
+            unwatch();
+          });
 
           function onSelectsChange (selects, oldSelects) {
             var current = data;

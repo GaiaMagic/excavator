@@ -14,6 +14,8 @@ controller('controller.public.form', [
   'i18n.translate',
   'public.public.forms.submit',
   function (panic, alert, currentForm, tr, submitForm) {
+    var self = this;
+
     if (angular.isUndefined(currentForm)) {
       return;
     } else if (currentForm === false) {
@@ -22,12 +24,21 @@ controller('controller.public.form', [
       this.form = currentForm;
     }
 
+    this.truncate = function () {
+      this.form.content.data = this.form.content.data || {};
+      var data = this.form.content.data;
+      for (var key in data) {
+        delete data[key];
+      }
+    };
+
     this.form = currentForm;
-    this.form.content.data = {};
+    this.truncate();
 
     this.submit = function () {
       var revid = currentForm.form.head._id;
       submitForm(revid, this.form.content.data).then(function () {
+        self.truncate();
         alert(tr('forms::Thank you.'), tr('forms::Success'));
       }, panic);
     };
