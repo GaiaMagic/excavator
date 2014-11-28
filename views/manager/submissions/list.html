@@ -18,9 +18,12 @@
           </button>
         </div>
       </div>
-      <table class="table table-bordered table-hover">
+      <table class="table table-bordered table-hover table-subs">
         <thead>
           <tr ng-if="cssl.submissions && cssl.submissions.length">
+            <th>
+              <span ng-bind="cssl.LABELS.portrait"></span>
+            </th>
             <th>
               <span ng-bind="cssl.LABELS.name"></span>
             </th>
@@ -36,6 +39,12 @@
             </td>
           </tr>
           <tr ng-repeat="sub in cssl.submissions">
+            <td>
+              <div class="sub-image"
+                   value-as-image="sub.data.portrait"
+                   value-options="{'image-size': 'small'}">
+              </div>
+            </td>
             <td ng-bind="sub.data.name || '-'"></td>
             <td>
               <span time-ago="sub.created_at"></span>

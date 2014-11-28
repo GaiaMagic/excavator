@@ -2,6 +2,7 @@ angular.module('excavator.public.form', [
   'mgcrea.ngStrap.modal',
   'excavator.func.enumerate',
   'excavator.func.error',
+  'excavator.func.filter',
   'excavator.func.panic',
   'excavator.func.scheme',
   'excavator.scheme'
@@ -69,6 +70,8 @@ directive('scrollTo', [
 ]).
 
 controller('controller.public.form', [
+  '$q',
+  '$scope',
   '$window',
   'func.panic',
   'func.panic.alert',
@@ -77,6 +80,8 @@ controller('controller.public.form', [
   'public.public.forms.submit',
   'scheme.bulk.enable.submit.buttons',
   function (
+    $q,
+    $scope,
     $window,
     panic,
     alert,
@@ -110,8 +115,9 @@ controller('controller.public.form', [
       var schemes = currentForm.content.scheme;
       var enable = enableSubmitButtons(schemes, false);
 
+      var data = this.form.content.data;
       var revid = currentForm.form.head._id;
-      submitForm(revid, this.form.content.data).then(function () {
+      submitForm(revid, data).then(function () {
         self.truncate();
         alert(tr('forms::Thank you.'), tr('forms::Success'), function () {
           $window.location.reload();

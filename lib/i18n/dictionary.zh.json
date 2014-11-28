@@ -122,6 +122,7 @@
     "Successfully created {{title}}. You will be redirected to the form edit page.": "成功创建 {{title}} 。即将跳转到该表格的编辑页。",
     "Form access for {{username}}": "用户 {{username}} 的表格访问权限",
     "Please wait...": "请稍候片刻…",
+    "You must select a JPEG image file.": "你必须选择一张JPEG图片",
     "Chinese mobile phone number": "中国手机号码",
     "be a valid 11-digit Chinese mobile phone number": "为正确的11位数字的中国手机号码",
     "Phone number": "电话号码",
@@ -155,15 +156,10 @@
   "subs": {
     "Submissions": "提交",
     "Show All": "显示全部",
-    "View": "查看",
     "Created At": "创建于",
     "Status": "状态",
+    "View Details": "查看详情",
     "No submissions yet!": "尚没有人提交过任何表格。",
-    "Filter": "筛选",
-    "Show only submissions of this form": "只显示此表格的提交",
-    "Columns": "栏目",
-    "RESET": "重置",
-    "No columns! You may try RESET or ADD your own column.": "你可以按重置按钮恢复默认栏目，或增加按钮添加自定显示栏目。",
     "Newer": "较新的提交",
     "Older": "较旧的提交",
     "Form": "表格",
@@ -247,6 +243,11 @@
       "Type": "类型",
       "Min": "始于",
       "Max": "终于"
+    },
+    "File": "文件上传",
+    "file": {
+      "Model": "字段",
+      "Label": "标签"
     },
     "Hierarchy": "树形下拉选项",
     "hierarchy": {

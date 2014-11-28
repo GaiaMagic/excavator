@@ -87,9 +87,23 @@ submissionSchema.pre('save', function (next) {
           if (validator(sd) !== true) {
             validatorMessage = validatorMessage || scheme.validatorMessage;
             errorMsgs.push(tr('Item "{{label}}" should {{msg}}.', {
-                label: scheme.label,
-                msg: validatorMessage
-              }));
+              label: scheme.label,
+              msg: validatorMessage
+            }));
+          }
+        }
+
+        if (scheme.type === 'file') {
+          try {
+            var fileData = data[scheme.model];
+            var saveAsImage = require('../lib/image');
+            data[scheme.model] = saveAsImage(fileData);
+          } catch (e) {
+            console.error(e.stack);
+            return next(panic(422, {
+              type: 'valdation-failed',
+              message: 'errorMsgs'
+            }));
           }
         }
       }
@@ -100,6 +114,7 @@ submissionSchema.pre('save', function (next) {
         }));
       }
     } catch (e) {
+      console.error(e.stack);
       return next(panic(422, {
         type: 'parse-error',
         message: tr('Unable to process data for now.')

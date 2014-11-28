@@ -63,7 +63,8 @@ controller('controller.control.form.edit', [
   this.def_formdata = tr('forms::Form data will appear here ' +
     'once you submit the form.', undefined, { fake: true });
   this.submit = function () {
-    this.formdata = angular.toJson(this.form.content.data, true);
+    var data = this.form.content.data;
+    this.formdata = angular.toJson(data, true);
   };
 
   this.views = ['preview', 'code'];

@@ -4,6 +4,10 @@ if (['development', 'production', 'test'].indexOf(environment) === -1) {
   environment = process.env.NODE_ENV;
 }
 
+if (environment === 'development') {
+  process.env.USERCONTENT_ROOT_DIR = __dirname;
+}
+
 var connect2MongoDB = require('./models');
 var excavator = require('./routes');
 

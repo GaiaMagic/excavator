@@ -23,6 +23,7 @@ module.exports = function developmentConfigs (express, excavator) {
     excavator.use(express.static(path.join(root, 'lib')));
     excavator.use(express.static(path.join(root, 'assets')));
     excavator.use(express.static(path.join(root, 'vendors')));
+    excavator.use(express.static(path.join(root, 'usercontent')));
     excavator.use(livereload({ port: 35729 }));
   }
 

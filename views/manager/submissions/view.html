@@ -1,6 +1,8 @@
 <div class="main-static container">
-  <div class="col-xs-8 col-xs-offset-2">
+  <div class="col-xs-10 col-xs-offset-1">
     <h3>
+      <a href="//{{ cssv.domains.public }}/{{ cssv.sub.sub.form.slug }}"
+        target="_blank" ng-bind="cssv.sub.title"></a>
       <span ng-bind="cssv.sub.sub.form_index + 1"></span> /
       <span ng-bind="cssv.sub.sub.form.submissions"></span>
       <div class="btn-group btn-group-sm pull-right">
@@ -18,37 +20,6 @@
     </h3>
     <table class="table table-bordered">
       <tbody>
-        <tr>
-          <td class="form-sub-key" i18n="subs::Form"></td>
-          <td>
-            <a href="//{{ cssv.domains.public }}/{{ cssv.sub.sub.form.slug }}"
-              target="_blank" ng-bind="cssv.sub.title"></a>
-            <a href="//{{ cssv.domains.public }}/{{ cssv.sub.sub.form.slug }}/{{
-              cssv.sub.sub.form_revision._id }}" target="_blank">
-              <code ng-bind="cssv.sub.sub.form_revision._id"></code></a>
-          </td>
-        </tr>
-        <tr>
-          <td class="form-sub-key" i18n="subs::Data"></td>
-          <td>
-            <em ng-if="cssv.isEmpty(cssv.sub.data)"
-              i18n="subs::This submission is empty."></em>
-            <table class="table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th i18n="subs::Column" class="form-sub-key"></th>
-                  <th i18n="subs::Value"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="item in cssv.sub.data">
-                  <td ng-bind="item.label" class="form-sub-key"></td>
-                  <td ng-bind="item.value"></td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-        </tr>
         <tr>
           <td i18n="subs::Status"></td>
           <td>
@@ -69,6 +40,32 @@
             <strong time-ago="cssv.sub.sub.created_at"></strong>
             <small ng-bind="cssv.sub.sub.created_at |
               date: 'yyyy-MM-dd HH:mm:ss'"></small>
+          </td>
+        </tr>
+        <tr>
+          <td class="form-sub-key" i18n="subs::Data"></td>
+          <td>
+            <em ng-if="cssv.isEmpty(cssv.sub.data)"
+              i18n="subs::This submission is empty."></em>
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th i18n="subs::Column" class="form-sub-key"></th>
+                  <th i18n="subs::Value"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="item in cssv.sub.data">
+                  <td ng-bind="item.label" class="form-sub-key"></td>
+                  <td>
+                    <div class="form-sub-value"
+                         value-resolve="item.value"
+                         value-options="{'image-size': 'medium'}">
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </td>
         </tr>
       </tbody>

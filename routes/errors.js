@@ -14,6 +14,12 @@ module.exports = function (err, req, res, next) {
       message: tr('The resource you requested does not exist.')
     });
   }
+  if (err.type === 'entity.too.large') {
+    err = panic(413, {
+      type: 'not-found',
+      message: tr('The file you have uploaded is too large. Please resize it.')
+    });
+  }
   if (err.panic) {
     var errObj = {
       status: err.status,
