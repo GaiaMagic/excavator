@@ -255,6 +255,7 @@ gulp.task('gettext', function () {
     'views/vendors/**/*.html',
     'assets/js/admin/*.js',
     'assets/js/form/*.js',
+    'assets/js/scheme/bulk.js',
     'assets/js/func/panic.js',
     'lib/timeago.js',
     'lib/hierarchies/hierarchies.js',
@@ -282,6 +283,7 @@ gulp.task('gettext', function () {
     'models/schemes/*.js',
     'views/vendors/**/*.html',
     'assets/js/public/form.js',
+    'assets/js/scheme/bulk.js',
     'assets/js/func/panic.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.public.%code%.json',

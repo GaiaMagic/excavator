@@ -58,6 +58,7 @@ module.exports = {
           buttons = [
             '<div class="btn-group" ng-repeat="item_p in items">',
               '<button type="[[ item.type ]]" class="btn" ',
+                'ng-disabled="item.disabled" ',
                 'ng-class="item.class || \'btn-default\'" ',
                 'ng-repeat="item in item_p" ng-bind="item.label"></button>',
             '</div>'
@@ -66,6 +67,7 @@ module.exports = {
           buttons = [
             '<div class="btn-group">',
               '<button type="[[ item.type ]]" class="btn" ',
+                'ng-disabled="item.disabled" ',
                 'ng-class="item.class || \'btn-default\'" ',
                 'ng-repeat="item in items" ng-bind="item.label"></button>',
             '</div>'

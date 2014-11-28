@@ -1,4 +1,5 @@
 angular.module('excavator.scheme', [
+  'excavator.scheme.bulk',
   'excavator.scheme.editor',
   'excavator.scheme.hierarchy'
 ]).

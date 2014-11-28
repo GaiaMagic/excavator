@@ -14,7 +14,16 @@ controller('controller.public.form', [
   'currentForm',
   'i18n.translate',
   'public.public.forms.submit',
-  function ($window, panic, alert, currentForm, tr, submitForm) {
+  'scheme.bulk.enable.submit.buttons',
+  function (
+    $window,
+    panic,
+    alert,
+    currentForm,
+    tr,
+    submitForm,
+    enableSubmitButtons
+  ) {
     var self = this;
 
     if (angular.isUndefined(currentForm)) {
@@ -37,13 +46,20 @@ controller('controller.public.form', [
     this.truncate();
 
     this.submit = function () {
+      var schemes = currentForm.content.scheme;
+      var enable = enableSubmitButtons(schemes, false);
+
       var revid = currentForm.form.head._id;
       submitForm(revid, this.form.content.data).then(function () {
         self.truncate();
         alert(tr('forms::Thank you.'), tr('forms::Success'), function () {
           $window.location.reload();
         });
-      }, panic);
+      }, panic).finally(function () {
+        if (!enable.cancel()) {
+          enableSubmitButtons(schemes, true);
+        }
+      });
     };
   }
 ]);

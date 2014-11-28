@@ -121,6 +121,7 @@
     "Successfully updated {{title}}.": "成功更新 {{title}} 。",
     "Successfully created {{title}}. You will be redirected to the form edit page.": "成功创建 {{title}} 。即将跳转到该表格的编辑页。",
     "Form access for {{username}}": "用户 {{username}} 的表格访问权限",
+    "Please wait...": "请稍候片刻…",
     "Chinese mobile phone number": "中国手机号码",
     "be a valid 11-digit Chinese mobile phone number": "为正确的11位数字的中国手机号码",
     "Phone number": "电话号码",
