@@ -8,12 +8,13 @@ angular.module('excavator.public.form', [
 ]).
 
 controller('controller.public.form', [
+  '$window',
   'func.panic',
   'func.panic.alert',
   'currentForm',
   'i18n.translate',
   'public.public.forms.submit',
-  function (panic, alert, currentForm, tr, submitForm) {
+  function ($window, panic, alert, currentForm, tr, submitForm) {
     var self = this;
 
     if (angular.isUndefined(currentForm)) {
@@ -39,7 +40,9 @@ controller('controller.public.form', [
       var revid = currentForm.form.head._id;
       submitForm(revid, this.form.content.data).then(function () {
         self.truncate();
-        alert(tr('forms::Thank you.'), tr('forms::Success'));
+        alert(tr('forms::Thank you.'), tr('forms::Success'), function () {
+          $window.location.reload();
+        });
       }, panic);
     };
   }
