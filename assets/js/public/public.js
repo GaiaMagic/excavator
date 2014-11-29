@@ -1,6 +1,7 @@
 angular.module('excavator.public.public', [
   'excavator.func.localstorage',
   'excavator.i18n',
+  'excavator.shared.nav.meta',
   'mgcrea.ngStrap.datepicker'
 ]).
 
@@ -14,8 +15,9 @@ config([
 run([
   '$rootScope',
   '$document',
-  function ($rootScope, $document) {
-    $rootScope.$on('global-meta', function (e, val) {
+  'shared.nav.meta',
+  function ($rootScope, $document, meta) {
+    meta.watch($rootScope, function (val) {
       if (angular.isObject(val) && angular.isString(val.title)) {
         $document[0].title = val.title;
       }

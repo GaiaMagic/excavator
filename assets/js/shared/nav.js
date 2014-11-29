@@ -1,4 +1,6 @@
-angular.module('excavator.manager.nav', []).
+angular.module('excavator.shared.nav', [
+  'excavator.shared.nav.meta'
+]).
 
 directive('navView', [
   '$location',
@@ -7,7 +9,8 @@ directive('navView', [
   'func.panic.alert',
   'i18n.linguist',
   'i18n.translate',
-  function ($location, status, logout, alert, linguist, tr) {
+  'shared.nav.meta',
+  function ($location, status, logout, alert, linguist, tr, meta) {
   return {
     scope: true,
     templateUrl: '/nav.html',
@@ -33,10 +36,10 @@ directive('navView', [
         return !!($scope.metaData && $scope.metaData.type === type);
       };
       $scope.status = status;
-      $scope.$on('global-meta', function (e, data) {
+      $scope.linguist = linguist;
+      meta.watch($scope, function (data) {
         $scope.metaData = data;
       });
-      $scope.linguist = linguist;
     }
   };
 }]);

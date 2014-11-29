@@ -22,14 +22,14 @@ constant('resolver.submissions', function submissionsResolver (service) {
 
 constant('resolver.submission', function submissionResolver (service) {
   return [
-    '$rootScope',
     '$route',
     service,
     'func.panic',
-    function currentSubmission ($rootScope, $route, get, panic) {
+    'shared.nav.meta',
+    function currentSubmission ($route, get, panic, meta) {
       var subid = $route.current.params.subid;
       return get(subid).then(function (res) {
-        $rootScope.$broadcast('global-meta', undefined);
+        meta.set(undefined);
 
         res.data.data = res.data.data || {};
         var rawdata = res.data.data;
@@ -58,7 +58,7 @@ constant('resolver.submission', function submissionResolver (service) {
 
         var title = res.data.form_revision.title;
 
-        $rootScope.$broadcast('global-meta', {
+        meta.set({
           type: 'submission-view',
           title: '#' + (res.data.form_index + 1),
           id: subid

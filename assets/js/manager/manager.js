@@ -12,9 +12,9 @@ angular.module('excavator.manager.manager', [
   'excavator.func.scheme',
   'excavator.i18n',
   'excavator.manager.login',
-  'excavator.manager.nav',
   'excavator.manager.routes',
   'excavator.shared.domains',
+  'excavator.shared.nav',
   'excavator.shared.subs'
 ]).
 

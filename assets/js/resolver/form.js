@@ -24,7 +24,16 @@ constant('resolver.form', function formResolver (service, options) {
     service,
     'func.panic',
     'func.scheme.parse',
-    function currentForm ($rootScope, $route, $timeout, get, panic, parse) {
+    'shared.nav.meta',
+    function currentForm (
+      $rootScope,
+      $route,
+      $timeout,
+      get,
+      panic,
+      parse,
+      meta
+    ) {
       options = options || {};
       var formid = options.formId || $route.current.params.formid;
       var formrevid = options.formRevId || $route.current.params.formrevid;
@@ -36,7 +45,7 @@ constant('resolver.form', function formResolver (service, options) {
           };
         }
 
-        $rootScope.$broadcast('global-meta', undefined);
+        meta.set(undefined);
 
         var head = 'head';
         var isViewingRevision = false;
@@ -59,12 +68,10 @@ constant('resolver.form', function formResolver (service, options) {
         if (!angular.isObject(content) ||
             !angular.isObject(content.scheme)) return false;
 
-        $timeout(function () {
-          $rootScope.$broadcast('global-meta', {
-            type: 'form-edit',
-            title: title,
-            id: res.data._id
-          });
+        meta.set({
+          type: 'form-edit',
+          title: title,
+          id: res.data._id
         });
 
         var link = '/' + slug;

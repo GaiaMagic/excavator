@@ -4,7 +4,7 @@
       <a class="navbar-brand" href="/" i18n="nav::Form Generator Admin"></a>
     </div>
     <div>
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav" ng-if="status.loggedIn">
         <li ng-class="{active: ifPathIs('/forms')}">
           <a href="/forms" i18n="nav::All Forms"></a>
         </li>
