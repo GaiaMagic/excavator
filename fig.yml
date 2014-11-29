@@ -6,6 +6,12 @@ data:
   volumes:
     - /data/db
 
+usercontent:
+  image: busybox:latest
+  volumes:
+    - /usercontent
+    - /srv/excavator-usercontent:/usercontent
+
 # mongodb
 # remember to also update excavator.js if you change this service name
 db:
@@ -20,6 +26,8 @@ backend:
     - db
   ports:
     - '43210:3000'
+  volumes_from:
+    - usercontent
 
 # frontend
 frontend:

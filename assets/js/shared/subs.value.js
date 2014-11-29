@@ -70,8 +70,10 @@ directive('subsValue', [
         return angular.toJson(value, true);
       }
       if (options.imageOnly) return;
-      if (angular.isString(value) && value.indexOf('\n') > -1) {
-        return multilineWrapper(value);
+      if (angular.isString(value)) {
+        if (value.indexOf('\n') > -1 || value.length > 200) {
+          return multilineWrapper(value);
+        }
       }
       return value;
     }

@@ -122,6 +122,7 @@
     "Successfully created {{title}}. You will be redirected to the form edit page.": "成功创建 {{title}} 。即将跳转到该表格的编辑页。",
     "Form access for {{username}}": "用户 {{username}} 的表格访问权限",
     "Please wait...": "请稍候片刻…",
+    "You must select a JPEG image file.": "你必须选择一张JPEG图片",
     "Chinese mobile phone number": "中国手机号码",
     "be a valid 11-digit Chinese mobile phone number": "为正确的11位数字的中国手机号码",
     "Phone number": "电话号码",
@@ -245,6 +246,13 @@
       "Min": "始于",
       "Max": "终于"
     },
+    "File": "文件上传",
+    "file": {
+      "Model": "字段",
+      "Label": "标签",
+      "Size Limit": "大小限制",
+      "Help Text": "帮助文字"
+    },
     "Hierarchy": "树形下拉选项",
     "hierarchy": {
       "Presets": "预设",
@@ -294,6 +302,10 @@
       "ENUM": "枚举",
       "Validator": "验证"
     }
+  },
+  "validator": {
+    "Please provide a JPEG image file whose size is less than {{size}}.": "请提供一张文件大小不超过{{size}}的JPEG图片。",
+    "Help text": "验证失败时显示的文字"
   },
   "template": {
     "hierarchy": {

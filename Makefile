@@ -88,6 +88,10 @@ data:
 	sudo docker run -it --rm --volumes-from=excavator_data_1 \
 	--workdir=/data/db busybox
 
+usercontent:
+	sudo docker run -it --rm --volumes-from=excavator_usercontent_1 \
+	--workdir=/usercontent busybox
+
 node:
 	sudo nsenter --target $$(sudo docker inspect \
 	--format "{{.State.Pid}}" excavator_backend_1) \

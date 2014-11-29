@@ -87,9 +87,9 @@ submissionSchema.pre('save', function (next) {
           if (validator(sd) !== true) {
             validatorMessage = validatorMessage || scheme.validatorMessage;
             errorMsgs.push(tr('Item "{{label}}" should {{msg}}.', {
-                label: scheme.label,
-                msg: validatorMessage
-              }));
+              label: scheme.label,
+              msg: validatorMessage
+            }));
           }
         }
       }
@@ -98,8 +98,18 @@ submissionSchema.pre('save', function (next) {
           type: 'valdation-failed',
           messages: errorMsgs
         }));
+      } else {
+        for (var i = 0; i < schemes.length; i++) {
+          var scheme = schemes[i];
+          if (scheme.type === 'file') {
+            var fileData = data[scheme.model];
+            var saveAsImage = require('../lib/image');
+            data[scheme.model] = saveAsImage(fileData);
+          }
+        }
       }
     } catch (e) {
+      console.error(e.stack);
       return next(panic(422, {
         type: 'parse-error',
         message: tr('Unable to process data for now.')

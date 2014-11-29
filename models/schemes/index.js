@@ -5,5 +5,6 @@ module.exports = {
   'switch': require('./switch'),
   'date': require('./date'),
   'hierarchy': require('./hierarchy'),
+  'file': require('./file'),
   'button': require('./button')
 };

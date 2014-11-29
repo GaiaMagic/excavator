@@ -3,7 +3,7 @@ var router = express.Router();
 var Form = require('../models/form');
 var FormRevision = require('../models/form-revision');
 var Submission = require('../models/submission');
-var jsonParser = require('body-parser').json();
+var jsonParser = require('body-parser').json;
 var Q = require('q');
 
 router.get('/forms/:slug/:revid([a-f0-9]{24})?', function (req, res, next) {
@@ -27,7 +27,9 @@ router.get('/forms/:slug/:revid([a-f0-9]{24})?', function (req, res, next) {
   }).catch(next);
 });
 
-router.post('/submit', jsonParser, function (req, res, next) {
+router.post('/submit', jsonParser({
+  limit: '1.5mb'
+}), function (req, res, next) {
   Submission.submit(
     req.body.form,
     req.body.data

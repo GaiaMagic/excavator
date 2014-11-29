@@ -256,6 +256,7 @@ gulp.task('gettext', function () {
     'assets/js/admin/*.js',
     'assets/js/form/*.js',
     'assets/js/scheme/bulk.js',
+    'assets/js/scheme/file.js',
     'assets/js/func/panic.js',
     'lib/timeago.js',
     'lib/hierarchies/hierarchies.js',
@@ -284,11 +285,12 @@ gulp.task('gettext', function () {
     'views/vendors/**/*.html',
     'assets/js/public/form.js',
     'assets/js/scheme/bulk.js',
+    'assets/js/scheme/file.js',
     'assets/js/func/panic.js'
   ]).pipe(gettext({
     file: 'lib/i18n/dictionary.public.%code%.json',
     langs: ['zh'],
-    excludeRootKeys: ['schemes', 'hierarchy']
+    excludeRootKeys: ['schemes', 'hierarchy', 'validator']
   })).pipe(gulp.dest('.'));
 
   gulp.src([
