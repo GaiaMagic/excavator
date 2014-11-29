@@ -4,7 +4,7 @@
       <a class="navbar-brand" href="/" i18n="nav::Manager"></a>
     </div>
     <div>
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav" ng-if="status.loggedIn">
         <li ng-class="{active: ifPathIs('/submissions')}">
           <a href="/submissions" i18n="nav::Submissions"></a>
         </li>

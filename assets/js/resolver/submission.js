@@ -60,7 +60,7 @@ constant('resolver.submission', function submissionResolver (service) {
 
         $rootScope.$broadcast('global-meta', {
           type: 'submission-view',
-          title: subid,
+          title: '#' + (res.data.form_index + 1),
           id: subid
         });
 

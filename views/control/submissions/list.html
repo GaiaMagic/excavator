@@ -1,5 +1,5 @@
 <div class="main-static">
-  <div class="col-sm-9">
+  <div class="col-sm-12">
     <div class="panel panel-default">
       <div class="panel-heading">
         <span i18n="subs::Submissions"></span>
@@ -18,16 +18,14 @@
           </button>
         </div>
       </div>
-      <table class="table table-bordered table-hover">
+      <table class="table table-bordered table-hover subs-list-table">
         <thead>
           <tr ng-if="cssl.submissions && cssl.submissions.length">
-            <th i18n="subs::View"></th>
-            <th ng-repeat="label in cssl.labels track by $index">
-              <span ng-bind="cssl.LABELS[label] || label"
-                title="Model name: {{ cssl.models[label] || label }}"></span>
-            </th>
-            <th class="date" i18n="subs::Created At"></th>
+            <th i18n="subs::Portrait"></th>
+            <th i18n="subs::Name"></th>
+            <th i18n="subs::Created At" class="date"></th>
             <th i18n="subs::Status"></th>
+            <th i18n="subs::View Details"></th>
           </tr>
         </thead>
         <tbody>
@@ -37,22 +35,10 @@
             </td>
           </tr>
           <tr ng-repeat="sub in cssl.submissions">
-            <td>
-              <div class="pull-left" ng-if="!cssl.submissions.hasFormQuery">
-                <a href="/submissions?form={{ sub.form }}"><span
-                  class="glyphicon glyphicon-chevron-right"></span></a>&nbsp;
-              </div>
-              <div class="pull-left" ng-if="cssl.submissions.hasFormQuery">
-                <a href="/submissions"><span
-                  class="glyphicon glyphicon-chevron-left"></span></a>&nbsp;
-              </div>
-              <a class="block" href="/submissions/view/{{ sub._id }}">
-                <span ng-bind="sub.form_revision.title"></span>
-                [#<span ng-bind="sub.form_index + 1"></span>]
-              </a>
+            <td subs-value="sub.data.portrait"
+                subs-value-options="{imageSize: 'small', imageOnly: true}">
             </td>
-            <td ng-repeat="label in cssl.labels track by $index"
-              ng-bind="sub.data[label] || sub.data[cssl.models[label]]"></td>
+            <td ng-bind="sub.data.name || '-'"></td>
             <td>
               <span time-ago="sub.created_at"></span>
             </td>
@@ -61,76 +47,13 @@
                 ng-bind="cssl.tr('subs::statuses::' + status.label)"
                 class="label label-{{ status.type }}"></span>
             </td>
+            <td>
+              <a class="block" href="/submissions/view/{{ sub._id }}"
+                i18n="subs::View Details"></a>
+            </td>
           </tr>
         </tbody>
       </table>
-    </div>
-  </div>
-  <div class="col-sm-3">
-    <form ng-submit="cssl.filter()">
-      <div class="panel panel-default">
-        <div class="panel-heading" i18n="subs::Filter"></div>
-        <table class="table">
-          <tbody>
-            <tr>
-              <td>
-                <input type="text" class="form-control" ng-model="cssl.form"
-                  i18n="{placeholder: 'subs::Show only submissions of this form'}">
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <button class="btn btn-info" type="submit" i18n="subs::Filter">
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </form>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <span i18n="subs::Columns"></span>
-        <div class="btn-group btn-group-xs pull-right">
-          <button class="btn btn-default"
-            ng-click="cssl.array.push(cssl.labels, '')">
-            <span class="glyphicon glyphicon-plus"></span>
-          </button>
-          <button class="btn btn-default" ng-click="cssl.reset()"
-            i18n="subs::RESET"></button>
-        </div>
-      </div>
-      <div class="panel-body" ng-if="!cssl.labels || !cssl.labels.length">
-        <small i18n="subs::No columns! You may try RESET or ADD your own column.">
-        </small>
-      </div>
-      <ul class="list-group">
-        <li class="list-group-item" ng-repeat="model in cssl.labels track by $index">
-          <div class="input-group input-group-sm input-group-compact">
-            <input type="text" class="form-control" ng-model="cssl.labels[$index]">
-            <span class="input-group-btn">
-              <button class="btn btn-default"
-                ng-click="cssl.array.duplicate(cssl.labels, $index)">
-                <span class="glyphicon glyphicon-plus"></span>
-              </button>
-              <button class="btn btn-default"
-                ng-click="cssl.array.delete(cssl.labels, $index)">
-                <span class="glyphicon glyphicon-minus"></span>
-              </button>
-              <button class="btn btn-default"
-                ng-class="{disabled: cssl.array.edgeT(cssl.labels, $index)}"
-                ng-click="cssl.array.moveup(cssl.labels, $index)">
-                <span class="glyphicon glyphicon-chevron-up"></span>
-              </button>
-              <button class="btn btn-default"
-                ng-class="{disabled: cssl.array.edgeB(cssl.labels, $index)}"
-                ng-click="cssl.array.movedown(cssl.labels, $index)">
-                <span class="glyphicon glyphicon-chevron-down"></span>
-              </button>
-            </span>
-          </div>
-        </li>
-      </ul>
     </div>
   </div>
 </div>
