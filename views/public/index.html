@@ -39,7 +39,13 @@
 </head>
 
 <body>
-  <div ng-view></div>
+  <div class="pro">
+    <div class="pro-logo"></div>
+    <div class="pro-button">
+      <a class="btn btn-info" scroll-to="view">立即报名</a>
+    </div>
+  </div>
+  <div id="view" ng-view></div>
 
   <!-- @exclude -->
   <script src="/js/angular.js"></script>
