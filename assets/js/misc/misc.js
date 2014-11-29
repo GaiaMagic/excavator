@@ -2,6 +2,8 @@ angular.module('excavator.misc', [
   'excavator.misc.timeago'
 ]).
 
+constant('misc.bytes', require('./lib/bytes.js')).
+
 constant('misc.hierarchies',
   require('./lib/hierarchies/hierarchies.js')).
 
