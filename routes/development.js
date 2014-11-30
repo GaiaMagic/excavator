@@ -16,14 +16,28 @@ module.exports = function developmentConfigs (express, excavator) {
   var root = excavator.get('root');
   var environment = excavator.get('environment');
 
-  express.static.mime.define({'text/javascript': ['js']});
+  var Static = express.static;
+
+  Static.mime.define({'text/javascript': ['js']});
 
   if (environment === 'development') {
-    excavator.use(express.static(path.join(root, '.tmp')));
-    excavator.use(express.static(path.join(root, 'lib')));
-    excavator.use(express.static(path.join(root, 'assets')));
-    excavator.use(express.static(path.join(root, 'vendors')));
-    excavator.use(express.static(path.join(root, 'usercontent')));
+    excavator.use(Static(path.join(root, '.tmp')));
+    excavator.use(Static(path.join(root, 'lib')));
+    excavator.use(Static(path.join(root, 'assets')));
+    excavator.use(Static(path.join(root, 'vendors')));
+
+    var blank = new Buffer(
+      '/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgU' +
+      'GCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/yQALCAABAAEBAR' +
+      'EA/8wABgAQEAX/2gAIAQEAAD8A0s8g/9k=', 'base64');
+    excavator.use(
+      '/uploads',
+      Static(path.join(root, 'usercontent', 'uploads')),
+      function (req, res, next) {
+      res.set({'Content-Type': 'image/jpeg', 'Content-Length': blank.length});
+      res.end(blank);
+    });
+
     excavator.use(livereload({ port: 35729 }));
   }
 
@@ -32,8 +46,6 @@ module.exports = function developmentConfigs (express, excavator) {
   if (environment === 'test') {
     views = path.join(root, 'dist');
   }
-
-  var Static = express.static;
 
   excavator.use(function (req, res, next) {
     switch (req.hostname) {
