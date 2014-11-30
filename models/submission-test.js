@@ -111,7 +111,7 @@ describe('Submission database model', function () {
     it('should only store acceptable data', function (done) {
       expectFailure(Submission.submit(realForm._id, {
         fullname: '@!#'
-      }), 'valdation-failed', done);
+      }), 'validation-failed', done);
     });
   });
 });

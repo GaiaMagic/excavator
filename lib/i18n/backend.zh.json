@@ -17,9 +17,6 @@
   "Settings should not be deleted.": "设置不应被删除。",
   "Submission should not be edited.": "提交不应被修改。",
   "The form is invalid.": "表格格式错误。",
-  "Scheme \"{{type}}\" does not exist.": "项目“{{type}}”不存在。",
-  "Scheme \"{{type}}\" with version \"{{version}}\" does not exist.": "项目“{{type}}”版本“{{version}}”不存在。",
-  "Item \"{{label}}\" should {{msg}}.": "\"{{label}}\"应{{msg}}。",
   "Unable to process data for now.": "暂时无法处理数据。",
   "Submission should not be deleted.": "提交不应被删除。",
   "Unexpected server error was encountered.": "服务器发生错误。",
@@ -37,6 +34,11 @@
   "Password is wrong.": "密码错误。",
   "User has been blocked by administrators.": "用户已被管理员查封。",
   "Please log-in again.": "请重新登录。",
+  "Scheme \"{{type}}\" does not exist.": "项目“{{type}}”不存在。",
+  "Scheme \"{{type}}\" with version \"{{version}}\" does not exist.": "项目“{{type}}”版本“{{version}}”不存在。",
+  "Unable to validate \"{{label}}\".": "无法对“{{label}}”进行验证。",
+  "Timed out validating \"{{label}}\". It may contain infinite loop.": "验证“{{label}}”时超时。可能存在死循环。",
+  "Item \"{{label}}\" should {{msg}}.": "“{{label}}”应{{msg}}。",
   "hierarchy": {
     "_": {
       "Please choose one \"{{field}}\".": "请选择一个“{{field}}”。",

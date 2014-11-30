@@ -3,9 +3,9 @@ var Schema       = mongoose.Schema;
 var Q            = require('q');
 var FormRevision = require('./form-revision');
 var panic        = require('../lib/panic');
-var undecorate   = require('../lib/decorate').undecorate;
-var Schemes      = require('./schemes');
 var tr           = require('../lib/i18n').tr;
+var validate     = require('./validator');
+var postProcess  = require('./validator-post');
 
 var submissionSchema = new Schema({
   form:                { type: Schema.ObjectId, ref: 'Form' },
@@ -36,78 +36,18 @@ submissionSchema.pre('save', function (next) {
     self.form_index = formRev.parent.submissions;
     self.form_revision_index = formRev.submissions;
 
-    // validator
     try {
       var data = self.data;
       if (typeof data === 'string') data = JSON.parse(data);
-      var content = JSON.parse(formRev.content);
-      var schemes = content.scheme;
-      var errorMsgs = [];
-      for (var i = 0; i < schemes.length; i++) {
-        var scheme = schemes[i];
-
-        var serverScheme = Schemes[scheme.type];
-        if (typeof serverScheme !== 'object') {
-          errorMsgs.push(tr('Scheme "{{type}}" does not exist.', {
-            type: scheme.type
-          }));
-          continue;
-        }
-        serverScheme = serverScheme[scheme.version];
-        if (typeof serverScheme !== 'object') {
-          errorMsgs.push(tr('Scheme "{{type}}" with version "{{version}}" ' +
-            'does not exist.', {
-              type: scheme.type,
-              version: scheme.version
-            }));
-          continue;
-        }
-
-        var validator = serverScheme.validator;
-        var validatorMessage = serverScheme.validatorMessage;
-
-        if (typeof scheme.validator === 'string' && scheme.validator) {
-          validator = undecorate(scheme.validator);
-          if (typeof validator !== 'function') {
-            validator = new Function('data', 'return ' + scheme.validator);
-          }
-        } else if (typeof scheme.validator === 'function') {
-          validator = scheme.validator;
-        }
-        if (typeof validator !== 'function') {
-          continue;
-        }
-        if (scheme.models instanceof Array) {
-          var validation = validator.call({ tr: tr }, scheme, data);
-          if (validation.result !== true) {
-            errorMsgs = errorMsgs.concat(validation.errorMsgs);
-          }
-        } else {
-          var sd = data[scheme.model];
-          if (validator(sd) !== true) {
-            validatorMessage = validatorMessage || scheme.validatorMessage;
-            errorMsgs.push(tr('Item "{{label}}" should {{msg}}.', {
-              label: scheme.label,
-              msg: validatorMessage
-            }));
-          }
-        }
-      }
+      var schemes = JSON.parse(formRev.content).scheme;
+      var errorMsgs = validate(schemes, data);
       if (errorMsgs.length > 0) {
         return next(panic(422, {
-          type: 'valdation-failed',
+          type: 'validation-failed',
           messages: errorMsgs
         }));
-      } else {
-        for (var i = 0; i < schemes.length; i++) {
-          var scheme = schemes[i];
-          if (scheme.type === 'file') {
-            var fileData = data[scheme.model];
-            var saveAsImage = require('../lib/image');
-            data[scheme.model] = saveAsImage(fileData);
-          }
-        }
       }
+      postProcess(schemes, data);
     } catch (e) {
       console.error(e.stack);
       return next(panic(422, {
