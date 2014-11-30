@@ -100,3 +100,13 @@ node:
 dist:
 	sudo docker run -it --rm --volumes-from=excavator_frontend_1 \
 	--workdir=/excavator excavator_frontend bash
+
+backup: backup-data backup-usercontent
+
+backup-data:
+	sudo docker run --rm --volumes-from excavator_data_1 \
+	-v $$(pwd):/backup busybox tar cvf /backup/excavator_data_1.tar /data
+
+backup-usercontent:
+	sudo docker run --rm --volumes-from excavator_usercontent_1 \
+	-v $$(pwd):/backup busybox tar cvf /backup/excavator_usercontent_1.tar /usercontent
