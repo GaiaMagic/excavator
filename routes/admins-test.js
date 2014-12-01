@@ -30,6 +30,70 @@ describe('Route /backend/admins', function () {
     }
   });
 
+  describe('Sub-route /passwd', function () {
+    it('should fail if old and new passwords are the same', function (done) {
+      request(excavator).
+      post('/backend/admins/passwd').
+      set('Authorization', 'token ' + realAdmin.token).
+      send({ password: real.password, newpassword: real.password }).
+      expect(422).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(Object.keys(res.body)).to.have.members([
+          'status',
+          'type',
+          'message'
+        ]);
+        expect(res.body.type).to.equal('password-unchanged');
+        done();
+      });
+    });
+
+    it('should allow admin to change the password', function (done) {
+      request(excavator).
+      post('/backend/admins/passwd').
+      send({ password: real.password, newpassword: 'newpassword' }).
+      set('Authorization', 'token ' + realAdmin.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(res.body).to.have.keys([
+          'token'
+        ]);
+        realAdmin.token = res.body.token;
+
+        request(excavator).
+        post('/backend/admins/login').
+        send({ username: real.username, password: real.password }).
+        expect(403).end(function (err, res) {
+          if (err) return done(err);
+
+          request(excavator).
+          post('/backend/admins/login').
+          send({ username: real.username, password: 'newpassword' }).
+          expect(200).end(function (err, res) {
+            if (err) return done(err);
+            realAdmin.token = res.body.token;
+
+            request(excavator).
+            post('/backend/admins/passwd').
+            send({ password: 'newpassword', newpassword: real.password }).
+            set('Authorization', 'token ' + realAdmin.token).
+            expect(200).
+            end(function (err, res) {
+              if (err) return done(err);
+              expect(res.body).to.have.keys([
+                'token'
+              ]);
+              realAdmin.token = res.body.token;
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+
   describe('Sub-route /status', function () {
     function expectFailure (token, done) {
       request(excavator).
