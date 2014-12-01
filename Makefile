@@ -36,11 +36,11 @@ reload:
 	$(call GIT_ENV,fig up -d --no-recreate)
 
 clean:
-	@sudo docker images | grep -q '<none>' && \
-	sudo docker images | awk 'NR==1||/<none>/' && echo \
+	@docker images | grep -q '<none>' && \
+	docker images | awk 'NR==1||/<none>/' && echo \
 	"Press Enter to remove these useless old '<none>' images." && read ANS && \
-	sudo docker images | grep '<none>' | awk '{print $$3}' | \
-		xargs -n1 sudo docker rmi || echo "Good! No useless images to clean."
+	docker images | grep '<none>' | awk '{print $$3}' | \
+		xargs -n1 docker rmi || echo "Good! No useless images to clean."
 
 help:
 	@printf ""\
@@ -59,54 +59,54 @@ help:
 	"  \033[0;36mmake dist\033[0m           view the source and the dist directory\n"
 
 db:
-	sudo docker run -it --rm --link excavator_db_1:mongo mongo:2.6.5 bash
+	docker run -it --rm --link excavator_db_1:mongo mongo:2.6.5 bash
 
 mongo:
-	sudo docker run -it --rm --link excavator_db_1:mongo mongo:2.6.5 \
+	docker run -it --rm --link excavator_db_1:mongo mongo:2.6.5 \
 	sh -c 'exec mongo \
 	$$MONGO_PORT_27017_TCP_ADDR:$$MONGO_PORT_27017_TCP_PORT/excavator'
 
 mongodump:
-	sudo docker run -it --rm --link excavator_db_1:mongo \
+	docker run -it --rm --link excavator_db_1:mongo \
 	--volume="$$(pwd):/dump" mongo:2.6.5 \
 	sh -c 'exec mongodump --host $$MONGO_PORT_27017_TCP_ADDR \
 	--port $$MONGO_PORT_27017_TCP_PORT --db excavator -o /dump'
 
 mongorestore:
-	sudo docker run -it --rm --link excavator_db_1:mongo \
+	docker run -it --rm --link excavator_db_1:mongo \
 	--volume="$$(pwd):/dump" mongo:2.6.5 \
 	sh -c 'exec mongorestore --host $$MONGO_PORT_27017_TCP_ADDR \
 	--port $$MONGO_PORT_27017_TCP_PORT --db excavator /dump/excavator'
 
 mongorestore-drop:
-	sudo docker run -it --rm --link excavator_db_1:mongo \
+	docker run -it --rm --link excavator_db_1:mongo \
 	--volume="$$(pwd):/dump" mongo:2.6.5 \
 	sh -c 'exec mongorestore --drop --host $$MONGO_PORT_27017_TCP_ADDR \
 	--port $$MONGO_PORT_27017_TCP_PORT --db excavator /dump/excavator'
 
 data:
-	sudo docker run -it --rm --volumes-from=excavator_data_1 \
+	docker run -it --rm --volumes-from=excavator_data_1 \
 	--workdir=/data/db busybox
 
 usercontent:
-	sudo docker run -it --rm --volumes-from=excavator_usercontent_1 \
+	docker run -it --rm --volumes-from=excavator_usercontent_1 \
 	--workdir=/usercontent busybox
 
 node:
-	sudo nsenter --target $$(sudo docker inspect \
+	nsenter --target $$(docker inspect \
 	--format "{{.State.Pid}}" excavator_backend_1) \
 	--mount --uts --ipc --net --pid
 
 dist:
-	sudo docker run -it --rm --volumes-from=excavator_frontend_1 \
+	docker run -it --rm --volumes-from=excavator_frontend_1 \
 	--workdir=/excavator excavator_frontend bash
 
 backup: backup-data backup-usercontent
 
 backup-data:
-	sudo docker run --rm --volumes-from excavator_data_1 \
+	docker run --rm --volumes-from excavator_data_1 \
 	-v $$(pwd):/backup busybox tar cvf /backup/excavator_data_1.tar /data
 
 backup-usercontent:
-	sudo docker run --rm --volumes-from excavator_usercontent_1 \
+	docker run --rm --volumes-from excavator_usercontent_1 \
 	-v $$(pwd):/backup busybox tar cvf /backup/excavator_usercontent_1.tar /usercontent
