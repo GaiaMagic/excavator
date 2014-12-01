@@ -258,6 +258,7 @@ gulp.task('gettext', function () {
     'assets/js/scheme/bulk.js',
     'assets/js/scheme/file.js',
     'assets/js/func/panic.js',
+    'assets/js/shared/*.js',
     'lib/timeago.js',
     'lib/hierarchies/hierarchies.js',
     'models/schemes/*.js',
@@ -273,6 +274,7 @@ gulp.task('gettext', function () {
     'views/vendors/**/*.html',
     'assets/js/func/panic.js',
     'assets/js/manager/nav.js',
+    'assets/js/shared/*.js',
     'lib/timeago.js',
     'models/status.js'
   ]).pipe(gettext({

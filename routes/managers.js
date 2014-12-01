@@ -207,6 +207,29 @@ needsManagerAuth, function (req, res, next) {
   }).catch(next);
 });
 
+router.post('/passwd', needsManagerAuth, jsonParser, function (req, res, next) {
+  if (req.body.password && req.body.newpassword &&
+      req.body.password === req.body.newpassword) {
+    return next(panic(422, {
+      type:    'password-unchanged',
+      message: tr('New password should be different than the old one.')
+    }));
+  }
+  Manager.authenticate(
+    req.authorizedUser.username,
+    req.body.password
+  ).then(function (user) {
+    user.password = req.body.newpassword;
+    return Q.nbind(user.save, user)().then(function () {
+      return user;
+    });
+  }).then(function (user) {
+    res.send({
+      token: user.token
+    });
+  }).catch(next);
+});
+
 // need no auth:
 
 router.get('/status', require('./token-auth').statusRoute('Manager'));

@@ -45,9 +45,17 @@ config([
       }
     }).
 
+    when('/passwd', {
+      templateUrl: '/passwd.html',
+      controller: 'controller.shared.user.passwd as csup',
+      resolve: {
+        loggedIn: authNeededResolver
+      }
+    }).
+
     when('/login', {
       templateUrl: '/login.html',
-      controller: 'controller.manager.manager.login as cmml',
+      controller: 'controller.shared.user.login as csul',
       resolve: {
         loggedIn: authSuccessResolver
       }

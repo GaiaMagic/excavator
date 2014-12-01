@@ -31,14 +31,6 @@ config([
       redirectTo: '/forms'
     }).
 
-    when('/login', {
-      templateUrl: '/login.html',
-      controller: 'controller.control.admin.login as ccal',
-      resolve: {
-        loggedIn: authSuccessResolver
-      }
-    }).
-
     when('/forms/create', {
       templateUrl: '/forms/edit.html',
       controller: 'controller.control.form.edit as ccfe',
@@ -99,9 +91,17 @@ config([
 
     when('/passwd', {
       templateUrl: '/passwd.html',
-      controller: 'controller.control.admin.passwd as ccap',
+      controller: 'controller.shared.user.passwd as csup',
       resolve: {
         loggedIn: authNeededResolver
+      }
+    }).
+
+    when('/login', {
+      templateUrl: '/login.html',
+      controller: 'controller.shared.user.login as csul',
+      resolve: {
+        loggedIn: authSuccessResolver
       }
     }).
 

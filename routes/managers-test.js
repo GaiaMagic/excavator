@@ -522,6 +522,70 @@ describe('Route /backend/managers', function () {
     });
   });
 
+  describe('Sub-route /passwd', function () {
+    it('should fail if old and new passwords are the same', function (done) {
+      request(excavator).
+      post('/backend/managers/passwd').
+      set('Authorization', 'token ' + realManager.token).
+      send({ password: real.password, newpassword: real.password }).
+      expect(422).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(Object.keys(res.body)).to.have.members([
+          'status',
+          'type',
+          'message'
+        ]);
+        expect(res.body.type).to.equal('password-unchanged');
+        done();
+      });
+    });
+
+    it('should allow manager to change the password', function (done) {
+      request(excavator).
+      post('/backend/managers/passwd').
+      send({ password: real.password, newpassword: 'newpassword' }).
+      set('Authorization', 'token ' + realManager.token).
+      expect(200).
+      end(function (err, res) {
+        if (err) return done(err);
+        expect(res.body).to.have.keys([
+          'token'
+        ]);
+        realManager.token = res.body.token;
+
+        request(excavator).
+        post('/backend/managers/login').
+        send({ username: real.username, password: real.password }).
+        expect(403).end(function (err, res) {
+          if (err) return done(err);
+
+          request(excavator).
+          post('/backend/managers/login').
+          send({ username: real.username, password: 'newpassword' }).
+          expect(200).end(function (err, res) {
+            if (err) return done(err);
+            realManager.token = res.body.token;
+
+            request(excavator).
+            post('/backend/managers/passwd').
+            send({ password: 'newpassword', newpassword: real.password }).
+            set('Authorization', 'token ' + realManager.token).
+            expect(200).
+            end(function (err, res) {
+              if (err) return done(err);
+              expect(res.body).to.have.keys([
+                'token'
+              ]);
+              realManager.token = res.body.token;
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+
   describe('Sub-route /status', function () {
     function expectFailure (token, done) {
       request(excavator).

@@ -1,6 +1,6 @@
-angular.module('excavator.admin.login', []).
+angular.module('excavator.shared.login', []).
 
-controller('controller.control.admin.login', [
+controller('controller.shared.user.login', [
   'backend.user.login',
   'func.location.goto',
   'func.panic',
@@ -13,7 +13,7 @@ controller('controller.control.admin.login', [
   }
 ]).
 
-controller('controller.control.admin.passwd', [
+controller('controller.shared.user.passwd', [
   'backend.user.login.status',
   'backend.user.passwd',
   'backend.user.user.token.set',

@@ -132,6 +132,7 @@
     "Form access for {{username}}": "用户 {{username}} 的表格访问权限",
     "Please wait...": "请稍候片刻…",
     "You must select a JPEG image file.": "你必须选择一张JPEG图片",
+    "Submission is corrupted.": "提交已损毁。",
     "Chinese mobile phone number": "中国手机号码",
     "should be a valid 11-digit Chinese mobile phone number": "应为正确的11位数字的中国手机号码",
     "Phone number": "电话号码",

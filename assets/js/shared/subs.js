@@ -60,7 +60,7 @@ controller('controller.shared.submission.view', [
     domains
   ) {
     if (!currentSubmission) {
-      return panic('Submission is corrupted.');
+      return panic(tr('forms::Submission is corrupted.'));
     }
 
     this.sub = currentSubmission;
