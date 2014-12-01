@@ -97,6 +97,14 @@ config([
       }
     }).
 
+    when('/passwd', {
+      templateUrl: '/passwd.html',
+      controller: 'controller.control.admin.passwd as ccap',
+      resolve: {
+        loggedIn: authNeededResolver
+      }
+    }).
+
     otherwise({
       redirectTo: '/login'
     });

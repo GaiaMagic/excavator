@@ -3,6 +3,14 @@
     "Username": "用户名",
     "Password": "密码",
     "Sign in": "登录",
+    "Change Password": "更改密码",
+    "Current Password": "当前密码",
+    "New Password": "新密码",
+    "Re-type New Password": "重输新密码",
+    "Update Password": "更新密码",
+    "Password has been updated. Would you like to log in again?": "密码已更新，你要重新登录吗？",
+    "Yes, bring me to log in page": "要，带我到登录页",
+    "No, keep me logged in": "不，不要注销",
     "You have successfully logged out.": "你已成功注销。"
   },
   "nav": {
@@ -14,6 +22,7 @@
     "Viewing !!metaData.title!!": "正在查看 !!metaData.title!!",
     "Managers": "经理",
     "Logged in as": "已登录：",
+    "Change Password": "更改密码",
     "Log out": "注销",
     "Log In": "登录"
   },

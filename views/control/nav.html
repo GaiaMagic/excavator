@@ -43,6 +43,9 @@
             <b ng-bind="status.username"></b>
             <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
+            <li><a href="/passwd" ng-click="loggedInOpen=false"
+              i18n="nav::Change Password"></a></li>
+            <li class="divider"></li>
             <li><a href ng-click="logout();
               loggedInOpen=false" i18n="nav::Log out"></a></li>
           </ul>

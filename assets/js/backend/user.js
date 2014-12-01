@@ -133,6 +133,19 @@ run([
   }
 ]).
 
+factory('backend.user.passwd', [
+  '$http',
+  'backend.user.scope',
+  function ($http, scope) {
+    return function (password, newpassword) {
+      return $http.post('/backend/' + scope + '/passwd', {
+        password: password,
+        newpassword: newpassword
+      });
+    };
+  }
+]).
+
 factory('backend.user.login', [
   '$http',
   'backend.user.scope',
