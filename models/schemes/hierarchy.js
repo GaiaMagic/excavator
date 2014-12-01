@@ -83,7 +83,8 @@ module.exports = {
             data: [{}]
           };
         } else {
-          this.hierarchy = angular.copy(hierarchies.findByName(this.scheme.hierarchy));
+          var hierarchy = hierarchies.findByName(this.scheme.hierarchy);
+          this.hierarchy = angular.copy(hierarchy);
         }
       }
     ],

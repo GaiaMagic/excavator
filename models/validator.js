@@ -1,5 +1,7 @@
 var vm         = require('vm');
 var tr         = require('../lib/i18n').tr;
+var bytes      = require('../lib/bytes');
+var extend     = require('extend');
 var undecorate = require('../lib/decorate').undecorate;
 var Schemes    = require('./schemes');
 
@@ -36,6 +38,7 @@ function validate (schemes, data) {
       continue;
     }
 
+    var trustedValidator = false;
     var validator = scheme.validator;
     var validatorMessage = scheme.validatorMessage;
 
@@ -54,6 +57,7 @@ function validate (schemes, data) {
     if (typeof validator !== 'function') {
       validator = serverScheme.validator;
       validatorMessage = validatorMessage || serverScheme.validatorMessage;
+      trustedValidator = true;
     }
     if (typeof validator !== 'function') {
       continue;
@@ -61,7 +65,8 @@ function validate (schemes, data) {
 
     var errMsgs;
     try {
-      errMsgs = callValidator(validator, validatorMessage, scheme, data);
+      errMsgs = callValidator(validator, validatorMessage, scheme, data,
+        trustedValidator);
     } catch (e) {
       if (e.message.indexOf('timed out') > -1) {
         errMsgs = [ tr('Timed out validating "{{label}}". ' +
@@ -84,7 +89,13 @@ function validate (schemes, data) {
  * Array of error message is returned and an empty array is returned if there
  * are no errors validating the data.
  */
-function callValidator(validatorFunction, validatorMessage, scheme, data) {
+function callValidator(
+  validatorFunction,
+  validatorMessage,
+  scheme,
+  data,
+  isValidatorTrusted
+) {
   if (validatorFunction.length <= 1) {
     var value = data[scheme.model];
     var expr = '(' + validatorFunction.toString() + ')(value)';
@@ -94,23 +105,32 @@ function callValidator(validatorFunction, validatorMessage, scheme, data) {
     }
     if (ret !== true) {
       return [
-        tr('Item "{{label}}" should {{msg}}.', {
+        tr('Item "{{label}}" {{msg}}.', {
           label: scheme.label,
           msg: validatorMessage
         })
       ];
     }
   } else {
-    var expr = '(' + validatorFunction.toString() + ')';
-    expr += '.call({ tr: tr }, scheme, data)';
-    var ret = vm.runInNewContext(expr, {
-      scheme: scheme, data: data, tr: tr
-    }, { timeout: TIMEOUT });
+    var ret;
+    var inject = { tr: tr, bytes: bytes };
+    if (isValidatorTrusted) {
+      ret = validatorFunction.call(inject, scheme, data);
+    } else {
+      var expr = '(' + validatorFunction.toString() + ')';
+      expr += '.call({ tr: tr, bytes: bytes }, scheme, data)';
+      ret = vm.runInNewContext(expr, extend(true, {
+        scheme: scheme, data: data
+      }, inject), { timeout: TIMEOUT });
+    }
     if (typeof ret !== 'object' ||
         typeof ret.result === 'undefined') {
       throw new Error('it should return an object containing result');
     }
     if (ret.result !== true) {
+      if (!(ret.errorMsgs instanceof Array)) {
+        return [ret.errorMsgs];
+      }
       return ret.errorMsgs;
     }
   }

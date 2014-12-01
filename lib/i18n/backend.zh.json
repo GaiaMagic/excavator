@@ -38,7 +38,11 @@
   "Scheme \"{{type}}\" with version \"{{version}}\" does not exist.": "项目“{{type}}”版本“{{version}}”不存在。",
   "Unable to validate \"{{label}}\".": "无法对“{{label}}”进行验证。",
   "Timed out validating \"{{label}}\". It may contain infinite loop.": "验证“{{label}}”时超时。可能存在死循环。",
-  "Item \"{{label}}\" should {{msg}}.": "“{{label}}”应{{msg}}。",
+  "Item \"{{label}}\" {{msg}}.": "“{{label}}”{{msg}}。",
+  "validator": {
+    "Please provide a JPEG image file whose size is less than {{size}}.": "请提供一张文件大小不超过{{size}}的JPEG图片。",
+    "Help text": "验证失败时显示的文字"
+  },
   "hierarchy": {
     "_": {
       "Please choose one \"{{field}}\".": "请选择一个“{{field}}”。",

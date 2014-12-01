@@ -11,7 +11,7 @@ describe('simple validator (one or zero argument)', function () {
         model: 'name',
         label: 'Name',
         validator: validator,
-        validatorMessage: "be a non-empty string"
+        validatorMessage: "should be a non-empty string"
       }], { name: 'Sam' });
       expect(errorMsgs).to.be.an('array').and.have.length(0);
     }
@@ -59,7 +59,7 @@ describe('simple validator (one or zero argument)', function () {
         model: 'name',
         label: 'Name',
         validator: validator,
-        validatorMessage: "be a non-empty string"
+        validatorMessage: "should be a non-empty string"
       }], { name: 'Sam' }).map(function (msg) {
         return translate(msg.string, 'en', msg.context);
       });
@@ -76,7 +76,7 @@ describe('simple validator (one or zero argument)', function () {
         model: 'name',
         label: 'Name',
         validator: 'true',
-        validatorMessage: "be a non-empty string"
+        validatorMessage: "should be a non-empty string"
       });
     });
 
@@ -88,7 +88,7 @@ describe('simple validator (one or zero argument)', function () {
         model: 'name',
         label: 'Name',
         validator: 'true',
-        validatorMessage: "be a non-empty string"
+        validatorMessage: "should be a non-empty string"
       });
     });
 
@@ -142,7 +142,7 @@ describe('validator (two arguments)', function () {
         model: 'name',
         label: 'Name',
         validator: validator,
-        validatorMessage: "be a non-empty string"
+        validatorMessage: "should be a non-empty string"
       }], { name: 'Sam' });
       expect(errorMsgs).to.be.an('array').and.have.length(0);
     }
@@ -187,7 +187,7 @@ describe('validator (two arguments)', function () {
         model: 'name',
         label: 'Name',
         validator: validator,
-        validatorMessage: "be a non-empty string"
+        validatorMessage: "should be a non-empty string"
       }], { name: 'Sam' }).map(function (msg) {
         return translate(msg.string, 'en', msg.context);
       });

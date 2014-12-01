@@ -51,25 +51,33 @@ module.exports = {
             ';',
           '};'
         ].join('\n'))();
-        var prefix = 'be a date';
-        var msg = this.scheme.validatorMessage;
-        if (!msg) delete this.scheme.validatorDirty;
-        if (!this.scheme.validatorDirty) {
+        if (!this.scheme.validatorMessage ||
+            !this.scheme.validatorMessageCustom) {
           var cdate = $filter('date');
-          msg = prefix;
+          var msg = tr('validator::should be a valid date like {{example}}', {
+            example: cdate(new Date, format)
+          });
           if (datemin) {
             if (datemax) {
-              msg += ' from ' + cdate(datemin, format);
-              msg += ' to ' + cdate(datemax, format);
+              msg = tr('validator::should be a valid date from {{start}} to ' +
+              '{{end}}', {
+                start: cdate(datemin, format),
+                end: cdate(datemax, format)
+              });
             } else {
-              msg += ' after ' + cdate(datemin, format);
+              msg = tr('validator::should be a valid date after {{start}}', {
+                start: cdate(datemin, format)
+              });
             }
           } else {
             if (datemax) {
-              msg += ' before ' + cdate(datemax, format);
+              msg = tr('validator::should be a valid date before {{end}}', {
+                end: cdate(datemax, format)
+              });
             }
           }
           this.scheme.validatorMessage = msg;
+          this.scheme.validatorMessageCustom = false;
         }
       }
     ],

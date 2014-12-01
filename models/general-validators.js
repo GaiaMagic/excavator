@@ -5,14 +5,14 @@ module.exports = function (tr) {
       label: tr('forms::Chinese mobile phone number'),
       value: 'typeof data === "string" && data.length === 11 && ' +
         '/^1[3-8][0-9]{9}$/.test(data)',
-      say: tr('forms::be a valid 11-digit Chinese mobile phone number')
+      say: tr('forms::should be a valid 11-digit Chinese mobile phone number')
     },
     {
       name: 'phone-number',
       label: tr('forms::Phone number'),
       value: 'typeof data === "string" && data.length >= 3 && ' +
         'data.length <= 30 && /^[0-9\\(\\)\\/\\+\\s\\-]*$/.test(data)',
-      say: tr('forms::be a valid 3-30 digtis phone number')
+      say: tr('forms::should be a valid 3-30 digtis phone number')
     },
     {
       // https://github.com/jzaefferer/jquery-validation/blob/master/src/core.js
@@ -22,7 +22,7 @@ module.exports = function (tr) {
         '/^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:' +
         '[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:' +
         '[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(data)',
-      say: tr('forms::be a valid Email address')
+      say: tr('forms::should be a valid Email address')
     },
     {
       // https://gist.github.com/dperini/729294
@@ -37,7 +37,7 @@ module.exports = function (tr) {
         '\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z' +
         '\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z' +
         '\\u00a1-\\uffff]{2,})))(?::\\d{2,5})?(?:\\/\\S*)?$/i.test(data)',
-      say: tr('forms::be a valid URL')
+      say: tr('forms::should be a valid URL')
     },
     {
       // https://gist.github.com/ShirtlessKirk/2134376
@@ -58,14 +58,14 @@ module.exports = function (tr) {
         '  return sum % 10 === 0 && sum > 0;',
         '})(data)'
       ].join('\n'),
-      say: tr('forms::be a valid credit card number')
+      say: tr('forms::should be a valid credit card number')
     },
     {
       name: 'resident-id',
       label: tr('forms::Resident ID Card'),
       value: 'typeof data === "string" && data.length === 18 && ' +
         '/^[0-9]{17}[0-9Xx]$/.test(data)',
-      say: tr('forms::be a valid 18-digit resident ID card number')
+      say: tr('forms::should be a valid 18-digit resident ID card number')
     }
   ];
 };

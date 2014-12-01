@@ -14,17 +14,30 @@ module.exports = {
   latest: '1.0',
 
   '1.0': {
-    validator: function (value) {
-      var result = false;
-      var errorMsg;
-      if (typeof value !== 'string' ||
-                 value.indexOf('data:image/jpeg;base64,') !== 0) {
-        return false;
-      }
-      if (value.length > 1024 * 1024 * 1.5) {
-        return false;
-      }
-      return true;
+    validator: function (scheme, data) {
+      var tr = this.tr;
+      var bytes = this.bytes;
+      var value = data[scheme.model];
+      var result = (function () {
+        if (typeof value !== 'string' ||
+                   value.indexOf('data:image/jpeg;base64,') !== 0) {
+          return false;
+        }
+        if (typeof scheme.size !== 'number') {
+          return false;
+        }
+        if (value.length > scheme.size) {
+          return false;
+        }
+        return true;
+      })();
+      return {
+        result: result,
+        errorMsgs: tr('validator::Please provide a ' +
+          'JPEG image file whose size is less than {{size}}.', {
+          size: bytes(scheme.size)
+        })
+      };
     },
     templateInit: [
       'misc.bytes',

@@ -295,6 +295,7 @@ gulp.task('gettext', function () {
 
   gulp.src([
     'models/*.js',
+    'models/schemes/file.js',
     'models/schemes/hierarchy.js',
     '!models/general-validators.js',
     '!models/status.js',
@@ -302,6 +303,6 @@ gulp.task('gettext', function () {
   ]).pipe(gettext({
     file: 'lib/i18n/backend.%code%.json',
     langs: ['zh'],
-    excludeRootKeys: ['schemes', 'template']
+    excludeRootKeys: ['schemes', 'template', 'forms']
   })).pipe(gulp.dest('.'));
 });

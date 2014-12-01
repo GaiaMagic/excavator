@@ -28,7 +28,7 @@ router.get('/forms/:slug/:revid([a-f0-9]{24})?', function (req, res, next) {
 });
 
 router.post('/submit', jsonParser({
-  limit: '1.5mb'
+  limit: '6.8mb'
 }), function (req, res, next) {
   Submission.submit(
     req.body.form,

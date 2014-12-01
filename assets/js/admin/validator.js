@@ -142,7 +142,7 @@ directive('validator', [
       scope.say = function () {
         if (scope.page === 'general') {
           var general = scope.general;
-          if (!angular.isObject(general)) return tr('forms::be empty');
+          if (!angular.isObject(general)) return tr('forms::should be empty');
           return general.say;
         }
 
@@ -150,16 +150,16 @@ directive('validator', [
           var ret = scope.choices.filter(function (choice) {
             return choice;
           }).map(angular.toJson).join(', ');
-          return ret ? (tr('forms::be one of the following: ') + ret) :
-            tr('forms::be empty');
+          return ret ? (tr('forms::should be one of the following: ') + ret) :
+            tr('forms::should be empty');
         }
 
         if (scope.page === 'boolean') {
-          return tr('forms::be yes or no');
+          return tr('forms::should be yes or no');
         }
 
         if (scope.page === 'numeric') {
-          return tr('forms::be a number between {{min}} to {{max}}', {
+          return tr('forms::should be a number between {{min}} to {{max}}', {
             min: scope.min, max: scope.max
           });
         }
@@ -170,13 +170,13 @@ directive('validator', [
             ret.push(scope.charsets[i].say);
           }
         }
-        var con = '';
+        var con = { inc: ret, min: scope.min, max: scope.max };
         if (ret.length > 0) {
-          con = tr('forms::include {{inc.join(", ")}} and ', { inc: ret });
+          return tr('forms::should include {{inc.join(", ")}} and ' +
+            'have {{min}}-{{max}} characters', con);
+        } else {
+          return tr('forms::should have {{min}}-{{max}} characters', con);
         }
-        return con + tr('forms::have {{min}}-{{max}} characters', {
-          min: scope.min, max: scope.max
-        });
       };
       scope.ok = function () {
         modal.hide();
@@ -196,9 +196,11 @@ directive('validator', [
           tpl = [
             '<div class="validator validator-static">',
               '<pre><code ng-bind="', $attrs.for, '"></code></pre>',
-              '<input type="text" class="form-control" placeholder="',
-                tr('forms::Help text'), '" ng-change="', $attrs.for,
-                  'Dirty = true" ng-model="', $attrs.for, 'Message">',
+              '<input type="text" class="form-control" ',
+                'ng-model-options="{ updateOn: \'blur\'}" ',
+                'placeholder="', tr('forms::Help text'), '" ',
+                'ng-change="', $attrs.for, 'MessageCustom = true" ',
+                'ng-model="', $attrs.for, 'Message">',
             '</div>'
           ];
         } else {
