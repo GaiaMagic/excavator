@@ -140,7 +140,10 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
         if (err.code === 11000) {
           err = panic(409, {
             type:    'username-has-been-taken',
-            message: tr('Username has been taken. Use another one.')
+            message: tr('Username "{{username}}" has been taken. ' +
+            'Use another one.', {
+              username: self.username
+            })
           });
         }
         if (!err.panic) {
@@ -154,6 +157,18 @@ function makeUserAlikeSchema (schemaName, scheme, schemaFunc) {
       deferred.resolve(self);
     });
     return deferred.promise;
+  });
+
+  userSchema.method('resetPassword', function () {
+    var self = this;
+    var newpassword = self.constructor.generateNewToken().slice(0, 50);
+    self.password = newpassword;
+    return self.heal().then(function () {
+      return {
+        password: newpassword,
+        user: self
+      };
+    });
   });
 
   userSchema.method('sanitize', function () {

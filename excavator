@@ -1,0 +1,211 @@
+#!/usr/bin/env node
+
+var Q = require('q');
+var translate = require('./lib/i18n').translate;
+var argv = require('optimist').argv;
+
+var scope = argv._[0] || '';
+var action = argv._[1] || '';
+var target = argv._[2] || '';
+var targets = argv._.slice(2);
+var verbose = false;
+
+switch (scope) {
+case 'admin':
+  admin();
+  break;
+case 'manager':
+  manager();
+  break;
+default:
+  if (scope) E('no such scope: ' + scope);
+  E('- possible scopes are:');
+  E('  - admin');
+  E('  - manager');
+}
+
+function E () {
+  console.error.apply(console, arguments);
+}
+
+function ERR (e) {
+  if (e.panic) {
+    if (typeof e.message === 'object') {
+      E(translate(e.message.string, 'en', e.message.context));
+    } else {
+      E(e.message);
+    }
+  } else {
+    if (e.stack) {
+      E(e.stack);
+    } else {
+      E(e);
+    }
+  }
+}
+
+function admin () {
+  var Admin = require('./models/admin');
+  switch (action) {
+  case 'create':
+    createUser(Admin);
+    break;
+  case 'list':
+    listUsers(Admin);
+    break;
+  case 'reset-password':
+    resetPassword(Admin);
+    break;
+  default:
+    if (action) E('no such action: ' + action);
+    E('- possible actions are:');
+    E('  - create <username> ...');
+    E('  - list');
+    E('  - reset-password <username> ...');
+  }
+}
+
+function manager () {
+  var Manager = require('./models/manager');
+  switch (action) {
+  case 'create':
+    createUser(Manager);
+    break;
+  case 'delete':
+    deleteUser(Manager);
+    break;
+  case 'list':
+    listUsers(Manager);
+    break;
+  case 'reset-password':
+    resetPassword(Manager);
+    break;
+  default:
+    if (action) E('no such action: ' + action);
+    E('- possible actions are:');
+    E('  - create <username> ...');
+    E('  - delete <username> ...');
+    E('  - list');
+    E('  - reset-password <username> ...');
+  }
+}
+
+function createUser (scope) {
+  if (!target) return E('Please provide username.');
+  var Database = require('./models');
+  Database.connectPromise().then(function (address) {
+    if (verbose) console.error('Connected to ' + address);
+    return Q.allSettled(targets.map(function (target) {
+      var password = scope.generateNewToken().slice(0, 50);
+      return scope.register(target, password).then(function (user) {
+        user._password = password;
+        return user;
+      });
+    }));
+  }).then(function (users) {
+    for (var i = 0; i < users.length; i++) {
+      var user = users[i].value;
+      var reason = users[i].reason;
+      if (users[i].state === 'fulfilled' && user) {
+        console.log('User ' + user.username + ' has been created (password: ' +
+          user._password + ').');
+      } else {
+        ERR(reason);
+      }
+    }
+  }).finally(function () {
+    Database.disconnect();
+  });
+}
+
+function deleteUser (scope) {
+  if (!target) return E('Please provide username.');
+  var Database = require('./models');
+  Database.connectPromise().then(function (address) {
+    if (verbose) console.error('Connected to ' + address);
+    return Q.allSettled(targets.map(function (target) {
+      return Q.nbind(scope.findOne, scope)({ username: target });
+    }));
+  }).then(function (users) {
+    var p = [];
+    for (var i = 0; i < users.length; i++) {
+      var user = users[i].value;
+      var reason = users[i].reason;
+      if (users[i].state === 'fulfilled' && !user) {
+        E('no such user: ' + targets[i]);
+      } else if (users[i].state !== 'fulfilled') {
+        ERR(reason);
+      } else {
+        var promise = Q.nbind(user.remove, user)().then(function (user) {
+          console.log('User ' + user.username + ' has been deleted.');
+        }).catch(function (e) {
+          ERR(e);
+        });
+        p.push(promise);
+      }
+    }
+    return Q.all(p);
+  }).finally(function () {
+    Database.disconnect();
+  });
+}
+
+function listUsers (scope) {
+  var Database = require('./models');
+  Database.connectPromise().then(function (address) {
+    if (verbose) console.error('Connected to ' + address);
+    return Q.nbind(scope.find, scope)();
+  }).then(function (users) {
+    var list = users.map(function (user) {
+      return user.username;
+    }).join('\n');
+    if (!process.stdout.isTTY) {
+      return console.log(list);
+    }
+    var spawn = require('child_process').spawn,
+    column = spawn('column');
+    column.stdout.pipe(process.stdout);
+    column.stdin.write(list);
+    column.stdin.end('\n');
+    column.on('error', function () {
+      console.log(list);
+    });
+  }).catch(function (e) {
+    ERR(e);
+  }).finally(function () {
+    Database.disconnect();
+  });
+}
+
+function resetPassword (scope) {
+  if (!target) return E('Please provide username.');
+  var Database = require('./models');
+  Database.connectPromise().then(function (address) {
+    if (verbose) console.error('Connected to ' + address);
+    return Q.allSettled(targets.map(function (target) {
+      return Q.nbind(scope.findOne, scope)({ username: target });
+    }));
+  }).then(function (users) {
+    var p = [];
+    for (var i = 0; i < users.length; i++) {
+      var user = users[i].value;
+      var reason = users[i].reason;
+      if (users[i].state === 'fulfilled' && !user) {
+        E('no such user: ' + targets[i]);
+      } else if (users[i].state !== 'fulfilled') {
+        ERR(reason);
+      } else {
+        var promise = user.resetPassword().then(function (ret) {
+          console.log('Password of ' + ret.user.username +
+            ' has been reset to ' + ret.password + '.');
+        }).catch(function (e) {
+          ERR(e);
+        });
+        p.push(promise);
+      }
+    }
+    return Q.all(p);
+  }).finally(function () {
+    Database.disconnect();
+  });
+}

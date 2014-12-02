@@ -28,7 +28,7 @@
   "Password is required.": "密码是必填项。",
   "Password is too short. It needs at least 6 characters.": "密码太短。至少要6个字符。",
   "Password is too long. Its length should not be over 50.": "密码太长。最长50个字符。",
-  "Username has been taken. Use another one.": "用户名已被注册，请使用其他用户名。",
+  "Username \"{{username}}\" has been taken. Use another one.": "用户名“{{username}}”已被注册，请使用其他用户名。",
   "User does not exist.": "用户不存在。",
   "User has been locked due to too many failed logins.": "用户因多次失败的登录而被暂时锁定。",
   "Password is wrong.": "密码错误。",
