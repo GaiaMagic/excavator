@@ -5,15 +5,20 @@ constant('resolver.submissions', function submissionsResolver (service) {
     '$route',
     service,
     'func.panic',
-    function currentSubmissions ($route, list, panic) {
+    'shared.nav.meta',
+    function currentSubmissions ($route, list, panic, meta) {
       var params = {};
-      var form = $route.current.params.form;
+      var form = $route.current.params.formid || $route.current.params.form;
       if (angular.isDefined(form)) params.form = form;
       var status = $route.current.params.status;
       if (angular.isDefined(status)) params.status = status;
       return list(params).then(function (res) {
+        meta.set('submission', {
+          formid: form
+        });
+
         var data = res.data;
-        if (form) data.hasFormQuery = true;
+        if (form) data.formId = form;
         return data;
       }, panic);
     }
@@ -58,10 +63,10 @@ constant('resolver.submission', function submissionResolver (service) {
 
         var title = res.data.form_revision.title;
 
-        meta.set({
-          type: 'submission-view',
+        meta.set('submission', {
           title: '#' + (res.data.form_index + 1),
-          id: subid
+          subid: subid,
+          formid: res.data.form._id
         });
 
         return {

@@ -28,13 +28,14 @@
       <table class="table table-bordered table-hover">
         <thead ng-if="ccfl.forms && ccfl.forms.length">
           <tr>
+            <th class="link" i18n="forms::Preview"></th>
+            <th class="link" i18n="forms::Edit"></th>
             <th i18n="forms::Name"></th>
             <th class="number" i18n="forms::Submissions"></th>
             <th class="number" i18n="forms::Managers"></th>
             <th class="number" i18n="forms::Rev."></th>
             <th class="date" i18n="forms::Created At"></th>
             <th class="date" i18n="forms::Updated At"></th>
-            <th class="slug" i18n="forms::Slug"></th>
           </tr>
         </thead>
         <tbody>
@@ -47,11 +48,24 @@
           </tr>
           <tr ng-repeat="form in ccfl.forms">
             <td>
-              <a class="block" href="/forms/edit/{{ form._id }}"
+              <a target="_blank"
+                href="//{{ ccfl.domains.public }}/{{ form.slug }}">
+                <span class="glyphicon glyphicon-new-window"></span>
+                <span i18n="forms::Preview"></span>
+              </a>
+            </td>
+            <td>
+              <a href="/forms/edit/{{ form._id }}">
+                <span class="glyphicon glyphicon-edit"></span>
+                <span i18n="forms::Edit"></span>
+              </a>
+            </td>
+            <td>
+              <a class="block" href="/forms/{{ form._id }}/submissions"
                 ng-bind="form.head.title || '(untitled)'"></a>
             </td>
             <td>
-              <a href="/submissions?form={{ form.slug }}"
+              <a href="/forms/{{ form._id }}/submissions"
                 ng-bind="form.submissions" class="block"></a>
             </td>
             <td>
@@ -64,13 +78,6 @@
             </td>
             <td>
               <span time-ago="form.updated_at"></span>
-            </td>
-            <td class="slug">
-              <a class="block" target="_blank"
-                href="//{{ ccfl.domains.public }}/{{ form.slug }}">
-                <span class="glyphicon glyphicon-new-window"></span>
-                <span ng-bind="form.slug"></span>
-              </a>
             </td>
           </tr>
         </tbody>

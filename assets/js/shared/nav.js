@@ -23,17 +23,29 @@ directive('navView', [
         logout();
         alert(tr('login::You have successfully logged out.'));
       };
-      $scope.ifPathHas = function (path) {
-        if (path.slice(-1) !== '/') path += '/';
+      $scope.ifPathHas = function (/* paths */) {
         var currentPath = $scope.currentPath;
-        if (currentPath.slice(-1) !== '/') currentPath += '/';
-        return currentPath.slice(0, path.length) === path;
+        if (arguments.length === 1) {
+          var path = arguments[0];
+          if (path.slice(-1) !== '/') path += '/';
+          if (currentPath.slice(-1) !== '/') currentPath += '/';
+          return currentPath.slice(0, path.length) === path;
+        }
+        for (var i = 0; i < arguments.length; i++) {
+          if (currentPath.indexOf(arguments[i]) === -1) {
+            return false;
+          }
+        }
+        return true;
       };
       $scope.ifPathIs = function (path) {
         return $scope.currentPath === path;
       };
+      $scope.ifPathLike = function (path) {
+        return (new RegExp(path)).test($scope.currentPath);
+      };
       $scope.is = function (type) {
-        return !!($scope.metaData && $scope.metaData.type === type);
+        return !!($scope.metaData && $scope.metaData.namespace === type);
       };
       $scope.status = status;
       $scope.linguist = linguist;

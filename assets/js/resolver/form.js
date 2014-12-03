@@ -68,10 +68,9 @@ constant('resolver.form', function formResolver (service, options) {
         if (!angular.isObject(content) ||
             !angular.isObject(content.scheme)) return false;
 
-        meta.set({
-          type: 'form-edit',
+        meta.set('form', {
           title: title,
-          id: res.data._id
+          formid: res.data._id
         });
 
         var link = '/' + slug;

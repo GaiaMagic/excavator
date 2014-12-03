@@ -8,11 +8,10 @@
         <li ng-class="{active: ifPathIs('/submissions')}">
           <a href="/submissions" i18n="nav::Submissions"></a>
         </li>
-        <li ng-class="{active:
-          ifPathHas('/submissions/view')}"
-          ng-if="is('submission-view')">
-          <a href="/submissions/view/{{metaData.id}}"
-            i18n="nav::Viewing !!metaData.title!!"></a>
+        <li ng-class="{active: ifPathHas('/submissions/view')}"
+          ng-if="is('submission') && metaData.data.subid">
+          <a href="/submissions/view/{{metaData.data.subid}}"
+            i18n="nav::Viewing !!metaData.data.title!!"></a>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

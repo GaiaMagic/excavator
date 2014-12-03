@@ -48,7 +48,11 @@
                 class="label label-{{ status.type }}"></span>
             </td>
             <td>
+              <a class="block" ng-if="cssl.submissions.formId"
+                href="/forms/{{ cssl.submissions.formId }}/submissions/{{ sub._id }}"
+                i18n="subs::View Details"></a>
               <a class="block" href="/submissions/view/{{ sub._id }}"
+                ng-if="!cssl.submissions.formId"
                 i18n="subs::View Details"></a>
             </td>
           </tr>

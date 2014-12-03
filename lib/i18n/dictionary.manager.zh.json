@@ -16,7 +16,7 @@
   "nav": {
     "Manager": "表格管理经理",
     "Submissions": "提交列表",
-    "Viewing !!metaData.title!!": "正在查看 !!metaData.title!!",
+    "Viewing !!metaData.data.title!!": "正在查看 !!metaData.data.title!!",
     "Logged in as": "已登录：",
     "Change Password": "更改密码",
     "Log out": "注销",
