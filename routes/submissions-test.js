@@ -68,6 +68,7 @@ describe('Route /backend/submissions', function () {
         if (err) return done(err);
         expect(res.body).to.be.an('array').and.have.length(2);
         expect(res.body[0].created_at).to.be.above(res.body[1].created_at);
+        expect(res.headers['content-range']).to.equal('1-10/2');
         done();
       });
     });
@@ -83,6 +84,7 @@ describe('Route /backend/submissions', function () {
           if (err) return deferred.reject(err);
           var body = res.body;
           expect(body).to.be.an('array').and.have.length(length);
+          expect(res.headers['content-range']).to.equal('1-10/' + length);
           deferred.resolve();
         });
         return deferred.promise;

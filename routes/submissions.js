@@ -12,10 +12,10 @@ function makePromise (promise) {
 }
 
 router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
-  var promise;
   var subid = req.params.submissionid;
+
   if (subid) {
-    promise = makePromise(Submission.findById(subid).
+    return makePromise(Submission.findById(subid).
     populate('form form_revision')).then(function (submission) {
       if (!submission) return;
       return Q.all([
@@ -27,48 +27,68 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
           _id:  { $lt: subid },
           form: submission.form._id
         }).sort({ _id: -1 }).limit(1).select('_id'))
-      ]).then(function (ret) {
+      ]).spread(function (newer, older) {
         submission = submission.toObject();
-        submission.newer = ret[0][0] ? ret[0][0]._id : null;
-        submission.older = ret[1][0] ? ret[1][0]._id : null;
+        submission.newer = newer[0] ? newer[0]._id : null;
+        submission.older = older[0] ? older[0]._id : null;
         return submission;
       });
-    });
-  } else {
-    var form = req.query.form;
-    if (form) {
-      promise = makePromise(Form.findOne(
-        /^[a-f0-9]{24}$/.test(form) ? { _id: form } : { slug: form }
-      )).then(function (form) {
-        if (!form) return;
-        return { form: form._id };
-      });
-    } else {
-      promise = Q({});
-    }
-    promise = promise.then(function (condition) {
-      if (!condition) return;
-      var status = req.query.status;
-      if (status) {
-        status = Status.findById(status);
-        if (status) {
-          condition.status = status.id;
-        } else {
-          return;
-        }
-      }
-      return condition;
-    }).then(function (condition) {
-      if (!condition) return []; // return 0 results if no condition
-      return makePromise(Submission.find(condition).sort({ _id: -1 }).
-        populate('form_revision'));
-    });
+    }).then(function (submission) {
+      if (!submission) return next('not-found');
+      res.send(submission);
+    }).catch(next);
   }
-  promise.then(function (submissions) {
-    if (!submissions) return next('not-found');
-    res.send(submissions);
+
+  var page = +req.query.page || 1;
+  if (page < 1) page = 1;
+  var itemsPerPage = 10;
+  var start = (page - 1) * itemsPerPage + 1;
+  var end = page * itemsPerPage;
+
+  Q.all([
+    checkIfFormExists(req.query.form),
+    Status.findById(req.query.status)
+  ]).spread(function (form, status) {
+    if (req.query.form && !form) return;
+    if (req.query.status && !status) return;
+
+    var condition = {};
+    if (form) condition.form = form;
+    if (status) condition.status = status.id;
+    return condition;
+  }).then(function (condition) {
+    // return 0 results if no condition
+    if (!condition || Object.keys(condition) === 0) {
+      res.set('Content-Range', start + '-' + end + '/0');
+      return [];
+    }
+
+    return Q.all([
+      makePromise(Submission.find(condition).sort({ _id: -1 }).
+        skip(start - 1).limit(itemsPerPage).populate('form_revision')),
+      makePromise(Submission.count(condition))
+    ]).spread(function (data, total) {
+      var range = start + '-' + end + '/' + total;
+      res.set('Content-Range', range);
+      return data;
+    });
+  }).then(function (ret) {
+    res.send(ret);
   }).catch(next);
 });
+
+function checkIfFormExists (slugOrId) {
+  var query;
+  if (/^[a-f0-9]{24}$/.test(slugOrId)) {
+    query = { _id: slugOrId };
+  } else {
+    query = { slug: slugOrId };
+  }
+  return makePromise(Form.find(query).limit(1)).then(function (forms) {
+    if (forms.length === 0) return;
+    return forms[0]._id;
+  });
+}
 
 router.put('/:submissionid([a-f0-9]{24})/status/:status([0-9]+)',
 function (req, res, next) {
