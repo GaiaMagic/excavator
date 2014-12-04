@@ -3,8 +3,5 @@ machine:
     version: 0.11.14
 
 dependencies:
-  pre:
-    - npm cache clean
-    - rm -rf node_modules
   override:
     - npm install
