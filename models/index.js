@@ -35,7 +35,7 @@ function connectPromise (address) {
 
 function connect (address, options) {
   options = options || {};
-  connectPromise(address).then(function () {
+  connectPromise(address).then(function (address) {
     console.log('MongoDB is running: ' + address);
   }, function (err) {
     console.error('Failed to connect to MongoDB (' + err.address + ').',
