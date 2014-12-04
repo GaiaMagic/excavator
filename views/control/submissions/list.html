@@ -57,6 +57,15 @@
             </td>
           </tr>
         </tbody>
+        <tfoot ng-show="total">
+          <tr>
+            <td colspan="99" class="text-center">
+              <pager namespace="submission"></pager>
+              <div i18n="pager::!!total!! items in total.
+                Showing items from !!start!! to !!end!!."></div>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>

@@ -130,10 +130,6 @@ var needsManagerAuth = require('./token-auth')({
 
 router.get('/submissions/:submissionid([a-f0-9]{24})?', needsManagerAuth,
 function (req, res, next) {
-  function makePromise (promise) {
-    return Q.nbind(promise.exec, promise)();
-  }
-
   Q.nbind(Manager.findById, Manager)(req.authorizedUser.id).
   then(function (manager) {
     var subid = req.params.submissionid;
@@ -152,35 +148,51 @@ function (req, res, next) {
             _id:  { $lt: subid },
             form: submission.form._id
           }).sort({ _id: -1 }).limit(1).select('_id'))
-        ]).then(function (ret) {
+        ]).spread(function (newer, older) {
           submission = submission.toObject();
-          submission.newer = ret[0][0] ? ret[0][0]._id : null;
-          submission.older = ret[1][0] ? ret[1][0]._id : null;
+          submission.newer = newer[0] ? newer[0]._id : null;
+          submission.older = older[0] ? older[0]._id : null;
           return submission;
         });
       });
-    } else {
-      var form = req.query.form;
-      var inTheseForms;
-      if (form) {
-        if (manager.forms.indexOf(form) > -1) {
-          inTheseForms = form;
-        } else {
-          return [];
-        }
-      } else {
-        inTheseForms = { $in: manager.forms };
-      }
-      var find = {
-        form: inTheseForms
-      };
-      var status = Status.findById(req.query.status);
-      if (status) {
-        find.status = status.id;
-      }
-      return makePromise(Submission.find(find).
-        sort({ _id: -1 }).populate('form_revision'));
     }
+
+    var page = +req.query.page || 1;
+    if (page < 1) page = 1;
+    var itemsPerPage = 10;
+    var start = (page - 1) * itemsPerPage + 1;
+    var end = page * itemsPerPage;
+
+    var form = req.query.form;
+    var inTheseForms;
+    if (form) {
+      if (manager.forms.indexOf(form) > -1) {
+        inTheseForms = form;
+      } else {
+        res.set('Content-Range', start + '-' + end + '/0');
+        return [];
+      }
+    } else {
+      inTheseForms = { $in: manager.forms };
+    }
+    var find = { form: inTheseForms };
+    var status = Status.findById(req.query.status);
+    if (status) {
+      find.status = status.id;
+    } else if (req.query.status) {
+      res.set('Content-Range', start + '-' + end + '/0');
+      return [];
+    }
+
+    return Q.all([
+      makePromise(Submission.find(find).sort({ _id: -1 }).
+        skip(start - 1).limit(itemsPerPage).populate('form_revision')),
+      makePromise(Submission.count(find))
+    ]).spread(function (data, total) {
+      var range = start + '-' + end + '/' + total;
+      res.set('Content-Range', range);
+      return data;
+    });
   }).then(function (submissions) {
     if (!submissions) return next('not-found');
     res.send(submissions);

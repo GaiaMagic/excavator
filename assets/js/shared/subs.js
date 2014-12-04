@@ -1,6 +1,5 @@
 angular.module('excavator.shared.subs', [
-  'excavator.shared.subs.value',
-  'excavator.misc'
+  'excavator.shared.subs.value'
 ]).
 
 controller('controller.shared.submission.list', [

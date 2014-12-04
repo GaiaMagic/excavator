@@ -268,6 +268,7 @@ describe('Route /backend/managers', function () {
         if (err) return deferred.reject(err);
         var body = res.body;
         expect(body).to.be.an('array').and.have.length(length);
+        expect(res.headers['content-range']).to.equal('1-10/' + length);
         if (length > 1) {
           expect(body[0].created_at).to.be.above(body[1].created_at);
         }
@@ -311,6 +312,7 @@ describe('Route /backend/managers', function () {
           if (err) return deferred.reject(err);
           var body = res.body;
           expect(body).to.be.an('array').and.have.length(length);
+          expect(res.headers['content-range']).to.equal('1-10/' + length);
           deferred.resolve();
         });
         return deferred.promise;
@@ -341,6 +343,7 @@ describe('Route /backend/managers', function () {
           if (err) return deferred.reject(err);
           var body = res.body;
           expect(body).to.be.an('array').and.have.length(length);
+          expect(res.headers['content-range']).to.equal('1-10/' + length);
           deferred.resolve();
         });
         return deferred.promise;

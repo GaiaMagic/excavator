@@ -8,5 +8,8 @@ angular.module('excavator.admin', [
   'excavator.shared.domains',
   'excavator.shared.login',
   'excavator.shared.nav',
-  'excavator.shared.subs'
+  'excavator.shared.subs',
+  'excavator.misc',
+  'excavator.misc.pager',
+  'excavator.misc.url'
 ]);

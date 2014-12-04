@@ -1,0 +1,26 @@
+<div class="paginate">
+  <ul class="pagination" ng-if="numPages > 1 || (numPages >= 1 && page > 1)">
+    <li ng-class="{disabled: page <= 1}">
+      <a href="{{ href(page - 1) }}">&#x25C0;</a>
+    </li>
+
+    <li ng-if="linkGroupFirst() > 0"><a href="{{ href(1) }}">1</a></li>
+    <li ng-if="linkGroupFirst() > 1" class="disabled"><a href>&hellip;</a></li>
+
+    <li ng-repeat="p in makeRange(linkGroupFirst(), linkGroupLast())"
+      ng-class="{active: p === page - 1}">
+      <a href="{{ href(p + 1) }}" ng-bind="p + 1"></a>
+    </li>
+
+    <li ng-if="linkGroupLast() < numPages - 2" class="disabled">
+      <a href>&hellip;</a>
+    </li>
+    <li ng-if="isFinite() && linkGroupLast() < numPages - 1">
+      <a href="{{ href(numPages) }}" ng-bind="numPages"></a>
+    </li>
+
+    <li ng-class="{disabled: page >= numPages}">
+      <a href="{{ href(page+1) }}">&#x25B6;</a>
+    </li>
+  </ul>
+</div>

@@ -5,14 +5,21 @@ constant('resolver.submissions', function submissionsResolver (service) {
     '$route',
     service,
     'func.panic',
+    'misc.pager',
     'shared.nav.meta',
-    function currentSubmissions ($route, list, panic, meta) {
+    function currentSubmissions ($route, list, panic, pager, meta) {
       var params = {};
+
       var form = $route.current.params.formid || $route.current.params.form;
-      if (angular.isDefined(form)) params.form = form;
-      var status = $route.current.params.status;
-      if (angular.isDefined(status)) params.status = status;
+      params.form = form;
+
+      params.status = $route.current.params.status;
+
+      params.page = $route.current.params.page;
+
       return list(params).then(function (res) {
+        pager.analyze('submission', res);
+
         meta.set('submission', {
           formid: form
         });

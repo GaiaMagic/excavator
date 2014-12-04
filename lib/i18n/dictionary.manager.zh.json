@@ -46,6 +46,9 @@
       "Rejected": "已拒绝"
     }
   },
+  "pager": {
+    "!!total!! items in total. Showing items from !!start!! to !!end!!.": "总共!!total!!项。当前显示第!!start!!至!!end!!项。"
+  },
   "panic": {
     "Close": "关闭",
     "Unable to access network. Check your network settings.": "无法访问网络。请检查你的网络设定。",
