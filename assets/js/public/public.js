@@ -18,8 +18,8 @@ run([
   'shared.nav.meta',
   function ($rootScope, $document, meta) {
     meta.watch($rootScope, function (val) {
-      if (angular.isObject(val) && angular.isString(val.title)) {
-        $document[0].title = val.title;
+      if (angular.isObject(val.data) && angular.isString(val.data.title)) {
+        $document[0].title = val.data.title;
       }
     });
   }
