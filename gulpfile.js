@@ -83,7 +83,8 @@ gulp.task('dump:public', function () {
 gulp.task('dump:manager', function () {
   var src = [
     'views/manager/**/*.html',
-    '!views/manager/index.html'
+    '!views/manager/index.html',
+    'views/vendors/pager.html'
   ];
   return dump(src, '.tmp/manager');
 });

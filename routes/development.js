@@ -44,6 +44,7 @@ module.exports = function developmentConfigs (express, excavator) {
   var views = path.join(root, 'views');
 
   if (environment === 'test') {
+    excavator.use(Static(path.join(root, 'usercontent')));
     views = path.join(root, 'dist');
   }
 
