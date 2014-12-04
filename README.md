@@ -18,10 +18,12 @@ This will create 4 containers:
 * excavator_backend_1
 * excavator_frontend_1
 * excavator_db_1
+* excavator_usercontent_1
 * excavator_data_1
 
-`excavator_data_1` is VERY IMPORTANT, because it has all the data. You must
-NOT remove it once it's created. Other three containers/images are free to
+`excavator_data_1` and `excavator_usercontent_1` is VERY IMPORTANT, because
+they have all the data and the images respectively. You must NOT remove it
+once it's created. For other containers/images, they are free to
 remove/recreate.
 
 * Run `make start` or `make restart` to recreate all containers.
@@ -44,6 +46,17 @@ Other useful `make` commands:
 * `make data` to enter where the MongoDB data files are
 * `make node` to enter the system where the backend application runs
 * `make dist` to view the source and the dist directory
+* `make test` to run `npm test` in a new container
+
+## CLI
+
+```
+# run locally
+./excavator [admin|manager] [create|delete|list|reset-password] ...
+
+# run in a running backend container
+docker exec -it excavator_backend_1 ./excavator [admin|manager] ...
+```
 
 ## Test
 
@@ -58,4 +71,7 @@ npm test
 
 alias mocha='./node_modules/mocha/bin/mocha'
 mocha [-w|--watch] [some-file-test.js] [-g|--grep 'grep']
+
+# run tests in container
+make test
 ```

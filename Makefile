@@ -35,6 +35,12 @@ restart: start
 reload:
 	$(call GIT_ENV,fig up -d --no-recreate)
 
+test:
+	docker kill excavator_test >/dev/null 2>&1 && docker rm excavator_test >/dev/null 2>&1; true
+	docker run -d --name excavator_test mongo:2.6.5 >/dev/null
+	docker run --rm --link=excavator_test:db excavator_frontend npm test
+	docker kill excavator_test >/dev/null 2>&1 && docker rm excavator_test >/dev/null 2>&1; true
+
 clean:
 	@docker images | grep -q '<none>' && \
 	docker images | awk 'NR==1||/<none>/' && echo \
@@ -48,6 +54,7 @@ help:
 	"  \033[0;36mmake start\033[0m          restart the application\n"\
 	"  \033[0;36mmake reload\033[0m         rebuild frontend\n"\
 	"  \033[0;36mmake clean\033[0m          remove useless docker images\n"\
+	"  \033[0;36mmake test\033[0m           run npm test in a new container\n"\
 	"\n"\
 	"  \033[0;36mmake db\033[0m             enter the MongoDB system\n"\
 	"  \033[0;36mmake mongo\033[0m          directly connect to db via 'mongo'\n"\
@@ -56,7 +63,10 @@ help:
 	"  \033[0;36mmake mongorestore-drop\033[0m   drop before restore\n"\
 	"  \033[0;36mmake data\033[0m           enter where the MongoDB data files are\n"\
 	"  \033[0;36mmake node\033[0m           enter the system where the backend application runs\n"\
-	"  \033[0;36mmake dist\033[0m           view the source and the dist directory\n"
+	"  \033[0;36mmake dist\033[0m           view the source and the dist directory\n"\
+	"  \033[0;36mmake backup-data\033[0m    archive database\n"\
+	"  \033[0;36mmake backup-usercontent\033[0m  archive usercontent\n"\
+	"  \033[0;36mmake backup\033[0m         archive both\n"
 
 db:
 	docker run -it --rm --link excavator_db_1:mongo mongo:2.6.5 bash
@@ -110,3 +120,5 @@ backup-data:
 backup-usercontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
 	-v $$(pwd):/backup busybox tar cvf /backup/excavator_usercontent_1.tar /usercontent
+
+.PHONY: test dist usercontent data backup db clean all frontend backend start restart reload clean help

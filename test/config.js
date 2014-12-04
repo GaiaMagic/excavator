@@ -12,8 +12,10 @@ var form = {
   }]
 };
 
+var testDBAddress = require('../models').getAddress(undefined, 'excavatorTest');
+
 module.exports = {
-  testDBAddress: 'mongodb://localhost/excavatorTest',
+  testDBAddress: testDBAddress,
 
   fixtures: {
     admin: {

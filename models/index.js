@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var DOCKER_FIG_SERVICE_NAME = 'db';
 
 module.exports = {};
+module.exports.getAddress = getAddress;
 module.exports.connect = connect;
 module.exports.connectPromise = connectPromise;
 module.exports.disconnect = disconnect;
@@ -17,12 +18,17 @@ function getMongoDBServiceAddress (service) {
   }
 }
 
-function connectPromise (address) {
-  var deferred = Q.defer();
+function getAddress (address, database) {
   if (!address) {
     address = getMongoDBServiceAddress(DOCKER_FIG_SERVICE_NAME) || 'localhost';
-    address = 'mongodb://' + address + '/excavator';
+    address = 'mongodb://' + address + '/' + database;
   }
+  return address;
+}
+
+function connectPromise (address) {
+  var deferred = Q.defer();
+  if (!address) address = getAddress(address, 'excavator');
   mongoose.connect(address, function (err) {
     if (err) {
       err.address = address;
