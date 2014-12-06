@@ -8,7 +8,7 @@ angular.module('excavator.public.public', [
 config([
   '$datepickerProvider',
   function ($datepickerProvider) {
-    $datepickerProvider.defaults.template = '/vendors/datepicker.html';
+    $datepickerProvider.defaults.template = '/datepicker.html';
   }
 ]).
 
