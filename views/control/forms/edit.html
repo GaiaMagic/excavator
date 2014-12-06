@@ -54,7 +54,8 @@
           </ul>
         </div>
         <div class="btn-group btn-group-sm pull-right">
-          <button class="btn btn-default" ng-click="ccfe.save()">
+          <button class="btn btn-default" ng-click="ccfe.save()"
+            ng-disabled="!ccfe.savable">
             <span class="glyphicon glyphicon-floppy-disk"></span>
             <span i18n="forms::Save"></span>
           </button>

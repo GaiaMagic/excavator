@@ -112,6 +112,12 @@ formRevisionSchema.pre('save', function (next) {
             '(only scheme is allowed).')
         }));
       }
+      if (!(parsed.scheme instanceof Array) || parsed.scheme.length === 0) {
+        return next(panic(422, {
+          type:    'content-is-empty',
+          message: tr('Content should not be empty.')
+        }));
+      }
       this.content = JSON.stringify(parsed);
     } catch (e) {
       return next(panic(422, {

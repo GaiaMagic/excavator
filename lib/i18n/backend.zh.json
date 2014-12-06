@@ -8,6 +8,7 @@
   "Content is too large. Its length should be less than 10K.": "内容太大，其长度不应超越10K。",
   "Revision should not be edited.": "修订不应被修改。",
   "Content should be a valid JSON string (only scheme is allowed).": "内容必须为正确格式的JSON字串（只允许scheme）。",
+  "Content should not be empty.": "内容不能为空。",
   "Content should be a valid JSON string.": "内容必须为正确格式的JSON字串。",
   "Revision should not be deleted.": "修订不应被删除。",
   "Invalid operation.": "错误的操作。",

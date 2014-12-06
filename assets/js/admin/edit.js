@@ -172,7 +172,17 @@ controller('controller.control.form.edit', [
   this.domains = domains;
 
   this.setschemedata = function () {
-    this.schemedata = stringify(this.form.content, ['scheme']);
+    var content = this.form.content;
+
+    this.savable = true;
+    if (this.isNew) {
+      if (!angular.isArray(content.scheme) || content.scheme.length === 0) {
+        this.savable = false;
+      }
+    }
+
+    this.schemedata = stringify(content, ['scheme']);
+    save('schemedata', this.schemedata);
     return this.schemedata;
   };
 

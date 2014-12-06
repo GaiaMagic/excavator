@@ -163,6 +163,12 @@ describe('Form (w/ revision) database model', function () {
         'content-is-not-valid-json-only-scheme-allowed', done);
     });
 
+    it('should fail if the content is empty', function (done) {
+      var invalidcontent = '{"scheme":[]}';
+      expectFailure(FormRevision.create(real.title, invalidcontent),
+        'content-is-empty', done);
+    });
+
     it('should fail if slug is invalid', function (done) {
       expectFailure(FormRevision.create(real.title, real.content,
         undefined, repeat(real.slug, 10)), 'invalid-slug', done);
