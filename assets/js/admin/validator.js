@@ -125,8 +125,8 @@ directive('validator', [
         }
 
         if (scope.page === 'numeric') {
-          return 'typeof data === "number" && data >= ' + (scope.min || 0) +
-            ' && data <= ' + (scope.max || 100);
+          return 'typeof +data === "number" && +data >= ' + (scope.min || 0) +
+            ' && +data <= ' + (scope.max || 100);
         }
 
         var regex = '';
