@@ -5,10 +5,12 @@ angular.module('excavator.public.form', [
   'excavator.func.panic',
   'excavator.func.scheme',
   'excavator.scheme',
+  'excavator.shared.scroll',
   'excavator.shared.validator'
 ]).
 
 controller('controller.public.form', [
+  '$timeout',
   '$window',
   'func.panic',
   'func.panic.alert',
@@ -16,8 +18,10 @@ controller('controller.public.form', [
   'i18n.translate',
   'public.public.forms.submit',
   'scheme.bulk.enable.submit.buttons',
+  'shared.scroll.to.first.element',
   'shared.validator',
   function (
+    $timeout,
     $window,
     panic,
     alert,
@@ -25,6 +29,7 @@ controller('controller.public.form', [
     tr,
     submitForm,
     enableSubmitButtons,
+    scrollTo,
     validator
   ) {
     var self = this;
@@ -54,6 +59,9 @@ controller('controller.public.form', [
 
       var errorCount = validator.validate(schemes, data);
       if  (errorCount !== 0) {
+        $timeout(function () {
+          scrollTo('.has-error', true);
+        });
         return;
       }
 
