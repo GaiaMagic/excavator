@@ -67,7 +67,7 @@ module.exports = {
             '<div class="btn-group" ng-repeat="item_p in items">',
               '<button type="button" class="btn btn-default" ',
                 'ng-class="{ active: item.value === data.{{ model }} }" ',
-                'ng-click="data.{{ model }} = item.value" ',
+                'ng-click="data.{{ model }} = item.value; scheme.$unsetError()" ',
                 'ng-repeat="item in item_p" ng-bind="item.label">',
               '</button>',
             '</div>',
@@ -78,11 +78,11 @@ module.exports = {
               '<button type="button" class="btn btn-default" '
           ].concat(stat.isObject ? [
                 'ng-class="{ active: item.value === data.{{ model }} }" ',
-                'ng-click="data.{{ model }} = item.value" ',
+                'ng-click="data.{{ model }} = item.value; scheme.$unsetError()" ',
                 'ng-repeat="item in items" ng-bind="item.label">'
               ] : [
                 'ng-class="{ active: item === data.{{ model }} }" ',
-                'ng-click="data.{{ model }} = item" ',
+                'ng-click="data.{{ model }} = item; scheme.$unsetError()" ',
                 'ng-repeat="item in items" ng-bind="item">'
           ]).concat([
               '</button>',
@@ -91,10 +91,12 @@ module.exports = {
         }
 
         return [
-          '<div class="form-group">',
+          '<div class="form-group" ng-class="{\'has-error\': scheme.$error}">',
             '<label class="col-sm-2 control-label">{{ label }}</label>',
             '<div class="col-sm-10">',
               buttons.join(''),
+              '<p class="help-block" ng-show="scheme.$error !== undefined" ',
+                'ng-bind="scheme.validatorMessage"></p>',
             '</div>',
           '</div>'
         ];

@@ -28,6 +28,9 @@ directive('file', [
               $scope.data[$attrs.file] = reader.result;
               $element[0].value = '';
               $scope.imageLoading = false;
+              if (angular.isFunction($scope.scheme.$unsetError)) {
+                $scope.scheme.$unsetError();
+              }
             };
           }, 1000);
         });

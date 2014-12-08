@@ -11,7 +11,8 @@ service('hierarchies', [
         return $q.when(self.cached[url]);
       }
       self.cached[url] = $http.get(url).then(function (res) {
-        return res.data;
+        self.cached[url] = res.data;
+        return self.cached[url];
       });
       return self.cached[url];
     };
@@ -102,6 +103,9 @@ directive('hierarchy', [
             for (var i = 0; i < models.length; i++) {
               if (!angular.isObject(models[i])) continue;
               $scope.data[models[i].model] = selects[i];
+            }
+            if (angular.isDefined(formScheme.$error)) {
+              formScheme.$error = undefined;
             }
           }
         }

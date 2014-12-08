@@ -4,7 +4,8 @@ angular.module('excavator.public.form', [
   'excavator.func.error',
   'excavator.func.panic',
   'excavator.func.scheme',
-  'excavator.scheme'
+  'excavator.scheme',
+  'excavator.shared.validator'
 ]).
 
 controller('controller.public.form', [
@@ -15,6 +16,7 @@ controller('controller.public.form', [
   'i18n.translate',
   'public.public.forms.submit',
   'scheme.bulk.enable.submit.buttons',
+  'shared.validator',
   function (
     $window,
     panic,
@@ -22,7 +24,8 @@ controller('controller.public.form', [
     currentForm,
     tr,
     submitForm,
-    enableSubmitButtons
+    enableSubmitButtons,
+    validator
   ) {
     var self = this;
 
@@ -47,10 +50,17 @@ controller('controller.public.form', [
 
     this.submit = function () {
       var schemes = currentForm.content.scheme;
+      var data = currentForm.content.data;
+
+      var errorCount = validator.validate(schemes, data);
+      if  (errorCount !== 0) {
+        return;
+      }
+
       var enable = enableSubmitButtons(schemes, false);
 
       var revid = currentForm.form.head._id;
-      submitForm(revid, this.form.content.data).then(function () {
+      submitForm(revid, data).then(function () {
         self.truncate();
         alert(tr('forms::Thank you.'), tr('forms::Success'), function () {
           $window.location.reload();

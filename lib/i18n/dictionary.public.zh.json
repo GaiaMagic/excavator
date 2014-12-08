@@ -9,7 +9,8 @@
   "template": {
     "hierarchy": {
       "No options available.": "无可用选项。",
-      "— Please choose one —": "— 请选择 —"
+      "— Please choose one —": "— 请选择 —",
+      "should choose one": "应选择一个"
     }
   },
   "panic": {

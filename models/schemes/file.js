@@ -70,7 +70,7 @@ module.exports = {
       'i18n.translate',
       function (tr) {
         return [
-          '<div class="form-group">',
+          '<div class="form-group" ng-class="{\'has-error\': scheme.$error}">',
             '<label class="col-sm-2 control-label">{{ label }}</label>',
             '<div class="col-sm-10">',
               '<div class="btn-group">',

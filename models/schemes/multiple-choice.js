@@ -69,12 +69,15 @@ module.exports = {
           expr = 'item for item in items';
         }
         return [
-          '<div class="form-group">',
+          '<div class="form-group" ng-class="{\'has-error\': scheme.$error}">',
             '<label class="col-sm-2 control-label">{{ label }}</label>',
             '<div class="col-sm-10">',
               '<select class="form-control" ng-model="data.{{ model }}" ',
-                'ng-options="', expr, '">',
+                'ng-options="', expr, '" ',
+                'ng-change="scheme.$unsetError()">',
               '</select>',
+              '<p class="help-block" ng-show="scheme.$error !== undefined" ',
+                'ng-bind="scheme.validatorMessage"></p>',
             '</div>',
           '</div>'
         ];

@@ -84,7 +84,7 @@ module.exports = {
     template: [
       function () {
         return [
-          '<div class="form-group">',
+          '<div class="form-group" ng-class="{\'has-error\': scheme.$error}">',
             '<label class="col-sm-2 control-label">{{ label }}</label>',
             '<div class="col-sm-10">',
               '<input type="text" class="form-control" ',
@@ -93,7 +93,10 @@ module.exports = {
                 'data-date-type="{{ datetype }}" ',
                 'data-min-date="{{ datemin }}" ',
                 'data-max-date="{{ datemax }}" ',
+                'ng-change="scheme.$unsetError()" ',
                 'ng-model="data.{{ model }}" bs-datepicker>',
+              '<p class="help-block" ng-show="scheme.$error !== undefined" ',
+                'ng-bind="scheme.validatorMessage"></p>',
             '</div>',
           '</div>'
         ];
