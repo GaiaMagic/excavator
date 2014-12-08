@@ -41,6 +41,8 @@
     "Title of the form": "表格标题",
     "Editing": "正在编辑",
     "Create New Form": "创建新表格",
+    "Loaded from unsaved data.": "载入了上次未保存内容",
+    "Delete unsaved data": "丢掉未保存内容",
     "Preview": "预览",
     "Code": "代码",
     "Undo": "撤销",

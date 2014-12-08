@@ -47,14 +47,30 @@ controller('controller.control.form.edit', [
   ) {
   var self = this;
 
+  this.isUnsavedData = false;
+  this.tryToLoadFromUnsavedData = function () {
+    var data = load('schemedata', parse);
+    if (angular.isObject(data)) {
+      this.form.content = data;
+      this.isUnsavedData = true;
+    }
+  };
   if (angular.isUndefined(currentForm)) {
     this.form = {};
-    this.form.content = load('schemedata', parse) || {scheme:[]};
+    if (load('schemedatafor') === '') {
+      this.tryToLoadFromUnsavedData();
+    }
+    if (!this.form.content) {
+      this.form.content = {scheme:[]};
+    }
     this.isNew = true;
   } else if (currentForm === false) {
     return panic(tr('forms::Form is corrupted.'));
   } else {
     this.form = currentForm;
+    if (load('schemedatafor') === currentForm.form._id) {
+      this.tryToLoadFromUnsavedData();
+    }
     this.isNew = false;
   }
 
@@ -89,19 +105,24 @@ controller('controller.control.form.edit', [
     this.submit();
   };
 
+  this.removeUnsavedData = function () {
+    remove('schemedatafor');
+    remove('schemedata');
+    $route.reload();
+  };
+
   this.save = function () {
-    var self = this;
     createNew(currentForm, this.form.content).then(function () {
       if (currentForm) {
-        $route.reload();
+        self.removeUnsavedData();
       }
     }).catch(function (data) {
+      save('schemedatafor', currentForm.form._id)
       save('schemedata', self.schemedata);
     });
   };
 
   this.access = function () {
-    var self = this;
     accessControl(currentForm).then(function (form) {
       self.form.form.managers = form.managers;
     });
@@ -125,6 +146,7 @@ controller('controller.control.form.edit', [
 
   this.clear = function () {
     this.form.content.scheme.splice(0);
+    remove('schemedatafor');
     remove('schemedata');
   };
 
@@ -170,6 +192,7 @@ controller('controller.control.form.edit', [
   this.array = funcArray;
   this.tr = tr;
   this.domains = domains;
+  this.schemedataOriginal;
 
   this.setschemedata = function () {
     var content = this.form.content;
@@ -182,7 +205,13 @@ controller('controller.control.form.edit', [
     }
 
     this.schemedata = stringify(content, ['scheme']);
-    save('schemedata', this.schemedata);
+    if (this.schemedataOriginal === undefined) {
+      this.schemedataOriginal = this.schemedata;
+    }
+    if (this.schemedataOriginal !== this.schemedata) {
+      save('schemedatafor', this.isNew ? '' : currentForm.form._id);
+      save('schemedata', this.schemedata);
+    }
     return this.schemedata;
   };
 

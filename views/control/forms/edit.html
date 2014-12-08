@@ -8,6 +8,10 @@
             target="_blank" ng-bind="ccfe.form.title"></a>
         </span>
         <span ng-if="ccfe.isNew" i18n="forms::Create New Form"></span>
+        <span ng-if="ccfe.isUnsavedData" class="editor-cache">
+          <span i18n="forms::Loaded from unsaved data."></span>
+          <a href ng-click="ccfe.removeUnsavedData()" i18n="forms::Delete unsaved data"></a>
+        </span>
         <div class="btn-group btn-group-sm pull-right">
           <button type="button" class="btn btn-default"
             ng-class="{active: ccfe.view === 'preview'}"
