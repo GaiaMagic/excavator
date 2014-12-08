@@ -14,4 +14,4 @@ ENV NODE_ENV production
 
 ADD . /excavator
 
-CMD node excavator.js
+CMD ./service

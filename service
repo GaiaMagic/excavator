@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export NODE_ENV=production
+
+CMD="node excavator.js"
+
+until echo "Running excavator..." && $CMD; do
+  echo "$CMD crashed with exit code $?. Respawn in 3 seconds..." >&2
+  sleep 3
+done
+
+exit 0
