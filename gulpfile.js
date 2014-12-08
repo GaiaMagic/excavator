@@ -1,14 +1,14 @@
-var gulp = require('gulp');
+var gulp        = require('gulp');
 var runSequence = require('run-sequence');
-var $ = require('gulp-load-plugins')();
+var $           = require('gulp-load-plugins')();
 
 var info = {
   git: {
-    headCommit: process.env.GIT_HEAD_COMMIT,
-    headDate: process.env.GIT_HEAD_DATE,
-    headAuthor: process.env.GIT_HEAD_AUTHOR,
+    headCommit:    process.env.GIT_HEAD_COMMIT,
+    headDate:      process.env.GIT_HEAD_DATE,
+    headAuthor:    process.env.GIT_HEAD_AUTHOR,
     headFileCount: process.env.GIT_HEAD_FILE_COUNT,
-    user: process.env.GIT_USER
+    user:          process.env.GIT_USER
   }
 };
 
@@ -22,11 +22,11 @@ if (!process.env.GIT_HEAD_COMMIT) {
     Q.nfcall(exec, 'git ls-files | wc -l'),
     Q.nfcall(exec, 'git config --get user.email')
   ]).then(function (ret) {
-    info.git.headCommit = ret[0][0].trim();
-    info.git.headDate = ret[1][0].trim();
-    info.git.headAuthor = ret[2][0].trim();
+    info.git.headCommit    = ret[0][0].trim();
+    info.git.headDate      = ret[1][0].trim();
+    info.git.headAuthor    = ret[2][0].trim();
     info.git.headFileCount = ret[3][0].trim();
-    info.git.user = ret[4][0].trim();
+    info.git.user          = ret[4][0].trim();
   });
 }
 
@@ -53,12 +53,12 @@ function browserify (src, dest) {
 }
 
 gulp.task('browserify', function () {
-  browserify('assets/js/scheme/scheme.js', '.tmp/js/scheme');
-  browserify('assets/js/misc/misc.js', '.tmp/js/misc');
-  browserify('assets/js/func/scheme.js', '.tmp/js/func');
-  browserify('assets/js/i18n/dictionary.js', '.tmp/js/i18n');
+  browserify('assets/js/scheme/scheme.js',      '.tmp/js/scheme');
+  browserify('assets/js/misc/misc.js',          '.tmp/js/misc');
+  browserify('assets/js/func/scheme.js',        '.tmp/js/func');
+  browserify('assets/js/i18n/dictionary.js',    '.tmp/js/i18n');
   browserify('assets/js/manager/dictionary.js', '.tmp/js/manager');
-  browserify('assets/js/public/dictionary.js', '.tmp/js/public');
+  browserify('assets/js/public/dictionary.js',  '.tmp/js/public');
 });
 
 function dump (src, dest) {
@@ -129,25 +129,25 @@ function compile (src, dest) {
     pipe($.revReplace()).
     pipe($.justReplace([
       {
-        search: /%HEAD_COMMIT%/g,
+        search:      /%HEAD_COMMIT%/g,
         replacement: info.git.headCommit
       }, {
-        search: /%HEAD_AUTHOR%/g,
+        search:      /%HEAD_AUTHOR%/g,
         replacement: info.git.headAuthor
       }, {
-        search: /%HEAD_DATE%/g,
+        search:      /%HEAD_DATE%/g,
         replacement: info.git.headDate
       }, {
-        search: /%HEAD_FILE_COUNT%/g,
+        search:      /%HEAD_FILE_COUNT%/g,
         replacement: info.git.headFileCount
       }, {
-        search: /%USER%/g,
+        search:      /%USER%/g,
         replacement: info.git.user
       }, {
-        search: /%DATE%/g,
+        search:      /%DATE%/g,
         replacement: new Date
       }, {
-        search: /%TIME_USED%/g,
+        search:      /%TIME_USED%/g,
         replacement: function () {
           return (+new Date - start) / 1000 + ' s';
         }
