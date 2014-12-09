@@ -23,4 +23,3 @@ module.exports = function (req, res, next) {
     addresses: getAddresses()
   });
 };
-
