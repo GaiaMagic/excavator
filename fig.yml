@@ -25,7 +25,7 @@ backend:
   links:
     - db
   ports:
-    - '43210:3000'
+    - 3000
   volumes_from:
     - usercontent
 
