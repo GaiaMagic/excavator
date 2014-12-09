@@ -121,4 +121,17 @@ backup-usercontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
 	-v $$(pwd):/backup busybox tar cvf /backup/excavator_usercontent_1.tar /usercontent
 
+restore: restore-data restore-usercontent
+
+restore-data:
+	@echo "Warning: You must NOT run this command when the database is running."
+	@echo "Warning: AND This might overwrite ALL the existing database data."
+	@read -p "If you are aware of the consequences, press Enter to continue. " ANS
+	docker run --rm --volumes-from excavator_data_1 \
+	-v $$(pwd):/restore busybox tar xvf /restore/excavator_data_1.tar
+
+restore-usercontent:
+	docker run --rm --volumes-from excavator_usercontent_1 \
+	-v $$(pwd):/restore busybox tar xvf /restore/excavator_usercontent_1.tar
+
 .PHONY: test dist usercontent data backup db clean all frontend backend start restart reload clean help
