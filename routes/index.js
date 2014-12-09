@@ -7,6 +7,7 @@ excavator.set('root', path.join(__dirname, '..'));
 excavator.set('environment', environment);
 excavator.use('/backend', require('./backend'));
 excavator.use('/public', require('./public'));
+excavator.use('/health-check', require('./health-check'));
 
 if (environment === 'development' || environment === 'test') {
   var development = require('./development');
