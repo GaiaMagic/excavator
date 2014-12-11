@@ -4,6 +4,7 @@ angular.module('excavator.public.form', [
   'excavator.func.error',
   'excavator.func.panic',
   'excavator.func.scheme',
+  'excavator.public.container',
   'excavator.scheme',
   'excavator.shared.scroll',
   'excavator.shared.validator'
