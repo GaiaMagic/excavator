@@ -35,6 +35,14 @@ module.exports = {
       submit: {
         fullname: 'fakename'
       }
+    },
+    template: {
+      name: 'template-for-test',
+      files: [
+        { type: 'text/css', content: 'body { margin: 0; padding: 0; }' },
+        { type: 'text/javascript', content: '(function () { console.log("OK") })()' },
+        { type: 'text/html', content: '<div>OK</div>' }
+      ]
     }
   },
 
