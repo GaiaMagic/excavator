@@ -7,6 +7,7 @@ var needsAdminAuth = require('./token-auth')({
 router.use('/admins', require('./admins'));
 router.use('/forms', needsAdminAuth, require('./forms'));
 router.use('/submissions', needsAdminAuth, require('./submissions'));
+router.use('/templates', needsAdminAuth, require('./templates'));
 
 router.use('/managers', require('./managers'));
 

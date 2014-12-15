@@ -38,6 +38,7 @@ module.exports = {
     },
     template: {
       name: 'template-for-test',
+      form: '548ead8beee943852a6e7499',
       files: [
         { type: 'text/css', content: 'body { margin: 0; padding: 0; }' },
         { type: 'text/javascript', content: '(function () { console.log("OK") })()' },
