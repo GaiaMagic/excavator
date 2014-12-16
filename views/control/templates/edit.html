@@ -1,0 +1,69 @@
+<div class="main">
+  <div class="main-pane">
+    <div class="editor-header">
+      <h3>
+        <span ng-if="!ccte.isNew">
+          <span i18n="tpl::Editing"></span>
+          <span ng-bind="ccte.tpl.name"></span>
+        </span>
+        <span ng-if="ccte.isNew" i18n="tpl::Create New Template"></span>
+        <div class="btn-group btn-group-sm pull-right">
+          <button class="btn btn-default" ng-click="ccte.add()">
+            <span class="glyphicon glyphicon-plus"></span>
+            <span i18n="tpl::Add File"></span>
+          </button>
+        </div>
+        <div class="btn-group btn-group-sm pull-right">
+          <button class="btn btn-default" ng-click="ccte.save()"
+            ng-disabled="!ccte.savable()">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            <span i18n="tpl::Save"></span>
+          </button>
+        </div>
+      </h3>
+    </div>
+    <div class="editor-left col-xs-6">
+      <form class="form-form form-horizontal">
+        <div ng-repeat="file in ccte.tpl.files">
+          <div class="btn-group btn-group-xs pull-right">
+            <button class="btn btn-default"
+              ng-click="ccte.array.duplicate(ccte.tpl.files, $index)">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <button class="btn btn-default"
+              ng-click="ccte.array.delete(ccte.tpl.files, $index)">
+              <span class="glyphicon glyphicon-minus"></span>
+            </button>
+            <button class="btn btn-default"
+              ng-class="{disabled: ccte.array.edgeT(ccte.tpl.files, $index)}"
+              ng-click="ccte.array.moveup(ccte.tpl.files, $index)">
+              <span class="glyphicon glyphicon-chevron-up"></span>
+            </button>
+            <button class="btn btn-default"
+              ng-class="{disabled: ccte.array.edgeB(ccte.tpl.files, $index)}"
+              ng-click="ccte.array.movedown(ccte.tpl.files, $index)">
+              <span class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+          </div>
+          <h4 i18n="tpl::File !!$index+1!!"></h4>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" i18n="tpl::Type"></label>
+            <div class="col-sm-10">
+              <select class="form-control" ng-model="file.type"
+                ng-options="type as type for type in ccte.types"></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" i18n="tpl::Content"></label>
+            <div class="col-sm-10">
+              <textarea class="form-control" rows="10" ng-model="file.content"></textarea>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="editor-right col-xs-6">
+      preview
+    </div>
+  </div>
+</div>

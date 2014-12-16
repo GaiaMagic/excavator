@@ -12,6 +12,8 @@ config([
   'resolver.is',
   'resolver.submissions',
   'resolver.submission',
+  'resolver.templates',
+  'resolver.template',
   'resolver.managers',
   function(
     $routeProvider,
@@ -23,6 +25,8 @@ config([
     isResolver,
     submissionsResolver,
     submissionResolver,
+    templatesResolver,
+    templateResolver,
     managersResolver
   ) {
     $routeProvider.
@@ -101,6 +105,35 @@ config([
         loggedIn: authNeededResolver,
         setStatusPrefix: isResolver(),
         currentSubmission: submissionResolver('backend.submission.get')
+      }
+    }).
+
+    when('/templates/edit/:tplid', {
+      templateUrl: '/templates/edit.html',
+      controller: 'controller.control.template.edit as ccte',
+      resolve: {
+        loggedIn: authNeededResolver,
+        currentTpl: templateResolver()
+      }
+    }).
+
+    when('/templates', {
+      templateUrl: '/templates/list.html',
+      controller: 'controller.control.template.list as cctl',
+      resolve: {
+        loggedIn: authNeededResolver,
+        templates: templatesResolver()
+      }
+    }).
+
+    when('/templates/create', {
+      templateUrl: '/templates/edit.html',
+      controller: 'controller.control.template.edit as ccte',
+      resolve: {
+        loggedIn: authNeededResolver,
+        currentTpl: [function () {
+          return undefined;
+        }]
       }
     }).
 

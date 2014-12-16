@@ -26,6 +26,17 @@
         <li ng-class="{active:ifPathIs('/forms/create')}">
           <a href="/forms/create" i18n="nav::Create"></a>
         </li>
+        <li ng-class="{active:ifPathIs('/templates')}">
+          <a href="/templates" i18n="nav::Templates"></a>
+        </li>
+        <li ng-class="{active: ifPathHas('/templates/edit')}"
+          ng-if="is('template')">
+          <a href="/templates/edit/{{metaData.data.tplid}}"
+            i18n="nav::Editing !!metaData.data.name!!"></a>
+        </li>
+        <li ng-class="{active:ifPathIs('/templates/create')}">
+          <a href="/templates/create" i18n="nav::Create"></a>
+        </li>
         <li ng-class="{active:ifPathIs('/managers')}">
           <a href="/managers" i18n="nav::Managers"></a>
         </li>

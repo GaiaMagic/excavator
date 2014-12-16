@@ -3,6 +3,7 @@ var Schema   = mongoose.Schema;
 var Q        = require('q');
 var panic    = require('../lib/panic');
 var tr       = require('../lib/i18n').tr;
+var TYPES    = require('./tpl-types');
 
 var templateSchema = new Schema({
   name:       { type: String                       },
@@ -30,7 +31,7 @@ templateSchema.pre('save', function (next) {
   if (this.files instanceof Array && this.files.length > 0) {
     var pass = true;
     var allowedKeys = ['type', 'content'];
-    var types = ['text/css', 'text/javascript', 'text/html'];
+    var types = TYPES;
     for (var i = 0; i < this.files.length; i++) {
       if (typeof this.files[i] !== 'object') {
         pass = false;

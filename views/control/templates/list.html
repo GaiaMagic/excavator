@@ -1,0 +1,37 @@
+<div class="main-static">
+  <div class="col-xs-12">
+    <div class="panel panel-default">
+      <div class="panel-heading" i18n="tpl::Templates"></div>
+      <table class="table table-bordered table-hover">
+        <thead ng-if="cctl.tpls && cctl.tpls.length">
+          <tr>
+            <th i18n="tpl::Name"></th>
+            <th class="date" i18n="tpl::Created At"></th>
+            <th class="date" i18n="tpl::Updated At"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-if="!cctl.tpls || !cctl.tpls.length">
+            <td class="text-center">
+              <span i18n="tpl::No template has been created yet."></span>
+              <a href="/templates/create" class="btn btn-xs btn-info"
+                i18n="tpl::Create"></a>
+            </td>
+          </tr>
+          <tr ng-repeat="tpl in cctl.tpls">
+            <td>
+              <a class="block" href="/templates/edit/{{ tpl._id }}"
+                ng-bind="tpl.name || '(unnamed)'"></a>
+            </td>
+            <td>
+              <span time-ago="tpl.created_at"></span>
+            </td>
+            <td>
+              <span time-ago="tpl.updated_at"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

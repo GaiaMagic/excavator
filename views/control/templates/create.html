@@ -1,0 +1,28 @@
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form-horizontal" role="form" ng-submit="submit()">
+        <div class="modal-header" ng-show="title">
+          <button type="button" class="close"
+            ng-click="$hide()">&times;</button>
+          <h4 class="modal-title" ng-bind="title"></h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="title" class="col-sm-2 control-label"
+              i18n="tpl::Name"></label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="title"
+                i18n="{placeholder: 'tpl::Name of the template'}"
+                ng-model="tpl.name">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-info"
+            ng-disabled="!tpl.name" i18n="tpl::Save"></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
