@@ -2,14 +2,18 @@ angular.module('excavator.admin.templates', []).
 
 controller('controller.control.template.edit', [
   '$route',
+  '$sce',
   'func.array',
   'misc.template.filetypes',
+  'shared.domains',
   'tpl.create',
   'currentTpl',
   function (
     $route,
+    $sce,
     array,
     filetypes,
+    domains,
     create,
     currentTpl
   ) {
@@ -41,6 +45,9 @@ controller('controller.control.template.edit', [
       }
       return true;
     };
+
+    var previewUrl = '//' + domains.public + '/' + currentTpl.form + '/preview:' + currentTpl._id;
+    this.previewUrl = $sce.trustAsResourceUrl(previewUrl);
   }
 ]).
 

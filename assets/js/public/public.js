@@ -25,6 +25,15 @@ run([
   }
 ]).
 
+factory('public.public.template.get', [
+  '$http',
+  function ($http) {
+    return function (templateid) {
+      return $http.get('/public/templates/' + templateid);
+    };
+  }
+]).
+
 factory('public.public.forms', [
   '$http',
   function ($http) {

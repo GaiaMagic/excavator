@@ -18,30 +18,55 @@ constant('resolver.forms', function formsResolver () {
 
 constant('resolver.form', function formResolver (service, options) {
   return [
+    '$q',
     '$rootScope',
     '$route',
     '$timeout',
     service,
     'func.panic',
     'func.scheme.parse',
+    'public.public.template.get',
     'shared.nav.meta',
     function currentForm (
+      $q,
       $rootScope,
       $route,
       $timeout,
       get,
       panic,
       parse,
+      getTpl,
       meta
     ) {
       options = options || {};
       var formid = options.formId || $route.current.params.formid;
       var formrevid = options.formRevId || $route.current.params.formrevid;
-      return get(formid, formrevid).then(function (res) {
+
+      var promises = [];
+
+      var isPreview = false;
+      if (angular.isString(formrevid)) {
+        var matches = formrevid.match(/^preview:([a-f0-9]{24})$/);
+        var tplId = matches[1];
+        if (tplId) {
+          isPreview = true;
+          promises.push(getTpl(tplId));
+          formrevid = undefined;
+        }
+      }
+
+      promises.unshift(get(formid, formrevid));
+      return $q.all(promises).then(function (res) {
+        var form = res[0].data;
+        if (res[1]) {
+          form.template = res[1].data;
+        }
+        return form;
+      }).then(function (form) {
         if (options.simple) {
           return {
-            title: res.data.head.title,
-            form: res.data
+            title: form.head.title,
+            form: form
           };
         }
 
@@ -51,31 +76,31 @@ constant('resolver.form', function formResolver (service, options) {
         var isViewingRevision = false;
         var isLatest = true;
 
-        if (!angular.isObject(res.data[head])) return false;
+        if (!angular.isObject(form[head])) return false;
 
-        if (angular.isObject(res.data.index)) {
+        if (angular.isObject(form.index)) {
           head = 'index';
           isViewingRevision = true;
-          isLatest = res.data.index._id === res.data.head._id;
+          isLatest = form.index._id === form.head._id;
         }
 
-        var title = res.data[head].title;
+        var title = form[head].title;
         if (!angular.isString(title) || !title) return false;
 
-        var slug = res.data.slug;
+        var slug = form.slug;
 
-        var content = parse(res.data[head].content);
+        var content = parse(form[head].content);
         if (!angular.isObject(content) ||
             !angular.isObject(content.scheme)) return false;
 
         meta.set('form', {
           title: title,
-          formid: res.data._id
+          formid: form._id
         });
 
         var link = '/' + slug;
-        var latestPermalink = link + '/' + res.data.head._id;
-        var currentPermalink = link + '/' + res.data[head]._id;
+        var latestPermalink = link + '/' + form.head._id;
+        var currentPermalink = link + '/' + form[head]._id;
 
         return {
           isViewingRevision: isViewingRevision,
@@ -87,7 +112,7 @@ constant('resolver.form', function formResolver (service, options) {
           title: title,
           content: content,
           slug: slug,
-          form: res.data
+          form: form
         };
       }, panic);
     }

@@ -3,6 +3,7 @@ var router = express.Router();
 var Form = require('../models/form');
 var FormRevision = require('../models/form-revision');
 var Submission = require('../models/submission');
+var Template = require('../models/template');
 var jsonParser = require('body-parser').json;
 var Q = require('q');
 
@@ -24,6 +25,14 @@ router.get('/forms/:slug/:revid([a-f0-9]{24})?', function (req, res, next) {
       form.index = formRev;
     }
     res.send(form);
+  }).catch(next);
+});
+
+router.get('/templates/:tplid([a-f0-9]{24})', function (req, res, next) {
+  var tplid = req.params.tplid;
+  Q.nbind(Template.findById, Template)(tplid).then(function (tpl) {
+    if (!tpl) return next('not-found');
+    res.send(tpl);
   }).catch(next);
 });
 

@@ -42,7 +42,7 @@ describe('Template database model', function () {
     });
 
     it('should fail if form is not valid', function (done) {
-      expectFailure(real.name, 'oops', real.files, 'form-is-not-valid', done);
+      expectFailure(real.name, {}, real.files, 'form-is-not-valid', done);
     });
 
     it('should fail if files are not valid', function (done) {

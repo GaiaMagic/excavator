@@ -6,11 +6,11 @@ var tr       = require('../lib/i18n').tr;
 var TYPES    = require('./tpl-types');
 
 var templateSchema = new Schema({
-  name:       { type: String                       },
-  form:       { type: Schema.ObjectId, ref: 'Form' },
-  files:      { type: Array                        },
-  created_at: { type: Date, default: Date.now      },
-  updated_at: { type: Date, default: Date.now      }
+  name:       { type: String                  },
+  form:       { type: String                  },
+  files:      { type: Array                   },
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now }
 });
 
 templateSchema.pre('save', function (next) {
@@ -65,7 +65,7 @@ templateSchema.pre('save', function (next) {
 
 templateSchema.static('create', function (name, form, files) {
   if (form) {
-    if (typeof form !== 'string' || !/^[0-9a-fA-F]{24}$/.test(form)) {
+    if (typeof form !== 'string') {
       return Q.reject(panic(422, {
         type:    'form-is-not-valid',
         message: tr('Form ID is invalid.')

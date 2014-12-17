@@ -3,7 +3,9 @@ var express = require('express');
 var environment = process.env.NODE_ENV;
 
 var excavator = express();
-excavator.set('root', path.join(__dirname, '..'));
+var root = path.join(__dirname, '..');
+process.env.ROOTDIR = root;
+excavator.set('root', root);
 excavator.set('environment', environment);
 excavator.use('/backend', require('./backend'));
 excavator.use('/public', require('./public'));
