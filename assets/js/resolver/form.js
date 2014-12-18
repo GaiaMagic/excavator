@@ -45,13 +45,15 @@ constant('resolver.form', function formResolver (service, options) {
       var isPreview = false;
       if (angular.isString(formrevid)) {
         var matches = formrevid.match(/^preview:([a-f0-9]{24})$/);
-        var tplId = matches[1];
-        if (tplId) {
-          isPreview = true;
-          var injector = angular.element(document.body).injector();
-          var getTpl = injector.get('public.public.template.get');
-          promises.push(getTpl(tplId));
-          formrevid = undefined;
+        if (matches) {
+          var tplId = matches[1];
+          if (tplId) {
+            isPreview = true;
+            var injector = angular.element(document.body).injector();
+            var getTpl = injector.get('public.public.template.get');
+            promises.push(getTpl(tplId));
+            formrevid = undefined;
+          }
         }
       }
 

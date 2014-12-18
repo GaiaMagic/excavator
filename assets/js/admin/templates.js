@@ -5,6 +5,8 @@ controller('controller.control.template.edit', [
   '$sce',
   '$scope',
   'func.array',
+  'func.localstorage.load',
+  'func.localstorage.save',
   'misc.template.filetypes',
   'shared.domains',
   'tpl.create',
@@ -14,14 +16,30 @@ controller('controller.control.template.edit', [
     $sce,
     $scope,
     array,
+    load,
+    save,
     filetypes,
     domains,
-    save,
+    saveTpl,
     currentTpl
   ) {
     var self = this;
     this.array = array;
     this.types = filetypes;
+    this.live = load('template.live');
+    if (this.live === 'false') {
+      this.live = false;
+    } else {
+      this.live = true;
+    }
+
+    this.toggleLive = function () {
+      this.live = !this.live;
+      if (this.live) {
+        this.update();
+      }
+      save('template.live', this.live);
+    };
 
     if (currentTpl) {
       this.tpl = currentTpl;
@@ -39,7 +57,7 @@ controller('controller.control.template.edit', [
     };
 
     this.save = function () {
-      save(currentTpl, this.tpl).then(function () {
+      saveTpl(currentTpl, this.tpl).then(function () {
         if (currentTpl) {
           $route.reload();
         }
@@ -51,18 +69,24 @@ controller('controller.control.template.edit', [
       }
       return true;
     };
+    this.update = function () {
+      if (!this.tpl.form || !this.tpl._id) return;
+      var previewUrl = '//' + domains.public + '/' + this.tpl.form +
+        '/preview:' + this.tpl._id;
+      this.previewUrl = $sce.trustAsResourceUrl(previewUrl);
+      saveTpl(this.tpl, this.tpl, { silent: true }).then(function () {
+        $scope.$emit('update template preview');
+      });
+    };
+    this.update();
 
     $scope.$watch(function () {
       return self.tpl;
     }, function (tpl, old) {
       if (angular.equals(tpl, old)) return;
-      save(currentTpl, tpl, { silent: true }).then(function () {
-        $scope.$emit('update template preview');
-      });
+      if (!self.live) return;
+      self.update();
     }, true);
-
-    var previewUrl = '//' + domains.public + '/' + currentTpl.form + '/preview:' + currentTpl._id;
-    this.previewUrl = $sce.trustAsResourceUrl(previewUrl);
   }
 ]).
 
