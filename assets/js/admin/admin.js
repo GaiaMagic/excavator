@@ -5,6 +5,7 @@ angular.module('excavator.admin', [
   'excavator.admin.historian',
   'excavator.admin.managers',
   'excavator.admin.templates',
+  'excavator.admin.uploader',
   'excavator.admin.validator',
   'excavator.shared.domains',
   'excavator.shared.login',

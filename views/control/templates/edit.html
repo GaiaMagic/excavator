@@ -30,7 +30,7 @@
             <input type="text" class="form-control" ng-model="ccte.tpl.form">
           </div>
         </div>
-        <div ng-repeat="file in ccte.tpl.files">
+        <div ng-repeat="file in ccte.tpl.files" ng-switch="file.type">
           <div class="btn-group btn-group-xs pull-right">
             <button class="btn btn-default"
               ng-click="ccte.array.duplicate(ccte.tpl.files, $index)">
@@ -59,18 +59,50 @@
                 ng-options="type for type in ccte.types"></select>
             </div>
           </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" i18n="tpl::Content"></label>
-            <div class="col-sm-10">
-              <textarea class="form-control monospace" rows="10"
-                ng-model="file.content"></textarea>
+          <div ng-switch-when="image">
+            <div class="form-group">
+              <label class="col-sm-2 control-label" i18n="tpl::Name"></label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model="file.name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" i18n="tpl::Image"></label>
+              <div class="col-sm-10">
+                <div class="thumbnail preview-image" ng-if="file.content">
+                  <a target="_blank" href="{{ file.content }}">
+                    <img ng-src="{{ file.content }}">
+                  </a>
+                </div>
+                <input type="text" class="form-control" ng-model="file.content"
+                  ng-model-options="{debounce: 500}">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" i18n="tpl::Upload"></label>
+              <div class="col-sm-10">
+                <p class="form-control-static">
+                  <input accept=".jpg, .png" admin-uploader="file.content" type="file">
+                </p>
+              </div>
+            </div>
+          </div>
+          <div ng-switch-default>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" i18n="tpl::Content"></label>
+              <div class="col-sm-10">
+                <textarea class="form-control monospace" rows="10"
+                  ng-model-options="{updateOn: 'blur'}"
+                  ng-model="file.content"></textarea>
+              </div>
             </div>
           </div>
         </div>
       </form>
     </div>
     <div class="editor-right col-xs-6">
-      <iframe src="{{ ccte.previewUrl }}" width="100%" height="100%" frameborder="0"></iframe>
+      <iframe src="{{ ccte.previewUrl }}" width="100%" height="100%"
+        template-preview frameborder="0"></iframe>
     </div>
   </div>
 </div>

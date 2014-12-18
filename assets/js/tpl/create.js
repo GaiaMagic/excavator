@@ -18,10 +18,23 @@ factory('tpl.create', [
     tr
   ) {
     var tpl = {};
-    return function (currentTpl, tplData) {
+    return function (currentTpl, tplData, options) {
       var deferred = $q.defer();
       var modal;
+      options = options || {};
+
+      function __update () {
+        return update(currentTpl._id,
+          modal ? modal.$scope.tpl.name : currentTpl.name,
+          tplData.form, tplData.files);
+      }
+
+      function __add () {
+        return create(tpl.name, tplData.form, tplData.files);
+      }
+
       if (angular.isObject(currentTpl)) {
+        if (options.silent) return __update();
         modal = $modal({
           title: tr('tpl::Save Changes To {{name}}', {
             name: currentTpl.name
@@ -33,8 +46,7 @@ factory('tpl.create', [
         };
         modal.$scope.submit = function () {
           modal.hide();
-          update(currentTpl._id, modal.$scope.tpl.name,
-          tplData.form, tplData.files).then(function (res) {
+          __update().then(function (res) {
             alert(tr('tpl::Successfully updated {{name}}.', {
               name: currentTpl.name
             }), tr('tpl::Success'));
@@ -45,13 +57,14 @@ factory('tpl.create', [
           });
         };
       } else {
+        if (options.silent) return __add();
         modal = $modal({
           title: tr('tpl::Create New Template'),
           template: '/templates/create.html'
         });
         modal.$scope.submit = function () {
           modal.hide();
-          create(tpl.name, tplData.form, tplData.files).then(function (res) {
+          __add().then(function (res) {
             alert(
               tr(
                 'tpl::Successfully created {{name}}. You will be ' +

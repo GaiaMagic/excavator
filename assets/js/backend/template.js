@@ -42,4 +42,20 @@ factory('backend.template.update', [
       });
     };
   }
+]).
+
+factory('backend.template.upload', [
+  '$http',
+  function ($http) {
+    return function (data) {
+      return $http({
+        method: 'POST',
+        url: '/backend/templates/upload',
+        headers: {
+          'Content-Type': undefined
+        },
+        data: data
+      });
+    };
+  }
 ]);

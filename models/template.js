@@ -30,7 +30,8 @@ templateSchema.pre('save', function (next) {
 
   if (this.files instanceof Array && this.files.length > 0) {
     var pass = true;
-    var allowedKeys = ['type', 'content'];
+    var allowedKeys = ['name', 'type', 'content'];
+    var requiredKeys = ['type', 'content'];
     var types = TYPES;
     for (var i = 0; i < this.files.length; i++) {
       if (typeof this.files[i] !== 'object') {
@@ -38,11 +39,17 @@ templateSchema.pre('save', function (next) {
         break;
       }
       var keys = Object.keys(this.files[i]);
-      if (keys.length !== 2 ||
-          allowedKeys.indexOf(keys[0]) === -1 ||
-          allowedKeys.indexOf(keys[1]) === -1) {
-        pass = false;
-        break;
+      for (var j = 0; j < keys.length; j++) {
+        if (allowedKeys.indexOf(keys[j]) === -1) {
+          pass = false;
+          break;
+        }
+      }
+      for (var j = 0; j < requiredKeys.length; j++) {
+        if (keys.indexOf(requiredKeys[j]) === -1) {
+          pass = false;
+          break;
+        }
       }
       if (types.indexOf(this.files[i].type) === -1) {
         pass = false;

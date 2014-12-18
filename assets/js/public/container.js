@@ -23,7 +23,7 @@ directive('container', [
   '$document',
   '$templateCache',
   function ($compile, $document, $templateCache) {
-    function findFilesByType(tpl, filetype, limit) {
+    function findFilesByType (tpl, filetype, limit) {
       var files = [];
       if (angular.isObject(tpl) && angular.isArray(tpl.files)) {
         for (var i = 0; i < tpl.files.length; i++) {
@@ -34,6 +34,33 @@ directive('container', [
         }
       }
       return files;
+    }
+
+    var replaceables = ['image'];
+
+    function findFileByName (tpl, name) {
+      if (angular.isObject(tpl) && angular.isArray(tpl.files)) {
+        for (var i = 0; i < tpl.files.length; i++) {
+          if (tpl.files[i].name === name &&
+              replaceables.indexOf(tpl.files[i].type) > -1) {
+            return tpl.files[i];
+          }
+        }
+      }
+      return {};
+    }
+
+    function replaceVariable (tpl) {
+      if (angular.isObject(tpl) && angular.isArray(tpl.files)) {
+        for (var i = 0; i < tpl.files.length; i++) {
+          if (replaceables.indexOf(tpl.files[i].type) === -1) {
+            tpl.files[i].content = tpl.files[i].content.replace(/%%(.+?)%%/g,
+            function (p0, p1) {
+              return findFileByName(tpl, p1.trim()).content || p0;
+            });
+          }
+        }
+      }
     }
 
     return {
@@ -48,6 +75,7 @@ directive('container', [
         $elem.html(html);
         $compile($elem.contents())($scope);
         if (tpl) {
+          replaceVariable(tpl);
           var head = $document[0].getElementsByTagName('head')[0];
           var files = findFilesByType(tpl, 'text/css');
           files.forEach(function (file) {

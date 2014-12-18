@@ -3,6 +3,7 @@ angular.module('excavator.admin.templates', []).
 controller('controller.control.template.edit', [
   '$route',
   '$sce',
+  '$scope',
   'func.array',
   'misc.template.filetypes',
   'shared.domains',
@@ -11,12 +12,14 @@ controller('controller.control.template.edit', [
   function (
     $route,
     $sce,
+    $scope,
     array,
     filetypes,
     domains,
-    create,
+    save,
     currentTpl
   ) {
+    var self = this;
     this.array = array;
     this.types = filetypes;
 
@@ -29,11 +32,14 @@ controller('controller.control.template.edit', [
     }
     this.add = function () {
       this.tpl.files = this.tpl.files || [];
-      this.tpl.files.push({ type: 'text/css', content: '' });
+      this.tpl.files.push({
+        type: 'text/css',
+        content: ''
+      });
     };
 
     this.save = function () {
-      create(currentTpl, this.tpl).then(function () {
+      save(currentTpl, this.tpl).then(function () {
         if (currentTpl) {
           $route.reload();
         }
@@ -46,6 +52,15 @@ controller('controller.control.template.edit', [
       return true;
     };
 
+    $scope.$watch(function () {
+      return self.tpl;
+    }, function (tpl, old) {
+      if (angular.equals(tpl, old)) return;
+      save(currentTpl, tpl, { silent: true }).then(function () {
+        $scope.$emit('update template preview');
+      });
+    }, true);
+
     var previewUrl = '//' + domains.public + '/' + currentTpl.form + '/preview:' + currentTpl._id;
     this.previewUrl = $sce.trustAsResourceUrl(previewUrl);
   }
@@ -55,5 +70,17 @@ controller('controller.control.template.list', [
   'templates',
   function (templates) {
     this.tpls = templates;
+  }
+]).
+
+directive('templatePreview', [
+  function () {
+    return {
+      link: function ($scope, $element, $attrs) {
+        $scope.$on('update template preview', function () {
+          $element[0].src += '';
+        });
+      }
+    };
   }
 ]);
