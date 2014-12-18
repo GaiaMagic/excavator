@@ -25,7 +25,6 @@ constant('resolver.form', function formResolver (service, options) {
     service,
     'func.panic',
     'func.scheme.parse',
-    'public.public.template.get',
     'shared.nav.meta',
     function currentForm (
       $q,
@@ -35,7 +34,6 @@ constant('resolver.form', function formResolver (service, options) {
       get,
       panic,
       parse,
-      getTpl,
       meta
     ) {
       options = options || {};
@@ -50,6 +48,8 @@ constant('resolver.form', function formResolver (service, options) {
         var tplId = matches[1];
         if (tplId) {
           isPreview = true;
+          var injector = angular.element(document.body).injector();
+          var getTpl = injector.get('public.public.template.get');
           promises.push(getTpl(tplId));
           formrevid = undefined;
         }
