@@ -3,6 +3,7 @@ var router     = express.Router();
 var Q          = require('q');
 var Template   = require('../models/template');
 var jsonParser = require('body-parser').json();
+var textParser = require('body-parser').text;
 
 function makePromise (promise) {
   return Q.nbind(promise.exec, promise)();
@@ -42,6 +43,13 @@ router.put('/:tplid([a-f0-9]{24})', jsonParser, function (req, res, next) {
   }).then(function (tpl) {
     res.send(tpl);
   }).catch(next);
+});
+
+router.post('/upload', textParser({
+  limit: '8mb'
+}), function (req, res, next) {
+  var saveImage = require('../lib/image').saveFileAsAdminContent;
+  res.send(saveImage(req.body));
 });
 
 module.exports = router;

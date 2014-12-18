@@ -32,6 +32,7 @@ module.exports = function developmentConfigs (express, excavator) {
       'EA/8wABgAQEAX/2gAIAQEAAD8A0s8g/9k=', 'base64');
     excavator.use(
       '/uploads',
+      Static(path.join(root, 'admincontent', 'uploads')),
       Static(path.join(root, 'usercontent', 'uploads')),
       function (req, res, next) {
       res.set({'Content-Type': 'image/jpeg', 'Content-Length': blank.length});
@@ -44,6 +45,7 @@ module.exports = function developmentConfigs (express, excavator) {
   var views = path.join(root, 'views');
 
   if (environment === 'test') {
+    excavator.use(Static(path.join(root, 'admincontent')));
     excavator.use(Static(path.join(root, 'usercontent')));
     views = path.join(root, 'dist');
   }

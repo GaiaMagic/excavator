@@ -3,7 +3,7 @@ function postValidate (schemes, data) {
     var scheme = schemes[i];
     if (scheme.type === 'file') {
       var fileData = data[scheme.model];
-      var saveAsImage = require('../lib/image');
+      var saveAsImage = require('../lib/image').saveFileAsUserContent;
       data[scheme.model] = saveAsImage(fileData);
     }
   }
