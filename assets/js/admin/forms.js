@@ -1,3 +1,7 @@
+/*
+  for gettext:
+    - tr('forms::(no template)')
+*/
 angular.module('excavator.admin.forms', []).
 
 controller('controller.control.form.list', [
@@ -8,6 +12,7 @@ controller('controller.control.form.list', [
   'form.access.control',
   'form.set.template',
   'forms',
+  'i18n.translate',
   'resolver.form',
   'shared.domains',
   function (
@@ -18,6 +23,7 @@ controller('controller.control.form.list', [
     accessControl,
     setTpl,
     forms,
+    tr,
     formResolver,
     domains
   ) {
@@ -51,5 +57,6 @@ controller('controller.control.form.list', [
       });
     };
     this.domains = domains;
+    this.tr = tr;
   }
 ]);

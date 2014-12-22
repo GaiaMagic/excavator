@@ -104,6 +104,7 @@
     "Return value should be an array.": "返回值必须为数组。",
     "No errors": "无错误",
     "Open Helper...": "配置...",
+    "(no template)": "(不设模板)",
     "Are you sure you want to ban manager {{username}} ?": "确定要查封经理 {{username}} ？",
     "Yes, ban this manager": "是，查封这个经理",
     "Are you sure you want to delete manager {{username}} ?": "确定要删除经理 {{username}} ？",
