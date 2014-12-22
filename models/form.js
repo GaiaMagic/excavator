@@ -109,6 +109,20 @@ formSchema.method('countManagers', function (save) {
   });
 });
 
+formSchema.method('applyTemplate', function (template) {
+  var self = this;
+  return Q.nbind(this.populate, this)('head').then(function (form) {
+    var FormRevision = require('./form-revision');
+    return FormRevision.create(
+      form.head.title,
+      form.head.content,
+      form.head.parent,
+      form.head.slug,
+      template
+    );
+  });
+});
+
 formSchema.static('updateManagers', function (formID, managerIDs) {
   var deferred = Q.defer();
   this.findById(formID, function (err, form) {

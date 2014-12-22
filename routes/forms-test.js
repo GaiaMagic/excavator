@@ -6,9 +6,10 @@ var Admin     = require('../models/admin');
 var Form      = require('../models/form');
 var FormRevision = require('../models/form-revision');
 var Manager   = require('../models/manager');
+var Template  = require('../models/template');
 var Q         = require('q');
 
-var real      = config.fixturesOf('admin', 'form');
+var real      = config.fixturesOf('admin', 'form', 'template');
 
 var chai      = require('chai');
 var expect    = chai.expect;
@@ -19,6 +20,7 @@ describe('Route /backend/forms', function () {
   var realAdmin;
   var realManager;
   var realForm;
+  var realTemplate;
 
   before(function (done) {
     if (mongoose.connection.db) {
@@ -34,6 +36,8 @@ describe('Route /backend/forms', function () {
       }).then(function () {
         return Q.nbind(FormRevision.remove, FormRevision)({});
       }).then(function () {
+        return Q.nbind(Template.remove, Template)({});
+      }).then(function () {
         return Admin.register(real.username, real.password);
       }).then(function (admin) {
         realAdmin = admin;
@@ -41,6 +45,9 @@ describe('Route /backend/forms', function () {
       }).then(function (form) {
         realForm = form;
       }).then(function () {
+        return Template.create(real.name, String(realForm._id), real.files);
+      }).then(function (tpl) {
+        realTemplate = tpl;
         return Manager.register(real.username, real.password);
       }).then(function (manager) {
         realManager = manager;
@@ -208,6 +215,36 @@ describe('Route /backend/forms', function () {
         end(function (err, res) {
           if (err) return done(err);
           expect(res.body).to.be.an('object');
+          done();
+        });
+      });
+    });
+
+    describe('Sub-route /templates', function () {
+      it('should set template if template is valid', function (done) {
+        request(excavator).
+        post('/backend/forms/' + realForm.parent + '/templates').
+        send({template: realTemplate._id}).
+        set('Authorization', 'token ' + realAdmin.token).
+        expect(200).
+        end(function (err, res) {
+          if (err) return done(err);
+          expect(res.body).to.be.an('object');
+          expect(res.body.template).to.equal(realTemplate._id.toString());
+          done();
+        });
+      });
+
+      it('should clear template if template is undefined', function (done) {
+        request(excavator).
+        post('/backend/forms/' + realForm.parent + '/templates').
+        send({template: undefined}).
+        set('Authorization', 'token ' + realAdmin.token).
+        expect(200).
+        end(function (err, res) {
+          if (err) return done(err);
+          expect(res.body).to.be.an('object');
+          expect(res.body.template).to.be.undefined();
           done();
         });
       });

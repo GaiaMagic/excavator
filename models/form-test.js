@@ -53,6 +53,7 @@ describe('Form (w/ revision) database model', function () {
           'title',
           'content',
           'submissions',
+          'template',
           'created_at',
           '_id', '__v']);
         expect(isNaN(new Date(revision.created_at))).to.be.false;

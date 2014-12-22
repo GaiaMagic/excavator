@@ -17,14 +17,20 @@ router.get('/forms/:slug/:revid([a-f0-9]{24})?', function (req, res, next) {
   Q.all(promises).then(function (ret) {
     var form = ret[0];
     if (!form) return next('not-found');
-    if (revid) {
-      var formRev = ret[1];
-      if (!formRev) return next('not-found');
-      if (typeof form.toObject === 'function') form = form.toObject();
-      if (typeof formRev.toObject === 'function') formRev = formRev.toObject();
-      form.index = formRev;
-    }
-    res.send(form);
+    return Q.nbind(form.head.populate, form.head)('template', 'files').
+    then(function (head) {
+      form.head = head;
+      return form;
+    }).then(function (form) {
+      if (revid) {
+        var formRev = ret[1];
+        if (!formRev) return next('not-found');
+        if (typeof form.toObject === 'function') form = form.toObject();
+        if (typeof formRev.toObject === 'function') formRev = formRev.toObject();
+        form.index = formRev;
+      }
+      res.send(form);
+    });
   }).catch(next);
 });
 

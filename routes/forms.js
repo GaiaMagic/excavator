@@ -29,8 +29,16 @@ router.get('/', function (req, res, next) {
     });
   } else {
     promise = Form.find({}).sort({ _id: -1 }).skip(0).limit(20);
-    promise = promise.populate('head', 'title');
-    promise = Q.nbind(promise.exec, promise)();
+    promise = promise.populate('head', 'title template');
+    promise = Q.nbind(promise.exec, promise)().then(function (forms) {
+      return Q.all(forms.map(function (form) {
+        return Q.nbind(form.head.populate, form.head)('template', '-files').
+        then(function (head) {
+          form.head = head;
+          return form;
+        });
+      }));
+    });
   }
   promise.then(function (forms) {
     res.send(forms);
@@ -67,12 +75,24 @@ router.post('/:formid/managers', jsonParser, function (req, res, next) {
   }).catch(next);
 });
 
+router.post('/:formid/templates', jsonParser, function (req, res, next) {
+  Q.nbind(Form.findById, Form)(req.params.formid).then(function (form) {
+    return form.applyTemplate(req.body.template);
+  }).then(function (formRev) {
+    res.send(formRev);
+  }).catch(next);
+});
+
 router.get('/:formid', function (req, res, next) {
-  Form.findById(req.params.formid).populate('head').exec().
-  then(function (revision) {
-    if (!revision) return next('not-found');
-    res.send(revision);
-  }, next);
+  QQ(Form.findById(req.params.formid).populate('head')).
+  then(function (form) {
+    if (!form) return Q.reject('not-found');
+    return Q.nbind(form.head.populate, form.head)('template').
+    then(function (head) {
+      form.head = head;
+      res.send(form);
+    });
+  }).catch(next);
 });
 
 router.post('/create', jsonParser, function (req, res, next) {

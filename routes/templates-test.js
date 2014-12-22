@@ -48,7 +48,7 @@ describe('Route /backend/templates', function () {
           '_id',
           'created_at',
           'updated_at',
-          'files',
+          // 'files', // do not include files (cause it's large in size)
           'form',
           'name'
         ]);

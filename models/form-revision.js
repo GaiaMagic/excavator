@@ -18,6 +18,8 @@ var formRevisionSchema = new Schema({
   // cached calculated value
   submissions: { type: Number, default: 0 },
 
+  template:    { type: Schema.ObjectId, ref: 'Template' },
+
   created_at:  { type: Date, default: Date.now }
 });
 
@@ -182,13 +184,15 @@ formRevisionSchema.method('sanitize', function () {
  * @param  {string} slug    the page URI slug
  * @return {promise}        a promise is returned
  */
-formRevisionSchema.static('create', function (title, content, parent, slug) {
+formRevisionSchema.static('create',
+  function (title, content, parent, slug, template) {
   var self = this;
   var newrevision = new self({
     parent: parent,
     title: title,
     content: content,
-    slug: slug
+    slug: slug,
+    template: template
   });
 
   var deferred = Q.defer();

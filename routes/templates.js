@@ -15,8 +15,8 @@ router.get('/:tplid([a-f0-9]{24})?', function (req, res, next) {
   if (tplid) {
     promise = makePromise(Template.findById(tplid));
   } else {
-    promise = makePromise(Template.find({}).sort({ _id: -1}).
-      skip(0).limit(30));
+    promise = makePromise(Template.find({}).select('-files').
+      sort({ _id: -1}).skip(0).limit(30));
   }
   promise.then(function (templates) {
     if (!templates) return next('not-found');
