@@ -67,7 +67,7 @@ directive('container', [
       link: function ($scope, $elem, $attrs) {
         var cpf = $scope.cpf;
         if (!cpf || !cpf.form) return;
-        var tpl = cpf.form.form.template;
+        var tpl = cpf.form.form.head.template;
         var html = findFilesByType(tpl, 'text/html', 1)[0];
         if (!html) {
           html = $templateCache.get('form-container');

@@ -1,0 +1,51 @@
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form-horizontal" role="form" ng-submit="submit()">
+        <div class="modal-header" ng-show="title">
+          <button type="button" class="close"
+            ng-click="$hide()">&times;</button>
+          <h4 class="modal-title" ng-bind="title"></h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="filter" class="col-sm-2 control-label"
+              i18n="forms::Template"></label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="filter"
+                i18n="{placeholder: 'forms::Enter keyword to filter templates'}"
+                ng-model="filter.name">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2">
+              <div class="list-group">
+                <a href class="list-group-item"
+                  i18n="forms::No template"
+                  ng-class="{active: !selected}"
+                  ng-click="selected=undefined">
+                </a>
+                <a href class="list-group-item"
+                  ng-class="{active: tpl === $parent.selected}"
+                  ng-click="$parent.selected=tpl"
+                  ng-repeat="tpl in templates | filter:filter">
+                  <span ng-bind="tpl.name"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="btn-toolbar">
+            <div class="btn-group">
+              <a class="btn btn-default" target="_blank"
+                 href="{{ preview() }}" i18n="forms::Preview"></a>
+            </div>
+            <button type="submit" class="btn btn-info"
+              i18n="forms::Save"></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

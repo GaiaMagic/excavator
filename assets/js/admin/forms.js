@@ -6,6 +6,7 @@ controller('controller.control.form.list', [
   '$route',
   '$routeParams',
   'form.access.control',
+  'form.set.template',
   'forms',
   'resolver.form',
   'shared.domains',
@@ -15,6 +16,7 @@ controller('controller.control.form.list', [
     $route,
     $routeParams,
     accessControl,
+    setTpl,
     forms,
     formResolver,
     domains
@@ -32,6 +34,18 @@ controller('controller.control.form.list', [
       var promise = $injector.invoke(resolve);
       promise.then(function (currentForm) {
         return accessControl(currentForm);
+      }).then(function () {
+        $route.reload();
+      });
+    };
+    this.setTpl = function (form) {
+      var resolve = formResolver('backend.form.get', {
+        formId: form._id,
+        simple: true
+      });
+      var promise = $injector.invoke(resolve);
+      promise.then(function (currentForm) {
+        return setTpl(currentForm);
       }).then(function () {
         $route.reload();
       });

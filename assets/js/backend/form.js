@@ -48,4 +48,15 @@ factory('backend.form.update.managers', [
       return $http.post('/backend/forms/' + formid + '/managers', operation);
     };
   }
+]).
+
+factory('backend.form.update.template', [
+  '$http',
+  function ($http) {
+    return function (formid, templateid) {
+      return $http.post('/backend/forms/' + formid + '/templates', {
+        template: templateid
+      });
+    };
+  }
 ]);

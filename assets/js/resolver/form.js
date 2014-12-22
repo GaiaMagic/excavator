@@ -61,7 +61,7 @@ constant('resolver.form', function formResolver (service, options) {
       return $q.all(promises).then(function (res) {
         var form = res[0].data;
         if (res[1]) {
-          form.template = res[1].data;
+          form.head.template = res[1].data;
         }
         return form;
       }).then(function (form) {

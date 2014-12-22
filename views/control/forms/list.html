@@ -8,6 +8,7 @@
             <th class="link" i18n="forms::Preview"></th>
             <th class="link" i18n="forms::Edit"></th>
             <th i18n="forms::Name"></th>
+            <th class="template" i18n="forms::Template"></th>
             <th class="number" i18n="forms::Submissions"></th>
             <th class="number" i18n="forms::Managers"></th>
             <th class="number" i18n="forms::Rev."></th>
@@ -39,7 +40,11 @@
             </td>
             <td>
               <a class="block" href="/forms/{{ form._id }}/submissions"
-                ng-bind="form.head.title || '(untitled)'"></a>
+                ng-bind="form.head.title"></a>
+            </td>
+            <td>
+              <a class="block" href ng-click="ccfl.setTpl(form)"
+                ng-bind="form.head.template.name || '(no template)'"></a>
             </td>
             <td>
               <a href="/forms/{{ form._id }}/submissions"
