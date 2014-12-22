@@ -36,13 +36,15 @@ factory('form.set.template', [
         }),
         template: '/forms/tpl.html'
       });
+      var orig;
       var templates = $injector.invoke(templatesResolver());
       templates.then(function (templates) {
         modal.$scope.templates = templates;
         if (currentForm.form.head.template) {
-          modal.$scope.selected = templates.filter(function (tpl) {
+          orig = templates.filter(function (tpl) {
             return tpl._id === currentForm.form.head.template._id;
           })[0];
+          modal.$scope.selected = orig;
         }
       }, panic);
       modal.$scope.submit = function () {
@@ -58,6 +60,9 @@ factory('form.set.template', [
           panic(err);
           deferred.reject();
         });
+      };
+      modal.$scope.submittable = function () {
+        return modal.$scope.selected !== orig;
       };
       modal.$scope.preview = function () {
         var sel = modal.$scope.selected;

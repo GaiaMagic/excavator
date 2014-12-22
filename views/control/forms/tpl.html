@@ -42,6 +42,7 @@
                  href="{{ preview() }}" i18n="forms::Preview"></a>
             </div>
             <button type="submit" class="btn btn-info"
+              ng-disabled="!submittable()"
               i18n="forms::Save"></button>
           </div>
         </div>
