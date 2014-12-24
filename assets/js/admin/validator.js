@@ -3,7 +3,9 @@ angular.module('excavator.admin.validator', []).
 service('admin.validator', [
   'i18n.translate',
   function (tr) {
-    this.make = function (scope) {
+    this.make = function (scope, options) {
+      options = options || {};
+
       if (scope.page === 'general') {
         var general = scope.general;
         if (!angular.isObject(general)) return 'false';
@@ -14,7 +16,13 @@ service('admin.validator', [
         var ret = scope.choices.filter(function (choice) {
           return choice;
         }).map(angular.toJson).join(', ');
-        return ret ? ('[' + ret + '].indexOf(data) > -1') : 'false';
+        if (!ret) return 'false';
+        if (options.valueIsArray) {
+          return 'data instanceof Array && ' +
+            'data.every(function (item) { return [' + ret +
+            '].indexOf(item) > -1; })';
+        }
+        return '[' + ret + '].indexOf(data) > -1';
       }
 
       if (scope.page === 'boolean') {
@@ -37,7 +45,9 @@ service('admin.validator', [
         '}/.test(data)';
     };
 
-    this.say = function (scope) {
+    this.say = function (scope, options) {
+      options = options || {};
+
       if (scope.page === 'general') {
         var general = scope.general;
         if (!angular.isObject(general)) return tr('forms::should be empty');
@@ -48,8 +58,11 @@ service('admin.validator', [
         var ret = scope.choices.filter(function (choice) {
           return choice;
         }).map(angular.toJson).join(', ');
-        return ret ? (tr('forms::should be one of the following: ') + ret) :
-          tr('forms::should be empty');
+        if (!ret) return tr('forms::should be empty');
+        if (options.valueIsArray) {
+          return tr('forms::should select at least one item of: ') + ret;
+        }
+        return tr('forms::should be one of the following: ') + ret;
       }
 
       if (scope.page === 'boolean') {
@@ -193,11 +206,14 @@ directive('validator', [
           } catch (e) {}
         }
       }
+      var options = {
+        valueIsArray: parentScope.data.type === 'checkbox'
+      };
       scope.make = function () {
-        return validator.make(scope);
+        return validator.make(scope, options);
       };
       scope.say = function () {
-        return validator.say(scope);
+        return validator.say(scope, options);
       };
       scope.ok = function () {
         modal.hide();

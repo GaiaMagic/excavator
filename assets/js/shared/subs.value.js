@@ -61,6 +61,9 @@ directive('subsValue', [
     }
 
     function display (value, options) {
+      if (angular.isArray(value)) {
+        return value.join(', ');
+      }
       if (angular.isObject(value)) {
         if (angular.isString(value.format) &&
           imageFormats.indexOf(value.format) > -1) {

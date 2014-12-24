@@ -96,10 +96,15 @@ function callValidator(
   data,
   isValidatorTrusted
 ) {
+  var basic = {
+    Array: Array,
+    Object: Object
+  };
   if (validatorFunction.length <= 1) {
     var value = data[scheme.model];
     var expr = '(' + validatorFunction.toString() + ')(value)';
-    var ret = vm.runInNewContext(expr, { value: value }, { timeout: TIMEOUT });
+    var ret = vm.runInNewContext(expr, extend(true, { value: value },
+      basic), { timeout: TIMEOUT });
     if (typeof ret === 'function') {
       return callValidator(ret, validatorMessage, scheme, data);
     }
@@ -121,7 +126,7 @@ function callValidator(
       expr += '.call({ tr: tr, bytes: bytes }, scheme, data)';
       ret = vm.runInNewContext(expr, extend(true, {
         scheme: scheme, data: data
-      }, inject), { timeout: TIMEOUT });
+      }, basic, inject), { timeout: TIMEOUT });
     }
     if (typeof ret !== 'object' ||
         typeof ret.result === 'undefined') {

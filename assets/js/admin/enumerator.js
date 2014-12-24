@@ -179,13 +179,32 @@ directive('enumerator', [
         modal.hide();
         var data = $parse(src)(parentScope);
         data[attr] = new Function('return ' + scope.make())();
-        var vScope = {
-          page: 'choices',
-          choices: data.enum
-        };
         if (!data.validator) {
-          data.validator = validator.make(vScope);
-          data.validatorMessage = validator.say(vScope);
+          var options = {
+            valueIsArray: parentScope.data.type === 'checkbox'
+          };
+          var choices = data.enum;
+          if (angular.isObject(choices[0])) {
+            data.validator = validator.make({
+              page: 'choices',
+              choices: choices.map(function (choice) {
+                return choice.value;
+              })
+            }, options);
+            data.validatorMessage = validator.say({
+              page: 'choices',
+              choices: choices.map(function (choice) {
+                return choice.label;
+              })
+            }, options);
+          } else {
+            var vScope = {
+              page: 'choices',
+              choices: choices
+            };
+            data.validator = validator.make(vScope, options);
+            data.validatorMessage = validator.say(vScope, options);
+          }
         }
       };
     }
