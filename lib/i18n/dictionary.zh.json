@@ -19,9 +19,14 @@
     "Editing !!metaData.data.title!!": "正在编辑 !!metaData.data.title!!",
     "Submissions": "提交列表",
     "Viewing !!metaData.data.title!!": "正在查看 !!metaData.data.title!!",
-    "Create": "创建表格",
+    "forms": {
+      "Create": "创建表格"
+    },
     "Templates": "模板",
     "Editing !!metaData.data.name!!": "正在编辑 !!metaData.data.name!!",
+    "tpls": {
+      "Create": "创建模板"
+    },
     "Managers": "经理",
     "Logged in as": "已登录：",
     "Change Password": "更改密码",
