@@ -12,6 +12,6 @@ RUN npm --loglevel warn install
 
 ENV NODE_ENV production
 
-ADD . /excavator
-
 CMD ./service
+
+ADD . /excavator

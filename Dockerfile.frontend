@@ -12,12 +12,15 @@ RUN npm --loglevel warn install
 
 RUN npm --loglevel warn install -g gulp
 
+# use global gulp so we won't install it again
+RUN npm link gulp
+
 ADD package.json /excavator/package.json
 
 RUN npm --loglevel warn install
 
-ADD . /excavator
-
 ENV NODE_ENV production
 
 CMD gulp build
+
+ADD . /excavator

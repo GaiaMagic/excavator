@@ -1,12 +1,4 @@
-DOCKER = $(shell which docker 2>/dev/null)
-ifeq ($(strip $(DOCKER)),)
-$(error Docker does not exist! You can download it from https://www.docker.com/)
-endif
-
-FIG = $(shell which fig 2>/dev/null)
-ifeq ($(strip $(FIG)),)
-$(error Fig does not exist! You can download it from http://www.fig.sh/)
-endif
+SCALE ?= 1
 
 GIT_ENV = @GIT_HEAD_COMMIT="$(shell git rev-parse HEAD)" \
 	GIT_HEAD_DATE="$(shell git --no-pager show --format="%ad" --quiet HEAD)" \
@@ -15,47 +7,12 @@ GIT_ENV = @GIT_HEAD_COMMIT="$(shell git rev-parse HEAD)" \
 	GIT_USER="$(shell git config --get user.email)" \
 	$(1)
 
-all: backend frontend start clean
-
-backend:
-	mv Dockerfile.backend Dockerfile
-	fig build backend
-	mv Dockerfile Dockerfile.backend
-
-frontend:
-	mv Dockerfile.frontend Dockerfile
-	fig build frontend
-	mv Dockerfile Dockerfile.frontend
-
-start:
-	$(call GIT_ENV,fig up -d)
-
-restart: start
-
-reload:
-	$(call GIT_ENV,fig up -d --no-recreate)
-
-test:
-	docker kill excavator_test >/dev/null 2>&1 && docker rm excavator_test >/dev/null 2>&1; true
-	docker run -d --name excavator_test mongo:2.6.5 >/dev/null
-	docker run --rm --link=excavator_test:db excavator_frontend npm test
-	docker kill excavator_test >/dev/null 2>&1 && docker rm excavator_test >/dev/null 2>&1; true
-
-clean:
-	@docker images | grep -q '<none>' && \
-	docker images | awk 'NR==1||/<none>/' && echo \
-	"Press Enter to remove these useless old '<none>' images." && read ANS && \
-	docker images | grep '<none>' | awk '{print $$3}' | \
-		xargs -n1 docker rmi || echo "Good! No useless images to clean."
-
 help:
 	@printf ""\
-	"  \033[0;36mmake\033[0m                rebuild and start the application\n"\
-	"  \033[0;36mmake start\033[0m          restart the application\n"\
-	"  \033[0;36mmake reload\033[0m         rebuild frontend\n"\
+	"  \033[0;36mmake all\033[0m            rebuild and start the application\n"\
+	"\n"\
 	"  \033[0;36mmake clean\033[0m          remove useless docker images\n"\
 	"  \033[0;36mmake test\033[0m           run npm test in a new container\n"\
-	"\n"\
 	"  \033[0;36mmake db\033[0m             enter the MongoDB system\n"\
 	"  \033[0;36mmake mongo\033[0m          directly connect to db via 'mongo'\n"\
 	"  \033[0;36mmake mongodump\033[0m      dump excavator database to current directory\n"\
@@ -66,7 +23,48 @@ help:
 	"  \033[0;36mmake dist\033[0m           view the source and the dist directory\n"\
 	"  \033[0;36mmake backup-data\033[0m    archive database\n"\
 	"  \033[0;36mmake backup-usercontent\033[0m  archive usercontent\n"\
-	"  \033[0;36mmake backup\033[0m         archive both\n"
+	"  \033[0;36mmake backup\033[0m         archive both\n"\
+	"  \033[0;36mmake restore-data\033[0m   restore database\n"\
+	"  \033[0;36mmake restore-usercontent\033[0m  restore usercontent\n"\
+	"  \033[0;36mmake restore\033[0m        restore both\n"
+
+all: backend frontend remove start post-update
+
+ifeq ($(SCALE),1)
+update: backend frontend remove start
+else
+update: start
+endif
+
+backend:
+	mv Dockerfile.backend Dockerfile; true
+	fig build backend; mv Dockerfile Dockerfile.backend
+
+frontend:
+	mv Dockerfile.frontend Dockerfile; true
+	fig build frontend; mv Dockerfile Dockerfile.frontend
+
+remove:
+	fig kill backend
+	fig rm --force backend
+
+start:
+	fig scale backend=$(SCALE)
+
+post-update:
+	$(call GIT_ENV,fig up -d frontend)
+	fig start
+
+# other:
+
+test:
+	docker kill excavator_test >/dev/null 2>&1 && docker rm excavator_test >/dev/null 2>&1; true
+	docker run -d --name excavator_test mongo:2.6.5 >/dev/null
+	docker run --rm --link=excavator_test:db excavator_frontend npm test
+	docker kill excavator_test >/dev/null 2>&1 && docker rm excavator_test >/dev/null 2>&1; true
+
+clean:
+	docker images | grep '<none>' | awk '{print $$3}' | xargs docker rmi 2>/dev/null; true
 
 db:
 	docker run -it --rm --link excavator_db_1:mongo mongo:2.6.5 bash
@@ -134,4 +132,4 @@ restore-usercontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
 	-v $$(pwd):/restore busybox tar xvf /restore/excavator_usercontent_1.tar
 
-.PHONY: test dist usercontent data backup db clean all frontend backend start restart reload clean help
+.PHONY: test dist usercontent data backup db clean all frontend backend start restart clean help
