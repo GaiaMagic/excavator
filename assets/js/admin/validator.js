@@ -1,11 +1,91 @@
 angular.module('excavator.admin.validator', []).
 
+service('admin.validator', [
+  'i18n.translate',
+  function (tr) {
+    this.make = function (scope) {
+      if (scope.page === 'general') {
+        var general = scope.general;
+        if (!angular.isObject(general)) return 'false';
+        return general.value;
+      }
+
+      if (scope.page === 'choices') {
+        var ret = scope.choices.filter(function (choice) {
+          return choice;
+        }).map(angular.toJson).join(', ');
+        return ret ? ('[' + ret + '].indexOf(data) > -1') : 'false';
+      }
+
+      if (scope.page === 'boolean') {
+        return 'data === true || data === false';
+      }
+
+      if (scope.page === 'numeric') {
+        return 'typeof +data === "number" && +data >= ' + (scope.min || 0) +
+          ' && +data <= ' + (scope.max || 100);
+      }
+
+      var regex = '';
+      for (var i = 0; i < scope.charsets.length; i++) {
+        if (scope.charsets[i].selected) {
+          regex += scope.charsets[i].value
+        }
+      }
+      return 'typeof data === "string" && /' + (regex ? ('[' + regex +
+        ']') : '.') + '{' + (scope.min || 0) + ',' + (scope.max || 100) +
+        '}/.test(data)';
+    };
+
+    this.say = function (scope) {
+      if (scope.page === 'general') {
+        var general = scope.general;
+        if (!angular.isObject(general)) return tr('forms::should be empty');
+        return general.say;
+      }
+
+      if (scope.page === 'choices') {
+        var ret = scope.choices.filter(function (choice) {
+          return choice;
+        }).map(angular.toJson).join(', ');
+        return ret ? (tr('forms::should be one of the following: ') + ret) :
+          tr('forms::should be empty');
+      }
+
+      if (scope.page === 'boolean') {
+        return tr('forms::should be yes or no');
+      }
+
+      if (scope.page === 'numeric') {
+        return tr('forms::should be a number between {{min}} to {{max}}', {
+          min: scope.min, max: scope.max
+        });
+      }
+
+      var ret = [];
+      for (var i = 0; i < scope.charsets.length; i++) {
+        if (scope.charsets[i].selected) {
+          ret.push(scope.charsets[i].say);
+        }
+      }
+      var con = { inc: ret, min: scope.min, max: scope.max };
+      if (ret.length > 0) {
+        return tr('forms::should include {{inc.join(", ")}} and ' +
+          'have {{min}}-{{max}} characters', con);
+      } else {
+        return tr('forms::should have {{min}}-{{max}} characters', con);
+      }
+    };
+  }
+]).
+
 directive('validator', [
   '$compile',
   '$modal',
+  'admin.validator',
   'i18n.translate',
   'misc.general.validators',
-  function ($compile, $modal, tr, generalValidators) {
+  function ($compile, $modal, validator, tr, generalValidators) {
 
     function helper (parentScope, attr) {
       var modal = $modal({
@@ -50,6 +130,8 @@ directive('validator', [
           defaultString.indexOf('true') > -1 &&
           defaultString.indexOf('false') > -1) {
           scope.page = 'boolean';
+        } else if (defaultString.indexOf('indexOf') > -1) {
+          scope.page = 'choices';
         } else {
           scope.page = 'general';
         }
@@ -58,6 +140,9 @@ directive('validator', [
       scope.choices = [''];
       scope.add = function (index) {
         scope.choices.splice(index + 1, 0, '');
+      };
+      scope.minus = function (index) {
+        scope.choices.splice(index, 1);
       };
       scope.charsets = [{
         label: tr('forms::Lowercase letters'),
@@ -101,82 +186,18 @@ directive('validator', [
           scope.max = +matches[1];
         }
       } else if (scope.page === 'choices') {
-        var matches = defaultString && defaultString.match(/(\[\s*".*"\s*\])/);
+        var matches = defaultString && defaultString.match(/(\[[\S\s]+?\])/);
         if (matches) {
-          scope.choices = new Function('return ' + matches[1])();
+          try {
+            scope.choices = new Function('return ' + matches[1])();
+          } catch (e) {}
         }
       }
       scope.make = function () {
-        if (scope.page === 'general') {
-          var general = scope.general;
-          if (!angular.isObject(general)) return 'false';
-          return general.value;
-        }
-
-        if (scope.page === 'choices') {
-          var ret = scope.choices.filter(function (choice) {
-            return choice;
-          }).map(angular.toJson).join(', ');
-          return ret ? ('[' + ret + '].indexOf(data) > -1') : 'false';
-        }
-
-        if (scope.page === 'boolean') {
-          return 'data === true || data === false';
-        }
-
-        if (scope.page === 'numeric') {
-          return 'typeof +data === "number" && +data >= ' + (scope.min || 0) +
-            ' && +data <= ' + (scope.max || 100);
-        }
-
-        var regex = '';
-        for (var i = 0; i < scope.charsets.length; i++) {
-          if (scope.charsets[i].selected) {
-            regex += scope.charsets[i].value
-          }
-        }
-        return 'typeof data === "string" && /' + (regex ? ('[' + regex +
-          ']') : '.') + '{' + (scope.min || 0) + ',' + (scope.max || 100) +
-          '}/.test(data)';
+        return validator.make(scope);
       };
       scope.say = function () {
-        if (scope.page === 'general') {
-          var general = scope.general;
-          if (!angular.isObject(general)) return tr('forms::should be empty');
-          return general.say;
-        }
-
-        if (scope.page === 'choices') {
-          var ret = scope.choices.filter(function (choice) {
-            return choice;
-          }).map(angular.toJson).join(', ');
-          return ret ? (tr('forms::should be one of the following: ') + ret) :
-            tr('forms::should be empty');
-        }
-
-        if (scope.page === 'boolean') {
-          return tr('forms::should be yes or no');
-        }
-
-        if (scope.page === 'numeric') {
-          return tr('forms::should be a number between {{min}} to {{max}}', {
-            min: scope.min, max: scope.max
-          });
-        }
-
-        var ret = [];
-        for (var i = 0; i < scope.charsets.length; i++) {
-          if (scope.charsets[i].selected) {
-            ret.push(scope.charsets[i].say);
-          }
-        }
-        var con = { inc: ret, min: scope.min, max: scope.max };
-        if (ret.length > 0) {
-          return tr('forms::should include {{inc.join(", ")}} and ' +
-            'have {{min}}-{{max}} characters', con);
-        } else {
-          return tr('forms::should have {{min}}-{{max}} characters', con);
-        }
+        return validator.say(scope);
       };
       scope.ok = function () {
         modal.hide();

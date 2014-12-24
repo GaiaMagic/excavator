@@ -4,10 +4,11 @@ directive('enumerator', [
   '$compile',
   '$modal',
   '$parse',
+  'admin.validator',
   'func.array',
   'func.formatter.function.reindent',
   'i18n.translate',
-  function ($compile, $modal, $parse, funcArray, reindent, tr) {
+  function ($compile, $modal, $parse, validator, funcArray, reindent, tr) {
     function stringORprimitive (string) {
       try {
         return new Function('return ' + string)();
@@ -178,6 +179,14 @@ directive('enumerator', [
         modal.hide();
         var data = $parse(src)(parentScope);
         data[attr] = new Function('return ' + scope.make())();
+        var vScope = {
+          page: 'choices',
+          choices: data.enum
+        };
+        if (!data.validator) {
+          data.validator = validator.make(vScope);
+          data.validatorMessage = validator.say(vScope);
+        }
       };
     }
 
