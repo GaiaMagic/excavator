@@ -9,8 +9,10 @@ data:
 usercontent:
   image: busybox:latest
   volumes:
+    - /admincontent
+    - /srv/excavator/admincontent:/admincontent
     - /usercontent
-    - /srv/excavator-usercontent:/usercontent
+    - /srv/excavator/usercontent:/usercontent
 
 # mongodb
 # remember to also update excavator.js if you change this service name
@@ -39,4 +41,4 @@ frontend:
     - GIT_HEAD_FILE_COUNT
     - GIT_USER
   volumes:
-    - /srv/excavator:/excavator/dist
+    - /srv/excavator/dist:/excavator/dist
