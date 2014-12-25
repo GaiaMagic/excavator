@@ -4,6 +4,9 @@ var Form = require('../models/form');
 var FormRevision = require('../models/form-revision');
 var Manager = require('../models/manager');
 var jsonParser = require('body-parser').json();
+var largerJsonParser = require('body-parser').json({
+  limit: '500kb'
+});
 var Q = require('q');
 
 function QQ (promise) {
@@ -95,7 +98,7 @@ router.get('/:formid', function (req, res, next) {
   }).catch(next);
 });
 
-router.post('/create', jsonParser, function (req, res, next) {
+router.post('/create', largerJsonParser, function (req, res, next) {
   FormRevision.create(
     req.body.title,
     req.body.content,

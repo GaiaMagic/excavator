@@ -312,7 +312,7 @@ describe('Route /backend/forms', function () {
 
     it('should return content-is-too-large if title was too long',
     function (done) {
-      var object = { test: repeat(real.title, 500) };
+      var object = { test: repeat(real.title, 5000) };
       var largecontent = JSON.stringify(object);
       expectFailure('token ' + realAdmin.token, {
         title: real.title,
