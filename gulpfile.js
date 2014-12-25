@@ -172,11 +172,12 @@ gulp.task('compress', function () {
 
 gulp.task('build', function (done) {
   runSequence(
-    [ 'clean' ],
+    [ 'clean'                                                ],
     [ 'dump:public',    'dump:manager',    'dump:control',
-      'copy:json',      'copy:fonts',      'compile:less'    ],
+      'copy:json',      'copy:fonts',      'compile:less',
+      'copy:lazyloads'                                       ],
     [ 'compile:public', 'compile:manager', 'compile:control' ],
-    [ 'compress',       'copy:lazyloads'                     ],
+    [ 'compress'                                             ],
     done
   );
 });
