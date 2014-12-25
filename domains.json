@@ -4,6 +4,11 @@
     "manager": "manager:3000",
     "control": "control:3000"
   },
+  "test": {
+    "public": "public:3000",
+    "manager": "manager:3000",
+    "control": "control:3000"
+  },
   "production": {
     "public": "form.gaiamagic.com",
     "manager": "manager.form.gaiamagic.com",

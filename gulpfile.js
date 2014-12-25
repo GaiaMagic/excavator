@@ -110,6 +110,10 @@ gulp.task('copy:fonts', function () {
   gulp.src('vendors/css/*.woff').pipe(gulp.dest('dist/control'));
 });
 
+gulp.task('copy:lazyloads', function () {
+  gulp.src('vendors/js/qrcode.min.js').pipe(gulp.dest('dist/public/js'));
+});
+
 function compile (src, dest) {
   var assets = $.useref.assets();
   var jsFilter = $.filter(['*.js', '!0.*.js']);
@@ -178,7 +182,7 @@ gulp.task('build', function (done) {
     [ 'dump:public',    'dump:manager',    'dump:control',
       'copy:json',      'copy:fonts',      'compile:less'    ],
     [ 'compile:public', 'compile:manager', 'compile:control' ],
-    [ 'compress' ],
+    [ 'compress',       'copy:lazyloads'                     ],
     done
   );
 });

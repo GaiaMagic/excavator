@@ -60,7 +60,7 @@ constant('resolver.form', function formResolver (service, options) {
       promises.unshift(get(formid, formrevid));
       return $q.all(promises).then(function (res) {
         var form = res[0].data;
-        if (res[1]) {
+        if (res[1] && form && form.head) {
           form.head.template = res[1].data;
         }
         return form;
