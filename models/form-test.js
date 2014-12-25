@@ -140,7 +140,7 @@ describe('Form (w/ revision) database model', function () {
     });
 
     it('should fail if the content is too large', function (done) {
-      var object = { test: repeat(real.title, 500) };
+      var object = { test: repeat(real.title, 5000) };
       var largecontent = JSON.stringify(object);
       expectFailure(FormRevision.create(real.title, largecontent),
         'content-is-too-large', done);
