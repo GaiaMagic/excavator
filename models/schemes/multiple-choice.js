@@ -52,8 +52,9 @@ module.exports = {
 
         this.items = items;
         this.stat = stat;
-        this.data[scheme.model] = angular.isDefined(scheme.default) ?
-          scheme.default : defValue;
+        if (angular.isDefined(scheme.default)) {
+          this.data[scheme.model] = scheme.default;
+        }
       }
     ],
     template: [

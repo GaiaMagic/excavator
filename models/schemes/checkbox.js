@@ -85,6 +85,7 @@ module.exports = {
                   '<span ng-bind="item.label || item"></span>',
                 '</label>',
               '</div>',
+              '<div class="clearfix"></div>',
               '<p class="help-block" ng-show="scheme.$error !== undefined" ',
                 'ng-bind="scheme.validatorMessage"></p>',
             '</div>',
@@ -98,7 +99,8 @@ module.exports = {
         var ret = [];
         var fields = {
           model: tr('schemes::checkbox::Model'),
-          label: tr('schemes::checkbox::Label')
+          label: tr('schemes::checkbox::Label'),
+          class: tr('schemes::checkbox::Class')
         };
         for (var name in fields) {
           ret = ret.concat([
