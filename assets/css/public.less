@@ -9,3 +9,189 @@
 .main {
   padding: 30px 0 200px;
 }
+
+.main {
+  padding: 30px 0 50px;
+}
+
+html, body {
+  height: 100%;
+  background-color: #0c183e;
+}
+
+.main-form {
+  background-color: #fff;
+  border-radius: 10px;
+  &.col-xs-10 {
+    width: 94%;
+  }
+  &.col-xs-offset-1 {
+    margin-left: 3%;
+  }
+}
+
+.form-group {
+  margin-bottom: 30px;
+}
+
+.pro {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-image: url(/images/bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+.pro-logo {
+  @width: 917px;
+  @height: 442px;
+  width: @width;
+  height: @height;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  margin-left: -@width / 2;
+  margin-top: -@height / 2;
+  background-image: url(/images/logo.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.pro-button {
+  display: block;
+  @width: 170px;
+  @height: 44px;
+  width: @width;
+  height: @height;
+  position: absolute;
+  left: 50%;
+  top: 73%;
+  top: auto;
+  bottom: 20%;
+  margin-left: -@width / 2;
+  margin-top: -@height / 2;
+  text-align: center;
+  background: url(/images/button.png) no-repeat;
+  background-size: contain;
+  text-indent: -9999px;
+}
+
+.pro-share {
+  position: absolute;
+  @width: 150px;
+  width: @width;
+  top: auto;
+  bottom: 13%;
+  left: 50%;
+  margin-left: -@width / 2;
+  color: #fff;
+  text-align: center;
+}
+
+.pro-share-weibo {
+  display: inline-block;
+  text-indent: -9999px;
+  width: 29px;
+  height: 23px;
+  background: url(/images/weibo.png) no-repeat;
+  background-size: contain;
+  margin-left: 15px;
+}
+
+.pro-share-wechat {
+  display: inline-block;
+  text-indent: -9999px;
+  width: 29px;
+  height: 23px;
+  background: url(/images/wechat.png) no-repeat;
+  background-size: contain;
+  margin-left: 15px;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.5),
+       screen and (min-resolution: 144dpi),
+       screen and (min-resolution: 1.5dppx) {
+  .pro {
+    background-image: url(/images/bg@2x.jpg);
+  }
+  .pro-logo {
+    background-image: url(/images/logo@2x.png);
+  }
+  .pro-button {
+    background-image: url(/images/button@2x.png);
+  }
+  .pro-share-weibo {
+    background-image: url(/images/weibo@2x.png);
+  }
+  .pro-share-wechat {
+    background-image: url(/images/wechat@2x.png);
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .pro {
+    background-image: url(/images/bg-tablet.jpg);
+  }
+  .pro-logo {
+    background-size: contain;
+    width: 90%;
+    margin-left: 0;
+    left: 5%;
+  }
+  .pro-button {
+    top: 78%;
+  }
+  .pro-share {
+    top: 85%;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.5) and (max-width: 1024px),
+       screen and (min-resolution: 144dpi)              and (max-width: 1024px),
+       screen and (min-resolution: 1.5dppx)             and (max-width: 1024px) {
+  .pro {
+    background-image: url(/images/bg-tablet@2x.jpg);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .pro {
+    background-image: url(/images/bg-mobile.png);
+  }
+  .pro-logo {
+    background-image: url(/images/logo-mobile.png);
+    top: 38%;
+  }
+  .pro-button {
+    top: 82%;
+  }
+  .pro-share {
+    top: 91%;
+  }
+  .pro-share-wechat {
+    display: none;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.5) and (max-width: 480px),
+       screen and (min-resolution: 144dpi)              and (max-width: 480px),
+       screen and (min-resolution: 1.5dppx)             and (max-width: 480px) {
+  .pro {
+    background-image: url(/images/bg-mobile@2x.png);
+  }
+  .pro-logo {
+    background-image: url(/images/logo-mobile@2x.png);
+  }
+}
+
+.scheme-label, .scheme-content {
+  float: none !important;
+  margin-bottom: 8px !important;
+  margin-left: 0 !important;
+  text-align: left !important;
+  padding-top: 0 !important;
+  width: 100% !important;
+}
