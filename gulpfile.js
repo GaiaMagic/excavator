@@ -7,8 +7,7 @@ var info = {
     headCommit:    process.env.GIT_HEAD_COMMIT,
     headDate:      process.env.GIT_HEAD_DATE,
     headAuthor:    process.env.GIT_HEAD_AUTHOR,
-    headFileCount: process.env.GIT_HEAD_FILE_COUNT,
-    user:          process.env.GIT_USER
+    headFileCount: process.env.GIT_HEAD_FILE_COUNT
   }
 };
 
@@ -19,14 +18,12 @@ if (!process.env.GIT_HEAD_COMMIT) {
     Q.nfcall(exec, 'git rev-parse HEAD'),
     Q.nfcall(exec, 'git --no-pager show --format="%ad" --quiet HEAD'),
     Q.nfcall(exec, 'git --no-pager show --format="%ae" --quiet HEAD'),
-    Q.nfcall(exec, 'git ls-files | wc -l'),
-    Q.nfcall(exec, 'git config --get user.email')
+    Q.nfcall(exec, 'git ls-files | wc -l')
   ]).then(function (ret) {
     info.git.headCommit    = ret[0][0].trim();
     info.git.headDate      = ret[1][0].trim();
     info.git.headAuthor    = ret[2][0].trim();
     info.git.headFileCount = ret[3][0].trim();
-    info.git.user          = ret[4][0].trim();
   });
 }
 
@@ -144,9 +141,6 @@ function compile (src, dest) {
       }, {
         search:      /%HEAD_FILE_COUNT%/g,
         replacement: info.git.headFileCount
-      }, {
-        search:      /%USER%/g,
-        replacement: info.git.user
       }, {
         search:      /%DATE%/g,
         replacement: new Date
