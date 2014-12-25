@@ -56,6 +56,30 @@ controller('controller.control.template.edit', [
       });
     };
 
+    this.fetch = function (content) {
+      this.tpl.files = this.tpl.files || [];
+      var orig = this.tpl.files.filter(function (file) {
+        return file.name;
+      }).map(function (file) {
+        return file.name;
+      });
+      var toAdd = [];
+      var matches = content.match(/%%(.+?)%%/g);
+      if (!matches) return;
+      matches.forEach(function (match) {
+        var name = match.match(/%%(.+?)%%/)[1].trim();
+        if (orig.indexOf(name) > -1) return;
+        if (toAdd.indexOf(name) > -1) return;
+        toAdd.push(name);
+      });
+      toAdd.forEach(function (name) {
+        self.tpl.files.push({
+          type: 'image',
+          name: name
+        });
+      });
+    };
+
     this.save = function () {
       saveTpl(currentTpl, this.tpl).then(function () {
         if (currentTpl) {

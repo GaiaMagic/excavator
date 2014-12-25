@@ -104,6 +104,11 @@
                 <textarea class="form-control monospace" rows="10"
                   ng-model-options="{updateOn: 'blur'}"
                   ng-model="file.content"></textarea>
+                <div class="btn-group btn-group-xs">
+                  <button class="btn btn-default"
+                    ng-click="ccte.fetch(file.content)"
+                    i18n="tpl::Fetch Variables"></button>
+                </div>
               </div>
             </div>
           </div>
