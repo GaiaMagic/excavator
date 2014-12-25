@@ -25,9 +25,11 @@ module.exports = {
       }
     ],
     template: [
-      '<div class="form-group" ng-class="{\'has-error\': scheme.$error}">',
-        '<label class="col-sm-2 control-label">{{ label }}</label>',
-        '<div class="col-sm-10">',
+      '<div class="form-group scheme" ',
+        'ng-class="{\'has-error\': scheme.$error}">',
+        '<label class="col-sm-2 control-label ',
+          'scheme-label">{{ label }}</label>',
+        '<div class="col-sm-10 scheme-content">',
           '<textarea class="form-control" rows="{{ rows || 3 }}" ',
             'ng-model="data.{{ model }}" ',
             'ng-change="scheme.$unsetError()" ',

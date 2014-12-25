@@ -91,9 +91,11 @@ module.exports = {
         }
 
         return [
-          '<div class="form-group" ng-class="{\'has-error\': scheme.$error}">',
-            '<label class="col-sm-2 control-label">{{ label }}</label>',
-            '<div class="col-sm-10">',
+          '<div class="form-group scheme" ',
+            'ng-class="{\'has-error\': scheme.$error}">',
+            '<label class="col-sm-2 control-label ',
+              'scheme-label">{{ label }}</label>',
+            '<div class="col-sm-10 scheme-content">',
               buttons.join(''),
               '<p class="help-block" ng-show="scheme.$error !== undefined" ',
                 'ng-bind="scheme.validatorMessage"></p>',

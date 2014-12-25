@@ -70,9 +70,11 @@ module.exports = {
       'i18n.translate',
       function (tr) {
         return [
-          '<div class="form-group" ng-class="{\'has-error\': scheme.$error}">',
-            '<label class="col-sm-2 control-label">{{ label }}</label>',
-            '<div class="col-sm-10">',
+          '<div class="form-group scheme" ',
+            'ng-class="{\'has-error\': scheme.$error}">',
+            '<label class="col-sm-2 control-label ',
+              'scheme-label">{{ label }}</label>',
+            '<div class="col-sm-10 scheme-content">',
               '<div class="btn-group">',
                 '<p ng-if="imageLoading">', tr('forms::Please wait...'), '</p>',
                 '<div class="thumbnail preview-image" ng-if="data.{{ model }}">',

@@ -74,8 +74,8 @@ module.exports = {
           ];
         }
         return [
-          '<div class="form-group">',
-            '<div class="col-sm-offset-2 col-sm-10">',
+          '<div class="form-group scheme">',
+            '<div class="col-sm-offset-2 col-sm-10 scheme-content">',
               buttons.join(''),
             '</div>',
           '</div>'

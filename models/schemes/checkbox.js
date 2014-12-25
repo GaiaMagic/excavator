@@ -74,10 +74,12 @@ module.exports = {
     template: [
       function () {
         return [
-          '<div class="form-group" ng-class="{\'has-error\': scheme.$error}">',
-            '<label class="col-sm-2 control-label">{{ label }}</label>',
-            '<div class="col-sm-10">',
-              '<div class="checkbox" ng-repeat="item in items">',
+          '<div class="form-group scheme" ',
+            'ng-class="{\'has-error\': scheme.$error}">',
+            '<label class="col-sm-2 control-label ',
+              'scheme-label">{{ label }}</label>',
+            '<div class="col-sm-10 scheme-content">',
+              '<div class="checkbox {{ class }}" ng-repeat="item in items">',
                 '<label>',
                   '<input type="checkbox" ng-click="toggle(item)" ng-checked="exists(item)"> ',
                   '<span ng-bind="item.label || item"></span>',
