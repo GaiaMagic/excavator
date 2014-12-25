@@ -5,7 +5,7 @@
   "Title is required.": "标题是必填项。",
   "Title is too long. Its length should be less than 100.": "标题太长，其长度不应超过100。",
   "Content is required.": "内容是必填项。",
-  "Content is too large. Its length should be less than 10K.": "内容太大，其长度不应超越10K。",
+  "Content is too large. Its length should be less than 100K.": "内容太大，其长度不应超越100K。",
   "Revision should not be edited.": "修订不应被修改。",
   "Content should be a valid JSON string (only scheme is allowed).": "内容必须为正确格式的JSON字串（只允许scheme）。",
   "Content should not be empty.": "内容不能为空。",

@@ -86,10 +86,10 @@ formRevisionSchema.pre('save', function (next) {
     }));
   }
 
-  if (this.content.length > 10 * 1024) {
+  if (this.content.length > 100 * 1024) {
     return next(panic(413, {
       type:    'content-is-too-large',
-      message: tr('Content is too large. Its length should be less than 10K.')
+      message: tr('Content is too large. Its length should be less than 100K.')
     }));
   }
 
