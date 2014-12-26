@@ -9,6 +9,7 @@ controller('controller.control.template.edit', [
   'func.localstorage.save',
   'misc.template.filetypes',
   'shared.domains',
+  'tpl.code',
   'tpl.create',
   'currentTpl',
   function (
@@ -20,6 +21,7 @@ controller('controller.control.template.edit', [
     save,
     filetypes,
     domains,
+    showCodeEditor,
     saveTpl,
     currentTpl
   ) {
@@ -54,6 +56,10 @@ controller('controller.control.template.edit', [
         type: 'text/css',
         content: ''
       });
+    };
+
+    this.toggleCode = function () {
+      showCodeEditor(this.tpl);
     };
 
     this.fetch = function (content) {

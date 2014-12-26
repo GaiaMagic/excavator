@@ -7,6 +7,12 @@
           <span ng-bind="ccte.tpl.name"></span>
         </span>
         <span ng-if="ccte.isNew" i18n="tpl::Create New Template"></span>
+        <div class="btn-group btn-group-sm pull-right">
+          <button class="btn btn-default" ng-click="ccte.toggleCode()">
+            <span class="glyphicon glyphicon-edit"></span>
+            <span i18n="tpl::Code View"></span>
+          </button>
+        </div>
         <div class="btn-group btn-group-sm pull-right"
           ng-if="!ccte.isNew">
           <button class="btn btn-default" ng-click="ccte.toggleLive()"

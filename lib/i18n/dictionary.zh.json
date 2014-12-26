@@ -216,6 +216,7 @@
     "Save": "保存",
     "Editing": "正在编辑",
     "Create New Template": "创建新模板",
+    "Code View": "编辑代码",
     "Live Update & Preview": "实时保存和预览",
     "Add File": "添加文件",
     "Form": "表格",
@@ -230,7 +231,13 @@
     "Created At": "创建于",
     "Updated At": "更新于",
     "No template has been created yet.": "尚没有创建过模板。",
-    "Create": "创建"
+    "Create": "创建",
+    "Save Changes To {{name}}": "保存到 {{name}}",
+    "Successfully updated {{name}}.": "成功更新 {{name}} 。",
+    "Success": "成功",
+    "Successfully created {{name}}. You will be redirected to the template edit page.": "成功创建 {{name}} 。即将跳转到该模板的编辑页。",
+    "Save Code": "保存代码",
+    "Code should return an array of files.": "代码应返回文件列表。"
   },
   "panic": {
     "Close": "关闭",

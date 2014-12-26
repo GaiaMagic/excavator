@@ -33,7 +33,7 @@ directive('behaveEditor', [
           var old;
           $element.on('change keyup paste', function () {
             if (typeof old === 'string' && old !== this.value) {
-              $scope.$emit(name + ' changed');
+              $scope.$emit(name + ' changed', this.value);
               $scope.$apply();
             }
             old = this.value;

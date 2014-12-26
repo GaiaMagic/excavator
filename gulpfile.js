@@ -259,6 +259,7 @@ gulp.task('gettext', function () {
     'assets/js/scheme/file.js',
     'assets/js/func/panic.js',
     'assets/js/shared/*.js',
+    'assets/js/tpl/*.js',
     'lib/timeago.js',
     'lib/hierarchies/hierarchies.js',
     'models/schemes/*.js',
