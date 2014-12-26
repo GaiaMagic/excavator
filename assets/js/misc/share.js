@@ -4,7 +4,7 @@ run([
   '$templateCache',
   function ($templateCache) {
     $templateCache.put('share-qrcode', [
-      '<div class="modal" tabindex="-1" role="dialog">',
+      '<div class="modal" tabindex="-1" role="dialog" style="z-index: 3333">',
         '<div class="modal-dialog" style="width: 310px; ',
           'margin-left: auto; margin-right: auto;">',
           '<div class="modal-content">',
@@ -63,9 +63,13 @@ directive('shareTo', [
         case 'weibo':
           var link = 'http://openapi.baidu.com/social/widget/share';
           link += '?method=share&media_type=sinaweibo';
-          link += '&client_id=' + $attrs.weiboId;
+          link += '&client_id=' + ($attrs.weiboId || '');
           link += '&url=' + encodeURIComponent($window.location.href);
-          link += '&pic_url=';
+          var photo = '';
+          if ($attrs.weiboPhoto) {
+            photo = $window.location.origin + $attrs.weiboPhoto;
+          }
+          link += '&pic_url=' + encodeURIComponent(photo);
           link += '&u=' + encodeURIComponent($window.location.href);
           $element.attr('target', '_blank');
 
@@ -78,6 +82,12 @@ directive('shareTo', [
           $element.on('click', function () {
             var modal = $modal({
               template: 'share-qrcode'
+            });
+            modal.$scope.$on('modal.show', function () {
+              var sibling = angular.element(modal.$element[0].nextSibling);
+              if (sibling && sibling.hasClass('modal-backdrop')) {
+                sibling.css('z-index', +modal.$element.css('z-index') - 10);
+              }
             });
             modal.$scope.url = $window.location.href;
           });

@@ -18,11 +18,8 @@ run([
   }
 ]).
 
-directive('container', [
-  '$compile',
-  '$document',
-  '$templateCache',
-  function ($compile, $document, $templateCache) {
+service('file.manager', [
+  function () {
     function findFilesByType (tpl, filetype, limit) {
       var files = [];
       if (angular.isObject(tpl) && angular.isArray(tpl.files)) {
@@ -36,13 +33,20 @@ directive('container', [
       return files;
     }
 
+    this.findFilesByType = findFilesByType;
+
     var replaceables = ['image'];
 
-    function findFileByName (tpl, name) {
+    function findFileByName (tpl, name, restrictTypes) {
       if (angular.isObject(tpl) && angular.isArray(tpl.files)) {
         for (var i = 0; i < tpl.files.length; i++) {
-          if (tpl.files[i].name === name &&
-              replaceables.indexOf(tpl.files[i].type) > -1) {
+          if (
+              tpl.files[i].name === name &&
+              (
+               !restrictTypes ||
+               restrictTypes.indexOf(tpl.files[i].type) > -1
+              )
+             ) {
             return tpl.files[i];
           }
         }
@@ -50,34 +54,47 @@ directive('container', [
       return {};
     }
 
+    this.findFileByName = findFileByName;
+
     function replaceVariable (tpl) {
       if (angular.isObject(tpl) && angular.isArray(tpl.files)) {
         for (var i = 0; i < tpl.files.length; i++) {
           if (replaceables.indexOf(tpl.files[i].type) === -1) {
             tpl.files[i].content = tpl.files[i].content.replace(/%%(.+?)%%/g,
             function (p0, p1) {
-              return findFileByName(tpl, p1.trim()).content || p0;
+              return findFileByName(tpl, p1.trim(), replaceables).content || p0;
             });
           }
         }
       }
     }
 
+    this.replaceVariable = replaceVariable;
+  }
+]).
+
+directive('container', [
+  '$compile',
+  '$document',
+  '$templateCache',
+  'file.manager',
+  function ($compile, $document, $templateCache, fileMan) {
     return {
       link: function ($scope, $elem, $attrs) {
         var cpf = $scope.cpf;
         if (!cpf || !cpf.form) return;
         var tpl = cpf.form.form.head.template;
-        var html = findFilesByType(tpl, 'text/html', 1)[0];
+        var html = fileMan.findFilesByType(tpl, 'text/html', 1)[0];
         if (!html) {
           html = $templateCache.get('form-container');
         }
+
         $elem.html(html);
         $compile($elem.contents())($scope);
         if (tpl) {
-          replaceVariable(tpl);
+          fileMan.replaceVariable(tpl);
           var head = $document[0].getElementsByTagName('head')[0];
-          var files = findFilesByType(tpl, 'text/css');
+          var files = fileMan.findFilesByType(tpl, 'text/css');
           files.forEach(function (file) {
             var style = $document[0].createElement('style');
             style.innerHTML = file;

@@ -38,9 +38,10 @@ factory('func.panic', [
 factory('func.panic.alert', [
   '$location',
   '$modal',
+  '$templateCache',
   '$timeout',
   'i18n.translate',
-  function ($location, $modal, $timeout, tr) {
+  function ($location, $modal, $tplCache, $timeout, tr) {
     /**
      * show an alert modal window
      * @param  {string}   content  the body of the alert window
@@ -48,13 +49,18 @@ factory('func.panic.alert', [
      * @param  {str/func} hide     function to be executed after modal window
      *                             is hidden, if this is a URI string, it will
      *                             go to this location
+     * @param  {string}   tpl      custom template for the modal dialog
      * @return {undefined}         this function returns nothing
      */
-    return function (content, title, hide) {
+    return function (content, title, hide, customTpl) {
+      if (angular.isString(customTpl)) {
+        $tplCache.put('custom-alert-tpl', customTpl);
+        customTpl = 'custom-alert-tpl';
+      }
       var modal = $modal({
         title: title || tr('panic::Info'),
         content: content,
-        template: '/panic.html'
+        template: customTpl || '/panic.html'
       });
       modal.$scope.modalType = 'info';
       var hideEvent;

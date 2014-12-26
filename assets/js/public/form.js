@@ -16,6 +16,7 @@ controller('controller.public.form', [
   'func.panic',
   'func.panic.alert',
   'currentForm',
+  'file.manager',
   'i18n.translate',
   'public.public.forms.submit',
   'scheme.bulk.enable.submit.buttons',
@@ -27,6 +28,7 @@ controller('controller.public.form', [
     panic,
     alert,
     currentForm,
+    fileMan,
     tr,
     submitForm,
     enableSubmitButtons,
@@ -71,9 +73,23 @@ controller('controller.public.form', [
       var revid = currentForm.form.head._id;
       submitForm(revid, data).then(function () {
         self.truncate();
+
+        var tpl = currentForm.form.head.template;
+        var successDialog;
+        if (tpl) {
+          var dialog = fileMan.findFileByName(tpl, 'success-dialog');
+          if (dialog.content) {
+            successDialog = dialog.content;
+          }
+        }
+
         alert(tr('forms::Thank you.'), tr('forms::Success'), function () {
           $window.location.reload();
-        });
+        }, successDialog);
+
+        alert(tr('forms::Thank you.'), tr('forms::Success'), function () {
+          $window.location.reload();
+        }, successDialog);
       }, panic).finally(function () {
         if (!enable.cancel()) {
           enableSubmitButtons(schemes, true);
