@@ -143,7 +143,8 @@ directive('validator', [
           defaultString.indexOf('true') > -1 &&
           defaultString.indexOf('false') > -1) {
           scope.page = 'boolean';
-        } else if (defaultString.indexOf('indexOf') > -1) {
+        } else if (angular.isString(defaultString) &&
+          defaultString.indexOf('indexOf') > -1) {
           scope.page = 'choices';
         } else {
           scope.page = 'general';
