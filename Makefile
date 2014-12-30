@@ -108,7 +108,7 @@ dist:
 	docker run -it --rm --volumes-from=excavator_frontend_1 \
 	--workdir=/excavator excavator_frontend bash
 
-backup: backup-data backup-usercontent
+backup: backup-data backup-admincontent backup-usercontent
 
 backup-data:
 	docker run --rm --volumes-from excavator_data_1 \
@@ -122,7 +122,7 @@ backup-usercontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
 	-v $$(pwd):/backup busybox tar cvf /backup/excavator_usercontent.tar /usercontent
 
-restore: restore-data restore-usercontent
+restore: restore-data restore-admincontent restore-usercontent
 
 restore-data:
 	@echo "Warning: You must NOT run this command when the database is running."
