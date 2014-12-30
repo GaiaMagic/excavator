@@ -116,8 +116,14 @@ function compile (src, dest) {
   var jsFilter = $.filter(['*.js', '!0.*.js']);
   var start = +new Date;
 
-  var domains = require('./domains');
-  var cdn = domains[process.env.NODE_ENV].cdn;
+  var domain;
+  if (dest.indexOf('public') > -1) {
+    domain = require('./domains')[process.env.NODE_ENV];
+  }
+  var cdn = $.cdnizer({
+    files: [ '**/*.css', '**/*.js' ],
+    defaultCDNBase: domain ? (domain.cdn || '') : ''
+  });
 
   return gulp.src(src).
     pipe($.preprocess({context: {build: true}})).
@@ -132,10 +138,7 @@ function compile (src, dest) {
     pipe(assets.restore()).
     pipe($.useref()).
     pipe($.revReplace()).
-    pipe($.cdnizer({
-      files: [ '**/*.css', '**/*.js' ],
-      defaultCDNBase: cdn
-    })).
+    pipe(cdn).
     pipe($.justReplace([
       {
         search:      /%HEAD_COMMIT%/g,
