@@ -112,11 +112,15 @@ backup: backup-data backup-usercontent
 
 backup-data:
 	docker run --rm --volumes-from excavator_data_1 \
-	-v $$(pwd):/backup busybox tar cvf /backup/excavator_data_1.tar /data
+	-v $$(pwd):/backup busybox tar cvf /backup/excavator_data.tar /data
+
+backup-admincontent:
+	docker run --rm --volumes-from excavator_usercontent_1 \
+	-v $$(pwd):/backup busybox tar cvf /backup/excavator_admincontent.tar /admincontent
 
 backup-usercontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
-	-v $$(pwd):/backup busybox tar cvf /backup/excavator_usercontent_1.tar /usercontent
+	-v $$(pwd):/backup busybox tar cvf /backup/excavator_usercontent.tar /usercontent
 
 restore: restore-data restore-usercontent
 
@@ -125,10 +129,14 @@ restore-data:
 	@echo "Warning: AND This might overwrite ALL the existing database data."
 	@read -p "If you are aware of the consequences, press Enter to continue. " ANS
 	docker run --rm --volumes-from excavator_data_1 \
-	-v $$(pwd):/restore busybox tar xvf /restore/excavator_data_1.tar
+	-v $$(pwd):/restore busybox tar xvf /restore/excavator_data.tar
+
+restore-admincontent:
+	docker run --rm --volumes-from excavator_usercontent_1 \
+	-v $$(pwd):/restore busybox tar xvf /restore/excavator_admincontent.tar
 
 restore-usercontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
-	-v $$(pwd):/restore busybox tar xvf /restore/excavator_usercontent_1.tar
+	-v $$(pwd):/restore busybox tar xvf /restore/excavator_usercontent.tar
 
 .PHONY: test dist usercontent data backup db clean all frontend backend start restart clean help
