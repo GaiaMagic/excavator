@@ -12,6 +12,7 @@
   "production": {
     "public": "form.youyanchu.com",
     "manager": "manager.form.youyanchu.com",
-    "control": "control.form.youyanchu.com"
+    "control": "control.form.youyanchu.com",
+    "cdn": "//dn-excavator.qbox.me/"
   }
 }

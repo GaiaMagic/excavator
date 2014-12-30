@@ -115,6 +115,10 @@ function compile (src, dest) {
   var assets = $.useref.assets();
   var jsFilter = $.filter(['*.js', '!0.*.js']);
   var start = +new Date;
+
+  var domains = require('./domains');
+  var cdn = domains[process.env.NODE_ENV].cdn;
+
   return gulp.src(src).
     pipe($.preprocess({context: {build: true}})).
     pipe(assets).
@@ -128,6 +132,10 @@ function compile (src, dest) {
     pipe(assets.restore()).
     pipe($.useref()).
     pipe($.revReplace()).
+    pipe($.cdnizer({
+      files: [ '**/*.css', '**/*.js' ],
+      defaultCDNBase: cdn
+    })).
     pipe($.justReplace([
       {
         search:      /%HEAD_COMMIT%/g,
