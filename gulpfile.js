@@ -11,6 +11,19 @@ var info = {
   }
 };
 
+var now = new Date();
+var pad0 = function (n) { return n < 10 ? '0' + n : n; };
+var VER = [
+  now.getFullYear(),
+  pad0(now.getMonth() + 1),
+  pad0(now.getDate()),
+  pad0(now.getHours()),
+  pad0(now.getMinutes()),
+  pad0(now.getSeconds())
+].join('_');
+var dist = 'dist/' + VER;
+var MAX_REVS = 10; // maximum entries in /dist
+
 if (!process.env.GIT_HEAD_COMMIT) {
   var exec = require('child_process').exec;
   var Q = require('q');
@@ -28,7 +41,7 @@ if (!process.env.GIT_HEAD_COMMIT) {
 }
 
 gulp.task('clean', function (cb) {
-  require('del')(['dist/*', '.tmp'], cb);
+  require('del')(['.tmp'], cb);
 });
 
 gulp.task('less', function () {
@@ -96,19 +109,19 @@ gulp.task('dump:control', function () {
 });
 
 gulp.task('copy:json', function () {
-  gulp.src('lib/**/*.json').pipe(gulp.dest('dist/public'));
-  gulp.src('lib/**/*.json').pipe(gulp.dest('dist/manager'));
-  gulp.src('lib/**/*.json').pipe(gulp.dest('dist/control'));
+  gulp.src('lib/**/*.json').pipe(gulp.dest(dist + '/public'));
+  gulp.src('lib/**/*.json').pipe(gulp.dest(dist + '/manager'));
+  gulp.src('lib/**/*.json').pipe(gulp.dest(dist + '/control'));
 });
 
 gulp.task('copy:fonts', function () {
-  gulp.src('vendors/css/*.woff').pipe(gulp.dest('dist/public'));
-  gulp.src('vendors/css/*.woff').pipe(gulp.dest('dist/manager'));
-  gulp.src('vendors/css/*.woff').pipe(gulp.dest('dist/control'));
+  gulp.src('vendors/css/*.woff').pipe(gulp.dest(dist + '/public'));
+  gulp.src('vendors/css/*.woff').pipe(gulp.dest(dist + '/manager'));
+  gulp.src('vendors/css/*.woff').pipe(gulp.dest(dist + '/control'));
 });
 
 gulp.task('copy:lazyloads', function () {
-  gulp.src('vendors/js/qrcode.min.js').pipe(gulp.dest('dist/public/js'));
+  gulp.src('vendors/js/qrcode.min.js').pipe(gulp.dest(dist + '/public/js'));
 });
 
 function compile (src, dest) {
@@ -166,19 +179,42 @@ function compile (src, dest) {
 }
 
 gulp.task('compile:public', function () {
-  return compile('views/public/index.html', 'dist/public');
+  return compile('views/public/index.html', dist + '/public');
 });
 
 gulp.task('compile:manager', function () {
-  return compile('views/manager/index.html', 'dist/manager');
+  return compile('views/manager/index.html', dist + '/manager');
 });
 
 gulp.task('compile:control', function () {
-  return compile('views/control/index.html', 'dist/control');
+  return compile('views/control/index.html', dist + '/control');
 });
 
 gulp.task('compress', function () {
-  return gulp.src('dist/**').pipe($.gzip()).pipe(gulp.dest('dist'));
+  return gulp.src(dist + '/**').pipe($.gzip()).pipe(gulp.dest(dist));
+});
+
+gulp.task('link', function (done) {
+  require('child_process').exec('ln -nfs ' + VER + ' dist/pending', done);
+});
+
+gulp.task('release', function (done) {
+  require('child_process').exec('ln -nfs $(readlink dist/pending) dist/latest', done);
+});
+
+gulp.task('clean-dist', function (done) {
+  var fs = require('fs');
+  var dirsToDel = [];
+  var dirs = fs.readdirSync('dist').filter(function (file) {
+    return fs.lstatSync('dist/' + file).isDirectory();
+  });
+  dirs.sort();
+  if (dirs.length > MAX_REVS) {
+    dirsToDel = dirs.slice(0, dirs.length - MAX_REVS).map(function (dir) {
+      return 'dist/' + dir;
+    });
+  }
+  require('del')(dirsToDel, done);
 });
 
 gulp.task('build', function (done) {
@@ -188,7 +224,8 @@ gulp.task('build', function (done) {
       'copy:json',      'copy:fonts',      'compile:less',
       'copy:lazyloads'                                       ],
     [ 'compile:public', 'compile:manager', 'compile:control' ],
-    [ 'compress'                                             ],
+    [ 'compress',       'link'                               ],
+    [ 'clean-dist'                                           ],
     done
   );
 });

@@ -47,7 +47,7 @@ module.exports = function developmentConfigs (express, excavator) {
   if (environment === 'test') {
     excavator.use(Static(path.join(root, 'admincontent')));
     excavator.use(Static(path.join(root, 'usercontent')));
-    views = path.join(root, 'dist');
+    views = path.join(root, 'dist', 'pending');
   }
 
   excavator.use(function (req, res, next) {
