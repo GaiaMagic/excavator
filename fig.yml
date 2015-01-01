@@ -40,4 +40,4 @@ frontend:
     - GIT_HEAD_AUTHOR
     - GIT_HEAD_FILE_COUNT
   volumes:
-    - /srv/excavator/dist:/excavator/dist
+    - /srv/excavator/dist:/excavator/dist # also in Makefile

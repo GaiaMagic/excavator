@@ -9,6 +9,7 @@ GIT_ENV = @GIT_HEAD_COMMIT="$(shell git rev-parse HEAD)" \
 help:
 	@printf ""\
 	"  \033[0;36mmake all\033[0m            rebuild and start the application\n"\
+	"  \033[0;36mmake dist release\033[0m   make frontend and make a new release\n"\
 	"\n"\
 	"  \033[0;36mmake clean\033[0m          remove useless docker images\n"\
 	"  \033[0;36mmake test\033[0m           run npm test in a new container\n"\
@@ -16,21 +17,22 @@ help:
 	"  \033[0;36mmake mongo\033[0m          directly connect to db via 'mongo'\n"\
 	"  \033[0;36mmake mongodump\033[0m      dump excavator database to current directory\n"\
 	"  \033[0;36mmake mongorestore\033[0m   restore the backed-up database in current directory\n"\
-	"  \033[0;36mmake mongorestore-drop\033[0m   drop before restore\n"\
+	"  \033[0;36mmake mongorestore-drop\033[0m    drop before restore\n"\
+	"  \033[0;36mmake usercontent\033[0m    enter container to control usercontent\n"\
+	"  \033[0;36mmake admincontent\033[0m   enter container to control admincontent\n"\
 	"  \033[0;36mmake data\033[0m           enter where the MongoDB data files are\n"\
 	"  \033[0;36mmake node\033[0m           enter the system where the backend application runs\n"\
-	"  \033[0;36mmake dist\033[0m           view the source and the dist directory\n"\
 	"  \033[0;36mmake backup-data\033[0m    archive database\n"\
-	"  \033[0;36mmake backup-usercontent\033[0m  archive usercontent\n"\
+	"  \033[0;36mmake backup-usercontent\033[0m   archive usercontent\n"\
 	"  \033[0;36mmake backup\033[0m         archive both\n"\
 	"  \033[0;36mmake restore-data\033[0m   restore database\n"\
 	"  \033[0;36mmake restore-usercontent\033[0m  restore usercontent\n"\
 	"  \033[0;36mmake restore\033[0m        restore both\n"
 
-all: backend frontend remove start post-update
+all: data-containers backend frontend remove start dist release
 
 ifeq ($(SCALE),1)
-update: backend frontend remove start
+update: data-containers backend frontend remove start
 else
 update: start
 endif
@@ -50,9 +52,15 @@ remove:
 start:
 	fig scale backend=$(SCALE)
 
-post-update:
-	$(call GIT_ENV,fig up -d frontend)
-	fig start
+data-containers:
+	fig up -d data usercontent db
+
+dist:
+	$(call GIT_ENV,fig up frontend)
+
+release:
+	docker run --rm -v="/srv/excavator/dist:/excavator/dist" \
+	excavator_frontend gulp release
 
 # other:
 
@@ -95,6 +103,10 @@ data:
 	docker run -it --rm --volumes-from=excavator_data_1 \
 	--workdir=/data/db busybox
 
+admincontent:
+	docker run -it --rm --volumes-from=excavator_usercontent_1 \
+	--workdir=/admincontent busybox
+
 usercontent:
 	docker run -it --rm --volumes-from=excavator_usercontent_1 \
 	--workdir=/usercontent busybox
@@ -103,10 +115,6 @@ node:
 	nsenter --target $$(docker inspect \
 	--format "{{.State.Pid}}" excavator_backend_1) \
 	--mount --uts --ipc --net --pid
-
-dist:
-	docker run -it --rm --volumes-from=excavator_frontend_1 \
-	--workdir=/excavator excavator_frontend bash
 
 backup: backup-data backup-admincontent backup-usercontent
 
