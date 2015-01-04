@@ -93,6 +93,16 @@
   color: #C8C8C8;
 }
 
+.scheme-item {
+  cursor: pointer;
+  label {
+    cursor: pointer;
+  }
+  &:hover {
+    background: #f7f7f7;
+  }
+}
+
 .form-form {
   .panel-group {
     list-style: none;
@@ -116,6 +126,18 @@
       margin-left: 15px;
       margin-right: 15px;
     }
+  }
+}
+
+.form-preview {
+  .scheme-label,
+  .scheme-content {
+    float: none !important;
+    margin-bottom: 8px !important;
+    margin-left: 0 !important;
+    text-align: left !important;
+    padding-top: 0 !important;
+    width: 100% !important;
   }
 }
 

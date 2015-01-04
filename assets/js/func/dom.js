@@ -44,4 +44,26 @@ factory('func.dom.input.restore.state', [
       }
     };
   }
+]).
+
+factory('func.dom.preview.scroll.editor', [
+  '$timeout',
+  '$window',
+  'shared.scroll',
+  function ($timeout, $window, scrollTo) {
+    return function (panelNumber) {
+      var editor = $window.document.getElementById('editor-left');
+      var panel = editor.querySelector('.panel-' + panelNumber);
+      if (panel) {
+        $timeout(function () {
+          scrollTo.top(editor, panel.offsetTop - 5);
+          var preview = $window.document.getElementById('editor-right');
+          var scheme = preview.querySelector('.scheme-item-' + panelNumber);
+          if (scheme) {
+            scrollTo.top(preview, scheme.offsetTop - 10);
+          }
+        }, 150);
+      }
+    };
+  }
 ]);

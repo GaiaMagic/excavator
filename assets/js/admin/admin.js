@@ -10,6 +10,7 @@ angular.module('excavator.admin', [
   'excavator.shared.domains',
   'excavator.shared.login',
   'excavator.shared.nav',
+  'excavator.shared.scroll',
   'excavator.shared.subs',
   'excavator.tpl',
   'excavator.misc',

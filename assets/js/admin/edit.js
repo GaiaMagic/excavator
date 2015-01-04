@@ -14,6 +14,7 @@ controller('controller.control.form.edit', [
   'form.create.new',
   'func.array',
   'func.dom.input.remember.state',
+  'func.dom.preview.scroll.editor',
   'func.localstorage.load',
   'func.localstorage.remove',
   'func.localstorage.save',
@@ -34,6 +35,7 @@ controller('controller.control.form.edit', [
     createNew,
     funcArray,
     rememberState,
+    preview2editor,
     load,
     remove,
     save,
@@ -228,4 +230,9 @@ controller('controller.control.form.edit', [
       debounce = undefined;
     }, 100);
   }, true);
+
+  this.activePanel = -1;
+  $scope.$watch(function () {
+    return self.activePanel;
+  }, preview2editor);
 }]);

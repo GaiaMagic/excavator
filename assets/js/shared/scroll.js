@@ -11,16 +11,24 @@ service('shared.scroll', [
       return 1 - Math.pow((1 - x) * 2, 2) / 2;
     }
 
-    function animateScroll (start, init, delta, duration, callback) {
+    function animateScroll (start, init, delta, duration, callback, element) {
       if (!start) {
         start = new Date().getTime();
       }
       var elapsed = new Date().getTime() - start;
       var percent = elapsed >= duration ? 1 : easing(elapsed / duration);
-      if (init < delta) {
-        $window.scrollTo(0, init + (delta - init) * percent);
+      if (element) {
+        if (init < delta) {
+          element.scrollTop = init + (delta - init) * percent;
+        } else {
+          element.scrollTop = delta + init * (1 - percent);
+        }
       } else {
-        $window.scrollTo(0, delta + init * (1 - percent));
+        if (init < delta) {
+          $window.scrollTo(0, init + (delta - init) * percent);
+        } else {
+          $window.scrollTo(0, delta + init * (1 - percent));
+        }
       }
       if (percent === 1) {
         if (typeof callback === 'function') {
@@ -52,6 +60,11 @@ service('shared.scroll', [
 
     this.animateScroll = animateScroll;
     this.scrollTop = scrollTop;
+
+    this.top = function (element, target, callback) {
+      animateScroll(undefined, element.scrollTop, target, 200, callback,
+        element);
+    };
   }
 ]).
 

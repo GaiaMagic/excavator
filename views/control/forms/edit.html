@@ -72,10 +72,12 @@
         </div>
       </h3>
     </div>
-    <div class="editor-left" ng-class="ccfe.hasView()&&'col-xs-8'||'col-xs-12'">
+    <div class="editor-left" ng-class="ccfe.hasView()&&'col-xs-8'||'col-xs-12'"
+      id="editor-left">
       <form class="form-form form-horizontal" historian="ccfe.form.content.scheme">
-        <ul class="panel-group" bs-collapse dnd-list="ccfe.form.content.scheme">
-          <li class="panel panel-default"
+        <ul class="panel-group" bs-collapse dnd-list="ccfe.form.content.scheme"
+          ng-model="ccfe.activePanel">
+          <li class="panel panel-default panel-{{$index}}"
             ng-repeat="scheme in ccfe.form.content.scheme"
             dnd-draggable="scheme"
             dnd-moved="ccfe.form.content.scheme.splice($index, 1)"
@@ -109,11 +111,15 @@
         </div>
       </form>
     </div>
-    <div class="editor-right col-xs-4" ng-show="ccfe.view === 'preview'">
-      <form class="form-horizontal" ng-submit="ccfe.submit()">
+    <div class="editor-right col-xs-4" ng-show="ccfe.view === 'preview'"
+      id="editor-right">
+      <form class="form-horizontal form-preview" ng-submit="ccfe.submit()">
         <div>
-          <div scheme="scheme" scheme-data="ccfe.form.content.data"
-            ng-repeat="scheme in ccfe.form.content.scheme"></div>
+          <div ng-repeat="scheme in ccfe.form.content.scheme">
+            <div scheme="scheme" scheme-data="ccfe.form.content.data"
+              class="scheme-item scheme-item-{{$index}}"
+              ng-click="ccfe.activePanel = $index"></div>
+          </div>
           <div ng-if="ccfe.form.content.scheme.length > 0">
             <pre ng-bind="ccfe.formdata || ccfe.tr(ccfe.def_formdata)"></pre>
             <a class="btn btn-default" href ng-click="ccfe.clearData()"
