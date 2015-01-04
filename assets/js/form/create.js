@@ -20,10 +20,12 @@ factory('form.create.new', [
           }),
           template: '/forms/create.html'
         });
+        var tpl = currentForm.form.head.template;
         modal.$scope.form = {
           title: currentForm.title,
           parent: currentForm.form._id,
-          slug: currentForm.slug
+          slug: currentForm.slug,
+          template: tpl ? tpl._id : undefined
         };
         modal.$scope.submit = function () {
           modal.hide();
@@ -31,7 +33,8 @@ factory('form.create.new', [
           var content = stringify(schemeData, ['scheme']);
           var parent = modal.$scope.form.parent;
           var slug = modal.$scope.form.slug;
-          create(title, content, parent, slug).then(function (res) {
+          var tpl = modal.$scope.form.template;
+          create(title, content, parent, slug, tpl).then(function (res) {
             alert(tr('forms::Successfully updated {{title}}.', {
               title: title
             }), tr('forms::Success'));
@@ -53,7 +56,9 @@ factory('form.create.new', [
           modal.hide();
           var content = stringify(schemeData, ['scheme']);
           var slug = form.slug;
-          create(form.title, content, undefined, slug).then(function (res) {
+          var tpl = form.template;
+          create(form.title, content, undefined, slug, tpl).
+          then(function (res) {
             alert(
               tr(
                 'forms::Successfully created {{title}}. You will be ' +

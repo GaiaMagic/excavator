@@ -103,7 +103,8 @@ router.post('/create', largerJsonParser, function (req, res, next) {
     req.body.title,
     req.body.content,
     req.body.parent,
-    req.body.slug
+    req.body.slug,
+    req.body.template
   ).then(function (revision) {
     res.send(revision.sanitize());
   }).catch(next);
