@@ -74,34 +74,48 @@
     </div>
     <div class="editor-left" ng-class="ccfe.hasView()&&'col-xs-8'||'col-xs-12'">
       <form class="form-form form-horizontal" historian="ccfe.form.content.scheme">
-        <h4 class="scheme-header" ng-repeat-start="scheme in ccfe.form.content.scheme">
-          <span ng-bind="scheme.label || ccfe.tr('forms::(unlabeled)')"></span>
-          <span class="label label-default label-type text-uppercase"
-            ng-bind="scheme.type"></span>
-          <div class="btn-group btn-group-xs pull-right">
-            <button class="btn btn-default"
-              ng-click="ccfe.array.duplicate(ccfe.form.content.scheme, $index)">
-              <span class="glyphicon glyphicon-plus"></span>
-            </button>
-            <button class="btn btn-default"
-              ng-click="ccfe.array.delete(ccfe.form.content.scheme, $index)">
-              <span class="glyphicon glyphicon-minus"></span>
-            </button>
-            <button class="btn btn-default"
-              ng-class="{disabled: ccfe.array.edgeT(ccfe.form.content.scheme, $index)}"
-              ng-click="ccfe.array.moveup(ccfe.form.content.scheme, $index)">
-              <span class="glyphicon glyphicon-chevron-up"></span>
-            </button>
-            <button class="btn btn-default"
-              ng-class="{disabled: ccfe.array.edgeB(ccfe.form.content.scheme, $index)}"
-              ng-click="ccfe.array.movedown(ccfe.form.content.scheme, $index)">
-              <span class="glyphicon glyphicon-chevron-down"></span>
-            </button>
-          </div>
-        </h4>
-        <div class="row row-scheme" scheme="scheme" scheme-data="scheme"
-          scheme-render="editor"></div>
-        <hr ng-repeat-end>
+        <ul class="panel-group" bs-collapse dnd-list="ccfe.form.content.scheme">
+          <li class="panel panel-default"
+            ng-repeat="scheme in ccfe.form.content.scheme"
+            dnd-draggable="scheme"
+            dnd-moved="ccfe.form.content.scheme.splice($index, 1)"
+            dnd-effect-allowed="move">
+            <div class="panel-heading scheme-heading" bs-collapse-toggle>
+              <h4 class="scheme-header panel-title">
+                <span ng-bind="scheme.label || ccfe.tr('forms::(unlabeled)')"></span>
+                <span class="label label-default label-type text-uppercase"
+                  ng-bind="scheme.type"></span>
+                <div class="btn-group btn-group-xs pull-right control-boxes"
+                  ng-click="$event.stopPropagation()">
+                  <button class="btn btn-default"
+                    ng-click="ccfe.array.duplicate(ccfe.form.content.scheme, $index)">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                  <button class="btn btn-default"
+                    ng-click="ccfe.array.delete(ccfe.form.content.scheme, $index)">
+                    <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                  <button class="btn btn-default"
+                    ng-class="{disabled: ccfe.array.edgeT(ccfe.form.content.scheme, $index)}"
+                    ng-click="ccfe.array.moveup(ccfe.form.content.scheme, $index)">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                  </button>
+                  <button class="btn btn-default"
+                    ng-class="{disabled: ccfe.array.edgeB(ccfe.form.content.scheme, $index)}"
+                    ng-click="ccfe.array.movedown(ccfe.form.content.scheme, $index)">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                  </button>
+                </div>
+              </h4>
+            </div>
+            <div class="panel-collapse" bs-collapse-target>
+              <div class="panel-body">
+                <div class="row row-scheme" scheme="scheme" scheme-data="scheme"
+                  scheme-render="editor"></div>
+              </div>
+            </div>
+          </li>
+        </ul>
         <div ng-if="!ccfe.form.content.scheme ||
           !ccfe.form.content.scheme.length" i18n="forms::To start, please click
           the 'Add' button, then choose a scheme.">

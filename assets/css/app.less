@@ -52,13 +52,36 @@
   padding: 0 0 0 20px;
 }
 
+.scheme-heading {
+  cursor: pointer;
+}
+
 .scheme-header {
   margin-left: 15px;
   margin-right: 15px;
-  margin-bottom: 15px;
+  .control-boxes {
+    margin-top: -2px;
+  }
 }
 
 .form-form {
+  .panel-group {
+    list-style: none;
+    padding: 0;
+    margin-top: -5px;
+  }
+  .panel {
+    margin-top: 5px;
+  }
+  .dndDraggingSource {
+    display: none;
+  }
+  .dndPlaceholder {
+    height: 39px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background: #eee;
+  }
   .col-sm-12 {
     .validator-static {
       margin-left: 15px;
