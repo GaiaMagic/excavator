@@ -7,6 +7,7 @@ controller('controller.control.template.edit', [
   'func.array',
   'func.localstorage.load',
   'func.localstorage.save',
+  'i18n.translate',
   'misc.template.filetypes',
   'shared.domains',
   'tpl.code',
@@ -19,6 +20,7 @@ controller('controller.control.template.edit', [
     array,
     load,
     save,
+    tr,
     filetypes,
     domains,
     showCodeEditor,
@@ -117,6 +119,8 @@ controller('controller.control.template.edit', [
       if (!self.live) return;
       self.update();
     }, true);
+
+    this.tr = tr;
   }
 ]).
 
