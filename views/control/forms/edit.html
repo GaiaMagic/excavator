@@ -82,31 +82,18 @@
             dnd-effect-allowed="move">
             <div class="panel-heading scheme-heading" bs-collapse-toggle>
               <h4 class="scheme-header panel-title">
-                <span ng-bind="scheme.label || ccfe.tr('forms::(unlabeled)')"></span>
-                <span class="label label-default label-type text-uppercase"
-                  ng-bind="scheme.type"></span>
-                <div class="btn-group btn-group-xs pull-right control-boxes"
+                <div class="pull-left control-boxes"
                   ng-click="$event.stopPropagation()">
-                  <button class="btn btn-default"
-                    ng-click="ccfe.array.duplicate(ccfe.form.content.scheme, $index)">
-                    <span class="glyphicon glyphicon-plus"></span>
-                  </button>
-                  <button class="btn btn-default"
+                  <button class="btn btn-xs btn-default"
                     ng-click="ccfe.array.delete(ccfe.form.content.scheme, $index)">
-                    <span class="glyphicon glyphicon-minus"></span>
-                  </button>
-                  <button class="btn btn-default"
-                    ng-class="{disabled: ccfe.array.edgeT(ccfe.form.content.scheme, $index)}"
-                    ng-click="ccfe.array.moveup(ccfe.form.content.scheme, $index)">
-                    <span class="glyphicon glyphicon-chevron-up"></span>
-                  </button>
-                  <button class="btn btn-default"
-                    ng-class="{disabled: ccfe.array.edgeB(ccfe.form.content.scheme, $index)}"
-                    ng-click="ccfe.array.movedown(ccfe.form.content.scheme, $index)">
-                    <span class="glyphicon glyphicon-chevron-down"></span>
+                    <span class="glyphicon glyphicon-remove"></span>
                   </button>
                 </div>
+                <div class="scheme-name"
+                  ng-bind="scheme.label || ccfe.tr('forms::(unlabeled)')">
+                </div>
               </h4>
+              <div class="scheme-type" ng-bind="scheme.type"></div>
             </div>
             <div class="panel-collapse" bs-collapse-target>
               <div class="panel-body">
