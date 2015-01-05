@@ -317,6 +317,15 @@
       "Min": "始于",
       "Max": "终于"
     },
+    "Dropdown": "下拉选项",
+    "dropdown": {
+      "Yes, I do.": "是，我接受",
+      "No, I don't": "不，我拒绝",
+      "Model": "字段",
+      "Label": "标签",
+      "ENUM": "枚举",
+      "Validator": "验证"
+    },
     "File": "文件上传",
     "file": {
       "Model": "字段",
@@ -381,6 +390,9 @@
     "should be a valid date before {{end}}": "应为一个在{{end}}之前的正确日期",
     "Please provide a JPEG image file whose size is less than {{size}}.": "请提供一张文件大小不超过{{size}}的JPEG图片。",
     "Help text": "验证失败时显示的文字"
+  },
+  "dropdown": {
+    "Please select": "请选择"
   },
   "template": {
     "hierarchy": {

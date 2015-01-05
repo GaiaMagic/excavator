@@ -46,13 +46,18 @@ gulp.task('clean', function (cb) {
 
 gulp.task('less', function () {
   return gulp.src('assets/css/*.less')
-    .pipe($.less())
+    .pipe($.less({
+      paths: ['.', 'vendors/css']
+    }))
     .pipe(gulp.dest('.tmp/css'));
 });
 
 gulp.task('compile:less', function () {
   return gulp.src('assets/css/*.less').
-    pipe($.less({ cleancss: true })).
+    pipe($.less({
+      cleancss: true,
+      paths: ['.', 'vendors/css']
+    })).
     pipe(gulp.dest('.tmp/css'));
 });
 
@@ -126,6 +131,11 @@ gulp.task('copy:lazyloads', function () {
     'vendors/js/jquery-2.1.3.min.js',
     'vendors/js/dropdowns-enhancement.min.js'
   ]).pipe(gulp.dest(dist + '/public/js'));
+
+  gulp.src([
+    'vendors/js/jquery-2.1.3.min.js',
+    'vendors/js/dropdowns-enhancement.min.js'
+  ]).pipe(gulp.dest(dist + '/control/js'));
 });
 
 function compile (src, dest) {

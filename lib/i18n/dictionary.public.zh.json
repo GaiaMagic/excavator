@@ -1,4 +1,7 @@
 {
+  "dropdown": {
+    "Please select": "请选择"
+  },
   "forms": {
     "Please wait...": "请稍候片刻…",
     "Form is corrupted.": "表格已损毁。",
