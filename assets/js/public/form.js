@@ -86,10 +86,6 @@ controller('controller.public.form', [
         alert(tr('forms::Thank you.'), tr('forms::Success'), function () {
           $window.location.reload();
         }, successDialog);
-
-        alert(tr('forms::Thank you.'), tr('forms::Success'), function () {
-          $window.location.reload();
-        }, successDialog);
       }, panic).finally(function () {
         if (!enable.cancel()) {
           enableSubmitButtons(schemes, true);
