@@ -1,5 +1,6 @@
 angular.module('excavator.misc', [
-  'excavator.misc.timeago'
+  'excavator.misc.timeago',
+  'excavator.misc.async'
 ]).
 
 constant('misc.bytes', require('./lib/bytes.js')).

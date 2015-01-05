@@ -19,24 +19,15 @@ run([
 ]).
 
 directive('qrcode', [
-  '$q',
-  '$document',
-  '$window',
-  function ($q, $document, $window) {
+  'misc.async',
+  function (async) {
     return {
       restrict: 'E',
       link: function ($scope, $element, $attrs) {
-        $q(function (resolve, reject) {
-          if ($window.QRCode) return resolve();
-          var script = $document[0].createElement('script');
-          var deferred = $q.defer();
-          script.onload = function () {
-            resolve();
-          };
-          $document[0].body.appendChild(script);
-          script.src = '/js/qrcode.min.js';
-        }).then(function () {
-          var qrcode = new $window.QRCode($element[0], {
+        async([
+          'qrcode'
+        ]).then(function (QRCode) {
+          var qrcode = new QRCode($element[0], {
             text: $attrs.text || '',
             width: +$attrs.width || 200,
             height: +$attrs.width || 200

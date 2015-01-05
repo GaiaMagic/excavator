@@ -121,7 +121,11 @@ gulp.task('copy:fonts', function () {
 });
 
 gulp.task('copy:lazyloads', function () {
-  gulp.src('vendors/js/qrcode.min.js').pipe(gulp.dest(dist + '/public/js'));
+  gulp.src([
+    'vendors/js/qrcode.min.js',
+    'vendors/js/jquery-2.1.3.min.js',
+    'vendors/js/dropdowns-enhancement.min.js'
+  ]).pipe(gulp.dest(dist + '/public/js'));
 });
 
 function compile (src, dest) {
