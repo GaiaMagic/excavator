@@ -47,7 +47,7 @@
           <td>
             <em ng-if="cssv.isEmpty(cssv.sub.data)"
               i18n="subs::This submission is empty."></em>
-            <table class="table table-bordered"
+            <table class="table table-bordered subs-data-table"
               ng-if="!cssv.isEmpty(cssv.sub.data)">
               <thead>
                 <tr>
@@ -58,7 +58,7 @@
               <tbody>
                 <tr ng-repeat="item in cssv.sub.data">
                   <td ng-bind="item.label" class="key"></td>
-                  <td subs-value="item.value"
+                  <td subs-value="item.value" class="value"
                       subs-value-options="{imageSize: 'medium'}">
                   </td>
                 </tr>
@@ -68,11 +68,23 @@
         </tr>
         <tr>
           <td class="key" i18n="subs::Raw Data"></td>
-          <td><pre><code ng-bind="cssv.sub.rawdata"></code></pre></td>
+          <td>
+            <a href ng-click="cssv.show.rawdata=true"
+              ng-hide="cssv.show.rawdata"
+              i18n="subs::Show Raw Data"></a>
+            <pre ng-show="cssv.show.rawdata"><code
+              ng-bind="cssv.sub.rawdata"></code></pre>
+          </td>
         </tr>
         <tr>
           <td class="key" i18n="subs::Raw Scheme"></td>
-          <td><pre><code ng-bind="cssv.sub.rawscheme"></code></pre></td>
+          <td>
+            <a href ng-click="cssv.show.rawscheme=true"
+              ng-hide="cssv.show.rawscheme"
+              i18n="subs::Show Raw Scheme"></a>
+            <pre ng-show="cssv.show.rawscheme"><code
+              ng-bind="cssv.sub.rawscheme"></code></pre>
+          </td>
         </tr>
       </tbody>
     </table>
