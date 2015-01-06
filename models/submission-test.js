@@ -108,6 +108,30 @@ describe('Submission database model', function () {
       expectFailure(promise, 'submission-not-allowed-to-delete', done);
     });
 
+    it('should store an empty ip address if ip address is not valid',
+    function (done) {
+      Submission.submit(realForm._id, real.submit, '333.123.12.33').
+      then(function (submission) {
+        expect(submission.ip_address).to.equal('');
+      }).then(done).catch(done);
+    });
+
+    it('should store ip address if ip address is valid IPv4 address',
+    function (done) {
+      Submission.submit(realForm._id, real.submit, '127.0.0.1').
+      then(function (submission) {
+        expect(submission.ip_address).to.equal('127.0.0.1');
+      }).then(done).catch(done);
+    });
+
+    it('should store ip address if ip address is valid IPv6 address',
+    function (done) {
+      Submission.submit(realForm._id, real.submit, 'fe80::200:5aee:feaa:20a2').
+      then(function (submission) {
+        expect(submission.ip_address).to.equal('fe80::200:5aee:feaa:20a2');
+      }).then(done).catch(done);
+    });
+
     it('should only store acceptable data', function (done) {
       expectFailure(Submission.submit(realForm._id, {
         fullname: '@!#'

@@ -170,6 +170,7 @@ describe('Route /backend/submissions', function () {
           'form_index',
           'form_revision',
           'form_revision_index',
+          'ip_address',
           'status',
           'newer',
           'older'
