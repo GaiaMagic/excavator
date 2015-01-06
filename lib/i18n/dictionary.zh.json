@@ -189,6 +189,7 @@
     "Name": "姓名",
     "Created At": "创建于",
     "Status": "状态",
+    "IP Address": "IP地址",
     "View Details": "查看详情",
     "No submissions yet!": "尚没有人提交过任何表格。",
     "Newer": "较新的提交",
@@ -199,7 +200,9 @@
     "Column": "栏目",
     "Value": "内容",
     "Raw Data": "原始数据",
+    "Show Raw Data": "显示原始数据",
     "Raw Scheme": "原始表格数据",
+    "Show Raw Scheme": "显示表格数据",
     "statuses": {
       "Undecided": "未决定",
       "Unknown": "未知态",

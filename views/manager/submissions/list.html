@@ -25,6 +25,7 @@
             <th i18n="subs::Name"></th>
             <th i18n="subs::Created At" class="date"></th>
             <th i18n="subs::Status"></th>
+            <th i18n="subs::IP Address" class="ipaddr"></th>
             <th i18n="subs::View Details"></th>
           </tr>
         </thead>
@@ -46,6 +47,9 @@
               <span ng-init="status = cssl.statuses.findById(sub.status)"
                 ng-bind="cssl.tr('subs::statuses::' + status.label)"
                 class="label label-{{ status.type }}"></span>
+            </td>
+            <td>
+              <span ng-bind="sub.ip_address || '-'"></span>
             </td>
             <td>
               <a class="block" href="/submissions/view/{{ sub._id }}"

@@ -45,9 +45,11 @@ router.get('/templates/:tplid([a-f0-9]{24})', function (req, res, next) {
 router.post('/submit', jsonParser({
   limit: '6.8mb'
 }), function (req, res, next) {
+  var ipAddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   Submission.submit(
     req.body.form,
-    req.body.data
+    req.body.data,
+    ipAddr
   ).then(function (submission) {
     res.send(submission);
   }).catch(next);

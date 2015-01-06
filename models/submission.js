@@ -14,6 +14,7 @@ var submissionSchema = new Schema({
   form_revision_index: { type: Number, default: 0 },
   data:                { type: Object },
   status:              { type: Number, default: 0 },
+  ip_address:          { type: String },
   created_at:          { type: Date, default: Date.now }
 });
 
@@ -23,6 +24,11 @@ submissionSchema.pre('save', function (next) {
       type:    'submission-not-allowed-to-edit',
       message: tr('Submission should not be edited.')
     }));
+  }
+
+  var net = require('net');
+  if (typeof this.ip_address !== 'string' || !net.isIP(this.ip_address)) {
+    this.ip_address = '';
   }
 
   var self = this;
@@ -100,11 +106,12 @@ submissionSchema.method('Save', function () {
   return deferred.promise;
 });
 
-submissionSchema.static('submit', function (formRevId, data) {
+submissionSchema.static('submit', function (formRevId, data, ipAddr) {
   var self = this;
   var newsubmission = new self({
     form_revision: formRevId,
-    data: data
+    data: data,
+    ip_address: ipAddr
   });
   var deferred = Q.defer();
   newsubmission.save(function (err) {
