@@ -120,7 +120,9 @@ backup: backup-data backup-admincontent backup-usercontent
 
 backup-data:
 	docker run --rm --volumes-from excavator_data_1 \
-	-v $$(pwd):/backup busybox tar cvf /backup/excavator_data.tar /data
+	-v $$(pwd):/backup busybox sh -c 'tar -cv \
+	--exclude db/journal -f - -C /data /data | gzip \
+	> /backup/excavator_data.tar.gz'
 
 backup-admincontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
@@ -134,10 +136,13 @@ restore: restore-data restore-admincontent restore-usercontent
 
 restore-data:
 	@echo "Warning: You must NOT run this command when the database is running."
-	@echo "Warning: AND This might overwrite ALL the existing database data."
-	@read -p "If you are aware of the consequences, press Enter to continue. " ANS
+	@echo "Warning: This will remove ALL existing database data and then restore."
+	@ANS= && while [[ $$ANS != "yes" ]]; do \
+	read -p "If you are aware of the consequences, press yes to continue. " ANS; done
 	docker run --rm --volumes-from excavator_data_1 \
-	-v $$(pwd):/restore busybox tar xvf /restore/excavator_data.tar
+	-v $$(pwd):/restore busybox sh -c 'rm -rf /data/db/*; \
+	gunzip -c /restore/excavator_data.tar.gz | tar -xvf -; \
+	rm -f /data/db/mongod.lock'
 
 restore-admincontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
