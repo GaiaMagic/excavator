@@ -13,18 +13,22 @@ help:
 	"\n"\
 	"  \033[0;36mmake clean\033[0m          remove useless docker images\n"\
 	"  \033[0;36mmake test\033[0m           run npm test in a new container\n"\
-	"  \033[0;36mmake db\033[0m             enter the MongoDB system\n"\
-	"  \033[0;36mmake mongo\033[0m          directly connect to db via 'mongo'\n"\
-	"  \033[0;36mmake mongodump\033[0m      dump excavator database to current directory\n"\
-	"  \033[0;36mmake mongorestore\033[0m   restore the backed-up database in current directory\n"\
-	"  \033[0;36mmake mongorestore-drop\033[0m    drop before restore\n"\
+	"\n"\
+	"inspect data:\n"\
 	"  \033[0;36mmake usercontent\033[0m    enter container to control usercontent\n"\
 	"  \033[0;36mmake admincontent\033[0m   enter container to control admincontent\n"\
 	"  \033[0;36mmake data\033[0m           enter where the MongoDB data files are\n"\
+	"\n"\
+	"use software:\n"\
+	"  \033[0;36mmake db\033[0m             enter the MongoDB system\n"\
+	"  \033[0;36mmake mongo\033[0m          directly connect to db via 'mongo'\n"\
 	"  \033[0;36mmake node\033[0m           enter the system where the backend application runs\n"\
+	"\n"\
+	"for tranfering data between servers:\n"\
 	"  \033[0;36mmake backup-data\033[0m    archive database\n"\
 	"  \033[0;36mmake backup-usercontent\033[0m   archive usercontent\n"\
 	"  \033[0;36mmake backup\033[0m         archive both\n"\
+	"  \033[0;36mmake backup-clean\033[0m   clean existing archive\n"\
 	"  \033[0;36mmake restore-data\033[0m   restore database\n"\
 	"  \033[0;36mmake restore-usercontent\033[0m  restore usercontent\n"\
 	"  \033[0;36mmake restore\033[0m        restore both\n"
@@ -81,24 +85,6 @@ mongo:
 	sh -c 'exec mongo \
 	$$MONGO_PORT_27017_TCP_ADDR:$$MONGO_PORT_27017_TCP_PORT/excavator'
 
-mongodump:
-	docker run -it --rm --link excavator_db_1:mongo \
-	--volume="$$(pwd):/dump" mongo:2.6.5 \
-	sh -c 'exec mongodump --host $$MONGO_PORT_27017_TCP_ADDR \
-	--port $$MONGO_PORT_27017_TCP_PORT --db excavator -o /dump/dump'
-
-mongorestore:
-	docker run -it --rm --link excavator_db_1:mongo \
-	--volume="$$(pwd):/dump" mongo:2.6.5 \
-	sh -c 'exec mongorestore --host $$MONGO_PORT_27017_TCP_ADDR \
-	--port $$MONGO_PORT_27017_TCP_PORT --db excavator /dump/dump/excavator'
-
-mongorestore-drop:
-	docker run -it --rm --link excavator_db_1:mongo \
-	--volume="$$(pwd):/dump" mongo:2.6.5 \
-	sh -c 'exec mongorestore --drop --host $$MONGO_PORT_27017_TCP_ADDR \
-	--port $$MONGO_PORT_27017_TCP_PORT --db excavator /dump/dump/excavator'
-
 data:
 	docker run -it --rm --volumes-from=excavator_data_1 \
 	--workdir=/data/db busybox
@@ -119,10 +105,13 @@ node:
 backup: backup-data backup-admincontent backup-usercontent
 
 backup-data:
-	docker run --rm --volumes-from excavator_data_1 \
-	-v $$(pwd):/backup busybox sh -c 'tar -cv \
-	--exclude db/journal -f - -C /data /data | gzip \
-	> /backup/excavator_data.tar.gz'
+	docker run -it --rm --link excavator_db_1:mongo \
+	--volume="$$(pwd):/dump" mongo:2.6.5 \
+	sh -c 'mongodump --host $$MONGO_PORT_27017_TCP_ADDR \
+	--port $$MONGO_PORT_27017_TCP_PORT --db excavator -o /dump/backup && \
+	chown -R $(shell id -u):$(shell id -u) /dump/backup'
+	tar cfvz backup.tar.gz backup
+	rm -rf backup
 
 backup-admincontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
@@ -132,17 +121,18 @@ backup-usercontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
 	-v $$(pwd):/backup busybox tar cvf /backup/excavator_usercontent.tar /usercontent
 
+backup-clean:
+	rm -f backup.tar.gz excavator_admincontent.tar excavator_usercontent.tar
+
 restore: restore-data restore-admincontent restore-usercontent
 
 restore-data:
-	@echo "Warning: You must NOT run this command when the database is running."
-	@echo "Warning: This will remove ALL existing database data and then restore."
-	@ANS= && while [[ $$ANS != "yes" ]]; do \
-	read -p "If you are aware of the consequences, press yes to continue. " ANS; done
-	docker run --rm --volumes-from excavator_data_1 \
-	-v $$(pwd):/restore busybox sh -c 'rm -rf /data/db/*; \
-	gunzip -c /restore/excavator_data.tar.gz | tar -xvf -; \
-	rm -f /data/db/mongod.lock'
+	tar xfvz backup.tar.gz
+	docker run -it --rm --link excavator_db_1:mongo \
+	--volume="$$(pwd):/dump" mongo:2.6.5 \
+	sh -c 'exec mongorestore --drop --host $$MONGO_PORT_27017_TCP_ADDR \
+	--port $$MONGO_PORT_27017_TCP_PORT --db excavator /dump/backup/excavator'
+	rm -rf backup
 
 restore-admincontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
@@ -152,4 +142,4 @@ restore-usercontent:
 	docker run --rm --volumes-from excavator_usercontent_1 \
 	-v $$(pwd):/restore busybox tar xvf /restore/excavator_usercontent.tar
 
-.PHONY: test dist usercontent data backup db clean all frontend backend start restart clean help
+.PHONY: all backend backup clean data db dist frontend help mongo node release remove restore start test update usercontent
