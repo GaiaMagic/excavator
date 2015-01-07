@@ -46,6 +46,9 @@ router.post('/submit', jsonParser({
   limit: '6.8mb'
 }), function (req, res, next) {
   var ipAddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  if (ipAddr.indexOf(', ') > -1) {
+    ipAddr = ipAddr.split(', ')[0];
+  }
   Submission.submit(
     req.body.form,
     req.body.data,
