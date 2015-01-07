@@ -8,7 +8,7 @@ constant('misc.libs', {
     }
   },
   "dropdowns-enhancement": {
-    url: '/js/dropdowns-enhancement.min.js',
+    url: '/js/dropdowns-enhancement-3.1.1.min.js',
     get: function () {
       return window.jQuery.fn.dropdown;
     }
@@ -44,7 +44,8 @@ factory('misc.async', [
 factory('misc.async.load', [
   '$document',
   '$q',
-  function ($document, $q) {
+  'shared.domains',
+  function ($document, $q, domains) {
     return function (lib) {
       if (!lib) throw 'no lib to load';
       if (!lib.promise) {
@@ -63,7 +64,11 @@ factory('misc.async.load', [
               }
             };
             $document[0].body.appendChild(script);
-            script.src = lib.url;
+            var url = lib.url;
+            if (domains.cdn) {
+              url = domains.cdn + url;
+            }
+            script.src = url;
           });
         }
       }

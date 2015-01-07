@@ -129,12 +129,12 @@ gulp.task('copy:lazyloads', function () {
   gulp.src([
     'vendors/js/qrcode.min.js',
     'vendors/js/jquery-2.1.3.min.js',
-    'vendors/js/dropdowns-enhancement.min.js'
+    'vendors/js/dropdowns-enhancement-3.1.1.min.js'
   ]).pipe(gulp.dest(dist + '/public/js'));
 
   gulp.src([
     'vendors/js/jquery-2.1.3.min.js',
-    'vendors/js/dropdowns-enhancement.min.js'
+    'vendors/js/dropdowns-enhancement-3.1.1.min.js'
   ]).pipe(gulp.dest(dist + '/control/js'));
 });
 
@@ -147,12 +147,19 @@ function compile (src, dest) {
   if (dest.indexOf('public') > -1) {
     domain = require('./domains')[process.env.NODE_ENV];
   }
+  var cdnDomain = domain ? (domain.cdn || '') : '';
   var cdn = $.cdnizer({
     files: [ '**/*.css', '**/*.js' ],
-    defaultCDNBase: domain ? (domain.cdn || '') : ''
+    defaultCDNBase: cdnDomain
   });
 
   return gulp.src(src).
+    pipe($.justReplace([
+      {
+        search:      /%CDN%/g,
+        replacement: cdnDomain
+      }
+    ])).
     pipe($.preprocess({context: {build: true}})).
     pipe(assets).
     pipe(jsFilter).

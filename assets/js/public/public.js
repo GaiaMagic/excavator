@@ -2,6 +2,7 @@ angular.module('excavator.public.public', [
   'excavator.func.localstorage',
   'excavator.i18n',
   'excavator.misc.share',
+  'excavator.shared.domains',
   'excavator.shared.nav.meta',
   'mgcrea.ngStrap.datepicker'
 ]).
@@ -52,6 +53,21 @@ factory('public.public.forms.submit', [
         form: formid,
         data: data
       });
+    };
+  }
+]).
+
+directive('link', [
+  'shared.domains',
+  function (domains) {
+    return {
+      link: function ($scope, $element, $attrs) {
+        if ($attrs.rel === 'cdn') {
+          if ($attrs.href.indexOf('//') > -1) {
+            domains.cdn = $attrs.href;
+          }
+        }
+      }
     };
   }
 ]);
