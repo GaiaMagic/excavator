@@ -85,19 +85,19 @@ mongodump:
 	docker run -it --rm --link excavator_db_1:mongo \
 	--volume="$$(pwd):/dump" mongo:2.6.5 \
 	sh -c 'exec mongodump --host $$MONGO_PORT_27017_TCP_ADDR \
-	--port $$MONGO_PORT_27017_TCP_PORT --db excavator -o /dump'
+	--port $$MONGO_PORT_27017_TCP_PORT --db excavator -o /dump/dump'
 
 mongorestore:
 	docker run -it --rm --link excavator_db_1:mongo \
 	--volume="$$(pwd):/dump" mongo:2.6.5 \
 	sh -c 'exec mongorestore --host $$MONGO_PORT_27017_TCP_ADDR \
-	--port $$MONGO_PORT_27017_TCP_PORT --db excavator /dump/excavator'
+	--port $$MONGO_PORT_27017_TCP_PORT --db excavator /dump/dump/excavator'
 
 mongorestore-drop:
 	docker run -it --rm --link excavator_db_1:mongo \
 	--volume="$$(pwd):/dump" mongo:2.6.5 \
 	sh -c 'exec mongorestore --drop --host $$MONGO_PORT_27017_TCP_ADDR \
-	--port $$MONGO_PORT_27017_TCP_PORT --db excavator /dump/excavator'
+	--port $$MONGO_PORT_27017_TCP_PORT --db excavator /dump/dump/excavator'
 
 data:
 	docker run -it --rm --volumes-from=excavator_data_1 \
