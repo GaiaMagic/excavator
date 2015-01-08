@@ -51,7 +51,9 @@ factory('misc.async.load', [
   function ($document, $q, domains) {
     function cdnify (URL) {
       if (domains.cdn) {
-        URL = domains.cdn + URL;
+        if (!/^(https?:)?\/\//.test(URL)) {
+          URL = domains.cdn + URL;
+        }
       }
       return URL;
     }

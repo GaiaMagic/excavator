@@ -48,7 +48,6 @@ controller('controller.shared.submission.list', [
         submissions.forEach(function (sub) {
           sub.ip_address_info = ipInfo[sub.ip_address];
         });
-        console.log(submissions)
       });
     }
 
