@@ -74,6 +74,7 @@ controller('controller.shared.submission.view', [
   'currentSubmission',
   'func.panic',
   'i18n.translate',
+  'misc.ip',
   'misc.statuses',
   'setStatusPrefix',
   'shared.domains',
@@ -84,15 +85,21 @@ controller('controller.shared.submission.view', [
     currentSubmission,
     panic,
     tr,
+    ip,
     statuses,
     setStatusPrefix,
     domains
   ) {
+    var self = this;
     if (!currentSubmission) {
       return panic(tr('forms::Submission is corrupted.'));
     }
 
     this.sub = currentSubmission;
+
+    ip(this.sub.sub.ip_address).then(function (ipAddrInfo) {
+      self.sub.sub.ip_address_info = ipAddrInfo;
+    });
 
     this.isEmpty = function (object) {
       if (!angular.isObject(object)) return true;

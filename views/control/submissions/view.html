@@ -22,7 +22,7 @@
       <tbody>
         <tr>
           <td class="key align-middle" i18n="subs::Status"></td>
-          <td>
+          <td colspan="3">
             <div class="btn-group">
               <button type="button" class="btn btn-default"
                 ng-click="cssv.setStatus(status)"
@@ -41,10 +41,20 @@
             <small ng-bind="cssv.sub.sub.created_at |
               date: 'yyyy-MM-dd HH:mm:ss'"></small>
           </td>
+          <td class="key" i18n="subs::IP Address"></td>
+          <td>
+            <span ng-if="cssv.sub.sub.ip_address_info">
+              <strong ng-bind="cssv.sub.sub.ip_address_info"></strong>
+              <small ng-bind="cssv.sub.sub.ip_address"></small>
+            </span>
+            <span ng-if="!cssv.sub.sub.ip_address_info"
+              ng-bind="cssv.sub.sub.ip_address || '-'">
+            </span>
+          </td>
         </tr>
         <tr>
           <td class="key" i18n="subs::Data"></td>
-          <td>
+          <td colspan="3">
             <em ng-if="cssv.isEmpty(cssv.sub.data)"
               i18n="subs::This submission is empty."></em>
             <table class="table table-bordered subs-data-table"
@@ -67,12 +77,8 @@
           </td>
         </tr>
         <tr>
-          <td class="key" i18n="subs::IP Address"></td>
-          <td ng-bind="cssv.sub.sub.ip_address || '-'"></td>
-        </tr>
-        <tr>
           <td class="key" i18n="subs::Raw Data"></td>
-          <td>
+          <td colspan="3">
             <a href ng-click="cssv.show.rawdata=true"
               ng-hide="cssv.show.rawdata"
               i18n="subs::Show Raw Data"></a>
@@ -82,7 +88,7 @@
         </tr>
         <tr>
           <td class="key" i18n="subs::Raw Scheme"></td>
-          <td>
+          <td colspan="3">
             <a href ng-click="cssv.show.rawscheme=true"
               ng-hide="cssv.show.rawscheme"
               i18n="subs::Show Raw Scheme"></a>

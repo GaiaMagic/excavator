@@ -5,6 +5,15 @@ factory('misc.ip', [
   '$window',
   'misc.async.load',
   function ($q, $window, load) {
+    function convert (v) {
+      var val = (v.country || '').trim();
+      val += (v.province || '').trim();
+      if (v.province !== v.city) {
+        val += (v.city || '').trim();
+      }
+      return val;
+    }
+
     var url = 'http://int.dpool.sina.com.cn';
     url += '/iplookup/iplookup.php?format=js&ip=';
     // ip can be an array or a string
@@ -17,15 +26,12 @@ factory('misc.ip', [
         removeScriptTag: true
       }).then(function () {
         var info = $window.remote_ip_info;
+        if (angular.isString(ip)) {
+          return convert(info);
+        }
         var ret = {};
         for (var i in info) {
-          var v = info[i];
-          var val = (v.country || '').trim();
-          val += (v.province || '').trim();
-          if (v.province !== v.city) {
-            val += (v.city || '').trim();
-          }
-          ret[i] = val;
+          ret[i] = convert(info[i]);
         }
         return ret;
       });
