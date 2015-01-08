@@ -14,6 +14,7 @@ angular.module('excavator.admin', [
   'excavator.shared.subs',
   'excavator.tpl',
   'excavator.misc',
+  'excavator.misc.ip',
   'excavator.misc.pager',
   'excavator.misc.url'
 ]);

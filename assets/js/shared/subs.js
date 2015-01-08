@@ -4,16 +4,24 @@ angular.module('excavator.shared.subs', [
 
 controller('controller.shared.submission.list', [
   '$location',
+  '$route',
   '$routeParams',
   '$scope',
+  'func.localstorage.load',
+  'func.localstorage.save',
   'i18n.translate',
+  'misc.ip',
   'misc.statuses',
   'submissions',
   function (
     $location,
+    $route,
     $routeParams,
     $scope,
+    load,
+    save,
     tr,
+    ip,
     statuses,
     submissions
   ) {
@@ -21,6 +29,28 @@ controller('controller.shared.submission.list', [
     var self = this;
 
     this.submissions = submissions;
+
+    this.showIpInfo = true;
+    if (load('submissions.view.showIpInfo') === 'no') {
+      this.showIpInfo = false;
+    }
+    this.toggleShowIpInfo = function () {
+      this.showIpInfo = !this.showIpInfo;
+      save('submissions.view.showIpInfo', this.showIpInfo ? 'yes' : 'no');
+      $route.reload();
+    };
+
+    if (angular.isArray(submissions) && this.showIpInfo) {
+      var ipAddrs = submissions.map(function (sub) {
+        return sub.ip_address;
+      });
+      ip(ipAddrs).then(function (ipInfo) {
+        submissions.forEach(function (sub) {
+          sub.ip_address_info = ipInfo[sub.ip_address];
+        });
+        console.log(submissions)
+      });
+    }
 
     this.tr = tr;
 

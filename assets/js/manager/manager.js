@@ -12,6 +12,7 @@ angular.module('excavator.manager.manager', [
   'excavator.func.scheme',
   'excavator.i18n',
   'excavator.misc',
+  'excavator.misc.ip',
   'excavator.misc.pager',
   'excavator.misc.url',
   'excavator.manager.routes',

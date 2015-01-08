@@ -26,7 +26,7 @@ constant('misc.libs', {
 
 factory('misc.async', [
   '$q',
-  'misc.async.load',
+  'misc.async.loadlib',
   'misc.libs',
   function ($q, load, LIBS) {
     return function (libs) {
@@ -49,13 +49,24 @@ factory('misc.async.load', [
   '$q',
   'shared.domains',
   function ($document, $q, domains) {
-    function load (URL) {
+    function cdnify (URL) {
+      if (domains.cdn) {
+        URL = domains.cdn + URL;
+      }
+      return URL;
+    }
+
+    return function load (URL, options) {
+      var options = options || {};
       var lib = this;
       return $q(function (resolve, reject) {
         var head = $document[0].getElementsByTagName('head')[0];
-        if (/\.js$/.test(URL)) {
+        if (/\.js$/.test(URL) || options.type === 'js') {
           var script = $document[0].createElement('script');
           script.onload = function () {
+            if (options.removeScriptTag) {
+              head.removeChild(script);
+            }
             if (angular.isFunction(lib.get)) {
               resolve(lib.get());
             } else {
@@ -65,7 +76,7 @@ factory('misc.async.load', [
           head.appendChild(script);
           script.src = cdnify(URL);
           return;
-        } else if (/\.css$/.test(URL)) {
+        } else if (/\.css$/.test(URL) || options.type === 'css') {
           var link = $document[0].createElement('link');
           link.rel = 'stylesheet';
           link.type = 'text/css';
@@ -76,15 +87,14 @@ factory('misc.async.load', [
         }
         reject();
       });
-    }
+    };
+  }
+]).
 
-    function cdnify (URL) {
-      if (domains.cdn) {
-        URL = domains.cdn + URL;
-      }
-      return URL;
-    }
-
+factory('misc.async.loadlib', [
+  '$q',
+  'misc.async.load',
+  function ($q, load) {
     return function (lib) {
       if (!lib) throw 'no lib to load';
       if (!lib.promise) {
