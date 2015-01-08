@@ -64,7 +64,7 @@ directive('link', [
       link: function ($scope, $element, $attrs) {
         if ($attrs.rel === 'cdn') {
           if ($attrs.href.indexOf('//') > -1) {
-            domains.cdn = $attrs.href;
+            domains.cdn = $attrs.href.replace(/\/+$/, '');
           }
         }
       }

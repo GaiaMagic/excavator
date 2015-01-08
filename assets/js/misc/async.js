@@ -8,7 +8,10 @@ constant('misc.libs', {
     }
   },
   "dropdowns-enhancement": {
-    url: '/js/dropdowns-enhancement-3.1.1.min.js',
+    url: [
+      '/js/dropdowns-enhancement-3.1.1.min.js',
+      '/css/dropdowns-enhancement-3.1.1.css'
+    ],
     get: function () {
       return window.jQuery.fn.dropdown;
     }
@@ -46,6 +49,42 @@ factory('misc.async.load', [
   '$q',
   'shared.domains',
   function ($document, $q, domains) {
+    function load (URL) {
+      var lib = this;
+      return $q(function (resolve, reject) {
+        var head = $document[0].getElementsByTagName('head')[0];
+        if (/\.js$/.test(URL)) {
+          var script = $document[0].createElement('script');
+          script.onload = function () {
+            if (angular.isFunction(lib.get)) {
+              resolve(lib.get());
+            } else {
+              resolve();
+            }
+          };
+          head.appendChild(script);
+          script.src = cdnify(URL);
+          return;
+        } else if (/\.css$/.test(URL)) {
+          var link = $document[0].createElement('link');
+          link.rel = 'stylesheet';
+          link.type = 'text/css';
+          link.href = cdnify(URL);
+          head.appendChild(link);
+          resolve();
+          return;
+        }
+        reject();
+      });
+    }
+
+    function cdnify (URL) {
+      if (domains.cdn) {
+        URL = domains.cdn + URL;
+      }
+      return URL;
+    }
+
     return function (lib) {
       if (!lib) throw 'no lib to load';
       if (!lib.promise) {
@@ -54,22 +93,13 @@ factory('misc.async.load', [
             resolve(lib.get());
           });
         } else {
-          lib.promise = $q(function (resolve, reject) {
-            var script = $document[0].createElement('script');
-            script.onload = function () {
-              if (angular.isFunction(lib.get)) {
-                resolve(lib.get());
-              } else {
-                resolve();
-              }
-            };
-            $document[0].body.appendChild(script);
-            var url = lib.url;
-            if (domains.cdn) {
-              url = domains.cdn + url;
-            }
-            script.src = url;
-          });
+          if (angular.isArray(lib.url)) {
+            lib.promise = $q.all(lib.url.map(function (url) {
+              return load.call(lib, url);
+            }));
+          } else {
+            lib.promise = load.call(lib, lib.url);
+          }
         }
       }
       return lib.promise;

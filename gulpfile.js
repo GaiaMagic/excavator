@@ -47,7 +47,7 @@ gulp.task('clean', function (cb) {
 gulp.task('less', function () {
   return gulp.src('assets/css/*.less')
     .pipe($.less({
-      paths: ['.', 'vendors/css']
+      paths: ['.']
     }))
     .pipe(gulp.dest('.tmp/css'));
 });
@@ -56,7 +56,7 @@ gulp.task('compile:less', function () {
   return gulp.src('assets/css/*.less').
     pipe($.less({
       cleancss: true,
-      paths: ['.', 'vendors/css']
+      paths: ['.']
     })).
     pipe(gulp.dest('.tmp/css'));
 });
@@ -136,6 +136,14 @@ gulp.task('copy:lazyloads', function () {
     'vendors/js/jquery-2.1.3.min.js',
     'vendors/js/dropdowns-enhancement-3.1.1.min.js'
   ]).pipe(gulp.dest(dist + '/control/js'));
+
+  gulp.src([
+    'vendors/css/dropdowns-enhancement-3.1.1.css'
+  ]).pipe(gulp.dest(dist + '/public/css'));
+
+  gulp.src([
+    'vendors/css/dropdowns-enhancement-3.1.1.css'
+  ]).pipe(gulp.dest(dist + '/control/css'));
 });
 
 function compile (src, dest) {
