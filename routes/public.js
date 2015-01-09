@@ -45,14 +45,18 @@ router.get('/templates/:tplid([a-f0-9]{24})', function (req, res, next) {
 router.post('/submit', jsonParser({
   limit: '6.8mb'
 }), function (req, res, next) {
-  var ipAddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  if (ipAddr.indexOf(', ') > -1) {
-    ipAddr = ipAddr.split(', ')[0];
+  var ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  if (ipAddress.indexOf(', ') > -1) {
+    ipAddress = ipAddress.split(', ')[0];
   }
+  var userAgent = req.headers['user-agent'];
   Submission.submit(
     req.body.form,
     req.body.data,
-    ipAddr
+    {
+      ipAddress: ipAddress,
+      userAgent: userAgent
+    }
   ).then(function (submission) {
     res.send(submission);
   }).catch(next);

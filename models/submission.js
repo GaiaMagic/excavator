@@ -15,6 +15,7 @@ var submissionSchema = new Schema({
   data:                { type: Object },
   status:              { type: Number, default: 0 },
   ip_address:          { type: String },
+  user_agent:          { type: String },
   created_at:          { type: Date, default: Date.now }
 });
 
@@ -29,6 +30,10 @@ submissionSchema.pre('save', function (next) {
   var net = require('net');
   if (typeof this.ip_address !== 'string' || !net.isIP(this.ip_address)) {
     this.ip_address = '';
+  }
+
+  if (typeof this.user_agent !== 'string') {
+    this.user_agent = '';
   }
 
   var self = this;
@@ -106,12 +111,14 @@ submissionSchema.method('Save', function () {
   return deferred.promise;
 });
 
-submissionSchema.static('submit', function (formRevId, data, ipAddr) {
+submissionSchema.static('submit', function (formRevId, data, userInfo) {
   var self = this;
+  userInfo = userInfo || {};
   var newsubmission = new self({
     form_revision: formRevId,
     data: data,
-    ip_address: ipAddr
+    ip_address: userInfo.ipAddress,
+    user_agent: userInfo.userAgent
   });
   var deferred = Q.defer();
   newsubmission.save(function (err) {

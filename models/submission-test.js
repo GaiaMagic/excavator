@@ -110,7 +110,9 @@ describe('Submission database model', function () {
 
     it('should store an empty ip address if ip address is not valid',
     function (done) {
-      Submission.submit(realForm._id, real.submit, '333.123.12.33').
+      Submission.submit(realForm._id, real.submit, {
+        ipAddress: '333.123.12.33'
+      }).
       then(function (submission) {
         expect(submission.ip_address).to.equal('');
       }).then(done).catch(done);
@@ -118,7 +120,9 @@ describe('Submission database model', function () {
 
     it('should store ip address if ip address is valid IPv4 address',
     function (done) {
-      Submission.submit(realForm._id, real.submit, '127.0.0.1').
+      Submission.submit(realForm._id, real.submit, {
+        ipAddress: '127.0.0.1'
+      }).
       then(function (submission) {
         expect(submission.ip_address).to.equal('127.0.0.1');
       }).then(done).catch(done);
@@ -126,9 +130,24 @@ describe('Submission database model', function () {
 
     it('should store ip address if ip address is valid IPv6 address',
     function (done) {
-      Submission.submit(realForm._id, real.submit, 'fe80::200:5aee:feaa:20a2').
+      Submission.submit(realForm._id, real.submit, {
+        ipAddress: 'fe80::200:5aee:feaa:20a2'
+      }).
       then(function (submission) {
         expect(submission.ip_address).to.equal('fe80::200:5aee:feaa:20a2');
+      }).then(done).catch(done);
+    });
+
+    it('should store user-agent',
+    function (done) {
+      var userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) ' +
+        'AppleWebKit/537.36 (KHTML, like Gecko) ' +
+        'Chrome/39.0.2171.95 Safari/537.36';
+      Submission.submit(realForm._id, real.submit, {
+        userAgent: userAgent
+      }).
+      then(function (submission) {
+        expect(submission.user_agent).to.equal(userAgent);
       }).then(done).catch(done);
     });
 
