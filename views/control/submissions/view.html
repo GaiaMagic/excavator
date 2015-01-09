@@ -22,7 +22,7 @@
       <tbody>
         <tr>
           <td class="key align-middle" i18n="subs::Status"></td>
-          <td colspan="3">
+          <td>
             <div class="btn-group">
               <button type="button" class="btn btn-default"
                 ng-click="cssv.setStatus(status)"
@@ -33,16 +33,20 @@
               </button>
             </div>
           </td>
-        </tr>
-        <tr>
-          <td class="key" i18n="subs::Submiited On"></td>
-          <td>
+          <td class="key align-middle" i18n="subs::Submiited On"></td>
+          <td class="align-middle nowrap">
             <strong time-ago="cssv.sub.sub.created_at"></strong>
             <small ng-bind="cssv.sub.sub.created_at |
               date: 'yyyy-MM-dd HH:mm:ss'"></small>
           </td>
-          <td class="key" i18n="subs::IP Address"></td>
-          <td>
+        </tr>
+        <tr>
+          <td class="key align-middle" i18n="subs::User Agent"></td>
+          <td class="align-middle">
+            <small ng-bind="cssv.sub.sub.user_agent || '-'"></small>
+          </td>
+          <td class="key align-middle" i18n="subs::IP Address"></td>
+          <td class="align-middle">
             <span ng-if="cssv.sub.sub.ip_address_info">
               <strong ng-bind="cssv.sub.sub.ip_address_info"></strong>
               <small ng-bind="cssv.sub.sub.ip_address"></small>
