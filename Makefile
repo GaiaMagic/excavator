@@ -1,6 +1,4 @@
-SCALE ?= 1
-
-GIT_ENV = @GIT_HEAD_COMMIT="$(shell git rev-parse HEAD)" \
+GIT_ENV = GIT_HEAD_COMMIT="$(shell git rev-parse HEAD)" \
 	GIT_HEAD_DATE="$(shell git --no-pager show --format="%ad" --quiet HEAD)" \
 	GIT_HEAD_AUTHOR="$(shell git --no-pager show --format="%ae" --quiet HEAD)" \
 	GIT_HEAD_FILE_COUNT="$(shell git ls-files | wc -l | xargs)" \
@@ -33,34 +31,51 @@ help:
 	"  \033[0;36mmake restore-usercontent\033[0m  restore usercontent\n"\
 	"  \033[0;36mmake restore\033[0m        restore both\n"
 
-all: data-containers backend frontend remove start dist release
+all: update-images dist backend release
 
-ifeq ($(SCALE),1)
-update: data-containers backend frontend remove start
-else
-update: start
-endif
+update: update-images dist update-backend release
 
-backend:
-	mv Dockerfile.backend Dockerfile; true
-	fig build backend; mv Dockerfile Dockerfile.backend
-
-frontend:
-	mv Dockerfile.frontend Dockerfile; true
-	fig build frontend; mv Dockerfile Dockerfile.frontend
-
-remove:
-	fig kill backend
-	fig rm --force backend
-
-start:
-	fig scale backend=$(SCALE)
-
-data-containers:
-	fig up -d data usercontent db
+update-images:
+	cp Dockerfile.backend Dockerfile
+	fig build backend
+	cp Dockerfile.frontend Dockerfile
+	fig build frontend
+	rm -f Dockerfile
 
 dist:
 	$(call GIT_ENV,fig up frontend)
+
+DBRUNNING = $(shell docker inspect --format '{{.State.Running}}' excavator_db_1 2>&1)
+ifeq ($(DBRUNNING),true)
+start-db:
+	@echo "Database has already started"
+else
+start-db:
+	fig up -d db data usercontent
+endif
+
+backend: start-db
+	fig kill backend
+	fig rm --force backend
+	fig scale backend=2
+
+update-backend: start-db
+	docker kill excavator_backend_slave; true
+	docker rm excavator_backend_slave; true
+	docker run -d \
+		-p="3000" \
+		--link=excavator_db_1:db \
+		--name excavator_backend_slave \
+		--volumes-from=excavator_usercontent_1 \
+		excavator_backend
+	cd .. && make reload
+	fig kill backend
+	cd .. && make reload
+	fig rm --force backend
+	fig scale backend=2
+	docker kill excavator_backend_slave; true
+	cd .. && make reload
+	docker rm excavator_backend_slave; true
 
 release:
 	docker run --rm -v="/srv/excavator/dist:/excavator/dist" \
