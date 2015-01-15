@@ -1,4 +1,5 @@
 angular.module('excavator.shared.subs', [
+  'excavator.shared.subs.filter',
   'excavator.shared.subs.value'
 ]).
 
@@ -12,6 +13,7 @@ controller('controller.shared.submission.list', [
   'i18n.translate',
   'misc.ip',
   'misc.statuses',
+  'shared.subs.filter',
   'submissions',
   function (
     $location,
@@ -23,6 +25,7 @@ controller('controller.shared.submission.list', [
     tr,
     ip,
     statuses,
+    filter,
     submissions
   ) {
     if (!angular.isArray(submissions)) return;
@@ -63,6 +66,8 @@ controller('controller.shared.submission.list', [
       if (angular.isDefined(val) && !angular.isNumber(val)) return;
       $location.search('status', angular.isNumber(val) ? val : null);
     });
+
+    this.filter = filter.init(submissions.form.head.content);
   }
 ]).
 

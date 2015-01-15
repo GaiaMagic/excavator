@@ -183,6 +183,13 @@
     "Add manager": "添加经理"
   },
   "subs": {
+    "Filter": "筛选",
+    "filter": {
+      "Add": "添加",
+      "Press Add button to add one filter.": "按添加按钮增加筛选项目。",
+      "Equal / Include": "等于或包含",
+      "Not Equal / Except": "不等或不包含"
+    },
     "Submissions": "提交",
     "More IP Info": "显示IP地理信息",
     "Show All": "显示全部",

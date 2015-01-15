@@ -1,31 +1,53 @@
 angular.module('excavator.resolver.submission', []).
 
-constant('resolver.submissions', function submissionsResolver (service) {
+constant('resolver.submissions',
+  function submissionsResolver (service, extraService) {
   return [
+    '$injector',
     '$route',
+    '$q',
     service,
     'func.panic',
     'misc.pager',
     'shared.nav.meta',
-    function currentSubmissions ($route, list, panic, pager, meta) {
+    function currentSubmissions ($injector, $route, $q, list, panic, pager, meta) {
+      var $params = $route.current.params;
       var params = {};
 
-      var form = $route.current.params.formid || $route.current.params.form;
+      var form = $params.formid || $params.form;
       params.form = form;
+      params.status = $params.status;
+      params.page = $params.page;
+      if ($params.k) { params.k = $params.k; }
+      if ($params.o) { params.o = $params.o; }
+      if ($params.v) { params.v = $params.v; }
 
-      params.status = $route.current.params.status;
-
-      params.page = $route.current.params.page;
-
-      return list(params).then(function (res) {
-        pager.analyze('submission', res);
+      var promises;
+      if (extraService && form) {
+        var get = $injector.get(extraService);
+        promises = $q.all([
+          list(params),
+          get(form)
+        ]);
+      } else {
+        promises = $q.all([ list(params) ]);
+      }
+      return promises.then(function (res) {
+        var list = res[0];
+        pager.analyze('submission', list);
 
         meta.set('submission', {
           formid: form
         });
 
-        var data = res.data;
+        var data = list.data;
         if (form) data.formId = form;
+
+        var formDetails = res[1];
+        if (formDetails) {
+          data.form = formDetails.data;
+        }
+
         return data;
       }, panic);
     }
@@ -41,6 +63,10 @@ constant('resolver.submission', function submissionResolver (service) {
     function currentSubmission ($route, get, panic, meta) {
       var subid = $route.current.params.subid;
       return get(subid).then(function (res) {
+        if (res.data.form._id !== $route.current.params.formid) {
+          return false;
+        }
+
         meta.set(undefined);
 
         res.data.data = res.data.data || {};

@@ -74,7 +74,7 @@ config([
       controller: 'controller.shared.submission.list as cssl',
       resolve: {
         loggedIn: authNeededResolver,
-        submissions: submissionsResolver('backend.submission.list')
+        submissions: submissionsResolver('backend.submission.list', 'backend.form.get')
       }
     }).
 
@@ -83,7 +83,7 @@ config([
       controller: 'controller.shared.submission.list as cssl',
       resolve: {
         loggedIn: authNeededResolver,
-        submissions: submissionsResolver('backend.submission.list')
+        submissions: submissionsResolver('backend.submission.list', 'backend.form.get')
       }
     }).
 
@@ -93,7 +93,6 @@ config([
       resolve: {
         loggedIn: authNeededResolver,
         setStatusPrefix: isResolver(),
-        currentForm: formResolver('backend.form.get'),
         currentSubmission: submissionResolver('backend.submission.get')
       }
     }).

@@ -46,14 +46,37 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
   var end = page * itemsPerPage;
 
   Q.all([
-    checkIfFormExists(req.query.form),
+    findForm(req.query.form),
     Status.findById(req.query.status)
   ]).spread(function (form, status) {
     if (req.query.form && !form) return;
     if (req.query.status && !status) return;
 
     var condition = {};
-    if (form) condition.form = form;
+
+    var k = req.query.k;
+    var o = req.query.o;
+    var v = req.query.v;
+    if (k && o && v) {
+      k = k.split(',');
+      o = o.split(',');
+      v = v.split(',');
+      var schemes = JSON.parse(form.head.content).scheme;
+      for (var i = 0; i < k.length; i++) {
+        var scheme = schemes[+k[i]];
+        var val = {};
+        switch (+o[i]) {
+        case 1:
+          val['$ne'] = scheme.enum[+v[i]];
+          break;
+        default:
+          val['$eq'] = scheme.enum[+v[i]];
+        }
+        condition['data.' + scheme.model] = val;
+      }
+    }
+
+    if (form) condition.form = form._id;
     if (status) condition.status = status.id;
     return condition;
   }).then(function (condition) {
@@ -77,16 +100,17 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
   }).catch(next);
 });
 
-function checkIfFormExists (slugOrId) {
+function findForm (slugOrId) {
   var query;
   if (/^[a-f0-9]{24}$/.test(slugOrId)) {
     query = { _id: slugOrId };
   } else {
     query = { slug: slugOrId };
   }
-  return makePromise(Form.find(query).limit(1)).then(function (forms) {
+  return makePromise(Form.find(query).limit(1).populate('head')).
+    then(function (forms) {
     if (forms.length === 0) return;
-    return forms[0]._id;
+    return forms[0];
   });
 }
 

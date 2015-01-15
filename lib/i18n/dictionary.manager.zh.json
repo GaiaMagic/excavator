@@ -39,6 +39,10 @@
     "This submission is empty.": "此提交内容是空的。",
     "Column": "栏目",
     "Value": "内容",
+    "filter": {
+      "Equal / Include": "等于或包含",
+      "Not Equal / Except": "不等或不包含"
+    },
     "statuses": {
       "Undecided": "未决定",
       "Unknown": "未知态",

@@ -1,8 +1,54 @@
 <div class="main-static">
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span i18n="subs::Filter"></span>
+        <div class="btn-group btn-group-xs pull-right">
+          <button class="btn btn-default" ng-click="cssl.filter.add(); cssl.filter.update()">
+            <span class="glyphicon glyphicon-plus"></span>
+            <span i18n="subs::filter::Add"></span>
+          </button>
+        </div>
+      </div>
+      <table class="table">
+        <tbody>
+          <tr ng-if="!cssl.filter.key.length">
+            <td><div class="text-center" i18n="subs::filter::Press Add button to add one filter."></div></td>
+          </tr>
+          <tr ng-repeat="key in cssl.filter.key track by $index">
+            <td>
+              <div class="btn-group btn-group-sm">
+                <button class="btn btn-default" ng-click="cssl.filter.remove($index); cssl.filter.update()">
+                  <span class="glyphicon glyphicon-minus"></span>
+                </button>
+              </div>
+            </td>
+            <td>
+              <select class="form-control" ng-change="cssl.filter.changeKey($index); cssl.filter.update()"
+                ng-model="cssl.filter.key[$index]" ng-options="cssl.filter.keys.indexOf(item) as item
+                  for item in cssl.filter.keys"></select>
+            </td>
+            <td>
+              <select class="form-control" ng-model="cssl.filter.operator[$index]" ng-change="cssl.filter.update()"
+                ng-options="cssl.filter.operators.indexOf(item) as cssl.tr(item)
+                  for item in cssl.filter.operators"></select>
+            </td>
+            <td>
+              <select class="form-control" ng-model="cssl.filter.val[$index]" ng-change="cssl.filter.update()"
+                ng-options="cssl.filter.vals[cssl.filter.key[$index]].indexOf(item) as item
+                  for item in cssl.filter.vals[cssl.filter.key[$index]]"></select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
   <div class="col-sm-12 submissions-list">
     <div class="panel panel-default">
       <div class="panel-heading">
         <span i18n="subs::Submissions"></span>
+        <span ng-if="total"
+          ng-bind="'(' + start + '-' + end + ' / ' + total + ')'"></span>
         <div class="btn-group btn-group-xs pull-right">
           <button type="button" class="btn btn-default"
             ng-click="cssl.toggleShowIpInfo()"
