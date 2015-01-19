@@ -10,7 +10,17 @@ constant('resolver.submissions',
     'func.panic',
     'misc.pager',
     'shared.nav.meta',
-    function currentSubmissions ($injector, $route, $q, list, panic, pager, meta) {
+    'shared.subs.filter',
+    function currentSubmissions (
+      $injector,
+      $route,
+      $q,
+      list,
+      panic,
+      pager,
+      meta,
+      filter
+    ) {
       var $params = $route.current.params;
       var params = {};
 
@@ -36,8 +46,11 @@ constant('resolver.submissions',
         var list = res[0];
         pager.analyze('submission', list);
 
+        filter.setParams();
+
         meta.set('submission', {
-          formid: form
+          formid: form,
+          params: filter.params
         });
 
         var data = list.data;
@@ -60,9 +73,15 @@ constant('resolver.submission', function submissionResolver (service) {
     service,
     'func.panic',
     'shared.nav.meta',
-    function currentSubmission ($route, get, panic, meta) {
-      var subid = $route.current.params.subid;
-      return get(subid).then(function (res) {
+    'shared.subs.filter',
+    function currentSubmission ($route, get, panic, meta, filter) {
+      var $params = $route.current.params;
+      var subid = $params.subid;
+      var params = {};
+      if ($params.k) { params.k = $params.k; }
+      if ($params.o) { params.o = $params.o; }
+      if ($params.v) { params.v = $params.v; }
+      return get(subid, params).then(function (res) {
         if (res.data.form._id !== $route.current.params.formid) {
           return false;
         }
@@ -94,12 +113,15 @@ constant('resolver.submission', function submissionResolver (service) {
           });
         }
 
+        filter.setParams();
+
         var title = res.data.form_revision.title;
 
         meta.set('submission', {
           title: '#' + (res.data.form_index + 1),
           subid: subid,
-          formid: res.data.form._id
+          formid: res.data.form._id,
+          params: filter.params
         });
 
         return {

@@ -82,6 +82,7 @@ controller('controller.shared.submission.view', [
   'misc.statuses',
   'setStatusPrefix',
   'shared.domains',
+  'shared.subs.filter',
   function (
     $injector,
     $route,
@@ -92,7 +93,8 @@ controller('controller.shared.submission.view', [
     ip,
     statuses,
     setStatusPrefix,
-    domains
+    domains,
+    filter
   ) {
     var self = this;
     if (!currentSubmission) {
@@ -120,5 +122,7 @@ controller('controller.shared.submission.view', [
         $route.reload();
       }, panic);
     };
+
+    this.filter = filter.setParams();
   }
 ]);

@@ -6,8 +6,9 @@ var Q = require('q');
 var panic = require('../lib/panic');
 var Status = require('../models/status');
 var tr = require('../lib/i18n').tr;
+var extend = require('extend');
 
-function makePromise (promise) {
+function QQ (promise) {
   return Q.nbind(promise.exec, promise)();
 }
 
@@ -15,18 +16,16 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
   var subid = req.params.submissionid;
 
   if (subid) {
-    return makePromise(Submission.findById(subid).
+    return QQ(Submission.findById(subid).
     populate('form form_revision')).then(function (submission) {
       if (!submission) return;
+      var condition = makeFilter(req, submission.form_revision.content);
+      condition.form = submission.form._id;
+      var newer = extend(true, {_id: { $gt: subid }}, condition);
+      var older = extend(true, {_id: { $lt: subid }}, condition);
       return Q.all([
-        makePromise(Submission.find({
-          _id:  { $gt: subid },
-          form: submission.form._id
-        }).sort({ _id: 1 }).limit(1).select('_id')),
-        makePromise(Submission.find({
-          _id:  { $lt: subid },
-          form: submission.form._id
-        }).sort({ _id: -1 }).limit(1).select('_id'))
+        QQ(Submission.find(newer).sort({ _id: 1 }).limit(1).select('_id')),
+        QQ(Submission.find(older).sort({ _id: -1 }).limit(1).select('_id'))
       ]).spread(function (newer, older) {
         submission = submission.toObject();
         submission.newer = newer[0] ? newer[0]._id : null;
@@ -52,16 +51,52 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
     if (req.query.form && !form) return;
     if (req.query.status && !status) return;
 
-    var condition = {};
+    var condition = makeFilter(req, form.head.content);
+    if (form) condition.form = form._id;
+    if (status) condition.status = status.id;
+    return condition;
+  }).then(function (condition) {
+    // return 0 results if no condition
+    if (!condition || Object.keys(condition) === 0) {
+      res.set('Content-Range', start + '-' + end + '/0');
+      return [];
+    }
 
-    var k = req.query.k;
-    var o = req.query.o;
-    var v = req.query.v;
-    if (k && o && v) {
-      k = k.split(',');
-      o = o.split(',');
-      v = v.split(',');
-      var schemes = JSON.parse(form.head.content).scheme;
+    return Q.all([
+      QQ(Submission.find(condition).sort({ _id: -1 }).
+        skip(start - 1).limit(itemsPerPage).populate('form_revision')),
+      QQ(Submission.count(condition))
+    ]).spread(function (data, total) {
+      var range = start + '-' + end + '/' + total;
+      res.set('Content-Range', range);
+      return data;
+    });
+  }).then(function (ret) {
+    res.send(ret);
+  }).catch(next);
+});
+
+function makeFilter (req, formContent) {
+  var condition = {};
+
+  var k = req.query.k;
+  var o = req.query.o;
+  var v = req.query.v;
+  if (k && o && v) {
+    k = k.split(',');
+    o = o.split(',');
+    v = v.split(',');
+
+    if (
+      !k.every(function (i) { return /^[0-9]+$/.test(i); }) ||
+      !o.every(function (i) { return /^[0-9]+$/.test(i); }) ||
+      !v.every(function (i) { return /^[0-9]+$/.test(i); })
+    ) {
+      return condition;
+    }
+
+    try {
+      var schemes = JSON.parse(formContent).scheme;
       for (var i = 0; i < k.length; i++) {
         var scheme = schemes[+k[i]];
         var val = {};
@@ -74,31 +109,13 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
         }
         condition['data.' + scheme.model] = val;
       }
+    } catch (e) {
+      return condition;
     }
+  }
 
-    if (form) condition.form = form._id;
-    if (status) condition.status = status.id;
-    return condition;
-  }).then(function (condition) {
-    // return 0 results if no condition
-    if (!condition || Object.keys(condition) === 0) {
-      res.set('Content-Range', start + '-' + end + '/0');
-      return [];
-    }
-
-    return Q.all([
-      makePromise(Submission.find(condition).sort({ _id: -1 }).
-        skip(start - 1).limit(itemsPerPage).populate('form_revision')),
-      makePromise(Submission.count(condition))
-    ]).spread(function (data, total) {
-      var range = start + '-' + end + '/' + total;
-      res.set('Content-Range', range);
-      return data;
-    });
-  }).then(function (ret) {
-    res.send(ret);
-  }).catch(next);
-});
+  return condition;
+}
 
 function findForm (slugOrId) {
   var query;
@@ -107,7 +124,7 @@ function findForm (slugOrId) {
   } else {
     query = { slug: slugOrId };
   }
-  return makePromise(Form.find(query).limit(1).populate('head')).
+  return QQ(Form.find(query).limit(1).populate('head')).
     then(function (forms) {
     if (forms.length === 0) return;
     return forms[0];

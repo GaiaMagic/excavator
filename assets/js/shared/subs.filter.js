@@ -2,10 +2,12 @@ angular.module('excavator.shared.subs.filter', []).
 
 service('shared.subs.filter', [
   '$location',
+  '$route',
   '$routeParams',
   'func.scheme.parse',
   function (
     $location,
+    $route,
     $routeParams,
     parse
   ) {
@@ -35,6 +37,21 @@ service('shared.subs.filter', [
       }
     };
 
+    this.setParams = function () {
+      var $params = $route.current.params || $routeParams;
+      var k = $params.k;
+      var v = $params.v;
+      var o = $params.o;
+
+      if (k && v && o) {
+        this.params = '?k=' + k + '&o=' + o + '&v=' + v;
+      } else {
+        this.params = '';
+      }
+
+      return this;
+    };
+
     this.init = function (formContent) {
       this.key = [];
       this.operator = [];
@@ -50,10 +67,19 @@ service('shared.subs.filter', [
       var v = $routeParams.v;
       var o = $routeParams.o;
 
+      this.setParams();
+
       if (k && v && o) {
         k = k.split(',');
         v = v.split(',');
         o = o.split(',');
+        if (
+          !k.every(function (i) { return /^[0-9]+$/.test(i); }) ||
+          !o.every(function (i) { return /^[0-9]+$/.test(i); }) ||
+          !v.every(function (i) { return /^[0-9]+$/.test(i); })
+        ) {
+          return this;
+        }
         k = k.map(function (item) { return +item; });
         o = o.map(function (item) { return +item; });
         v = v.map(function (item) { return +item; });

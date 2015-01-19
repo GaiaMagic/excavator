@@ -15,8 +15,8 @@ factory('backend.submission.create', [
 factory('backend.submission.get', [
   '$http',
   function ($http) {
-    return function (id) {
-      return $http.get('/backend/submissions/' + id);
+    return function (id, params) {
+      return $http.get('/backend/submissions/' + id, {params: params});
     };
   }
 ]).

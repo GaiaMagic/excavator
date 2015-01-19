@@ -15,12 +15,12 @@
         </li>
         <li ng-class="{active: ifPathLike('^/forms/.*/submissions$')}"
           ng-if="is('submission')">
-          <a href="/forms/{{metaData.data.formid}}/submissions"
+          <a href="/forms/{{metaData.data.formid}}/submissions{{metaData.data.params}}"
             i18n="nav::Submissions"></a>
         </li>
         <li ng-class="{active: ifPathHas('/forms/', '/submissions/')}"
           ng-if="is('submission') && metaData.data.subid">
-          <a href="/forms/{{metaData.data.formid}}/submissions/{{metaData.data.subid}}"
+          <a href="/forms/{{metaData.data.formid}}/submissions/{{metaData.data.subid}}{{metaData.data.params}}"
             i18n="nav::Viewing !!metaData.data.title!!"></a>
         </li>
         <li ng-class="{active:ifPathIs('/forms/create')}">

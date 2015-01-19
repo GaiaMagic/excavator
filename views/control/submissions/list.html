@@ -107,7 +107,7 @@
             </td>
             <td>
               <a class="block" ng-if="cssl.submissions.formId"
-                href="/forms/{{ cssl.submissions.formId }}/submissions/{{ sub._id }}"
+                href="/forms/{{ cssl.submissions.formId }}/submissions/{{ sub._id }}{{ cssl.filter.params }}"
                 i18n="subs::View Details"></a>
               <a class="block" href="/submissions/view/{{ sub._id }}"
                 ng-if="!cssl.submissions.formId"
