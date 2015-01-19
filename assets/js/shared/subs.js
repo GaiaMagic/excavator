@@ -67,7 +67,9 @@ controller('controller.shared.submission.list', [
       $location.search('status', angular.isNumber(val) ? val : null);
     });
 
-    this.filter = filter.init(submissions.form.head.content);
+    if (submissions.form) {
+      this.filter = filter.init(submissions.form.head.content);
+    }
   }
 ]).
 

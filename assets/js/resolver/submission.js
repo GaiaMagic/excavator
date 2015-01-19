@@ -82,7 +82,8 @@ constant('resolver.submission', function submissionResolver (service) {
       if ($params.o) { params.o = $params.o; }
       if ($params.v) { params.v = $params.v; }
       return get(subid, params).then(function (res) {
-        if (res.data.form._id !== $route.current.params.formid) {
+        if ($route.current.params.formid &&
+            res.data.form._id !== $route.current.params.formid) {
           return false;
         }
 

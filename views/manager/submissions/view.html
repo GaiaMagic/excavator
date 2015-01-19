@@ -33,18 +33,32 @@
               </button>
             </div>
           </td>
-        </tr>
-        <tr>
-          <td class="key" i18n="subs::Submiited On"></td>
-          <td>
+          <td class="key align-middle" i18n="subs::Submiited On"></td>
+          <td class="align-middle nowrap">
             <strong time-ago="cssv.sub.sub.created_at"></strong>
             <small ng-bind="cssv.sub.sub.created_at |
               date: 'yyyy-MM-dd HH:mm:ss'"></small>
           </td>
         </tr>
         <tr>
+          <td class="key align-middle" i18n="subs::User Agent"></td>
+          <td class="align-middle">
+            <small ng-bind="cssv.sub.sub.user_agent || '-'"></small>
+          </td>
+          <td class="key align-middle" i18n="subs::IP Address"></td>
+          <td class="align-middle">
+            <span ng-if="cssv.sub.sub.ip_address_info">
+              <strong ng-bind="cssv.sub.sub.ip_address_info"></strong>
+              <small ng-bind="cssv.sub.sub.ip_address"></small>
+            </span>
+            <span ng-if="!cssv.sub.sub.ip_address_info"
+              ng-bind="cssv.sub.sub.ip_address || '-'">
+            </span>
+          </td>
+        </tr>
+        <tr>
           <td class="key" i18n="subs::Data"></td>
-          <td>
+          <td colspan="3">
             <em ng-if="cssv.isEmpty(cssv.sub.data)"
               i18n="subs::This submission is empty."></em>
             <table class="table table-bordered subs-data-table"
@@ -65,10 +79,6 @@
               </tbody>
             </table>
           </td>
-        </tr>
-        <tr>
-          <td class="key" i18n="subs::IP Address"></td>
-          <td ng-bind="cssv.sub.sub.ip_address || '-'"></td>
         </tr>
       </tbody>
     </table>

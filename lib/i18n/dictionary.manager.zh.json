@@ -24,6 +24,7 @@
   },
   "subs": {
     "Submissions": "提交",
+    "More IP Info": "显示IP地理信息",
     "Show All": "显示全部",
     "Portrait": "头像",
     "Name": "姓名",
@@ -35,6 +36,7 @@
     "Newer": "较新的提交",
     "Older": "较旧的提交",
     "Submiited On": "创建于",
+    "User Agent": "浏览器",
     "Data": "内容",
     "This submission is empty.": "此提交内容是空的。",
     "Column": "栏目",
