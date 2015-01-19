@@ -51,7 +51,7 @@ router.get('/:submissionid([a-f0-9]{24})?', function (req, res, next) {
     if (req.query.form && !form) return;
     if (req.query.status && !status) return;
 
-    var condition = makeFilter(req, form.head.content);
+    var condition = form && form.head ? makeFilter(req, form.head.content) : {};
     if (form) condition.form = form._id;
     if (status) condition.status = status.id;
     return condition;
