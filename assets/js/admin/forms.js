@@ -11,6 +11,7 @@ controller('controller.control.form.list', [
   '$routeParams',
   'form.access.control',
   'form.set.template',
+  'form.set.publish',
   'forms',
   'i18n.translate',
   'resolver.form',
@@ -22,6 +23,7 @@ controller('controller.control.form.list', [
     $routeParams,
     accessControl,
     setTpl,
+    setPublish,
     forms,
     tr,
     formResolver,
@@ -56,6 +58,7 @@ controller('controller.control.form.list', [
         $route.reload();
       });
     };
+    this.togglePublish = setPublish;
     this.domains = domains;
     this.tr = tr;
   }

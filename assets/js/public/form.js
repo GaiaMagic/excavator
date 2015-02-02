@@ -45,6 +45,15 @@ controller('controller.public.form', [
       this.form = currentForm;
     }
 
+    function checkPublish () {
+      if (currentForm.form.published !== true) {
+        panic(tr('forms::Sorry, but this form has been closed and ' +
+          'will not accept new submissions for now.'));
+      }
+      return currentForm.form.published;
+    }
+    checkPublish();
+
     this.truncate = function () {
       this.form.content.data = this.form.content.data || {};
       var data = this.form.content.data;
@@ -57,6 +66,8 @@ controller('controller.public.form', [
     this.truncate();
 
     this.submit = function () {
+      if (!checkPublish()) return;
+
       var schemes = currentForm.content.scheme;
       var data = currentForm.content.data;
 

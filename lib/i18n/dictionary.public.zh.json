@@ -5,6 +5,7 @@
   "forms": {
     "Please wait...": "请稍候片刻…",
     "Form is corrupted.": "表格已损毁。",
+    "Sorry, but this form has been closed and will not accept new submissions for now.": "抱歉，此表格已关闭，将不再接收新的提交。",
     "Thank you.": "谢谢。",
     "Success": "成功",
     "You must select a JPEG image file.": "你必须选择一张JPEG图片。"

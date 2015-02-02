@@ -1,5 +1,5 @@
 <div class="main-static">
-  <div class="col-md-9">
+  <div class="col-xs-12">
     <div class="panel panel-default">
       <div class="panel-heading" i18n="forms::Forms"></div>
       <table class="table table-bordered table-hover">
@@ -7,6 +7,7 @@
           <tr>
             <th class="link" i18n="forms::Preview"></th>
             <th class="link" i18n="forms::Edit"></th>
+            <th class="number nowrap" i18n="forms::publish::Published"></th>
             <th i18n="forms::Name"></th>
             <th class="template" i18n="forms::Template"></th>
             <th class="number" i18n="forms::Submissions"></th>
@@ -39,6 +40,14 @@
               </a>
             </td>
             <td>
+              <a class="block" href ng-click="ccfl.togglePublish(form)">
+                <span class="text-success" i18n="forms::publish::Published"
+                  ng-if="form.published"></span>
+                <span class="text-danger" i18n="forms::publish::No"
+                  ng-if="!form.published"></span>
+              </a>
+            </td>
+            <td>
               <a class="block" href="/forms/{{ form._id }}/submissions"
                 ng-bind="form.head.title"></a>
             </td>
@@ -66,8 +75,11 @@
       </table>
     </div>
   </div>
-  <div class="col-md-3">
-    <form ng-submit="ccfl.filter()">
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <a href ng-click="ccfl.filterShown = true" i18n="forms::Show Filter"
+      ng-init="ccfl.filterShown = !!ccfl.manager"
+      ng-hide="ccfl.filterShown"></a>
+    <form ng-submit="ccfl.filter()" ng-show="ccfl.filterShown">
       <div class="panel panel-default">
         <div class="panel-heading" i18n="forms::Filter"></div>
         <table class="table">

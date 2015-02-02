@@ -33,6 +33,24 @@ factory('backend.form.list', [
   }
 ]).
 
+factory('backend.form.publish', [
+  '$http',
+  function ($http) {
+    return function (formid) {
+      return $http.post('/backend/forms/' + formid + '/publish');
+    };
+  }
+]).
+
+factory('backend.form.unpublish', [
+  '$http',
+  function ($http) {
+    return function (formid) {
+      return $http.delete('/backend/forms/' + formid + '/publish');
+    };
+  }
+]).
+
 factory('backend.form.search', [
   '$http',
   function ($http) {

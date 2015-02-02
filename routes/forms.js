@@ -69,6 +69,22 @@ router.get('/search', function (req, res, next) {
   }).catch(next);
 });
 
+router.post('/:formid/publish', function (req, res, next) {
+  QQ(Form.findByIdAndUpdate(req.params.formid, {
+    $set: { published: true }
+  })).then(function (form) {
+    res.send(form);
+  }).catch(next);
+});
+
+router.delete('/:formid/publish', function (req, res, next) {
+  QQ(Form.findByIdAndUpdate(req.params.formid, {
+    $set: { published: false }
+  })).then(function (form) {
+    res.send(form);
+  }).catch(next);
+});
+
 router.post('/:formid/managers', jsonParser, function (req, res, next) {
   Form.updateManagers(
     req.params.formid,

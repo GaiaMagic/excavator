@@ -47,6 +47,11 @@ submissionSchema.pre('save', function (next) {
     self.form_index = formRev.parent.submissions;
     self.form_revision_index = formRev.submissions;
 
+    if (formRev.parent.published !== true) return next(panic(422, {
+      type:    'unpublished-form',
+      message: tr('The form is not yet published.')
+    }));
+
     try {
       var data = self.data;
       if (typeof data === 'string') data = JSON.parse(data);
