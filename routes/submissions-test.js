@@ -41,6 +41,7 @@ describe('Route /backend/submissions', function () {
         return FormRevision.create(real.title, real.content);
       }).then(function (form) {
         realForm = form;
+        return Form.publish(form.parent).then(function () {});
       }).then(function () {
         return Submission.submit(realForm._id, real.submit);
       }).delay(100).then(function (submission) {

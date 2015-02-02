@@ -123,6 +123,18 @@ formSchema.method('applyTemplate', function (template) {
   });
 });
 
+formSchema.static('publish', function (id) {
+  return Q.nbind(this.findByIdAndUpdate, this)(id, {
+    $set: { published: true }
+  });
+});
+
+formSchema.static('unpublish', function (id) {
+  return Q.nbind(this.findByIdAndUpdate, this)(id, {
+    $set: { published: false }
+  });
+});
+
 formSchema.static('updateManagers', function (formID, managerIDs) {
   var deferred = Q.defer();
   this.findById(formID, function (err, form) {

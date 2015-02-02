@@ -2,6 +2,7 @@ var config    = require('../test/config');
 var mongoose  = require('mongoose');
 var request   = require('supertest');
 var excavator = require('./');
+var Form      = require('../models/form');
 var FormRevision = require('../models/form-revision');
 
 var real      = config.fixturesOf('form');
@@ -23,6 +24,7 @@ describe('Route /public', function () {
     function createForm (done) {
       FormRevision.create(real.title, real.content).then(function (form) {
         realForm = form;
+        return Form.publish(form.parent).then(function () {});
       }).then(done).catch(done);
     }
   });

@@ -2,6 +2,7 @@ var config       = require('../test/config');
 
 var Q            = require('q');
 var mongoose     = require('mongoose');
+var Form         = require('./form');
 var FormRevision = require('./form-revision');
 var Submission   = require('./submission');
 var panic        = require('../lib/panic');
@@ -37,6 +38,8 @@ describe('Submission database model', function () {
     before(function (done) {
       FormRevision.create(real.title, real.content).then(function (revision) {
         realForm = revision;
+      }).then(function () {
+        return Form.publish(realForm.parent).then(function () {});
       }).then(done).catch(done);
     });
 

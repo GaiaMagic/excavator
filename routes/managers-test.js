@@ -281,6 +281,10 @@ describe('Route /backend/managers', function () {
       expectLength(0).then(function () {
         return FormRevision.create(real.title, real.content);
       }).then(function (form) {
+        return Form.publish(form.parent).then(function () {
+          return form;
+        });
+      }).then(function (form) {
         return Submission.submit(form._id, real.submit);
       }).then(function (submission) {
         var op = {};
@@ -290,6 +294,10 @@ describe('Route /backend/managers', function () {
         return expectLength(1);
       }).then(function () {
         return FormRevision.create(real.title, real.content);
+      }).delay(200).then(function (form) {
+        return Form.publish(form.parent).then(function () {
+          return form;
+        });
       }).delay(200).then(function (form) {
         return Submission.submit(form._id, real.submit);
       }).then(function (submission) {
@@ -319,6 +327,10 @@ describe('Route /backend/managers', function () {
       }
 
       FormRevision.create(real.title, real.content).then(function (form) {
+        return Form.publish(form.parent).then(function () {
+          return form;
+        });
+      }).then(function (form) {
         return Submission.submit(form._id, real.submit);
       }).then(function (submission) {
         var op = {};
@@ -351,6 +363,10 @@ describe('Route /backend/managers', function () {
 
       Q.nbind(Submission.remove, Submission)({}).then(function () {
         return FormRevision.create(real.title, real.content);
+      }).then(function (form) {
+        return Form.publish(form.parent).then(function () {
+          return form;
+        });
       }).then(function (form) {
         return Submission.submit(form._id, real.submit);
       }).then(function (submission) {
@@ -411,6 +427,10 @@ describe('Route /backend/managers', function () {
       Q.nbind(Submission.remove, Submission)({}).then(function () {
         return FormRevision.create(real.title, real.content);
       }).then(function (form) {
+        return Form.publish(form.parent).then(function () {
+          return form;
+        });
+      }).then(function (form) {
         var op = {};
         op[realManager._id] = true;
         return Form.updateManagers(form.parent, op);
@@ -427,6 +447,10 @@ describe('Route /backend/managers', function () {
         return expectExistence(realSub[0], 200, undefined, moreExpectations);
       }).then(function () {
         return FormRevision.create(real.title, real.content);
+      }).then(function (form) {
+        return Form.publish(form.parent).then(function () {
+          return form;
+        });
       }).then(function (form) {
         realForm = form;
         return Submission.submit(form._id, real.submit);
@@ -501,6 +525,10 @@ describe('Route /backend/managers', function () {
       var realSubmission;
       Q.nbind(Submission.remove, Submission)({}).then(function () {
         return FormRevision.create(real.title, real.content);
+      }).then(function (form) {
+        return Form.publish(form.parent).then(function () {
+          return form;
+        });
       }).then(function (form) {
         return Submission.submit(form._id, real.submit);
       }).then(function (submission) {
