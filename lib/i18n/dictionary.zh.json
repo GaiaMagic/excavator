@@ -17,6 +17,7 @@
     "Form Generator Admin": "表格生成器管理界面",
     "All Forms": "表格列表",
     "Editing !!metaData.data.title!!": "正在编辑 !!metaData.data.title!!",
+    "Stats": "统计",
     "Submissions": "提交列表",
     "Viewing !!metaData.data.title!!": "正在查看 !!metaData.data.title!!",
     "forms": {
@@ -76,6 +77,7 @@
     "Syntax check": "检查语法",
     "OK, use this enumerator.": "好，使用这个枚举方法。",
     "Forms": "表格",
+    "Stats": "统计",
     "Edit": "编辑",
     "publish": {
       "Published": "已发布",
@@ -96,6 +98,13 @@
     "Current forms": "现有表格",
     "This manager will have no access to any form.": "此经理将无权限访问任何表格。",
     "Remove": "移除",
+    "stats": {
+      "View submissions": "查看提交",
+      "Stats by scheme": "项目统计",
+      "Show Percentage": "显示百分比",
+      "Sort by count": "按计数排序",
+      "No stats by scheme yet!": "还没有项目统计！"
+    },
     "Enter keyword to filter templates": "输入关键字筛选模板",
     "No template": "不设模板",
     "— Choose one —": "— 请选择 —",
@@ -210,6 +219,7 @@
     "IP Address": "IP地址",
     "View Details": "查看详情",
     "No submissions yet!": "尚没有人提交过任何表格。",
+    "View stats": "查看统计",
     "Newer": "较新的提交",
     "Older": "较旧的提交",
     "Submiited On": "创建于",

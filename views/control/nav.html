@@ -13,6 +13,11 @@
           <a href="/forms/edit/{{metaData.data.formid}}"
             i18n="nav::Editing !!metaData.data.title!!"></a>
         </li>
+        <li ng-class="{active: ifPathLike('^/forms/.*/stats$')}"
+          ng-if="is('formStats')">
+          <a href="/forms/{{metaData.data.formid}}/stats"
+            i18n="nav::Stats"></a>
+        </li>
         <li ng-class="{active: ifPathLike('^/forms/.*/submissions$')}"
           ng-if="is('submission')">
           <a href="/forms/{{metaData.data.formid}}/submissions{{metaData.data.params}}"

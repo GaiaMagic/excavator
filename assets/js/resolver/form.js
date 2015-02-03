@@ -119,4 +119,26 @@ constant('resolver.form', function formResolver (service, options) {
       }, panic);
     }
   ];
+}).
+
+constant('resolver.form.stats', function formStatsResolver () {
+  return [
+    '$route',
+    'backend.form.stats',
+    'func.panic',
+    'shared.nav.meta',
+    function ($route, stats, panic, meta) {
+      var $params = $route.current.params;
+      var formid = $params.formid;
+      meta.set(undefined);
+      return stats(formid).then(function (res) {
+        var form = res.data;
+        meta.set('formStats', {
+          title: form.title,
+          formid: form._id
+        });
+        return form;
+      }, panic);
+    }
+  ];
 });

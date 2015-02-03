@@ -1,0 +1,57 @@
+<div class="main-static">
+  <div class="col-sm-12">
+    <p>
+      <a href="/forms/{{ csfs.form._id }}/submissions">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span i18n="forms::stats::View submissions"></span>
+      </a>
+    </p>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span i18n="forms::stats::Stats by scheme"></span>
+        <span ng-if="csfs.form.stats.count"
+          ng-bind="'(' + csfs.form.stats.count + ')'"></span>
+        <div class="btn-group btn-group-xs pull-right">
+          <button type="button" class="btn btn-default"
+            ng-click="csfs.toggleFormStatsPercentage()"
+            ng-class="{active: csfs.formStatsPercentage}"
+            i18n="forms::stats::Show Percentage">
+          </button>
+          <button type="button" class="btn btn-default"
+            ng-click="csfs.toggleFormStatsSchemeSorted()"
+            ng-class="{active: csfs.formStatsScheme === 'schemeSorted'}"
+            i18n="forms::stats::Sort by count">
+          </button>
+        </div>
+      </div>
+      <table class="table table-bordered table-hover form-stats-scheme">
+        <tbody ng-if="!csfs.form.stats.scheme || !csfs.form.stats.scheme.length">
+          <tr>
+            <td class="text-center">
+              <span i18n="forms::stats::No stats by scheme yet!"></span>
+            </td>
+          </tr>
+        </tbody>
+        <tbody ng-repeat="scheme in csfs.form.stats[csfs.formStatsScheme]">
+          <tr>
+            <td colspan="{{ csfs.formStatsPercentage ? 3 : 2 }}">
+              <span ng-bind="scheme.label"></span>
+            </td>
+          </tr>
+          <tr ng-repeat="enum in scheme.enums">
+            <td class="enum" ng-bind="enum.value"></td>
+            <td class="count" ng-bind="enum.count"></td>
+            <td class="percent" ng-if="csfs.formStatsPercentage">
+              <div class="progress">
+                <div class="progress-bar progress-bar-info"
+                  ng-bind="enum.percent"
+                  style="width: {{ enum.percent }};">
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -9,6 +9,7 @@ config([
   'backend.user.auth.needed.resolver',
   'resolver.forms',
   'resolver.form',
+  'resolver.form.stats',
   'resolver.is',
   'resolver.submissions',
   'resolver.submission',
@@ -22,6 +23,7 @@ config([
     authNeededResolver,
     formsResolver,
     formResolver,
+    formStatsResolver,
     isResolver,
     submissionsResolver,
     submissionResolver,
@@ -75,6 +77,15 @@ config([
       resolve: {
         loggedIn: authNeededResolver,
         submissions: submissionsResolver('backend.submission.list', 'backend.form.get')
+      }
+    }).
+
+    when('/forms/:formid/stats', {
+      templateUrl: '/forms/stats.html',
+      controller: 'controller.shared.form.stats as csfs',
+      resolve: {
+        loggedIn: authNeededResolver,
+        form: formStatsResolver()
       }
     }).
 

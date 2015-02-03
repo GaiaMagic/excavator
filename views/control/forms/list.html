@@ -6,6 +6,7 @@
         <thead ng-if="ccfl.forms && ccfl.forms.length">
           <tr>
             <th class="link" i18n="forms::Preview"></th>
+            <th class="link" i18n="forms::Stats"></th>
             <th class="link" i18n="forms::Edit"></th>
             <th class="number nowrap" i18n="forms::publish::Published"></th>
             <th i18n="forms::Name"></th>
@@ -31,6 +32,12 @@
                 href="//{{ ccfl.domains.public }}/{{ form.slug }}">
                 <span class="glyphicon glyphicon-new-window"></span>
                 <span i18n="forms::Preview"></span>
+              </a>
+            </td>
+            <td>
+              <a href="/forms/{{ form._id }}/stats">
+                <span class="glyphicon glyphicon-signal"></span>
+                <span i18n="forms::Stats"></span>
               </a>
             </td>
             <td>

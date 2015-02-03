@@ -8,6 +8,7 @@ angular.module('excavator.admin', [
   'excavator.admin.uploader',
   'excavator.admin.validator',
   'excavator.shared.domains',
+  'excavator.shared.form',
   'excavator.shared.login',
   'excavator.shared.nav',
   'excavator.shared.scroll',

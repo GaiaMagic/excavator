@@ -24,6 +24,15 @@ factory('backend.form.get', [
   }
 ]).
 
+factory('backend.form.stats', [
+  '$http',
+  function ($http) {
+    return function (id) {
+      return $http.get('/backend/forms/' + id + '/stats');
+    };
+  }
+]).
+
 factory('backend.form.list', [
   '$http',
   function ($http) {
