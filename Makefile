@@ -119,12 +119,14 @@ node:
 
 backup: backup-data backup-admincontent backup-usercontent
 
-backup-data:
-	docker run -it --rm --link excavator_db_1:mongo \
+backup-data-only:
+	docker run --rm --link excavator_db_1:mongo \
 	--volume="$$(pwd):/dump" mongo:2.6.5 \
 	sh -c 'mongodump --host $$MONGO_PORT_27017_TCP_ADDR \
 	--port $$MONGO_PORT_27017_TCP_PORT --db excavator -o /dump/backup && \
 	chown -R $(shell id -u):$(shell id -u) /dump/backup'
+
+backup-data: backup-data-only
 	tar cfvz backup.tar.gz backup
 	rm -rf backup
 
@@ -143,7 +145,7 @@ restore: restore-data restore-admincontent restore-usercontent
 
 restore-data:
 	tar xfvz backup.tar.gz
-	docker run -it --rm --link excavator_db_1:mongo \
+	docker run --rm --link excavator_db_1:mongo \
 	--volume="$$(pwd):/dump" mongo:2.6.5 \
 	sh -c 'exec mongorestore --drop --host $$MONGO_PORT_27017_TCP_ADDR \
 	--port $$MONGO_PORT_27017_TCP_PORT --db excavator /dump/backup/excavator'
