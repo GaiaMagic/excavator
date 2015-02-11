@@ -621,11 +621,11 @@ describe('Route /backend/managers', function () {
 
   describe('Sub-route /status', function () {
     function expectFailure (token, done) {
-      request(excavator).
-      get('/backend/managers/status').
-      set('Authorization', token).
-      expect(200).
-      end(function (err, res) {
+      var req = request(excavator).get('/backend/managers/status');
+      if (typeof token !== 'undefined') {
+        req = req.set('Authorization', token);
+      }
+      req.expect(200).end(function (err, res) {
         if (err) return done(err);
         expect(res.body).to.have.keys([
           'status',

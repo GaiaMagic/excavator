@@ -96,11 +96,11 @@ describe('Route /backend/admins', function () {
 
   describe('Sub-route /status', function () {
     function expectFailure (token, done) {
-      request(excavator).
-      get('/backend/admins/status').
-      set('Authorization', token).
-      expect(200).
-      end(function (err, res) {
+      var req = request(excavator).get('/backend/admins/status');
+      if (typeof token !== 'undefined') {
+        req = req.set('Authorization', token);
+      }
+      req.expect(200).end(function (err, res) {
         if (err) return done(err);
         expect(Object.keys(res.body)).to.have.members([
           'status',

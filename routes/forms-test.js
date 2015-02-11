@@ -252,9 +252,11 @@ describe('Route /backend/forms', function () {
   });
 
   function expectFailure (token, data, status, type, done) {
-    request(excavator).
-    post('/backend/forms/create').
-    set('Authorization', token).
+    var req = request(excavator).post('/backend/forms/create');
+    if (typeof token !== 'undefined') {
+      req = req.set('Authorization', token);
+    }
+    req.
     send(data || { title: real.title, content: real.content }).
     expect(status || 403).
     end(function (err, res) {
