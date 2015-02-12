@@ -84,10 +84,10 @@ release:
 # other:
 
 test:
-	docker kill excavator_test >/dev/null 2>&1 && docker rm excavator_test >/dev/null 2>&1; true
-	docker run -d --name excavator_test mongo:2.6.5 >/dev/null
+	docker rm -f excavator_test >/dev/null 2>&1; true
+	docker run -d --name excavator_test mongo:2.6.5 --noprealloc --nojournal >/dev/null
 	docker run --rm --link=excavator_test:db excavator_frontend npm test
-	docker kill excavator_test >/dev/null 2>&1 && docker rm excavator_test >/dev/null 2>&1; true
+	docker rm -f excavator_test >/dev/null 2>&1; true
 
 clean:
 	docker images | grep '<none>' | awk '{print $$3}' | xargs docker rmi 2>/dev/null; true
