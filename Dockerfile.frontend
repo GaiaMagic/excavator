@@ -36,6 +36,10 @@ RUN npm --loglevel http install
 
 ENV NODE_ENV production
 
-CMD gulp build
+CMD GIT_HEAD_COMMIT="$(git rev-parse HEAD)" \
+    GIT_HEAD_DATE="$(git --no-pager show --format='%ad' --quiet HEAD)" \
+    GIT_HEAD_AUTHOR="$(git --no-pager show --format='%ae' --quiet HEAD)" \
+    GIT_HEAD_FILE_COUNT="$(git ls-files | wc -l | xargs)" \
+    gulp build
 
 ADD . /excavator
