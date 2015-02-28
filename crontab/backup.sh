@@ -32,6 +32,8 @@ DIRNAME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 DIRNAME="$(readlink -f "${DIRNAME}")"
 cd $(dirname "$DIRNAME")
 
+echo "Time is now: $(date)."
+
 cleanBackup
 
 if ! ls excavator-*.7z 1>/dev/null 2>&1; then

@@ -40,7 +40,7 @@ while [[ -z "$BACKUPCMD" ]]; do
 done
 
 crontab -l 2>/dev/null | grep -v "$DIRNAME" | { cat;
-echo "$MINUTE * * * * $BACKUPCMD --remote-host $REMOTEHOST --key $SSHKEY >/tmp/excavator-backup.log 2>&1"; } | crontab -
+echo "$MINUTE * * * * $BACKUPCMD --remote-host $REMOTEHOST --key $SSHKEY >>/tmp/excavator-backup.log 2>&1"; } | crontab -
 
 echo "Successfully updated crontab:"
 crontab -l
