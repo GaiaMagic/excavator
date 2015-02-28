@@ -28,7 +28,9 @@ ARCHIVE="excavator-${NOW}.7z"
 REMOTE="${REMOTEHOST:-localhost}:"
 REMOTEDIR="Dropbox/backups/excavator/"
 
-cd /data/projects/excavator
+DIRNAME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+DIRNAME="$(readlink -f "${DIRNAME}")"
+cd $(dirname "$DIRNAME")
 
 cleanBackup
 
