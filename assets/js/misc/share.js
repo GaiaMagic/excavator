@@ -52,21 +52,17 @@ directive('shareTo', [
         var type = $attrs.shareTo;
         switch (type) {
         case 'weibo':
-          var link = 'http://openapi.baidu.com/social/widget/share';
-          link += '?method=share&media_type=sinaweibo';
-          link += '&client_id=' + ($attrs.weiboId || '');
-          link += '&url=' + encodeURIComponent($window.location.href);
-          var photo = '';
-          if ($attrs.weiboPhoto) {
-            photo = $window.location.origin + $attrs.weiboPhoto;
-          }
-          link += '&pic_url=' + encodeURIComponent(photo);
-          link += '&u=' + encodeURIComponent($window.location.href);
           $element.attr('target', '_blank');
-
           $attrs.$observe('weiboContent', function (text) {
-            var content = '&content=' + encodeURIComponent(text);
-            $element.attr('href', link + content);
+            var url = 'http://service.weibo.com/share/share.php';
+            url += '?url=' + encodeURIComponent($window.location.href);
+            url += '&appkey=' + ($attrs.weiboAppkey || '');
+            if ($attrs.weiboPhoto) {
+              var photo = $window.location.origin + $attrs.weiboPhoto;
+              url += '&pic=' + encodeURIComponent(photo);
+            }
+            url += '&title=' + encodeURIComponent(text);
+            $element.attr('href', url);
           });
           break;
         case 'wechat':
