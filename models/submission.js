@@ -6,6 +6,7 @@ var panic        = require('../lib/panic');
 var tr           = require('../lib/i18n').tr;
 var validate     = require('./validator');
 var postProcess  = require('./validator-post');
+var http         = require('http');
 
 var submissionSchema = new Schema({
   form:                { type: Schema.ObjectId, ref: 'Form' },
@@ -15,6 +16,7 @@ var submissionSchema = new Schema({
   data:                { type: Object },
   status:              { type: Number, default: 0 },
   ip_address:          { type: String },
+  ip_address_info:     { country: String, province: String, city: String, district: String },
   user_agent:          { type: String },
   created_at:          { type: Date, default: Date.now }
 });
@@ -114,6 +116,64 @@ submissionSchema.method('Save', function () {
     deferred.resolve(self);
   });
   return deferred.promise;
+});
+
+function getIPInfo (ip) {
+  var deferred = Q.defer();
+  var req = http.request({
+    host: 'int.dpool.sina.com.cn',
+    port: 80,
+    path: '/iplookup/iplookup.php?format=json&ip=' + ip,
+    method: 'GET'
+  }, function (res) {
+    var body = '';
+    res.setEncoding('utf8');
+    res.on('data', function (chunk) {
+      body += chunk;
+    });
+    res.on('end', function () {
+      try {
+        var info = JSON.parse(body);
+        var ret = {};
+        ret[ip] = {
+          country: info['country'] || '-',
+          province: info['province'] || '-',
+          city: info['city'] || '-',
+          district: info['district'] || '-'
+        };
+        deferred.resolve(ret);
+      } catch (err) {
+        deferred.reject(err);
+      }
+    });
+  });
+  req.on('error', function (err) {
+    deferred.reject(err);
+  });
+  req.end();
+  return deferred.promise;
+}
+
+submissionSchema.method('getIPInfo', function () {
+  if (this.ip_address_info.country) {
+    var ret = {};
+    ret[this.ip_address] = this.ip_address_info;
+    return Q(ret);
+  }
+  var self = this;
+  return getIPInfo(this.ip_address).then(function (info) {
+    var ip = info[self.ip_address];
+    var Submission = module.exports;
+    Q.nbind(Submission.findByIdAndUpdate, Submission)(self._id, {
+      'ip_address_info.country': ip.country || '-',
+      'ip_address_info.province': ip.province || '-',
+      'ip_address_info.city': ip.city || '-',
+      'ip_address_info.district': ip.district || '-'
+    }).catch(function (e) {
+      console.error(e)
+    });
+    return info;
+  });
 });
 
 submissionSchema.static('submit', function (formRevId, data, userInfo) {

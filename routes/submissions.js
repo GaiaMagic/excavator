@@ -7,6 +7,7 @@ var panic = require('../lib/panic');
 var Status = require('../models/status');
 var tr = require('../lib/i18n').tr;
 var extend = require('extend');
+var jsonParser = require('body-parser').json();
 
 function QQ (promise) {
   return Q.nbind(promise.exec, promise)();
@@ -145,6 +146,36 @@ function (req, res, next) {
     { $set: { status: status.id } }).then(function (submission) {
       res.send({status: 'OK'});
     }).catch(next);
+});
+
+router.post('/ip', jsonParser, function (req, res, next) {
+  var subs = req.body.submissions;
+  if (!(subs instanceof Array)) {
+    return next(panic(422, {
+      type:    'invalid-submissions',
+      message: tr('Submissions should be an array.')
+    }));
+  }
+  subs = subs.filter(function (sub) {
+    return /^[a-f0-9]{24}$/.test(sub);
+  });
+  if (subs.length === 0) {
+    return res.send({});
+  }
+  QQ(Submission.find({ _id: { $in: subs }})).
+  then(function (subs) {
+    return Q.allSettled(subs.map(function (sub) {
+      return sub.getIPInfo().timeout(2000);
+    })).then(function (bundle) {
+      var ret = {};
+      bundle.forEach(function (b) {
+        if (b.state === 'fulfilled') {
+          extend(ret, JSON.parse(JSON.stringify(b.value)));
+        }
+      });
+      res.send(ret);
+    });
+  }).catch(next);
 });
 
 module.exports = router;

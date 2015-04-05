@@ -1,40 +1,41 @@
 angular.module('excavator.misc.ip', []).
 
 factory('misc.ip', [
+  '$http',
   '$q',
   '$window',
-  'misc.async.load',
-  function ($q, $window, load) {
+  function ($http, $q, $window) {
     function convert (v) {
       var val = (v.country || '').trim();
-      val += (v.province || '').trim();
-      if (v.province !== v.city) {
-        val += (v.city || '').trim();
+      if (v.country !== v.province) {
+        val += (v.province || '').trim();
+        if (v.province !== v.city) {
+          val += (v.city || '').trim();
+        }
       }
-      return val;
+      return val.replace(/-$/, '');
     }
 
-    var url = 'http://int.dpool.sina.com.cn';
-    url += '/iplookup/iplookup.php?format=js&ip=';
-    // ip can be an array or a string
-    return function (ip) {
-      if (!ip || (angular.isArray(ip) && ip.length === 0)) {
+    function get (subs) {
+      if (!subs || (angular.isArray(subs) && subs.length === 0)) {
         return $q(function (resolve, reject) { reject(); });
       }
-      return load(url + ip, {
-        type: 'js',
-        removeScriptTag: true
-      }).then(function () {
-        var info = $window.remote_ip_info;
-        if (angular.isString(ip)) {
-          return convert(info);
-        }
+      if (angular.isString(subs)) {
+        subs = [subs];
+      }
+      return $http.post('/backend/submissions/ip', {
+        submissions: subs
+      }).then(function (res) {
         var ret = {};
-        for (var i in info) {
-          ret[i] = convert(info[i]);
+        for (var i in res.data) {
+          ret[i] = convert(res.data[i]);
         }
         return ret;
       });
-    };
+    }
+
+    get.convert = convert;
+
+    return get;
   }
 ]);

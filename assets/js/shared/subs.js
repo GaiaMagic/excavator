@@ -44,12 +44,20 @@ controller('controller.shared.submission.list', [
     };
 
     if (angular.isArray(submissions) && this.showIpInfo) {
-      var ipAddrs = submissions.map(function (sub) {
-        return sub.ip_address;
+      var getIDs = [];
+      submissions.forEach(function (sub) {
+        if (sub.ip_address_info && sub.ip_address_info.country) {
+          sub.ip_address_info = ip.convert(sub.ip_address_info);
+        } else {
+          getIDs.push(sub._id);
+        }
       });
-      ip(ipAddrs).then(function (ipInfo) {
+      ip(getIDs).then(function (ipInfo) {
         submissions.forEach(function (sub) {
-          sub.ip_address_info = ipInfo[sub.ip_address];
+          var info = ipInfo[sub.ip_address];
+          if (info) {
+            sub.ip_address_info = info;
+          }
         });
       });
     }
@@ -105,9 +113,14 @@ controller('controller.shared.submission.view', [
 
     this.sub = currentSubmission;
 
-    ip(this.sub.sub.ip_address).then(function (ipAddrInfo) {
-      self.sub.sub.ip_address_info = ipAddrInfo;
-    });
+    var info = this.sub.sub.ip_address_info;
+    if (info && info.country) {
+      this.sub.sub.ip_address_info = ip.convert(info);
+    } else {
+      ip(this.sub.sub._id).then(function (ipAddrInfo) {
+        self.sub.sub.ip_address_info = ipAddrInfo[self.sub.sub.ip_address];
+      });
+    }
 
     this.isEmpty = function (object) {
       if (!angular.isObject(object)) return true;
