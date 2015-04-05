@@ -188,7 +188,8 @@ describe('Route /backend/submissions', function () {
     }
 
     it('should list a submission', function (done) {
-      Q.delay(500).then(function () {
+      this.timeout(3000);
+      Q.delay(2000).then(function () {
         return check(realSubmission._id, function (body) {
           expect(body.older).to.be.null;
           expect(body.newer).to.be.a('string').and.
