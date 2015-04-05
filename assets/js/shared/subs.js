@@ -43,7 +43,7 @@ controller('controller.shared.submission.list', [
       $route.reload();
     };
 
-    if (angular.isArray(submissions) && this.showIpInfo) {
+    if (angular.isArray(submissions)) {
       var getIDs = [];
       submissions.forEach(function (sub) {
         if (sub.ip_address_info && sub.ip_address_info.country) {

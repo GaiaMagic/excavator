@@ -103,7 +103,7 @@
             </td>
             <td>
               <span title="{{ sub.ip_address || '-' }}"
-                ng-bind="sub.ip_address_info || sub.ip_address || '-'"></span>
+                ng-bind="(cssl.showIpInfo ? sub.ip_address_info : null) || sub.ip_address"></span>
             </td>
             <td>
               <a class="block" ng-if="cssl.submissions.formId"
