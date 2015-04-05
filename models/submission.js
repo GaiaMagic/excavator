@@ -97,6 +97,7 @@ submissionSchema.post('save', function (submission) {
     };
     submission.form.update(op, log);
     submission.form_revision.update(op, log);
+    submission.getIPInfo();
   });
 });
 
@@ -143,7 +144,12 @@ function getIPInfo (ip) {
         };
         deferred.resolve(ret);
       } catch (err) {
-        deferred.reject(err);
+        deferred.resolve({
+          country: '-',
+          province: '-',
+          city: '-',
+          district: '-'
+        });
       }
     });
   });

@@ -172,6 +172,7 @@ describe('Route /backend/submissions', function () {
           'form_revision',
           'form_revision_index',
           'ip_address',
+          'ip_address_info',
           'user_agent',
           'status',
           'newer',
@@ -187,12 +188,14 @@ describe('Route /backend/submissions', function () {
     }
 
     it('should list a submission', function (done) {
-      check(realSubmission._id, function (body) {
-        expect(body.older).to.be.null;
-        expect(body.newer).to.be.a('string').and.
-          equal(realSubmission2._id.toString());
-        expect(body.form_index).to.equal(0);
-        expect(body.form_revision_index).to.equal(0);
+      Q.delay(500).then(function () {
+        return check(realSubmission._id, function (body) {
+          expect(body.older).to.be.null;
+          expect(body.newer).to.be.a('string').and.
+            equal(realSubmission2._id.toString());
+          expect(body.form_index).to.equal(0);
+          expect(body.form_revision_index).to.equal(0);
+        });
       }).then(function () {
         return check(realSubmission2._id, function (body) {
           expect(body.older).to.be.a('string').and.

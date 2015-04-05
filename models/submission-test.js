@@ -141,6 +141,42 @@ describe('Submission database model', function () {
       }).then(done).catch(done);
     });
 
+    it('should store ip address info if ip address is valid IPv4 address',
+    function (done) {
+      this.timeout(3000);
+      Submission.submit(realForm._id, real.submit, {
+        ipAddress: '14.212.82.124'
+      }).delay(2000).
+      then(function (submission) {
+        return Q.nbind(Submission.findById, Submission)(submission._id);
+      }).then(function (submission) {
+        expect(submission.toObject().ip_address_info).to.deep.equal({
+          country: '中国',
+          province: '广东',
+          city: '佛山',
+          district: '-'
+        });
+      }).then(done).catch(done);
+    });
+
+    it('should store ip address info if ip address is valid IPv6 address',
+    function (done) {
+      this.timeout(3000);
+      Submission.submit(realForm._id, real.submit, {
+        ipAddress: 'fe80::200:5aee:feaa:20a2'
+      }).delay(2000).
+      then(function (submission) {
+        return Q.nbind(Submission.findById, Submission)(submission._id);
+      }).then(function (submission) {
+        expect(submission.toObject().ip_address_info).to.deep.equal({
+          country: '-',
+          province: '-',
+          city: '-',
+          district: '-'
+        });
+      }).then(done).catch(done);
+    });
+
     it('should store user-agent',
     function (done) {
       var userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) ' +
