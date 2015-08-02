@@ -1,39 +1,22 @@
-# don't use `fig build` or `fig up` manually, use `make`
-
-# data-only container
-data:
-  image: busybox:latest
-  volumes:
-    - /data/db
-
-usercontent:
-  image: busybox:latest
-  volumes:
-    - /admincontent
-    - /srv/excavator/admincontent:/admincontent
-    - /usercontent
-    - /srv/excavator/usercontent:/usercontent
-
-# mongodb
-# remember to also update excavator.js if you change this service name
 db:
   image: mongo:2.6.5
-  volumes_from:
-    - data
+  volumes:
+    - /data/mongo/excavator:/data/db
 
-# backend
 backend:
   build: .
+  dockerfile: Dockerfile.backend
   links:
     - db
-  expose:
-    - 3000
-  volumes_from:
-    - usercontent
+  ports:
+    - '127.0.0.1:56600:3000'
+  volumes:
+    - /srv/excavator/admincontent:/admincontent
+    - /srv/excavator/usercontent:/usercontent
 
-# frontend
 frontend:
   build: .
+  dockerfile: Dockerfile.frontend
   environment:
     - GIT_HEAD_COMMIT
     - GIT_HEAD_DATE
