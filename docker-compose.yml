@@ -1,10 +1,14 @@
 db:
   image: mongo:2.6.5
+  restart: always
+  mem_limit: 200M
   volumes:
     - /data/mongo/excavator:/data/db
 
 backend:
   build: .
+  restart: always
+  mem_limit: 200M
   dockerfile: Dockerfile.backend
   links:
     - db
